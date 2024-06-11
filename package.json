@@ -4,9 +4,30 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev:example": "pnpm --filter example dev"
+    "dev:example": "pnpm --filter example dev",
+    "build": "pnpm --filter @tangled/react build",
+    "prepare": "husky",
+    "lint:fix": "eslint --fix src/**/*.{ts,tsx,json}",
+    "format": "prettier --write src/**/**/*.{ts,tsx,css} --config ./prettier.config.js"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write"
+    ],
+    "*.{md,css}": "prettier --write"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-flowtype": "^8.0.3",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^9.0.11",
+    "prettier": "^3.3.2",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "typescript": "^5.2.2"
+  }
 }
