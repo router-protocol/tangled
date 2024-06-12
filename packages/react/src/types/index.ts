@@ -1,4 +1,4 @@
-import { CHAIN_ID, CHAIN_TYPES } from '../constants';
+import { CHAIN_ID, CHAIN_TYPES } from '../constants/index.js';
 
 export type ChainType = (typeof CHAIN_TYPES)[number];
 

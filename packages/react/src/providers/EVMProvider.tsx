@@ -1,8 +1,8 @@
 import { ReactNode, useState } from 'react';
 import { Chain, Transport, http } from 'viem';
 import { WagmiProvider, createConfig } from 'wagmi';
-import { CHAINS_DATA } from '../constants';
-import { ChainConfig } from '../types';
+import { CHAINS_DATA } from '../constants/index.js';
+import { ChainConfig } from '../types/index.js';
 
 const EVMProvider = ({ children, chains }: { children: ReactNode; chains: ChainConfig[] }) => {
   const [evmChains] = useState(() => {

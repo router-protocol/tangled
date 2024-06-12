@@ -18,7 +18,7 @@ import {
   scroll,
   zkSync,
 } from 'viem/chains';
-import { ChainIds, ChainType } from '../types';
+import { ChainIds, ChainType } from '../types/index.js';
 
 export const CHAIN_ID = {
   // evm

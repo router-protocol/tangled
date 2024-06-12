@@ -3,8 +3,8 @@ import { coinbaseWallet, injected, walletConnect } from '@wagmi/connectors';
 import { ReactNode, createContext, useState } from 'react';
 import { Chain, Transport, http } from 'viem';
 import { WagmiProvider, createConfig } from 'wagmi';
-import { CHAINS_DATA } from '../constants';
-import { ChainConfig } from '../types';
+import { CHAINS_DATA } from '../constants/index.js';
+import { ChainConfig } from '../types/index.js';
 
 export const TangledContext = createContext({});
 
