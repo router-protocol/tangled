@@ -3,23 +3,42 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "watch": "tsc -w -p ./tsconfig.json",
+    "build": "pnpm clean && pnpm build:esm && pnpm build:postcompile && pnpm build:clean",
+    "build:esm": "tsc --build",
+    "build:postcompile": "node ../../scripts/postcompile.js && cpy 'src/**/*' dist",
+    "build:clean": "rm -rf tsconfig.tsbuildinfo ./dist/tsconfig.tsbuildinfo ./dist/tsconfig.cjs.tsbuildinfo",
+    "clean": "pnpm build:clean && rm -rf dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
+  "author": "Jayesh Bhole <jayesh@routerprotocol.com>",
   "dependencies": {
+    "@safe-global/safe-apps-sdk": "^9.0.0",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@tanstack/react-query": "^5.44.0",
+    "@wagmi/connectors": "^5.0.12",
+    "@wagmi/core": "^2.11.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "viem": "^2.13.8",
+    "wagmi": "^2.9.11",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",
     "@typescript-eslint/parser": "^7.2.0",
-    "@vitejs/plugin-react": "^4.2.1",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

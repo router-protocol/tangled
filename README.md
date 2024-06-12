@@ -1,6 +1,6 @@
-# Router Protocol's Tangled SDK
+# Router Protocol's Tangled SDK 🪢
 
-## 1. @tangled/react
+## 1. @tangled/react 🪢 ⚛️
 
 React wrappers, hooks, components, and utilities for Router Protocol's Tangled SDK.
 Enable crosschain interactions with your DApp with the Tangled SDK. Compatbile with Next.js 13 and React 18.
