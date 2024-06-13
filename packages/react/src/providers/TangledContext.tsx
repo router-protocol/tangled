@@ -1,49 +1,37 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { coinbaseWallet, injected, walletConnect } from '@wagmi/connectors';
 import { ReactNode, createContext, useState } from 'react';
-import { Chain, Transport, http } from 'viem';
-import { WagmiProvider, createConfig } from 'wagmi';
-import { CHAINS_DATA } from '../constants/index.js';
-import { ChainConfig } from '../types/index.js';
+import { TangledConfig } from '../types/index.js';
+import createChainConfigs from '../utils/createChainConfigs.js';
+import EVMProvider from './EVMProvider.js';
 
 export const TangledContext = createContext({});
 
 const queryClient = new QueryClient();
 
-const TangledContextProvider = ({ children, chains }: { children: ReactNode; chains: ChainConfig[] }) => {
-  const [evmChains] = useState(() => {
-    return chains.filter((chain) => chain.type === 'evm');
-  });
-  const [wagmiConfig] = useState(() => {
-    return createConfig({
-      chains: evmChains.map((chain) => ({ ...CHAINS_DATA[chain.id], ...chains }) as Chain) as [Chain, ...Chain[]],
-      transports: evmChains.reduce(
-        (acc, chain) => {
-          acc[chain.id] = http();
-          return acc;
-        },
-        {} as Record<string, Transport>,
-      ),
-      connectors: [
-        injected(),
-        walletConnect({ projectId: '949e50a7346865d10fe9757fe8dd9477' }),
-        coinbaseWallet({
-          appName: 'Nitro | Router Protocol',
-        }),
-      ],
-      ssr: true,
-      batch: {
-        multicall: {
-          wait: 20,
-        },
-      },
-    });
+const TangledContextProvider = ({
+  children,
+  // chains,
+  // evmConnectors,
+  config,
+}: {
+  children: ReactNode;
+  config: TangledConfig;
+  // chains: ChainConfig[];
+  // evmConnectors: CreateConnectorFn[];
+}) => {
+  const [chains] = useState(() => {
+    return createChainConfigs(config.chains, config.chainConfigs);
   });
 
   return (
-    <TangledContext.Provider value={{ chains, wagmiConfig }}>
+    <TangledContext.Provider value={{}}>
       <QueryClientProvider client={queryClient}>
-        <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>
+        <EVMProvider
+          chains={chains.evm}
+          connectors={config.evmConnectors}
+        >
+          {children}
+        </EVMProvider>
       </QueryClientProvider>
     </TangledContext.Provider>
   );

@@ -1,5 +1,5 @@
 const createTangledConfig = () => {
-  return;
+  return {};
 };
 
 export default createTangledConfig;

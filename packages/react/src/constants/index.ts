@@ -1,4 +1,3 @@
-import { Chain } from 'viem';
 import {
   arbitrum,
   avalanche,
@@ -18,7 +17,7 @@ import {
   scroll,
   zkSync,
 } from 'viem/chains';
-import { ChainIds, ChainType } from '../types/index.js';
+import { Chain, ChainData, ChainId } from '../types/index.js';
 
 export const CHAIN_ID = {
   // evm
@@ -75,9 +74,7 @@ export const CHAIN_TYPES = [
   'aleph_zero',
 ] as const;
 
-export type ChainData = Omit<Chain, 'id'> & { id: string | number; type?: ChainType };
-
-export const CHAINS_DATA: Record<ChainIds, ChainData> = {
+export const CHAINS_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrum]: arbitrum,
   [CHAIN_ID.avalanche]: avalanche,
   [CHAIN_ID.base]: base,
@@ -106,3 +103,23 @@ export const CHAINS_DATA: Record<ChainIds, ChainData> = {
   // 534351: scrollSepolia,
   // 11155111: sepolia,
 } as const;
+
+export const DEFAULT_CHAINS = [
+  'arbitrum',
+  'avalanche',
+  'base',
+  'binance',
+  'blast',
+  'boba',
+  'ethereum',
+  'linea',
+  'manta',
+  'mantle',
+  'metis',
+  'mode',
+  'optimism',
+  'polygon',
+  'polygon_zkevm',
+  'scroll',
+  'zksync',
+] as Chain[];
