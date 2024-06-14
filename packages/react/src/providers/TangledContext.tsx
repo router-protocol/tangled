@@ -3,6 +3,7 @@ import { ReactNode, createContext, useState } from 'react';
 import { TangledConfig } from '../types/index.js';
 import createChainConfigs from '../utils/createChainConfigs.js';
 import EVMProvider from './EVMProvider.js';
+import TronProvider from './TronProvider.js';
 
 export const TangledContext = createContext({});
 
@@ -26,12 +27,14 @@ const TangledContextProvider = ({
   return (
     <TangledContext.Provider value={{}}>
       <QueryClientProvider client={queryClient}>
-        <EVMProvider
-          chains={chains.evm}
-          connectors={config.evmConnectors}
-        >
-          {children}
-        </EVMProvider>
+        <TronProvider>
+          <EVMProvider
+            chains={chains.evm}
+            connectors={config.evmConnectors}
+          >
+            {children}
+          </EVMProvider>
+        </TronProvider>
       </QueryClientProvider>
     </TangledContext.Provider>
   );
