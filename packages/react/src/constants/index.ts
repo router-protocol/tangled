@@ -2,11 +2,11 @@ import {
   arbitrum,
   avalanche,
   base,
+  binance,
   blast,
   boba,
-  bsc,
+  ethereum,
   linea,
-  mainnet,
   manta,
   mantle,
   metis,
@@ -16,7 +16,7 @@ import {
   polygonZkEvm,
   scroll,
   zkSync,
-} from 'viem/chains';
+} from '../chains/index.js';
 import { Chain, ChainData, ChainId } from '../types/index.js';
 
 export const CHAIN_ID = {
@@ -62,26 +62,14 @@ export const CHAIN_ID = {
   // sepolia: '11155111',
 } as const;
 
-export const CHAIN_TYPES = [
-  'evm',
-  'tron',
-  'near',
-  'cosmos',
-  'solana',
-  'bitcoin',
-  'sui',
-  'casper',
-  'aleph_zero',
-] as const;
-
-export const CHAINS_DATA: Record<ChainId, ChainData> = {
+export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrum]: arbitrum,
   [CHAIN_ID.avalanche]: avalanche,
   [CHAIN_ID.base]: base,
-  [CHAIN_ID.binance]: bsc,
+  [CHAIN_ID.binance]: binance,
   [CHAIN_ID.blast]: blast,
   [CHAIN_ID.boba]: boba,
-  [CHAIN_ID.ethereum]: mainnet,
+  [CHAIN_ID.ethereum]: ethereum,
   [CHAIN_ID.linea]: linea,
   [CHAIN_ID.manta]: manta,
   [CHAIN_ID.mantle]: mantle,
