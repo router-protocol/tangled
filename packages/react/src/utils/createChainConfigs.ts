@@ -1,33 +1,63 @@
-import { CHAIN_ID, CHAINS_DATA } from '../constants/index.js';
-import { Chain, ChainConfig, ChainData, ChainType } from '../types/index.js';
+import { CHAIN_DATA, CHAIN_ID } from '../constants/index.js';
+import { Chain, ChainConfig, ChainData, SupportedChainsByType } from '../types/index.js';
+import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
   chains: Chain[] | undefined,
   overrides?: Record<Chain, ChainConfig>,
-): Record<ChainType, ChainData[]> => {
-  const evmChainConfigs: ChainData[] = [];
+  testnet?: boolean,
+): SupportedChainsByType => {
+  // const evmChainConfigs: ChainData[] = [];
+
+  let supportedChains: SupportedChainsByType = {
+    aleph_zero: [],
+    bitcoin: [],
+    casper: [],
+    cosmos: [],
+    evm: [],
+    near: [],
+    solana: [],
+    sui: [],
+    tron: [],
+  };
 
   if (chains) {
-    chains.forEach((_chain) => {
-      evmChainConfigs.push({
-        type: 'evm',
-        ...CHAINS_DATA[CHAIN_ID[_chain]],
-        ...overrides?.[_chain],
-      });
-    });
+    for (const chain of chains) {
+      const chainType = CHAIN_DATA[CHAIN_ID[chain]].type;
+
+      switch (chainType) {
+        case 'evm':
+          supportedChains.evm.push({
+            ...CHAIN_DATA[CHAIN_ID[chain]],
+            ...overrides?.[chain],
+          } as ChainData<'evm'>);
+          break;
+        case 'tron':
+          break;
+        case 'near':
+          break;
+        case 'cosmos':
+          break;
+        case 'solana':
+          break;
+        case 'sui':
+          break;
+        case 'casper':
+          break;
+        case 'aleph_zero':
+          break;
+        case 'bitcoin':
+          break;
+        default:
+          break;
+      }
+    }
+  } else {
+    // Default to all chains
+    supportedChains = getDefaultSupportedChains(testnet);
   }
 
-  return {
-    evm: evmChainConfigs,
-    solana: [],
-    bitcoin: [],
-    cosmos: [],
-    tron: [],
-    near: [],
-    sui: [],
-    casper: [],
-    aleph_zero: [],
-  };
+  return supportedChains;
 };
 
 export default createChainConfigs;
