@@ -3,6 +3,7 @@ import { ReactNode, createContext, useState } from 'react';
 import { TangledConfig } from '../types/index.js';
 import createChainConfigs from '../utils/createChainConfigs.js';
 import EVMProvider from './EVMProvider.js';
+import { SolanaProvider } from './SolanaProvider.js';
 import TronProvider from './TronProvider.js';
 
 export const TangledContext = createContext({});
@@ -28,12 +29,14 @@ const TangledContextProvider = ({
     <TangledContext.Provider value={{}}>
       <QueryClientProvider client={queryClient}>
         <TronProvider>
-          <EVMProvider
-            chains={chains.evm}
-            connectors={config.evmConnectors}
-          >
-            {children}
-          </EVMProvider>
+          <SolanaProvider network={chains.solana[0].id}>
+            <EVMProvider
+              chains={chains.evm}
+              connectors={config.evmConnectors}
+            >
+              {children}
+            </EVMProvider>
+          </SolanaProvider>
         </TronProvider>
       </QueryClientProvider>
     </TangledContext.Provider>
