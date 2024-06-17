@@ -17,7 +17,7 @@ export const solana: ChainData = {
   blockExplorers: {
     default: {
       name: 'Solana Explorer',
-      url: 'https://explorer.solana.com/',
+      url: 'https://explorer.solana.com',
     },
   },
 } as const;
