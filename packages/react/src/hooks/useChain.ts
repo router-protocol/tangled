@@ -1,19 +1,14 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { TangledContext } from '../providers/TangledContext.js';
-import { ChainData, ChainType } from '../types/index.js';
+import { ChainData, ChainId, ChainType } from '../types/index.js';
 
 /**
- * A hook that returns an array of supported chains.
- * If no type is provided, it returns all chains.
- * @param type The type of chain to return
- * @returns An array of `ChainData<type>`
+ * A hook that returns the chain data for a given chain ID.
+ * @param chainId The type of chain to return
+ * @returns An array of `ChainData<ChainType>`
  */
-const useChains = <T extends ChainType>(type: T | undefined): ChainData[] => {
+export const useChain = <T extends ChainType>(chainId: ChainId, type: T) => {
   const { chains } = useContext(TangledContext);
 
-  if (type) return chains[type] as ChainData<T>[];
-
-  return Object.values(chains).flat();
+  return useMemo(() => chains[type].find((chain) => chain.id === chainId) as ChainData<T>, [chains, chainId, type]);
 };
-
-export default useChains;
