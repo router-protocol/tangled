@@ -32,5 +32,13 @@
     "prettier-plugin-organize-imports": "^3.2.4",
     "standard-version": "^9.5.0",
     "typescript": "^5.2.2"
+  },
+  "pnpm": {
+    "overrides": {
+      "@ledgerhq/devices": "6.27.1",
+      "@ledgerhq/errors": "6.16.3",
+      "@ledgerhq/hw-transport": "6.27.1",
+      "@ledgerhq/hw-transport-webhid": "6.27.1"
+    }
   }
 }

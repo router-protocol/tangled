@@ -1,29 +1,23 @@
-import { Adapter, NetworkType, WalletReadyState } from '@tronweb3/tronwallet-abstract-adapter';
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { Adapter, NetworkType } from '@tronweb3/tronwallet-abstract-adapter';
+import { createContext, useCallback, useEffect, useRef } from 'react';
+import { useTronStore } from '../store/Tron.js';
 
 interface TronContextValues {
-  tronAdapter: Adapter | undefined;
-  readyState: WalletReadyState | undefined;
-  account: string | undefined;
-  network: NetworkType | undefined;
   connect: () => Promise<{ account: string; chainId: string }>;
   disconnect: () => Promise<void>;
 }
 
 export const TronContext = createContext<TronContextValues>({
-  tronAdapter: undefined,
-  readyState: undefined,
-  account: undefined,
-  network: undefined,
   connect: async () => ({ account: '', chainId: '' }),
   disconnect: async () => {},
 });
 
 const TronProvider = ({ children }: { children: React.ReactNode }) => {
-  const [tronAdapter, setTronAdapter] = useState<Adapter>();
-  const [readyState, setReadyState] = useState<WalletReadyState>();
-  const [account, setAccount] = useState<string>();
-  const [network, setNetwork] = useState<NetworkType>();
+  const tronAdapter = useTronStore((state) => state.tronAdapter);
+  const setTronAdapter = useTronStore((state) => state.setTronAdapter);
+  const setReadyState = useTronStore((state) => state.setReadyState);
+  const setAccount = useTronStore((state) => state.setAccount);
+  const setNetwork = useTronStore((state) => state.setNetwork);
 
   const connecting = useRef(false);
 
@@ -41,7 +35,7 @@ const TronProvider = ({ children }: { children: React.ReactNode }) => {
     setAccount(_adapter.address!);
 
     return _adapter;
-  }, []);
+  }, [setAccount, setReadyState, setTronAdapter]);
 
   useEffect(() => {
     if (!tronAdapter) {
@@ -74,7 +68,7 @@ const TronProvider = ({ children }: { children: React.ReactNode }) => {
       // remove all listeners when components is destroyed
       tronAdapter.removeAllListeners();
     };
-  }, [initialize, tronAdapter]);
+  }, [initialize, setAccount, setNetwork, setReadyState, tronAdapter]);
 
   const connect = useCallback(async () => {
     let adapter = tronAdapter;
@@ -114,11 +108,7 @@ const TronProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, [tronAdapter]);
 
-  return (
-    <TronContext.Provider value={{ tronAdapter, readyState, account, network, connect, disconnect }}>
-      {children}
-    </TronContext.Provider>
-  );
+  return <TronContext.Provider value={{ connect, disconnect }}>{children}</TronContext.Provider>;
 };
 
 export default TronProvider;

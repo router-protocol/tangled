@@ -54,7 +54,7 @@ export interface TangledConfig {
   // Override default supported chains
   chains?: Chain[];
   // Override default chain configs. TODO: Add chain config type
-  chainConfigs: Record<Chain, ChainConfig>;
+  chainConfigs: Partial<Record<Chain, ChainConfig>>;
   // Enable testnets. Defaults to false. If true, only testnet chains will be provided in the context.
   // testnet?: boolean;
 

@@ -1,8 +1,9 @@
 import type { Adapter } from '@solana/wallet-adapter-base';
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
-import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
+import { ConnectionProvider, WalletProvider as SolanaWalletProvider } from '@solana/wallet-adapter-react';
 import { clusterApiUrl } from '@solana/web3.js';
 import { useState, type FC, type PropsWithChildren } from 'react';
+import { ChainData } from '../types/index.js';
 
 /**
  * Wallets that implement either of these standards will be available automatically.
@@ -18,19 +19,30 @@ import { useState, type FC, type PropsWithChildren } from 'react';
  */
 const wallets: Adapter[] = [];
 
-export const SolanaProvider: FC<PropsWithChildren & { network: string }> = ({ children, network }) => {
+export const SolanaProvider: FC<PropsWithChildren & { network: ChainData<'solana'> }> = ({ children, network }) => {
   const [endpoint] = useState(() => {
-    return clusterApiUrl(network as WalletAdapterNetwork);
+    if (network.id === 'solana') {
+      return clusterApiUrl(WalletAdapterNetwork.Mainnet);
+    }
+    if (network.id === 'solanaTestnet') {
+      return clusterApiUrl(WalletAdapterNetwork.Testnet);
+    }
+    if (network.id === 'solanaDevnet') {
+      return clusterApiUrl(WalletAdapterNetwork.Devnet);
+    }
+    return undefined;
   });
 
-  return (
+  return endpoint === undefined ? (
+    <>{children}</>
+  ) : (
     <ConnectionProvider endpoint={endpoint}>
-      <WalletProvider
+      <SolanaWalletProvider
         wallets={wallets}
         autoConnect
       >
         {children}
-      </WalletProvider>
+      </SolanaWalletProvider>
     </ConnectionProvider>
   );
 };

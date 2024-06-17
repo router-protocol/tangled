@@ -4,7 +4,7 @@ import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
   chains: Chain[] | undefined,
-  overrides?: Record<Chain, ChainConfig>,
+  overrides?: Partial<Record<Chain, ChainConfig>>,
   testnet?: boolean,
 ): SupportedChainsByType => {
   // const evmChainConfigs: ChainData[] = [];

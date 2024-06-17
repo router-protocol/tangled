@@ -20,11 +20,13 @@
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",
+    "@solana/web3.js": "^1.93.0",
     "@tanstack/react-query": "^5.44.0",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
     "@tronweb3/tronwallet-adapters": "^1.2.1",
     "@wagmi/connectors": "^5.0.12",
     "@wagmi/core": "^2.11.0",
+    "immer": "^10.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "viem": "^2.13.8",
@@ -44,5 +46,11 @@
   "peerDependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "overrides": {
+    "@ledgerhq/devices": "6.27.1",
+    "@ledgerhq/errors": "6.16.3",
+    "@ledgerhq/hw-transport": "6.27.1",
+    "@ledgerhq/hw-transport-webhid": "6.27.1"
   }
 }

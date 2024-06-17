@@ -5,12 +5,13 @@ import createChainConfigs from '../utils/createChainConfigs.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
 import TronProvider from './TronProvider.js';
+import WalletsProvider from './WalletsProvider.js';
 
 export const TangledContext = createContext({});
 
 const queryClient = new QueryClient();
 
-const TangledContextProvider = ({
+export const TangledContextProvider = ({
   children,
   // chains,
   // evmConnectors,
@@ -29,12 +30,12 @@ const TangledContextProvider = ({
     <TangledContext.Provider value={{}}>
       <QueryClientProvider client={queryClient}>
         <TronProvider>
-          <SolanaProvider network={chains.solana[0].id}>
+          <SolanaProvider network={chains.solana[0]}>
             <EVMProvider
               chains={chains.evm}
               connectors={config.evmConnectors}
             >
-              {children}
+              <WalletsProvider>{children}</WalletsProvider>
             </EVMProvider>
           </SolanaProvider>
         </TronProvider>
@@ -42,5 +43,3 @@ const TangledContextProvider = ({
     </TangledContext.Provider>
   );
 };
-
-export default TangledContextProvider;
