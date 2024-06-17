@@ -21,6 +21,8 @@ const wallets: Adapter[] = [];
 
 export const SolanaProvider: FC<PropsWithChildren & { network: ChainData<'solana'> }> = ({ children, network }) => {
   const [endpoint] = useState(() => {
+    if (!network) return undefined;
+
     if (network.id === 'solana') {
       return clusterApiUrl(WalletAdapterNetwork.Mainnet);
     }
