@@ -1,25 +1,35 @@
-import { Adapter, NetworkType, WalletReadyState } from '@tronweb3/tronwallet-abstract-adapter';
-import { create } from 'zustand';
+import { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
+import { createStore } from 'zustand';
+import { TronAdapter } from '../types/wallet.js';
 
-interface TronState {
-  tronAdapter: Adapter | undefined;
-  readyState: WalletReadyState | undefined;
-  account: string | undefined;
-  network: NetworkType | undefined;
-  setTronAdapter: (tronAdapter: Adapter) => void;
-  setReadyState: (readyState: WalletReadyState) => void;
-  setAccount: (account: string | undefined) => void;
-  setNetwork: (network: NetworkType) => void;
+interface TronProps {
+  adapters: Adapter[];
 }
 
-export const useTronStore = create<TronState>((set) => ({
-  tronAdapter: undefined,
-  readyState: undefined,
-  account: undefined,
-  network: undefined,
+export interface TronState {
+  connectors: {
+    [key in string]: TronAdapter;
+  };
 
-  setTronAdapter: (tronAdapter) => set(() => ({ tronAdapter })),
-  setReadyState: (readyState) => set(() => ({ readyState })),
-  setAccount: (account) => set(() => ({ account })),
-  setNetwork: (network) => set(() => ({ network })),
-}));
+  setConnector: (connector: TronAdapter) => void;
+  setConnectors: (connectors: TronState['connectors']) => void;
+}
+
+export type TronStore = ReturnType<typeof createTronStore>;
+
+export const createTronStore = (props?: TronProps) => {
+  const DEFAULT_TRON_STATE: TronState = {
+    connectors: {},
+    setConnector: () => {},
+    setConnectors: () => {},
+  };
+
+  return createStore<TronState>((set) => ({
+    ...DEFAULT_TRON_STATE,
+    ...props,
+
+    setConnector: (connector) =>
+      set((state) => ({ connectors: { ...state.connectors, [connector.adapter.name]: connector } })),
+    setConnectors: (connectors) => set(() => ({ connectors })),
+  }));
+};

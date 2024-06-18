@@ -15,6 +15,7 @@ import {
   polygon,
   polygonZkEvm,
   scroll,
+  tronMainnet,
   zkSync,
 } from '../chains/index.js';
 import { Chain, ChainData, ChainId } from '../types/index.js';
@@ -43,6 +44,9 @@ export const CHAIN_ID = {
 
   // tron
   // tron: '0x2b6653dc',
+  tronMainnet: 'tron-mainnet',
+  // tronShasta: 'tron-shasta',
+  // tronNile: 'tron-nile',
 
   // near
 
@@ -82,7 +86,9 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.zksync]: zkSync,
 
   // tron
-  // [CHAIN_ID.tron]: tron,
+  [CHAIN_ID.tronMainnet]: tronMainnet,
+  // [CHAIN_ID.tronShasta]: tronShasta,
+  // [CHAIN_ID.tronNile]: tronNile,
 
   // testnets
   // 5: goerli,

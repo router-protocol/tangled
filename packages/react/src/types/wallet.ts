@@ -1,3 +1,8 @@
+import {
+  Adapter as TronAdapter,
+  NetworkType as TronNetworkType,
+  WalletReadyState as TronWalletReadyState,
+} from '@tronweb3/tronwallet-abstract-adapter';
 import { ChainType } from './index.js';
 
 export type Wallet = {
@@ -49,4 +54,11 @@ export type ConnectedWallets = {
  */
 export type ConnectedAccounts = {
   [walletId in string]?: Account;
+};
+
+export type TronAdapter = {
+  adapter: TronAdapter;
+  readyState: TronWalletReadyState;
+  account: string | undefined;
+  network: TronNetworkType | undefined;
 };

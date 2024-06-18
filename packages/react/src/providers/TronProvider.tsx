@@ -1,114 +1,94 @@
 import { Adapter, NetworkType } from '@tronweb3/tronwallet-abstract-adapter';
-import { createContext, useCallback, useEffect, useRef } from 'react';
-import { useTronStore } from '../store/Tron.js';
+import { createContext, useEffect, useRef } from 'react';
+import { useStore } from 'zustand';
+import { TronStore, createTronStore } from '../store/Tron.js';
+import { ChainData, ChainId } from '../types/index.js';
+import { getTronNetwork } from '../utils/getTronNetwork.js';
 
 interface TronContextValues {
-  connect: () => Promise<{ account: string; chainId: string }>;
+  connect: (adapterId: string) => Promise<{ account: string; chainId: ChainId | undefined }>;
   disconnect: () => Promise<void>;
 }
 
 export const TronContext = createContext<TronContextValues>({
-  connect: async () => ({ account: '', chainId: '' }),
+  connect: async () => ({ account: '', chainId: undefined }),
   disconnect: async () => {},
 });
 
-const TronProvider = ({ children }: { children: React.ReactNode }) => {
-  const tronAdapter = useTronStore((state) => state.tronAdapter);
-  const setTronAdapter = useTronStore((state) => state.setTronAdapter);
-  const setReadyState = useTronStore((state) => state.setReadyState);
-  const setAccount = useTronStore((state) => state.setAccount);
-  const setNetwork = useTronStore((state) => state.setNetwork);
+export const TronStoreContext = createContext<TronStore | null>(null);
 
-  const connecting = useRef(false);
+/**
+ * @notice This provider is used to connect to the Tron network.
+ * @param connectors - The connectors to use.
+ * @param network - The network to connect to.
+ * @returns The Tron provider context with the connect and disconnect functions.
+ */
+const TronProvider = ({
+  children,
+  adapters,
+  // chains,
+}: {
+  children: React.ReactNode;
+  chains: ChainData<'tron'>[];
+  adapters: Adapter[];
+}) => {
+  const tronStore = useRef(createTronStore({ adapters })).current;
 
-  const initialize = useCallback(async () => {
-    // import adapter for walletId
-    const adapters = await import('@tronweb3/tronwallet-adapters');
-
-    const _adapter: Adapter = new adapters.TronLinkAdapter();
-
-    // if(walletId === WALLET_ID.tronLink){
-    // }
-
-    setTronAdapter(_adapter);
-    setReadyState(_adapter.readyState);
-    setAccount(_adapter.address!);
-
-    return _adapter;
-  }, [setAccount, setReadyState, setTronAdapter]);
+  const tronConnectors = useStore(tronStore, (state) => state.connectors);
+  const setConnector = useStore(tronStore, (state) => state.setConnector);
 
   useEffect(() => {
-    if (!tronAdapter) {
-      return;
-    }
+    const connectors = Object.values(tronConnectors);
 
-    if (tronAdapter.address) setAccount(tronAdapter.address);
+    connectors.forEach((tronAdapter) => {
+      if (tronAdapter.adapter.listeners('connect').length > 0) return;
 
-    tronAdapter.on('connect', () => {
-      setAccount(tronAdapter.address!);
+      tronAdapter.adapter.on('connect', () => {
+        // tronAdapter.account = tronAdapter.adapter.address!;
+        setConnector({ ...tronAdapter, account: tronAdapter.adapter.address! });
+      });
+
+      tronAdapter.adapter.on('readyStateChanged', (state) => {
+        setConnector({ ...tronAdapter, readyState: state });
+      });
+
+      tronAdapter.adapter.on('accountsChanged', (data) => {
+        setConnector({ ...tronAdapter, account: data });
+      });
+
+      tronAdapter.adapter.on('chainChanged', (data) => {
+        setConnector({ ...tronAdapter, network: data as NetworkType });
+      });
+
+      tronAdapter.adapter.on('disconnect', () => {
+        setConnector({ ...tronAdapter, account: undefined, network: undefined });
+      });
     });
 
-    tronAdapter.on('readyStateChanged', (state) => {
-      setReadyState(state);
-    });
-
-    tronAdapter.on('accountsChanged', (data) => {
-      setAccount(data);
-    });
-
-    tronAdapter.on('chainChanged', (data) => {
-      setNetwork(data as NetworkType);
-    });
-
-    tronAdapter.on('disconnect', () => {
-      // when disconnect from wallet
-      setAccount(undefined);
-    });
     return () => {
-      // remove all listeners when components is destroyed
-      tronAdapter.removeAllListeners();
+      connectors.forEach((tronAdapter) => {
+        tronAdapter.adapter.removeAllListeners();
+      });
     };
-  }, [initialize, setAccount, setNetwork, setReadyState, tronAdapter]);
+  }, [setConnector, tronConnectors]);
 
-  const connect = useCallback(async () => {
-    let adapter = tronAdapter;
-    if (!adapter) {
-      adapter = await initialize();
-    }
+  const connect = async (adapterId: string) => {
+    const adapter = tronConnectors[adapterId];
 
-    if (connecting.current) {
-      return { account: '', chainId: '' };
-    }
+    if (!adapter) throw new Error('Adapter not found');
 
-    let chainId: string = '';
+    await adapter.adapter.connect();
 
-    try {
-      connecting.current = true;
-      await adapter.connect({});
-      // @ts-expect-error Type for network is not available
-      chainId = await adapter.network().chainId;
-    } catch (error) {
-      console.error('Error connecting to wallet', error);
-    }
+    return { account: adapter.account!, chainId: getTronNetwork(adapter.network) };
+  };
 
-    connecting.current = false;
+  const disconnect = async () => {};
 
-    return { account: adapter.address || '', chainId };
-  }, [initialize, tronAdapter]);
-
-  const disconnect = useCallback(async () => {
-    if (!tronAdapter) {
-      return;
-    }
-
-    try {
-      await tronAdapter.disconnect();
-    } catch (error) {
-      console.error('Error disconnecting wallet', error);
-    }
-  }, [tronAdapter]);
-
-  return <TronContext.Provider value={{ connect, disconnect }}>{children}</TronContext.Provider>;
+  return (
+    <TronStoreContext.Provider value={tronStore}>
+      <TronContext.Provider value={{ connect, disconnect }}>{children}</TronContext.Provider>;
+    </TronStoreContext.Provider>
+  );
 };
 
 export default TronProvider;
