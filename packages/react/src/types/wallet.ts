@@ -56,7 +56,7 @@ export type ConnectedAccounts = {
   [walletId in string]?: Account;
 };
 
-export type TronAdapter = {
+export type TronAdapterData = {
   adapter: TronAdapter;
   readyState: TronWalletReadyState;
   account: string | undefined;

@@ -1,6 +1,6 @@
 import { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { createStore } from 'zustand';
-import { TronAdapter } from '../types/wallet.js';
+import { TronAdapterData } from '../types/wallet.js';
 
 interface TronProps {
   adapters: Adapter[];
@@ -8,10 +8,10 @@ interface TronProps {
 
 export interface TronState {
   connectors: {
-    [key in string]: TronAdapter;
+    [key in string]: TronAdapterData;
   };
 
-  setConnector: (connector: TronAdapter) => void;
+  setConnector: (connector: TronAdapterData) => void;
   setConnectors: (connectors: TronState['connectors']) => void;
 }
 
