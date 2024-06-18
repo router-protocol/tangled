@@ -1,5 +1,5 @@
 import { injected } from '@wagmi/connectors';
-import { isWalletInstalled } from '../utils/isWalletInstalled.js';
+import { isWalletInstalled } from '../../utils/isWalletInstalled.js';
 
 export const metaMask = /*@__PURE__*/ injected({
   target: {

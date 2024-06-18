@@ -1,22 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Transport, http } from 'viem';
 import { CreateConnectorFn, WagmiProvider, createConfig } from 'wagmi';
-import * as defaultConnectors from '../connectors/connectors.js';
 import { ChainData } from '../types/index.js';
-
-const connectors: CreateConnectorFn[] = [
-  defaultConnectors.bitget,
-  defaultConnectors.exodus,
-  defaultConnectors.binance,
-  defaultConnectors.frontier,
-  defaultConnectors.okx,
-  defaultConnectors.trust,
-  defaultConnectors.brave,
-  defaultConnectors.dcent,
-  defaultConnectors.frame,
-  defaultConnectors.oneinch,
-  defaultConnectors.safepal,
-];
 
 const EVMProvider = ({
   children,
@@ -24,7 +9,7 @@ const EVMProvider = ({
 }: {
   children: ReactNode;
   chains: ChainData[];
-  connectors: CreateConnectorFn[] | undefined;
+  connectors: CreateConnectorFn[];
 }) => {
   const [wagmiConfig] = useState(() => {
     return createConfig({
@@ -36,7 +21,7 @@ const EVMProvider = ({
         },
         {} as Record<string, Transport>,
       ),
-      connectors: [...(props.connectors ?? []), ...connectors],
+      connectors: props.connectors,
     });
   });
 
