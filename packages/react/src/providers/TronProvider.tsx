@@ -86,7 +86,7 @@ const TronProvider = ({
 
   return (
     <TronStoreContext.Provider value={tronStore}>
-      <TronContext.Provider value={{ connect, disconnect }}>{children}</TronContext.Provider>;
+      <TronContext.Provider value={{ connect, disconnect }}>{children}</TronContext.Provider>
     </TronStoreContext.Provider>
   );
 };
