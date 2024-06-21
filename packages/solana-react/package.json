@@ -1,0 +1,36 @@
+{
+  "name": "@tangled/solana-react",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "watch": "tsc -w -p ./tsconfig.json",
+    "build": "pnpm build:esm",
+    "build:esm": "tsc --build",
+    "clean": "",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+  },
+  "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
+  "dependencies": {
+    "@solana-mobile/wallet-adapter-mobile": "^2.1.3",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-standard-wallet-adapter-react": "^1.1.2",
+    "@solana/web3.js": "^1.91.2",
+    "@tanstack/react-query": "^5.44.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.66",
+    "@types/react-dom": "^18.2.22",
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0"
+  }
+}
