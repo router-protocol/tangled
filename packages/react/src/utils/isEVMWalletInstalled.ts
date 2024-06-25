@@ -1,4 +1,4 @@
-export const isWalletInstalled = (id: string): boolean => {
+export const isEVMWalletInstalled = (id: string): boolean => {
   switch (id) {
     case 'gate':
       return (window as any)?.gatewallet;

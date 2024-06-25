@@ -1,4 +1,4 @@
-import { isWalletInstalled } from './isWalletInstalled.js';
+import { isEVMWalletInstalled } from './isEVMWalletInstalled.js';
 
 export const isWalletInstalledAsync = async (id: string): Promise<boolean> => {
   switch (id) {
@@ -25,6 +25,6 @@ export const isWalletInstalledAsync = async (id: string): Promise<boolean> => {
       }
     }
     default:
-      return isWalletInstalled(id);
+      return isEVMWalletInstalled(id);
   }
 };
