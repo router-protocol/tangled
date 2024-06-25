@@ -1,6 +1,6 @@
 import { type Adapter, type WalletName, type WalletReadyState } from '@solana/wallet-adapter-base';
 import { type PublicKey } from '@solana/web3.js';
-import { createContext } from 'react';
+import { createContext, useContext } from 'react';
 
 export interface Wallet {
   adapter: Adapter;
@@ -10,6 +10,8 @@ export interface Wallet {
 export interface WalletContextState {
   autoConnect: boolean;
   wallets: Wallet[];
+  connectedAdapter: Adapter | null;
+  connections: Adapter[];
   wallet: Wallet | null;
   publicKey: PublicKey | null;
   connecting: boolean;
@@ -85,3 +87,7 @@ function logMissingProviderError(action: string, property: string) {
 }
 
 export const WalletContext = createContext<WalletContextState>(DEFAULT_CONTEXT as WalletContextState);
+
+export const useWallet = () => {
+  return useContext(WalletContext);
+};

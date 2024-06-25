@@ -5,7 +5,7 @@
     "declaration": true,
     "noEmit": false,
     "sourceMap": true,
-    "outDir": "dist/_esm",
+    "outDir": "dist",
     "rootDir": "./src",
     "module": "ESNext",
     "moduleResolution": "Node"
