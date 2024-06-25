@@ -38,7 +38,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
     const detected: Wallet<'solana'>[] = solanaWallets
       .filter((wallet) => wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported')
       .map((wallet) => ({
-        id: wallet.adapter.name.toLowerCase(),
+        id: wallet.adapter.name,
         name: wallet.adapter.name,
         connector: wallet.adapter,
         icon: wallet.adapter.icon,
@@ -56,7 +56,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   const extendedTronWallets = useMemo<Wallet<'tron'>[]>(() => {
     return Object.values(tronConnectors).map((connector) => ({
-      id: connector.adapter.name.toLowerCase(),
+      id: connector.adapter.name,
       name: connector.adapter.name,
       connector: connector.adapter,
       icon: connector.adapter.icon,
