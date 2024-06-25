@@ -1,5 +1,6 @@
 import * as evm from '../chains/evm.js';
 import { solana } from '../chains/solana.js';
+import { tronMainnet } from '../chains/tron.js';
 import { ChainData, SupportedChainsByType } from '../types/index.js';
 
 const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => {
@@ -39,6 +40,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.zkSync,
     ] as ChainData<'evm'>[];
     supportedChains.solana = [solana] as ChainData<'solana'>[];
+    supportedChains.tron = [tronMainnet] as ChainData<'tron'>[];
   }
 
   return supportedChains;

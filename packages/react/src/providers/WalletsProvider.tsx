@@ -1,82 +1,108 @@
-import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
-import { WalletReadyState } from '@tronweb3/tronwallet-abstract-adapter';
+import { useWallet as useSolanaWallet } from '@tangled/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections } from 'wagmi';
 import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
-import { ChainTypeWallets, ConnectedAccounts } from '../types/wallet.js';
-import { getTronNetwork } from '../utils/getTronNetwork.js';
+import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
-  const wagmiConnections = useConnections();
-  const { wallet: solanaWallet } = useSolanaWallet();
-  // const { connection: solanaConnection } = useSolanaConnection();
+  const evmConnections = useConnections();
+  const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
+
   const tronStore = useTronStore((state) => state);
 
-  const { setConnectedAccounts, setConnectedWallets } = useWalletsStore();
+  const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
+  const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
 
   // update wallet store states when connections change for individual providers
   // evm
   useEffect(() => {
-    const evmAccounts: ConnectedAccounts = {};
-    const evmWallets: ChainTypeWallets = {};
+    const _evmAccounts: { [x: string]: ConnectedAccount } = {};
+    const _evmWallets: { [x: string]: ConnectedWallet } = {};
 
-    for (const connection of wagmiConnections) {
-      evmAccounts[connection.connector.id] = {
+    for (const connection of evmConnections) {
+      _evmAccounts[connection.connector.id] = {
         address: connection.accounts?.[0],
         chainId: connection.chainId.toString(),
         chainType: 'evm',
         wallet: connection.connector.id,
       };
 
-      evmWallets[connection.connector.id] = {
+      _evmWallets[connection.connector.id] = {
         address: connection.accounts?.[0],
         loading: false,
         chainId: connection.chainId.toString(),
+        chainType: 'evm',
+        connector: connection.connector,
       };
     }
 
-    setConnectedAccounts(evmAccounts);
+    setChainConnectedAccounts({ evm: _evmAccounts });
     setConnectedWallets({
-      evm: evmWallets,
+      evm: _evmWallets,
     });
-  }, [setConnectedAccounts, setConnectedWallets, wagmiConnections]);
+  }, [setChainConnectedAccounts, setConnectedWallets, evmConnections]);
 
   // solana
   useEffect(() => {
-    if (!solanaWallet?.adapter.publicKey || !solanaWallet?.adapter.publicKey || !solanaWallet.readyState) return;
+    const _solanaAccounts: { [x: string]: ConnectedAccount } = {};
+    const _solanaWallets: { [x: string]: ConnectedWallet } = {};
 
-    const pubKey = solanaWallet.adapter.publicKey;
-    const solanaAccount: ConnectedAccounts = {
-      [solanaWallet.adapter.name]: {
-        address: pubKey.toString(),
+    // console.log(solConnectedWallet, solanaWallets);
+
+    for (const wallet of solanaWallets) {
+      // console.log('wallet', wallet.name, wallet.publicKey?.toString(), wallet.readyState);
+
+      if (wallet.readyState === 'NotDetected' || wallet.readyState === 'Unsupported') continue;
+
+      _solanaAccounts[wallet.name] = {
+        address: wallet.publicKey?.toBase58() ?? '',
         chainId: undefined,
         chainType: 'solana',
-        wallet: solanaWallet.adapter.name,
-      },
-    };
+        wallet: wallet.name,
+      };
 
-    setConnectedAccounts(solanaAccount);
-  }, [solanaWallet, setConnectedAccounts]);
-
-  useEffect(() => {
-    const connectors = tronStore.connectors;
-
-    const tronAccounts: ConnectedAccounts = {};
-
-    for (const connector of Object.values(connectors)) {
-      if (connector.readyState !== WalletReadyState.Found || !connector.account || !connector.network) return;
-
-      tronAccounts[connector.adapter.name] = {
-        address: connector.account,
-        chainId: getTronNetwork(connector.network),
-        chainType: 'tron',
-        wallet: connector.adapter.name,
+      _solanaWallets[wallet.name] = {
+        address: wallet.publicKey?.toBase58() ?? '',
+        chainId: undefined,
+        chainType: 'solana',
       };
     }
 
-    setConnectedAccounts(tronAccounts);
-  }, [setConnectedAccounts, tronStore]);
+    setChainConnectedAccounts({ solana: _solanaAccounts });
+    setConnectedWallets({
+      solana: _solanaWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, solanaWallets, solConnectedWallet]);
+
+  // tron
+  useEffect(() => {
+    const connectors = tronStore.connectors;
+
+    const _tronAccounts: { [x: string]: ConnectedAccount } = {};
+    const _tronWallets: { [x: string]: ConnectedWallet<'tron'> } = {};
+
+    for (const connector of Object.values(connectors)) {
+      if (connector.readyState === 'NotFound' || connector.readyState === 'Loading' || !connector.adapter.address)
+        continue;
+
+      _tronAccounts[connector.adapter.name] = {
+        address: connector.adapter.address,
+        chainId: undefined,
+        chainType: 'tron',
+        wallet: connector.adapter.name,
+      };
+
+      _tronWallets[connector.adapter.name] = {
+        address: connector.adapter.address,
+        chainId: undefined,
+        chainType: 'tron',
+        connector: connector.adapter,
+      };
+    }
+
+    setChainConnectedAccounts({ tron: _tronAccounts });
+  }, [setChainConnectedAccounts, tronStore]);
 
   return <>{children}</>;
 };

@@ -12,5 +12,5 @@ export * from './types/index.js';
 export * from './types/wallet.js';
 // utils
 export * from './utils/getConnectorIcon.js';
-export * from './utils/isWalletInstalled.js';
+export * from './utils/isEVMWalletInstalled.js';
 export * from './utils/isWalletInstalledAsync.js';

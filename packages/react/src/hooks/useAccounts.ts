@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
-import { Account } from '../types/wallet.js';
+import { ConnectedAccount } from '../types/wallet.js';
 
 /**
  * A hook that returns an array of connected accounts for a {@link ChainType}.
@@ -9,14 +9,17 @@ import { Account } from '../types/wallet.js';
  * @param type The type of chain to return
  * @returns An array of `Account[]`
  */
-export const useAccounts = (type?: ChainType): Account[] => {
-  const connectedAccounts = useWalletsStore((store) => store.connectedAccounts);
+export const useAccounts = (type?: ChainType): ConnectedAccount[] => {
+  const connectedAccountsByChain = useWalletsStore((store) => store.connectedAccountsByChain);
 
   return useMemo(() => {
     if (type) {
-      return Object.values(connectedAccounts).filter((account) => account?.chainType === type) as Account[];
+      return connectedAccountsByChain[type] ? Object.values(connectedAccountsByChain[type]) : [];
     }
 
-    return Object.values(connectedAccounts).filter((a) => a !== undefined) as Account[];
-  }, [connectedAccounts, type]);
+    return Object.values(connectedAccountsByChain).reduce(
+      (acc, accountMap) => acc.concat(Object.values(accountMap)),
+      [] as ConnectedAccount[],
+    );
+  }, [connectedAccountsByChain, type]);
 };

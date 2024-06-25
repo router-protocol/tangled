@@ -15,13 +15,14 @@
     "clean": "pnpm build:clean && rm -rf dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
-  "author": "Jayesh Bhole <jayesh@routerprotocol.com>",
+  "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
   "dependencies": {
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",
-    "@solana/web3.js": "^1.93.0",
+    "@solana/web3.js": "^1.91.2",
     "@tanstack/react-query": "^5.44.0",
+    "@tangled/solana-react": "workspace:*",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
     "@tronweb3/tronwallet-adapters": "^1.2.1",
     "@wagmi/connectors": "^5.0.12",

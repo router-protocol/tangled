@@ -27,19 +27,19 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
   return (
     <TangledContext.Provider value={{ config, chains, connectors }}>
       <QueryClientProvider client={queryClient}>
-        <TronProvider
-          adapters={connectors.tron}
-          chains={chains.tron}
+        <EVMProvider
+          chains={chains.evm}
+          connectors={connectors.evm}
         >
-          <SolanaProvider network={chains.solana[0]}>
-            <EVMProvider
-              chains={chains.evm}
-              connectors={connectors.evm}
-            >
+          <TronProvider
+            adapters={connectors.tron}
+            chains={chains.tron}
+          >
+            <SolanaProvider network={chains.solana[0]}>
               <WalletsProvider>{children}</WalletsProvider>
-            </EVMProvider>
-          </SolanaProvider>
-        </TronProvider>
+            </SolanaProvider>
+          </TronProvider>
+        </EVMProvider>
       </QueryClientProvider>
     </TangledContext.Provider>
   );

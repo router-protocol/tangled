@@ -39,6 +39,10 @@ const createChainConfigs = (
         case 'cosmos':
           break;
         case 'solana':
+          supportedChains.solana.push({
+            ...CHAIN_DATA[CHAIN_ID[chain]],
+            ...overrides?.[chain],
+          } as ChainData<'solana'>);
           break;
         case 'sui':
           break;
