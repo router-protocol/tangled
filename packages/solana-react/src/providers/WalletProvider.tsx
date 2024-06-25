@@ -123,8 +123,6 @@ export const WalletProvider = ({
       if (!autoConnect || !connectedAdapter) return;
       // If autoConnect is true or returns true, use the default autoConnect behavior.
       if (autoConnect === true || (await autoConnect(connectedAdapter))) {
-        console.log('ac/', connectedAdapter.connected);
-
         if (walletName) {
           await connectedAdapter.connect();
         } else {
@@ -139,7 +137,6 @@ export const WalletProvider = ({
     },
     onSuccess: (connectedAdapter) => {
       if (connectedAdapter?.name) {
-        console.log('autoConnect success');
         setWalletName(connectedAdapter.name);
       }
     },
@@ -210,8 +207,6 @@ export const WalletProvider = ({
     };
 
     const handleDisconnect = () => {
-      console.log('[DISCONN]', connectedAdapter.name);
-
       setPublicKey(null);
       setConnected(false);
       setWalletName((v) => (connectedAdapter.name === v ? null : v));
@@ -269,8 +264,6 @@ export const WalletProvider = ({
     }
 
     function handleOnConnect(this: Adapter) {
-      console.log('[CONNECTED]', this.name);
-
       setConnected(true);
       setPublicKey(this.publicKey);
       setConnectedAdapters((prevWallets) => {
@@ -282,8 +275,6 @@ export const WalletProvider = ({
     }
 
     function handleOnDisconnect(this: Adapter) {
-      console.log('[DISCONNECTED]', this.name);
-
       setConnected(false);
       setPublicKey(null);
       setConnectedAdapters((prevWallets) => {
