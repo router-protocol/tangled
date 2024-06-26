@@ -1,14 +1,16 @@
 import { WalletName } from '@solana/wallet-adapter-base';
-import { useWallet } from '@tangled/solana-react';
+import { useWallet as useSolanaWallet } from '@tangled/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
+import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
 export const useConnect = () => {
   const wallets = useWallets();
-  const { connect: connectSolanaWallet } = useWallet();
+  const { connect: connectSolanaWallet } = useSolanaWallet();
+  const { connect: connectTronWallet } = useTronContext();
 
   const connectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {
@@ -26,13 +28,15 @@ export const useConnect = () => {
 
       if (params.chainType === 'solana') {
         await connectSolanaWallet({ walletName: walletInstance.name as WalletName });
+      } else if (params.chainType === 'tron') {
+        await connectTronWallet(walletInstance.id);
       } else {
         await walletInstance.connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectSolanaWallet, wallets],
+    [connectSolanaWallet, connectTronWallet, wallets],
   );
 
   const mutation = useMutation({

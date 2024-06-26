@@ -1,8 +1,8 @@
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import {
   Adapter as TronAdapter,
+  AdapterState as TronAdapterReadyState,
   NetworkType as TronNetworkType,
-  WalletReadyState as TronWalletReadyState,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { Mutable } from '@wagmi/core/internal';
 import { Connector as EVMConnector } from 'wagmi';
@@ -74,7 +74,7 @@ export type ConnectedAccountsByChain = {
 
 export type TronAdapterData = {
   adapter: TronAdapter;
-  readyState: TronWalletReadyState;
-  account: string | undefined;
+  readyState: TronAdapterReadyState;
+  account: string | null;
   network: TronNetworkType | undefined;
 };

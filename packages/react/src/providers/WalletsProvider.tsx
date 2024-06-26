@@ -9,7 +9,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const evmConnections = useConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
 
-  const tronStore = useTronStore((state) => state);
+  const tronConnectors = useTronStore((state) => state.connectors);
 
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
@@ -51,19 +51,17 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     // console.log(solConnectedWallet, solanaWallets);
 
     for (const wallet of solanaWallets) {
-      // console.log('wallet', wallet.name, wallet.publicKey?.toString(), wallet.readyState);
-
-      if (wallet.readyState === 'NotDetected' || wallet.readyState === 'Unsupported') continue;
+      if (wallet.readyState === 'NotDetected' || wallet.readyState === 'Unsupported' || !wallet.publicKey) continue;
 
       _solanaAccounts[wallet.name] = {
-        address: wallet.publicKey?.toBase58() ?? '',
+        address: wallet.publicKey.toBase58(),
         chainId: undefined,
         chainType: 'solana',
         wallet: wallet.name,
       };
 
       _solanaWallets[wallet.name] = {
-        address: wallet.publicKey?.toBase58() ?? '',
+        address: wallet.publicKey.toBase58(),
         chainId: undefined,
         chainType: 'solana',
       };
@@ -77,24 +75,23 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   // tron
   useEffect(() => {
-    const connectors = tronStore.connectors;
-
     const _tronAccounts: { [x: string]: ConnectedAccount } = {};
     const _tronWallets: { [x: string]: ConnectedWallet<'tron'> } = {};
 
-    for (const connector of Object.values(connectors)) {
-      if (connector.readyState === 'NotFound' || connector.readyState === 'Loading' || !connector.adapter.address)
+    for (const connector of Object.values(tronConnectors)) {
+      if (connector.readyState === 'NotFound' || connector.readyState === 'Loading' || !connector.account) {
         continue;
+      }
 
       _tronAccounts[connector.adapter.name] = {
-        address: connector.adapter.address,
+        address: connector.account,
         chainId: undefined,
         chainType: 'tron',
         wallet: connector.adapter.name,
       };
 
       _tronWallets[connector.adapter.name] = {
-        address: connector.adapter.address,
+        address: connector.account,
         chainId: undefined,
         chainType: 'tron',
         connector: connector.adapter,
@@ -102,7 +99,10 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     }
 
     setChainConnectedAccounts({ tron: _tronAccounts });
-  }, [setChainConnectedAccounts, tronStore]);
+    setConnectedWallets({
+      tron: _tronWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
   return <>{children}</>;
 };

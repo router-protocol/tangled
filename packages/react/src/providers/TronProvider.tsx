@@ -1,29 +1,28 @@
-import { Adapter, NetworkType } from '@tronweb3/tronwallet-abstract-adapter';
-import { createContext, useEffect, useRef } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
+import { createContext, useCallback, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { TronStore, createTronStore } from '../store/Tron.js';
 import { ChainData, ChainId } from '../types/index.js';
-import { getTronNetwork } from '../utils/getTronNetwork.js';
 
-interface TronContextValues {
-  connect: (adapterId: string) => Promise<{ account: string; chainId: ChainId | undefined }>;
+export interface TronContextValues {
+  connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
   disconnect: () => Promise<void>;
+  store: TronStore | null;
 }
 
 export const TronContext = createContext<TronContextValues>({
   connect: async () => ({ account: '', chainId: undefined }),
   disconnect: async () => {},
+  store: null,
 });
-
-export const TronStoreContext = createContext<TronStore | null>(null);
 
 /**
  * @notice This provider is used to connect to the Tron network.
- * @param connectors - The connectors to use.
- * @param network - The network to connect to.
+ * @param adapters - Supported adapters for the Tron network.
  * @returns The Tron provider context with the connect and disconnect functions.
  */
-const TronProvider = ({
+export const TronProvider = ({
   children,
   adapters,
   // chains,
@@ -33,62 +32,123 @@ const TronProvider = ({
   adapters: Adapter[];
 }) => {
   const tronStore = useRef(createTronStore({ adapters })).current;
-
-  const tronConnectors = useStore(tronStore, (state) => state.connectors);
+  const connectedAdapter = useStore(tronStore, (state) => state.connectedAdapter);
+  const setConnectedAdapter = useStore(tronStore, (state) => state.setConnectedAdapter);
   const setConnector = useStore(tronStore, (state) => state.setConnector);
+  const setAddress = useStore(tronStore, (state) => state.setAddress);
+
+  ///////////////////
+  ///// Handlers ////
+  ///////////////////
+  const handleConnect = useCallback(
+    function (this: Adapter, address: string) {
+      setAddress(address);
+      setConnector({ adapter: this, account: address, network: undefined, readyState: this.state });
+      setConnectedAdapter(this);
+    },
+    [setAddress, setConnectedAdapter, setConnector],
+  );
+
+  const handleError = useCallback((error: Error) => {
+    console.error('[TRON] Error', error);
+  }, []);
+
+  const handleAccountChange = useCallback(
+    function (this: Adapter, address: string) {
+      setAddress(address);
+      setConnector({ adapter: this, account: address, network: undefined, readyState: this.state });
+      setConnectedAdapter(this);
+    },
+    [setAddress, setConnectedAdapter, setConnector],
+  );
+
+  const handleDisconnect = useCallback(() => {
+    setConnectedAdapter(undefined);
+  }, [setConnectedAdapter]);
+
+  ///////////////////
+  ///// Effects /////
+  ///////////////////
+  useEffect(() => {
+    function handleStateChange(this: Adapter) {
+      setConnector({ adapter: this, account: this.address, network: undefined, readyState: this.state });
+    }
+
+    adapters.forEach((adapter) => adapter.on('stateChanged', handleStateChange, adapter));
+    return () => adapters.forEach((adapter) => adapter.off('stateChanged', handleStateChange, adapter));
+  }, [adapters, setConnector]);
 
   useEffect(() => {
-    const connectors = Object.values(tronConnectors);
+    if (connectedAdapter) {
+      connectedAdapter.on('connect', handleConnect, connectedAdapter);
+      connectedAdapter.on('error', handleError);
+      connectedAdapter.on('accountsChanged', handleAccountChange, connectedAdapter);
+      connectedAdapter.on('disconnect', handleDisconnect);
+      // connectedAdapter.on('chainChanged', handleChainChanged);
+      // connectedAdapter.on('readyStateChanged', handleReadyStateChanged);
+      return () => {
+        connectedAdapter.off('connect', handleConnect);
+        connectedAdapter.off('error', handleError);
+        connectedAdapter.off('accountsChanged', handleAccountChange);
+        connectedAdapter.off('disconnect', handleDisconnect);
+        // connectedAdapter.off('chainChanged', handleChainChanged);
+        // connectedAdapter.off('readyStateChanged', handleReadyStateChanged);
+      };
+    }
+  }, [handleConnect, handleError, handleAccountChange, handleDisconnect, connectedAdapter]);
 
-    connectors.forEach((tronAdapter) => {
-      if (tronAdapter.adapter.listeners('connect').length > 0) return;
-
-      tronAdapter.adapter.on('connect', () => {
-        // tronAdapter.account = tronAdapter.adapter.address!;
-        setConnector({ ...tronAdapter, account: tronAdapter.adapter.address! });
-      });
-
-      tronAdapter.adapter.on('readyStateChanged', (state) => {
-        setConnector({ ...tronAdapter, readyState: state });
-      });
-
-      tronAdapter.adapter.on('accountsChanged', (data) => {
-        setConnector({ ...tronAdapter, account: data });
-      });
-
-      tronAdapter.adapter.on('chainChanged', (data) => {
-        setConnector({ ...tronAdapter, network: data as NetworkType });
-      });
-
-      tronAdapter.adapter.on('disconnect', () => {
-        setConnector({ ...tronAdapter, account: undefined, network: undefined });
-      });
-    });
-
+  useEffect(() => {
     return () => {
-      connectors.forEach((tronAdapter) => {
-        tronAdapter.adapter.removeAllListeners();
-      });
+      connectedAdapter?.disconnect();
     };
-  }, [setConnector, tronConnectors]);
+  }, [connectedAdapter]);
 
-  const connect = async (adapterId: string) => {
-    const adapter = tronConnectors[adapterId];
+  // autoconnect
+  useEffect(() => {
+    if (!connectedAdapter || connectedAdapter.state !== AdapterState.Disconnect) {
+      return;
+    }
+    (async function autoConnect() {
+      try {
+        await connectedAdapter.connect();
+      } catch (error) {
+        console.error('[TRON] Auto connect failed', error);
+      }
+    })();
+  }, [connectedAdapter]);
 
-    if (!adapter) throw new Error('Adapter not found');
+  ///////////////////
+  ///// Mutations ///
+  ///////////////////
+  const { mutateAsync: connect } = useMutation({
+    mutationKey: ['tron connect'],
+    mutationFn: async (adapterId: string) => {
+      const adapter = adapters.find((adapter) => adapter.name === adapterId);
+      if (!adapter) {
+        throw new Error('Adapter not found');
+      }
 
-    await adapter.adapter.connect();
+      await adapter.connect();
+      return { account: adapter.address, chainId: undefined, adapter };
+    },
+    onSuccess: (data) => {
+      setConnectedAdapter(data.adapter);
+      setConnector({
+        adapter: data.adapter,
+        account: data.account,
+        network: undefined,
+        readyState: data.adapter.state,
+      });
+    },
+  });
 
-    return { account: adapter.account!, chainId: getTronNetwork(adapter.network) };
-  };
+  const { mutateAsync: disconnect } = useMutation({
+    mutationKey: ['tron disconnect'],
+    mutationFn: async () => {
+      if (!connectedAdapter) return;
+      await connectedAdapter.disconnect();
+    },
+  });
 
-  const disconnect = async () => {};
-
-  return (
-    <TronStoreContext.Provider value={tronStore}>
-      <TronContext.Provider value={{ connect, disconnect }}>{children}</TronContext.Provider>
-    </TronStoreContext.Provider>
-  );
+  return <TronContext.Provider value={{ store: tronStore, connect, disconnect }}>{children}</TronContext.Provider>;
 };
-
-export default TronProvider;

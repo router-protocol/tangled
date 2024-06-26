@@ -5,7 +5,7 @@ import createChainConfigs from '../utils/createChainConfigs.js';
 import { ChainConnectors, createChainConnectors } from '../utils/createChainConnectors.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
-import TronProvider from './TronProvider.js';
+import { TronProvider } from './TronProvider.js';
 import WalletsProvider from './WalletsProvider.js';
 
 export const TangledContext = createContext({
