@@ -22,6 +22,7 @@ const EVMProvider = ({
         {} as Record<string, Transport>,
       ),
       connectors: props.connectors,
+      multiInjectedProviderDiscovery: true,
     });
   });
 

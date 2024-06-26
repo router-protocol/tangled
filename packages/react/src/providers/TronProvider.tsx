@@ -147,6 +147,7 @@ export const TronProvider = ({
     mutationFn: async () => {
       if (!connectedAdapter) return;
       await connectedAdapter.disconnect();
+      // TODO: Implement shims for disconnecting some adapters like TronLink
     },
   });
 

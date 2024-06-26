@@ -1,14 +1,15 @@
 import { useWallet as useSolanaWallet } from '@tangled/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections } from 'wagmi';
+import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
+  const { chains } = useTangledConfig();
   const evmConnections = useConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
-
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
@@ -55,14 +56,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _solanaAccounts[wallet.name] = {
         address: wallet.publicKey.toBase58(),
-        chainId: undefined,
+        chainId: chains.solana[0].id,
         chainType: 'solana',
         wallet: wallet.name,
       };
 
       _solanaWallets[wallet.name] = {
         address: wallet.publicKey.toBase58(),
-        chainId: undefined,
+        chainId: chains.solana[0].id,
         chainType: 'solana',
       };
     }
@@ -71,7 +72,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       solana: _solanaWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, solanaWallets, solConnectedWallet]);
+  }, [setChainConnectedAccounts, setConnectedWallets, solanaWallets, solConnectedWallet, chains.solana]);
 
   // tron
   useEffect(() => {
@@ -85,14 +86,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _tronAccounts[connector.adapter.name] = {
         address: connector.account,
-        chainId: undefined,
+        chainId: chains.tron[0].id,
         chainType: 'tron',
         wallet: connector.adapter.name,
       };
 
       _tronWallets[connector.adapter.name] = {
         address: connector.account,
-        chainId: undefined,
+        chainId: chains.tron[0].id,
         chainType: 'tron',
         connector: connector.adapter,
       };
@@ -102,7 +103,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       tron: _tronWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
+  }, [chains.tron, setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
   return <>{children}</>;
 };

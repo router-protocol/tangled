@@ -47,9 +47,10 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         downloadUrl: wallet.adapter.url,
       }));
 
-    const suggested = configuredConnectors.solana.filter(
-      (connector) => detected.find((wallet) => wallet.name === connector.name) === undefined,
-    );
+    const suggested =
+      configuredConnectors.solana?.filter(
+        (connector) => detected.find((wallet) => wallet.name === connector.name) === undefined,
+      ) ?? [];
 
     return detected.concat(suggested);
   }, [configuredConnectors.solana, solanaWallets]);

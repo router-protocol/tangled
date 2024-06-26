@@ -48,7 +48,7 @@ export type ConnectedWallet<T extends ChainType = ChainType> = {
 
 export type ConnectedAccount = {
   address: string;
-  chainId: string | undefined;
+  chainId: string;
   chainType: ChainType;
   wallet: string;
 };
