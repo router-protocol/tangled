@@ -1,44 +1,96 @@
-import { useState } from 'react';
+import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled/react';
 import './App.css';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 
 function App() {
-  const [count, setCount] = useState(0);
+  const accounts = useAccounts();
+  const wallets = useWallets();
+
+  const { connect } = useConnect();
+  const { disconnect } = useDisConnect();
 
   return (
-    <>
+    <div className=''>
+      <h1>Tangled Example</h1>
+
+      <h2>ACCOUNTS</h2>
+
       <div>
-        <a
-          href='https://vitejs.dev'
-          target='_blank'
-        >
-          <img
-            src={viteLogo}
-            className='logo'
-            alt='Vite logo'
-          />
-        </a>
-        <a
-          href='https://react.dev'
-          target='_blank'
-        >
-          <img
-            src={reactLogo}
-            className='logo react'
-            alt='React logo'
-          />
-        </a>
+        <span>Connected Accounts:</span>
+
+        <ul>
+          {accounts.map((account) => {
+            return (
+              <li
+                key={`${account.address}-${account.wallet}`}
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+                  gap: '1rem',
+                }}
+              >
+                <img
+                  src={wallets[account.chainType].find((wallet) => wallet.id === account.wallet)?.icon}
+                  alt=''
+                  width={32}
+                  height={32}
+                />
+                <span>{account.address}</span>
+                <span>{account.chainId}</span>
+                <span>{account.chainType}</span>
+                <span>{account.wallet}</span>
+
+                <button onClick={() => disconnect({ chainType: account.chainType, walletId: account.wallet })}>
+                  Disconnect
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
-      <h1>Vite + React</h1>
-      <div className='card'>
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <br />
+
+      <h2>WALLETS</h2>
+
+      <div className=''>
+        {CHAIN_TYPES.map((chainType) => (
+          <div
+            className=''
+            key={chainType}
+          >
+            <span>{chainType}</span>
+            <ul>
+              {wallets[chainType].map((wallet) => (
+                <li
+                  key={wallet.id}
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: '2ch 1fr 1fr 1fr 1fr',
+                    gap: '1rem',
+                  }}
+                >
+                  <span>{wallet.installed ? '✅' : '❌'}</span>
+                  <span>{wallet.name}</span>
+                  <img
+                    src={wallet.icon}
+                    alt=''
+                    width={32}
+                    height={32}
+                  />
+                  {wallet.installed ? (
+                    <button onClick={() => connect({ walletId: wallet.id, chainType })}>connect</button>
+                  ) : wallet.url ? (
+                    <a href={wallet.url}>Install Link</a>
+                  ) : (
+                    <span>Not Installed</span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
       </div>
-      <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
-    </>
+    </div>
   );
 }
 
