@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { createContext, useCallback, useEffect } from 'react';
+import { createContext, useCallback, useEffect, useRef } from 'react';
 // import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
 import { IPolkadotWalletListItem, NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { useStore } from 'zustand';
@@ -54,7 +54,7 @@ export const AlephProvider = ({
   //   fetchData();
   // }, []);
 
-  const alephStore = createAlephStore({ adapter: NightlyConnectAdapter });
+  const alephStore = useRef(createAlephStore({ adapter: NightlyConnectAdapter })).current;
   // console.log("aleph store- ", alephStore)
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
@@ -97,73 +97,6 @@ export const AlephProvider = ({
   /////////////////
   /// Effects /////
   /////////////////
-  // useEffect(() => {
-  //   function handleStateChange(wallet: IPolkadotWalletListItem) {
-  //       if (connectedAdapter) {
-  //       console.log("state change - ", wallet, connectedAdapter.selectedWallet)
-  //       // setConnector({  });
-  //       // setConnector({ ...this});
-  //     }
-  //     }
-
-  //     adapters.forEach((wallet) => connectedAdapter.selectedWallet?.name == wallet.name && handleStateChange(wallet));
-  //     // adapters.forEach((adapter) => adapter.on('stateChanged', handleStateChange, adapter));
-  //     // return () => adapters.forEach((adapter) => adapter.off('stateChanged', handleStateChange, adapter));
-  // }, [connectedAdapter.selectedWallet, adapters, setConnector]);
-
-  useEffect(() => {
-    if (connectedAdapter) {
-      // connectedAdapter.on('connect', handleConnect, connectedAdapter);
-      // connectedAdapter.on('error', handleError);
-      // connectedAdapter.on('accountsChanged', handleAccountChange, connectedAdapter);
-      // connectedAdapter.on('disconnect', handleDisconnect);
-      // connectedAdapter.on('chainChanged', handleChainChanged);
-      // connectedAdapter.on('readyStateChanged', handleReadyStateChanged);
-      // const acc = connectedAdapter.accounts.get()
-
-      const fetchAccounts = async () => {
-        try {
-          console.log('acc connectedAdapter', connectedAdapter);
-          const acc = await connectedAdapter.accounts.get();
-          console.log('acc in useeffect', acc);
-        } catch (error) {
-          console.error('Error fetching accounts:', error);
-        }
-      };
-
-      fetchAccounts();
-
-      // return () =>
-      // {
-      // connectedAdapter.off('connect', handleConnect);
-      // connectedAdapter.off('error', handleError);
-      // connectedAdapter.off('accountsChanged', handleAccountChange);
-      // connectedAdapter.off('disconnect', handleDisconnect);
-      // connectedAdapter.off('chainChanged', handleChainChanged);
-      // connectedAdapter.off('readyStateChanged', handleReadyStateChanged);
-      // };
-    }
-  }, [handleConnect, handleError, handleAccountChange, handleDisconnect, connectedAdapter]);
-
-  // useEffect(() => {
-  //   return () => {
-  //     connectedAdapter?.disconnect();
-  //   };
-  // }, [connectedAdapter]);
-
-  // autoconnect
-  // useEffect(() => {
-  //   if (!connectedAdapter || connectedAdapter.state !== AdapterState.Disconnect) {
-  //     return;
-  //   }
-  //   (async function autoConnect() {
-  //     try {
-  //       await connectedAdapter.connect();
-  //     } catch (error) {
-  //       console.error('[TRON] Auto connect failed', error);
-  //     }
-  //   })();
-  // }, [connectedAdapter]);
 
   /////////////////
   /// Mutations ///
@@ -179,32 +112,34 @@ export const AlephProvider = ({
 
       const walletAdaters = connectedAdapter.walletsList;
       const connector = walletAdaters.find((adapter) => adapter.slug === walletName);
-      console.log('adapter in mutate ', adapters, walletAdaters, walletName, connector);
+
       if (!connector) {
         throw new Error('Adapter not found');
       }
-      console.log('adapter connector aleph ', connector, connectedAdapter);
 
       await connectedAdapter.connectToWallet(connector.name);
       const accounts = await connectedAdapter.accounts.get();
-      console.log('adapter connected - ', connectedAdapter, await connectedAdapter.accounts.get(), accounts);
-      // setAddress(accounts[0].address);
-      // handleAccountChange(adapter, accounts[0].address);
 
-      console.log('selected wallet', connectedAdapter.selectedWallet);
       return { account: accounts[0].address, chainId: undefined, adapter: connectedAdapter };
     },
     onSuccess: (data) => {
       setAddress(data.account);
-      console.log('data.adapter ', data.adapter);
       setConnectors(data.adapter);
+      console.log('data.adapter - ', data.adapter);
       setConnectedAdapter(data.adapter);
+
       // setConnector({...data.adapter.walletsList[0]});
       // setConnector({ name: "sd" });
     },
   });
 
-  console.log('connect aleph connectorss ', connectorss);
+  useEffect(() => {
+    console.log('aleph store - ', connectorss);
+  }, [connectorss]);
+
+  useEffect(() => {
+    console.log('[[[aleph state]]] - ', alephStore.getState());
+  });
 
   const { mutateAsync: disconnect } = useMutation({
     mutationKey: ['aleph disconnect'],

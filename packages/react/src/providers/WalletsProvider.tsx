@@ -12,7 +12,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const evmConnections = useConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
-  // const alephAdapter = useAlephStore((state) => state.connectedAdapter);
   const alephConnectors = useAlephStore((state) => state.connectors);
 
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
@@ -109,35 +108,39 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   }, [chains.tron, setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
   useEffect(() => {
-    // (async () => {
-    const _tronAccounts: { [x: string]: ConnectedAccount } = {};
-    const _tronWallets: { [x: string]: ConnectedWallet<'aleph_zero'> } = {};
-    for (const [name, adapter] of Object.entries(alephConnectors)) {
-      _tronAccounts[name] = {
-        address: '(await adapter.accounts.get())[0].address',
-        chainId: chains.aleph_zero[0].id,
-        chainType: 'aleph_zero',
-        wallet: name,
-      };
+    (async () => {
+      const _tronAccounts: { [x: string]: ConnectedAccount } = {};
+      const _tronWallets: { [x: string]: ConnectedWallet<'aleph_zero'> } = {};
+      console.log('alephConnectors', alephConnectors);
+
+      if (!alephConnectors) return;
+
+      for (const [name, adapter] of Object.entries(alephConnectors)) {
+        _tronAccounts[name] = {
+          address: (await adapter.accounts.get())[0].address,
+          chainId: chains.aleph_zero[0].id,
+          chainType: 'aleph_zero',
+          wallet: name,
+        };
+        // }
+
+        _tronWallets[name] = {
+          address: (await adapter.accounts.get())[0].address,
+          chainId: chains.aleph_zero[0].id,
+          chainType: 'aleph_zero',
+          connector: adapter,
+        };
+      }
+
+      // if (alephAdapter && alephAdapter.selectedWallet) {
+      // for (const wallet of alephAdapter.walletsList) {
       // }
 
-      _tronWallets[name] = {
-        address: '(await adapter.accounts.get())[0].address',
-        chainId: chains.aleph_zero[0].id,
-        chainType: 'aleph_zero',
-        connector: adapter,
-      };
-    }
-
-    // if (alephAdapter && alephAdapter.selectedWallet) {
-    // for (const wallet of alephAdapter.walletsList) {
-    // }
-
-    setChainConnectedAccounts({ aleph_zero: _tronAccounts });
-    setConnectedWallets({
-      tron: _tronWallets,
-    });
-    // })()
+      setChainConnectedAccounts({ aleph_zero: _tronAccounts });
+      setConnectedWallets({
+        tron: _tronWallets,
+      });
+    })();
     console.log('alephConnectors ', alephConnectors);
   }, [alephConnectors, chains.aleph_zero, setChainConnectedAccounts, setConnectedWallets]);
 
