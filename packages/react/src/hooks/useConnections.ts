@@ -12,6 +12,8 @@ import { ConnectedWallet } from '../types/wallet.js';
 export const useConnections = (type?: ChainType): ConnectedWallet[] => {
   const connectedWalletsByChain = useWalletsStore((store) => store.connectedWalletsByChain);
 
+  console.log('connectedWalletsByChain  - ', connectedWalletsByChain);
+
   return useMemo(() => {
     if (type) {
       return Object.values(connectedWalletsByChain[type]) ?? [];

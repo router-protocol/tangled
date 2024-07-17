@@ -5,6 +5,7 @@ import { useConnectors as useEVMConnectors } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { isEVMWalletInstalled } from '../utils/isEVMWalletInstalled.js';
+import { useAlephStore } from './useAlephStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -17,6 +18,10 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
   const evmConnectors = useEVMConnectors();
 
   const { wallets: solanaWallets } = useSolanaWallet();
+
+  // const alephConnectors = useAlephStore((state) => state.connectors);
+  const alephAdapter = useAlephStore((state) => state.connectedAdapter);
+  // console.log("aleconnectors - ", AlephConnectors)
 
   const { connectors: configuredConnectors } = useTangledConfig();
 
@@ -67,11 +72,30 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
     }));
   }, [tronConnectors]);
 
+  const extendedAlephWallets = useMemo<Wallet<'aleph_zero'>[]>(() => {
+    const detected: Wallet<'aleph_zero'>[] =
+      alephAdapter?.walletsList.map((wallet) => ({
+        id: wallet.slug,
+        name: wallet.name,
+        connector: alephAdapter,
+        icon: wallet.image.sm,
+        type: 'aleph_zero',
+        installed: wallet.detected,
+        downloadUrl: wallet.homepage,
+      })) ?? [];
+
+    console.log('detected aleph - ', detected);
+
+    return detected;
+  }, [alephAdapter]);
+
+  // console.log("extendedAlephWallets - ", extendedAlephWallets)
+
   return {
     evm: extendedEvmWallets,
     solana: extendedSolanaWallets,
     tron: extendedTronWallets,
-    aleph_zero: [],
+    aleph_zero: extendedAlephWallets,
     bitcoin: [],
     casper: [],
     cosmos: [],

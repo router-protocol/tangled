@@ -5,6 +5,7 @@ import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
+import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
@@ -13,12 +14,14 @@ export const useConnect = () => {
   const { connectAsync: connectEVM } = useWagmiConnect();
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
+  const { connect: connectAlephWallet } = useAlephContext();
 
   const connectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {
       const walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
+      console.log('Connecting wallet', params, wallets[params.chainType], walletInstance);
 
       if (!walletInstance) {
         throw new Error('Wallet not found');
@@ -34,13 +37,16 @@ export const useConnect = () => {
         await connectTronWallet(walletInstance.id);
       } else if (params.chainType === 'evm') {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
+      } else if (params.chainType === 'aleph_zero') {
+        console.log('Connecting to Aleph Zero', walletInstance);
+        await connectAlephWallet(walletInstance.name);
       } else {
         await walletInstance.connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectEVM, connectSolanaWallet, connectTronWallet, wallets],
+    [connectAlephWallet, connectEVM, connectSolanaWallet, connectTronWallet, wallets],
   );
 
   const mutation = useMutation({
@@ -53,6 +59,8 @@ export const useConnect = () => {
     //   // console.log('Connected', p.id);
     // },
   });
+
+  // console.log("connectWallet connectWallet - ", connectWallet)
 
   return {
     connect: connectWallet,
