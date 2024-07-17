@@ -17,6 +17,7 @@
   },
   "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
   "dependencies": {
+    "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",

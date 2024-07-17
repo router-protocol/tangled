@@ -56,7 +56,7 @@ export const CHAIN_ID = {
 
   // casper
 
-  // aleph_zero
+  aleph_zero: 'aleph_zero',
 
   // testnets
   // goerli: '5',

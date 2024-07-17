@@ -1,3 +1,4 @@
+import { IPolkadotWalletListItem } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as TronAdapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { CreateConnectorFn } from 'wagmi';
 import * as evmConnectors from '../connectors/evm/connectors.js';
@@ -15,7 +16,7 @@ export type ChainConnectors = {
   cosmos: any[];
   sui: any[];
   casper: any[];
-  aleph_zero: any[];
+  aleph_zero: IPolkadotWalletListItem[];
   bitcoin: any[];
 };
 
@@ -36,6 +37,8 @@ export const createChainConnectors = (overrides: Partial<ChainConnectors>): Chai
     solConnectors.backpack,
   ];
 
+  connectors.aleph_zero = [...(overrides.aleph_zero ?? [])];
+  console.log('overrides.aleph_zero - ', connectors, connectors.aleph_zero);
   return connectors;
 };
 
