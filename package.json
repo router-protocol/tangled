@@ -5,8 +5,12 @@
   "type": "module",
   "scripts": {
     "dev:example": "pnpm --filter example dev",
-    "build": "pnpm --filter @tangled/react build",
+    "build": "pnpm build:solana && pnpm build:react",
+    "build:solana": "pnpm --filter @tangled/react build",
+    "build:react": "pnpm --filter @tangled/react build",
+    "build:example": "pnpm --filter @tangled/react-example build",
     "prepare": "husky",
+    "lint": "eslint src/**/*.{ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{ts,tsx,json}",
     "format": "prettier --write src/**/**/*.{ts,tsx,css} --config ./prettier.config.js"
   },
