@@ -10,4 +10,5 @@ export const createWalletConnectConnector = /*@__PURE__*/ (params: WalletConnect
       },
     },
     ...params,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   }) as any;

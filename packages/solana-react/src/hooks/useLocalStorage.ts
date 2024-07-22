@@ -5,6 +5,7 @@ export function useLocalStorage<T>(key: string, defaultState: T): [T, Dispatch<S
     try {
       const value = localStorage.getItem(key);
       if (value) return JSON.parse(value) as T;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (typeof window !== 'undefined') {
         console.error(error);
@@ -27,6 +28,7 @@ export function useLocalStorage<T>(key: string, defaultState: T): [T, Dispatch<S
       } else {
         localStorage.setItem(key, JSON.stringify(value));
       }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (typeof window !== 'undefined') {
         console.error(error);

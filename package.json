@@ -5,10 +5,15 @@
   "type": "module",
   "scripts": {
     "dev:example": "pnpm --filter example dev",
-    "build": "pnpm --filter @tangled/react build",
+    "build": "pnpm build:solana && pnpm build:react",
+    "build:solana": "pnpm --filter @tangled/solana-react build",
+    "build:react": "pnpm --filter @tangled/react build",
+    "build:example": "pnpm --filter @tangled/react-example build",
     "prepare": "husky",
-    "lint:fix": "eslint --fix src/**/*.{ts,tsx,json}",
-    "format": "prettier --write src/**/**/*.{ts,tsx,css} --config ./prettier.config.js"
+    "lint": "eslint packages",
+    "lint:fix": "eslint packages --fix",
+    "format": "prettier --check . --config ./prettier.config.cjs",
+    "format:fix": "prettier --write . --config ./prettier.config.cjs"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -22,6 +27,7 @@
   "devDependencies": {
     "cpy-cli": "^5.0.0",
     "eslint-config-prettier": "^9.1.0",
+    "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-flowtype": "^8.0.3",
     "eslint-plugin-import": "^2.29.1",
     "eslint-plugin-jsx-a11y": "^6.8.0",
@@ -40,5 +46,6 @@
       "@ledgerhq/hw-transport": "6.27.1",
       "@ledgerhq/hw-transport-webhid": "6.27.1"
     }
-  }
+  },
+  "packageManager": "pnpm@9.4.0"
 }

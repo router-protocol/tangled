@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export const isEVMWalletInstalled = (id: string): boolean => {
   switch (id) {
     case 'gate':
