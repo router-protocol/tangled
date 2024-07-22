@@ -12,7 +12,8 @@
     "prepare": "husky",
     "lint": "eslint src/**/*.{ts,tsx,json}",
     "lint:fix": "eslint --fix src/**/*.{ts,tsx,json}",
-    "format": "prettier --write src/**/**/*.{ts,tsx,css} --config ./prettier.config.js"
+    "format": "prettier --check src/**/**/*.{ts,tsx,css} --config ./prettier.config.cjs",
+    "format:fix": "prettier --write src/**/**/*.{ts,tsx,css} --config ./prettier.config.cjs"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
