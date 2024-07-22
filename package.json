@@ -44,5 +44,6 @@
       "@ledgerhq/hw-transport": "6.27.1",
       "@ledgerhq/hw-transport-webhid": "6.27.1"
     }
-  }
+  },
+  "packageManager": "pnpm@9.4.0"
 }
