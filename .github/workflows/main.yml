@@ -35,9 +35,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check formatting
-        run: pnpm run format:fix
-
       - name: Check linting
         run: pnpm run lint
 
@@ -46,3 +43,6 @@ jobs:
 
       - name: Build example
         run: pnpm run build:example
+
+      - name: Check formatting
+        run: pnpm run format
