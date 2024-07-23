@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { createContext, useCallback, useEffect, useRef } from 'react';
+import { createContext, useEffect, useRef } from 'react';
 // import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
 import { IPolkadotWalletListItem, NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { useStore } from 'zustand';
@@ -31,67 +31,38 @@ export const AlephProvider = ({
   children: React.ReactNode;
   chains: ChainData<'aleph_zero'>[];
   adapters: IPolkadotWalletListItem[];
-  // walletList: IPolkadotWalletListItem[]
 }) => {
-  // const [nightlyAdapter, setNightlyAdapter] = useState<connectedAdapterAdapter>();
+  // const [nightlyAdapter, setNightlyAdapter] = useState<NightlyConnectAdapter>();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const connectedAdapter = connectedAdapterAdapter.buildLazy({
-  //         appMetadata: {
-  //           name: 'NC AlephZero nitro sdk',
-  //           description: 'Nightly Connect Test',
-  //           icon: 'https://docs.nightly.app/img/logo.png',
-  //           additionalInfo: 'Courtesy of Nightly Connect team'
-  //         },
-  //         network: 'AlephZero',
-  //       }));
-  //     } catch (error) {
-  //       console.error('Error fetching data:', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  const alephStore = useRef(createAlephStore({ adapter: NightlyConnectAdapter })).current;
+  const alephStore = useRef(createAlephStore()).current;
   // console.log("aleph store- ", alephStore)
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
   const setAddress = useStore(alephStore, (state) => state.setAddress);
-  const connectorss = useStore(alephStore, (state) => state.connectors);
+  const connectors = useStore(alephStore, (state) => state.connectors);
 
-  ///////////////////
-  ///// Handlers ////
-  ///////////////////
-  const handleConnect = useCallback(
-    function (this: IPolkadotWalletListItem, address: string) {
-      console.log('this ', this);
-      setAddress(address);
-      // setConnector({ ...this });
-      // setConnectedAdapter(connectedAdapter);
-    },
-    [setAddress],
-  );
+  useEffect(() => {
+    (async () => {
+      try {
+        console.log('start builfd');
+        const connectedAdapter = await NightlyConnectAdapter.build({
+          appMetadata: {
+            name: 'NC AlephZero nitro sdk',
+            description: 'Nightly Connect Test',
+            icon: 'https://docs.nightly.app/img/logo.png',
+            additionalInfo: 'Courtesy of Nightly Connect team',
+          },
+          network: 'AlephZero',
+          persistent: true,
+        });
 
-  const handleError = useCallback((error: Error) => {
-    console.error('[aleph] Error', error);
-  }, []);
-
-  const handleAccountChange = useCallback(
-    function (this: IPolkadotWalletListItem, adapter: typeof connectedAdapter, address: string) {
-      setAddress(address);
-      // setConnector({ name: this, account: this.accounts.get(), network: undefined, readyState: this.connected });
-      // setConnector({ ...this });
-      // setConnectedAdapter(adapter);
-      console.log('account change - ', this, adapter, address);
-    },
-    [setAddress, setConnectedAdapter],
-  );
-
-  const handleDisconnect = useCallback(() => {
-    setConnectedAdapter(undefined);
+        console.log('nightly adapter - ', connectedAdapter);
+        setConnectedAdapter(connectedAdapter);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    })();
   }, [setConnectedAdapter]);
 
   /////////////////
@@ -103,39 +74,34 @@ export const AlephProvider = ({
   /////////////////
   const { mutateAsync: connect } = useMutation({
     mutationKey: ['aleph connect'],
-    mutationFn: async (walletName: string) => {
-      // const adapter = nightlyAdapter;
-
+    mutationFn: async (walletSlug: string) => {
       if (!connectedAdapter) {
-        throw new Error('no nightly adapter connected');
+        throw new Error('no nightly adapter found');
       }
 
-      const walletAdaters = connectedAdapter.walletsList;
-      const connector = walletAdaters.find((adapter) => adapter.slug === walletName);
+      const walletAdaters = connectedAdapter.walletsFromRegistry;
+      const connector = walletAdaters.find((adapter) => adapter.name.toLowerCase() === walletSlug.toLowerCase());
+
+      console.log('walletAdaters ', connectedAdapter.walletsList, connectedAdapter.walletsFromRegistry);
 
       if (!connector) {
-        throw new Error('Adapter not found');
+        throw new Error('Wallet connector not found');
       }
 
       await connectedAdapter.connectToWallet(connector.name);
       const accounts = await connectedAdapter.accounts.get();
 
-      return { account: accounts[0].address, chainId: undefined, adapter: connectedAdapter };
+      console.log('Conencted to ', connector.name, accounts);
+
+      return { account: accounts[0].address, chainId: undefined, adapter: connectedAdapter, acc: accounts };
     },
     onSuccess: (data) => {
       setAddress(data.account);
       setConnectors(data.adapter);
       console.log('data.adapter - ', data.adapter);
       setConnectedAdapter(data.adapter);
-
-      // setConnector({...data.adapter.walletsList[0]});
-      // setConnector({ name: "sd" });
     },
   });
-
-  useEffect(() => {
-    console.log('aleph store - ', connectorss);
-  }, [connectorss]);
 
   useEffect(() => {
     console.log('[[[aleph state]]] - ', alephStore.getState());
@@ -146,11 +112,28 @@ export const AlephProvider = ({
     mutationFn: async () => {
       if (!connectedAdapter) return;
       console.log('disconnect required');
+      await connectedAdapter.disconnect();
+
+      // connectedAdapter.setSelectedWallet({})
+      // localStorage.removeItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')
+      console.log('disconnect done', connectedAdapter.selectedWallet);
+      // connectedAdapter.connectToStandardWallet()
+
       // TODO: Implement shims for disconnecting some adapters like TronLink
     },
   });
 
-  // console.log("connect aleph ddd ", connect, disconnect)
+  useEffect(() => {
+    // console.log('eager vconnect active', localStorage.getItem('NIGHTLY_CONNECT_SESSION_ID_AlephZero')?.toString() ?? "vd", connectedAdapter?.selectedWallet);
+    if (
+      connectedAdapter &&
+      !connectedAdapter?.connected &&
+      localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero') !== null
+    ) {
+      console.log('connecting ...');
+      connect(JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName ?? 'talisman');
+    }
+  }, [connect, connectedAdapter]);
 
   return <AlephContext.Provider value={{ store: alephStore, connect, disconnect }}>{children}</AlephContext.Provider>;
 };

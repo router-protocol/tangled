@@ -73,14 +73,17 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
   }, [tronConnectors]);
 
   const extendedAlephWallets = useMemo<Wallet<'aleph_zero'>[]>(() => {
+    const walletList = alephAdapter?.walletsList;
+    // console.log('wallet list  --- ', alephAdapter?.walletsFromRegistry);
+
     const detected: Wallet<'aleph_zero'>[] =
-      alephAdapter?.walletsList.map((wallet) => ({
-        id: wallet.slug ?? wallet.name.toLowerCase(),
+      alephAdapter?.walletsFromRegistry.map((wallet) => ({
+        id: wallet.slug.toLowerCase(),
         name: wallet.name,
         connector: alephAdapter,
         icon: wallet.image.default,
         type: 'aleph_zero',
-        installed: wallet.detected,
+        installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
         downloadUrl: wallet.homepage,
       })) ?? [];
 

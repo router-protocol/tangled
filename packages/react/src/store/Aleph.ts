@@ -2,10 +2,6 @@ import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
-interface AlephProps {
-  adapter: typeof NightlyConnectAdapter;
-}
-
 export interface AlephState {
   connectors: {
     [key in string]: NightlyConnectAdapter;
@@ -21,7 +17,7 @@ export interface AlephState {
 
 export type AlephStore = ReturnType<typeof createAlephStore>;
 
-export const createAlephStore = (props: AlephProps) => {
+export const createAlephStore = () => {
   const DEFAULT_ALEPH_STATE: AlephState = {
     connectors: {},
     connectedAdapter: undefined,
@@ -33,26 +29,15 @@ export const createAlephStore = (props: AlephProps) => {
     setConnectedAdapter: () => {},
   };
 
-  const nightlyConnect = props.adapter.buildLazy({
-    appMetadata: {
-      name: 'NC AlephZero nitro sdk',
-      description: 'Nightly Connect Test',
-      icon: 'https://docs.nightly.app/img/logo.png',
-      additionalInfo: 'Courtesy of Nightly Connect team',
-    },
-    network: 'AlephZero',
-  });
-
   const connectors: { [key in string]: NightlyConnectAdapter } = {};
-  if (nightlyConnect.selectedWallet) {
-    connectors[nightlyConnect.selectedWallet.name.toLowerCase()] = nightlyConnect;
-  }
 
+  // console.log('nightly walletlist - ', nightlyConnect.walletsList)
   return createStore<AlephState>()(
     devtools((set) => ({
       ...DEFAULT_ALEPH_STATE,
       connectors,
-      connectedAdapter: nightlyConnect,
+
+      setConnectedAdapter: (connectedAdapter) => set(() => ({ connectedAdapter })),
 
       setAddress: (address) => set(() => ({ address })),
       setConnectors: (connector) => {
