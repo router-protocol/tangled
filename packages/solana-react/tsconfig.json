@@ -4,11 +4,14 @@
     "composite": true,
     "declaration": true,
     "noEmit": false,
+
     "sourceMap": true,
-    "outDir": "dist",
+    "outDir": "dist/_esm",
     "rootDir": "./src",
+
+    "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "Node"
+    "moduleResolution": "Bundler"
   },
   "include": ["./src/**/*", "./src/**/*.json"]
 }
