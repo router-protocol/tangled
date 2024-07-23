@@ -35,7 +35,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
       icon: connector.icon ?? '',
       type: 'evm',
       installed: isEVMWalletInstalled(connector.id),
-      downloadUrl: undefined,
+      url: undefined,
     }));
   }, [evmConnectors]);
 
@@ -49,7 +49,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         icon: wallet.adapter.icon,
         type: 'solana',
         installed: wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported',
-        downloadUrl: wallet.adapter.url,
+        url: wallet.adapter.url,
       }));
 
     const suggested =
@@ -68,7 +68,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
       icon: connector.adapter.icon,
       type: 'tron',
       installed: connector.adapter.readyState !== 'NotFound' && connector.adapter.readyState !== 'Loading',
-      downloadUrl: connector.adapter.url,
+      url: connector.adapter.url,
     }));
   }, [tronConnectors]);
 
@@ -84,7 +84,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         icon: wallet.image.default,
         type: 'aleph_zero',
         installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
-        downloadUrl: wallet.homepage,
+        url: wallet.homepage,
       })) ?? [];
 
     return detected;
