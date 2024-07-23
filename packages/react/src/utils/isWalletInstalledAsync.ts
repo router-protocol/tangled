@@ -10,6 +10,7 @@ export const isWalletInstalledAsync = async (id: string): Promise<boolean> => {
         return false;
       }
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const SafeAppsSDK: any = (await import('@safe-global/safe-apps-sdk')).default;
       const sdk = new SafeAppsSDK();
 

@@ -1,0 +1,48 @@
+# .github main.yml
+# Check prettier formatting
+# Perform ESLint check
+# Build the project
+
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Check linting
+        run: pnpm run lint
+
+      - name: Build packages
+        run: pnpm run build
+
+      - name: Build example
+        run: pnpm run build:example
+
+      - name: Check formatting
+        run: pnpm run format

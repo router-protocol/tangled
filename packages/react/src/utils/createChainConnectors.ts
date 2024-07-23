@@ -12,9 +12,13 @@ export type ChainConnectors = {
   evm: CreateConnectorFn[];
   tron: TronAdapter[];
   solana: Wallet<'solana'>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   near: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   cosmos: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sui: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   casper: any[];
   aleph_zero: IPolkadotWalletListItem[];
   bitcoin: any[];
