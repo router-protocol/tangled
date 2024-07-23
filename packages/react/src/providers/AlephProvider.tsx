@@ -40,12 +40,11 @@ export const AlephProvider = ({
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
   const setAddress = useStore(alephStore, (state) => state.setAddress);
-  const connectors = useStore(alephStore, (state) => state.connectors);
+  const currentAddress = useStore(alephStore, (state) => state.address);
 
   useEffect(() => {
     (async () => {
       try {
-        console.log('start builfd');
         const connectedAdapter = await NightlyConnectAdapter.build({
           appMetadata: {
             name: 'NC AlephZero nitro sdk',
@@ -57,17 +56,13 @@ export const AlephProvider = ({
           persistent: true,
         });
 
-        console.log('nightly adapter - ', connectedAdapter);
+        console.log('nightly adapter conencted- ', connectedAdapter);
         setConnectedAdapter(connectedAdapter);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     })();
   }, [setConnectedAdapter]);
-
-  /////////////////
-  /// Effects /////
-  /////////////////
 
   /////////////////
   /// Mutations ///
@@ -103,35 +98,49 @@ export const AlephProvider = ({
     },
   });
 
+  // useEffect(() => {
+  //   console.log('[[[aleph state]]] - ', alephStore.getState());
+  // }, [alephStore]);
+
   useEffect(() => {
-    console.log('[[[aleph state]]] - ', alephStore.getState());
-  });
+    if (!connectedAdapter) {
+      return;
+    }
+
+    const handleAccountsUpdate = async () => {
+      const account = await connectedAdapter?.accounts.get();
+      setConnectors(connectedAdapter);
+      console.log('account --', account);
+      // if(accout && accout[0].address !== currentAddress)
+      // setConnectedAdapter(connectedAdapter)
+    };
+
+    return () => {
+      connectedAdapter.accounts.subscribe(handleAccountsUpdate)();
+    };
+  }, [connectedAdapter, connectedAdapter?.accounts, currentAddress, setConnectedAdapter, setConnectors]);
 
   const { mutateAsync: disconnect } = useMutation({
     mutationKey: ['aleph disconnect'],
     mutationFn: async () => {
       if (!connectedAdapter) return;
-      console.log('disconnect required');
+
       await connectedAdapter.disconnect();
+      setConnectors(connectedAdapter);
 
-      // connectedAdapter.setSelectedWallet({})
-      // localStorage.removeItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')
-      console.log('disconnect done', connectedAdapter.selectedWallet);
-      // connectedAdapter.connectToStandardWallet()
-
-      // TODO: Implement shims for disconnecting some adapters like TronLink
+      console.log('aleph zero disconnected');
     },
   });
 
   useEffect(() => {
-    // console.log('eager vconnect active', localStorage.getItem('NIGHTLY_CONNECT_SESSION_ID_AlephZero')?.toString() ?? "vd", connectedAdapter?.selectedWallet);
     if (
       connectedAdapter &&
       !connectedAdapter?.connected &&
       localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero') !== null
     ) {
-      console.log('connecting ...');
-      connect(JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName ?? 'talisman');
+      console.log('eager connect for aleph zero ...');
+      JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName ??
+        connect(JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName);
     }
   }, [connect, connectedAdapter]);
 
