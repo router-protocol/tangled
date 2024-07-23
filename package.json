@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev:example": "pnpm --filter example dev",
+    "dev:example": "pnpm --filter @tangled/react-example dev",
     "build": "pnpm build:solana && pnpm build:react",
     "build:solana": "pnpm --filter @tangled/solana-react build",
     "build:react": "pnpm --filter @tangled/react build",
