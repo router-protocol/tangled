@@ -35,6 +35,20 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Update @solana-mobile/wallet-adapter-mobile package.json
+        run: |
+          # Install jq if not already available
+          sudo apt-get update && sudo apt-get install -y jq
+
+          # Navigate to the package directory
+          cd packages/solana-react/node_modules/@solana-mobile/wallet-adapter-mobile
+
+          # Use jq to update the package.json file
+          jq '.exports["."].types = "./lib/types/index.d.ts"' package.json > temp.json && mv temp.json package.json
+
+          # Verify the change
+          grep -A 3 '"exports":' package.json
+
       - name: Check linting
         run: pnpm run lint
 
