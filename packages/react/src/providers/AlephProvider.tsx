@@ -25,7 +25,7 @@ export const AlephContext = createContext<AlephContextValues>({
  */
 export const AlephProvider = ({
   children,
-  adapters,
+  // adapters,
   // chains,
 }: {
   children: React.ReactNode;

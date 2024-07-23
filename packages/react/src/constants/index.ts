@@ -1,4 +1,5 @@
 import {
+  alephZero,
   arbitrum,
   avalanche,
   base,
@@ -90,6 +91,9 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // [CHAIN_ID.tronShasta]: tronShasta,
   // [CHAIN_ID.tronNile]: tronNile,
 
+  // aleph
+  [CHAIN_ID.aleph_zero]: alephZero,
+
   // testnets
   // 5: goerli,
   // 80001: polygonMumbai,
@@ -116,4 +120,5 @@ export const DEFAULT_CHAINS = [
   'polygon_zkevm',
   'scroll',
   'zksync',
+  'aleph_zero',
 ] as Chain[];
