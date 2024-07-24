@@ -10,23 +10,18 @@
     "build:solana": "pnpm --filter @tangled/solana-react build",
     "build:react": "pnpm --filter @tangled/react build",
     "build:example": "pnpm --filter @tangled/react-example build",
-    "prepare": "husky",
+    "prepare": "husky && husky install",
     "lint": "eslint packages",
     "lint:fix": "eslint packages --fix",
     "format": "prettier --check . --config ./prettier.config.cjs",
     "format:fix": "prettier --write . --config ./prettier.config.cjs"
-  },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "prettier --write"
-    ],
-    "*.{md,css}": "prettier --write"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "cpy-cli": "^5.0.0",
+    "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-plugin-flowtype": "^8.0.3",
@@ -48,5 +43,11 @@
       "@ledgerhq/hw-transport-webhid": "6.27.1"
     }
   },
-  "packageManager": "pnpm@9.4.0"
+  "packageManager": "pnpm@9.4.0",
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "prettier --write . --config ./prettier.config.cjs"
+    ],
+    "*.{md,css,json}": "prettier --write . --config ./prettier.config.cjs"
+  }
 }
