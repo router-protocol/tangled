@@ -125,10 +125,10 @@ export const AlephProvider = ({
     };
 
     connectedAdapter.accounts.subscribe(handleAccountsUpdate);
+    const unsubscribe = connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     return () => {
-      connectedAdapter.accounts.subscribe(handleAccountsUpdate)();
+      unsubscribe();
     };
-  }, [connectedAdapter, connectedAdapter?.accounts, currentAddress, setConnectedAdapter, setConnectors]);
 
   // Eager connect when the page reloads
   useEffect(() => {
