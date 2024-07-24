@@ -4,6 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "postinstall": "node ./scripts/postinstall.js",
     "dev:example": "pnpm --filter @tangled/react-example dev",
     "build": "pnpm build:solana && pnpm build:react",
     "build:solana": "pnpm --filter @tangled/solana-react build",
