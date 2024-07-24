@@ -7,7 +7,7 @@ export const alephZero: ChainData = {
   nativeCurrency: {
     name: 'AZERO',
     symbol: 'AZERO',
-    decimals: 18,
+    decimals: 12,
   },
   rpcUrls: {
     default: {

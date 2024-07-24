@@ -135,11 +135,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
           };
         }
       }
-
-      // if (alephAdapter && alephAdapter.selectedWallet) {
-      // for (const wallet of alephAdapter.walletsList) {
-      // }
-
       setChainConnectedAccounts({ aleph_zero: _alephAccounts });
       setConnectedWallets({
         aleph_zero: _alephWallets,
