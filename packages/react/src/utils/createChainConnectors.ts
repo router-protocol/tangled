@@ -1,4 +1,3 @@
-import { IPolkadotWalletListItem } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as TronAdapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { CreateConnectorFn } from 'wagmi';
 import * as evmConnectors from '../connectors/evm/connectors.js';
@@ -20,7 +19,9 @@ export type ChainConnectors = {
   sui: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   casper: any[];
-  aleph_zero: IPolkadotWalletListItem[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  aleph_zero: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
 };
 
@@ -42,7 +43,6 @@ export const createChainConnectors = (overrides: Partial<ChainConnectors>): Chai
   ];
 
   connectors.aleph_zero = [...(overrides.aleph_zero ?? [])];
-  console.log('overrides.aleph_zero - ', connectors, connectors.aleph_zero);
   return connectors;
 };
 
