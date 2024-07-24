@@ -42,6 +42,8 @@ export const AlephProvider = ({
   const setAddress = useStore(alephStore, (state) => state.setAddress);
   const currentAddress = useStore(alephStore, (state) => state.address);
 
+  // Build and set Nightly Adapter
+  // Used build instead of buildLazy to fix nightlyAdapter loading issue while fetching supported nigthly wallet list(walletsFromRegistry)
   useEffect(() => {
     (async () => {
       try {
@@ -59,7 +61,7 @@ export const AlephProvider = ({
         console.log('nightly adapter conencted- ', connectedAdapter);
         setConnectedAdapter(connectedAdapter);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error Connecting with Nightly:', error);
       }
     })();
   }, [setConnectedAdapter]);
@@ -98,28 +100,6 @@ export const AlephProvider = ({
     },
   });
 
-  // useEffect(() => {
-  //   console.log('[[[aleph state]]] - ', alephStore.getState());
-  // }, [alephStore]);
-
-  useEffect(() => {
-    if (!connectedAdapter) {
-      return;
-    }
-
-    const handleAccountsUpdate = async () => {
-      const account = await connectedAdapter?.accounts.get();
-      setConnectors(connectedAdapter);
-      console.log('account --', account);
-      // if(accout && accout[0].address !== currentAddress)
-      // setConnectedAdapter(connectedAdapter)
-    };
-
-    return () => {
-      connectedAdapter.accounts.subscribe(handleAccountsUpdate)();
-    };
-  }, [connectedAdapter, connectedAdapter?.accounts, currentAddress, setConnectedAdapter, setConnectors]);
-
   const { mutateAsync: disconnect } = useMutation({
     mutationKey: ['aleph disconnect'],
     mutationFn: async () => {
@@ -132,15 +112,34 @@ export const AlephProvider = ({
     },
   });
 
+  // Change Account subscription, runs when user changes account
+  useEffect(() => {
+    if (!connectedAdapter) {
+      return;
+    }
+
+    const handleAccountsUpdate = async () => {
+      const accounts = await connectedAdapter.accounts.get();
+      setConnectors(connectedAdapter);
+      console.log('accounts changed --', accounts);
+    };
+
+    connectedAdapter.accounts.subscribe(handleAccountsUpdate);
+    return () => {
+      connectedAdapter.accounts.subscribe(handleAccountsUpdate)();
+    };
+  }, [connectedAdapter, connectedAdapter?.accounts, currentAddress, setConnectedAdapter, setConnectors]);
+
+  // Eager connect when the page reloads
   useEffect(() => {
     if (
       connectedAdapter &&
       !connectedAdapter?.connected &&
       localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero') !== null
     ) {
-      console.log('eager connect for aleph zero ...');
-      JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName ??
+      if (localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')) {
         connect(JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName);
+      }
     }
   }, [connect, connectedAdapter]);
 
