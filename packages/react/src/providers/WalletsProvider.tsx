@@ -117,24 +117,27 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       for (const [name, adapter] of Object.entries(alephConnectors)) {
         const accounts = await adapter.accounts.get();
-        console.log('accounts - ', accounts);
-        const address = accounts.length > 0 && accounts[0].address ? accounts[0].address : '';
-        if (address !== '') {
-          _alephAccounts[name] = {
-            address: address,
-            chainId: chains.aleph_zero[0].id,
-            chainType: 'aleph_zero',
-            wallet: name,
-          };
+        const address = accounts[0]?.address ?? '';
 
-          _alephWallets[name] = {
-            address: address,
-            chainId: chains.aleph_zero[0].id,
-            chainType: 'aleph_zero',
-            connector: adapter,
-          };
+        if (address === '') {
+          continue;
         }
+
+        _alephAccounts[name] = {
+          address: address,
+          chainId: chains.aleph_zero[0].id,
+          chainType: 'aleph_zero',
+          wallet: name,
+        };
+
+        _alephWallets[name] = {
+          address: address,
+          chainId: chains.aleph_zero[0].id,
+          chainType: 'aleph_zero',
+          connector: adapter,
+        };
       }
+
       setChainConnectedAccounts({ aleph_zero: _alephAccounts });
       setConnectedWallets({
         aleph_zero: _alephWallets,

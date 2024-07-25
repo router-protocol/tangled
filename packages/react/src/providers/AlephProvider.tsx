@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useRef } from 'react';
 // import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
-import { IPolkadotWalletListItem, NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
+import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { useStore } from 'zustand';
 import { AlephStore, createAlephStore } from '../store/Aleph.js';
 import { ChainData, ChainId } from '../types/index.js';
@@ -25,12 +25,12 @@ export const AlephContext = createContext<AlephContextValues>({
  */
 export const AlephProvider = ({
   children,
+  // chains
   // adapters,
-  // chains,
 }: {
   children: React.ReactNode;
   chains: ChainData<'aleph_zero'>[];
-  adapters: IPolkadotWalletListItem[];
+  // adapters: IPolkadotWalletListItem[];
 }) => {
   // const [nightlyAdapter, setNightlyAdapter] = useState<NightlyConnectAdapter>();
 
@@ -40,7 +40,6 @@ export const AlephProvider = ({
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
   const setAddress = useStore(alephStore, (state) => state.setAddress);
-  const currentAddress = useStore(alephStore, (state) => state.address);
 
   // Build and set Nightly Adapter
   // Used build instead of buildLazy to fix nightlyAdapter loading issue while fetching supported nigthly wallet list(walletsFromRegistry)
@@ -129,17 +128,17 @@ export const AlephProvider = ({
     return () => {
       unsubscribe();
     };
+  });
 
   // Eager connect when the page reloads
   useEffect(() => {
-    if (
-      connectedAdapter &&
-      !connectedAdapter?.connected &&
-      localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero') !== null
-    ) {
-      if (localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')) {
-        connect(JSON.parse(localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero')!)?.walletName);
-      }
+    const recentWalletItem = localStorage.getItem('NIGHTLY_CONNECT_RECENT_WALLET_AlephZero');
+
+    if (connectedAdapter && !connectedAdapter?.connected && recentWalletItem !== null) {
+      const recentWalletName = JSON.parse(recentWalletItem)?.walletName;
+      if (!recentWalletName) return;
+
+      connect(recentWalletName);
     }
   }, [connect, connectedAdapter]);
 
