@@ -42,7 +42,6 @@ export const createChainConnectors = (overrides: Partial<ChainConnectors>): Chai
     solConnectors.backpack,
   ];
 
-  connectors.aleph_zero = [...(overrides.aleph_zero ?? [])];
   return connectors;
 };
 
