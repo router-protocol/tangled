@@ -143,7 +143,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
         aleph_zero: _alephWallets,
       });
     })();
-    console.log('alephConnectors ', alephConnectors);
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.aleph_zero, alephConnectors]);
 
   return <>{children}</>;

@@ -57,7 +57,6 @@ export const AlephProvider = ({
           persistent: true,
         });
 
-        console.log('nightly adapter conencted- ', connectedAdapter);
         setConnectedAdapter(connectedAdapter);
       } catch (error) {
         console.error('Error Connecting with Nightly:', error);
@@ -78,8 +77,6 @@ export const AlephProvider = ({
       const walletAdaters = connectedAdapter.walletsFromRegistry;
       const connector = walletAdaters.find((adapter) => adapter.name.toLowerCase() === walletSlug.toLowerCase());
 
-      console.log('walletAdaters ', connectedAdapter.walletsList, connectedAdapter.walletsFromRegistry);
-
       if (!connector) {
         throw new Error('Wallet connector not found');
       }
@@ -87,14 +84,11 @@ export const AlephProvider = ({
       await connectedAdapter.connectToWallet(connector.name);
       const accounts = await connectedAdapter.accounts.get();
 
-      console.log('Conencted to ', connector.name, accounts);
-
       return { account: accounts[0].address, chainId: undefined, adapter: connectedAdapter, acc: accounts };
     },
     onSuccess: (data) => {
       setAddress(data.account);
       setConnectors(data.adapter);
-      console.log('data.adapter - ', data.adapter);
       setConnectedAdapter(data.adapter);
     },
   });
@@ -106,8 +100,6 @@ export const AlephProvider = ({
 
       await connectedAdapter.disconnect();
       setConnectors(connectedAdapter);
-
-      console.log('aleph zero disconnected');
     },
   });
 
@@ -118,9 +110,9 @@ export const AlephProvider = ({
     }
 
     const handleAccountsUpdate = async () => {
-      const accounts = await connectedAdapter.accounts.get();
+      // const accounts = await connectedAdapter.accounts.get();
+      // console.log('accounts changed --', accounts);
       setConnectors(connectedAdapter);
-      console.log('accounts changed --', accounts);
     };
 
     connectedAdapter.accounts.subscribe(handleAccountsUpdate);

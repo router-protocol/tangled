@@ -21,7 +21,6 @@ export const useConnect = () => {
       const walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
-      console.log('Connecting wallet', params, wallets[params.chainType], walletInstance);
 
       if (!walletInstance) {
         throw new Error('Wallet not found');
@@ -38,7 +37,6 @@ export const useConnect = () => {
       } else if (params.chainType === 'evm') {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'aleph_zero') {
-        console.log('Connecting to Aleph Zero', walletInstance);
         await connectAlephWallet(walletInstance.name);
       } else {
         await walletInstance.connector.connect();
