@@ -1,7 +1,6 @@
+import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useRef } from 'react';
-// import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
-import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { useStore } from 'zustand';
 import { AlephStore, createAlephStore } from '../store/Aleph.js';
 import { ChainData, ChainId } from '../types/index.js';
@@ -19,23 +18,18 @@ export const AlephContext = createContext<AlephContextValues>({
 });
 
 /**
- * @notice This provider is used to connect to the Tron network.
- * @param adapters - Supported adapters for the Tron network.
- * @returns The Tron provider context with the connect and disconnect functions.
+ * @notice This provider is used to connect to the Aleph Zero using Nightly Connector.
+ * @param adapters - Supported wallet adapters for the Aleph Zero.
+ * @returns The Aleph Zero provider context with the connect and disconnect functions.
  */
 export const AlephProvider = ({
   children,
   // chains
-  // adapters,
 }: {
   children: React.ReactNode;
   chains: ChainData<'aleph_zero'>[];
-  // adapters: IPolkadotWalletListItem[];
 }) => {
-  // const [nightlyAdapter, setNightlyAdapter] = useState<NightlyConnectAdapter>();
-
   const alephStore = useRef(createAlephStore()).current;
-  // console.log("aleph store- ", alephStore)
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
@@ -71,7 +65,7 @@ export const AlephProvider = ({
     mutationKey: ['aleph connect'],
     mutationFn: async (walletSlug: string) => {
       if (!connectedAdapter) {
-        throw new Error('no nightly adapter found');
+        throw new Error('No nightly adapter found');
       }
 
       const walletAdaters = connectedAdapter.walletsFromRegistry;
@@ -110,8 +104,6 @@ export const AlephProvider = ({
     }
 
     const handleAccountsUpdate = async () => {
-      // const accounts = await connectedAdapter.accounts.get();
-      // console.log('accounts changed --', accounts);
       setConnectors(connectedAdapter);
     };
 

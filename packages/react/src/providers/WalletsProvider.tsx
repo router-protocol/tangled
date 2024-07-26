@@ -52,8 +52,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     const _solanaAccounts: { [x: string]: ConnectedAccount } = {};
     const _solanaWallets: { [x: string]: ConnectedWallet } = {};
 
-    // console.log(solConnectedWallet, solanaWallets);
-
     for (const wallet of solanaWallets) {
       if (wallet.readyState === 'NotDetected' || wallet.readyState === 'Unsupported' || !wallet.publicKey) continue;
 

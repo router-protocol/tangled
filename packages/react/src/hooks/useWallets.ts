@@ -19,9 +19,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   const { wallets: solanaWallets } = useSolanaWallet();
 
-  // const alephConnectors = useAlephStore((state) => state.connectors);
   const alephAdapter = useAlephStore((state) => state.connectedAdapter);
-  // console.log("aleconnectors - ", AlephConnectors)
 
   const { connectors: configuredConnectors } = useTangledConfig();
 
@@ -74,7 +72,6 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   const extendedAlephWallets = useMemo<Wallet<'aleph_zero'>[]>(() => {
     const walletList = alephAdapter?.walletsList;
-    // console.log('wallet list  --- ', alephAdapter?.walletsFromRegistry);
 
     const detected: Wallet<'aleph_zero'>[] =
       alephAdapter?.walletsFromRegistry.map((wallet) => ({
@@ -89,8 +86,6 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
     return detected;
   }, [alephAdapter]);
-
-  // console.log("extendedAlephWallets - ", extendedAlephWallets)
 
   return {
     evm: extendedEvmWallets,

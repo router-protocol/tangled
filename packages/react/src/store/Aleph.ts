@@ -10,7 +10,6 @@ export interface AlephState {
   address: string | null;
 
   setAddress: (address: string) => void;
-  // setConnector: (connector: IPolkadotWalletListItem) => void;
   setConnectors: (connector: NightlyConnectAdapter) => void;
   setConnectedAdapter: (adapter: NightlyConnectAdapter | undefined) => void;
 }
@@ -24,14 +23,12 @@ export const createAlephStore = () => {
     address: null,
 
     setAddress: () => {},
-    // setConnector: () => {},
     setConnectors: () => {},
     setConnectedAdapter: () => {},
   };
 
   const connectors: { [key in string]: NightlyConnectAdapter } = {};
 
-  // console.log('nightly walletlist - ', nightlyConnect.walletsList)
   return createStore<AlephState>()(
     devtools((set) => ({
       ...DEFAULT_ALEPH_STATE,
