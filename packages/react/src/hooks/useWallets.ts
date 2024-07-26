@@ -5,6 +5,7 @@ import { useConnectors as useEVMConnectors } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { isEVMWalletInstalled } from '../utils/isEVMWalletInstalled.js';
+import { useAlephStore } from './useAlephStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -18,6 +19,8 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   const { wallets: solanaWallets } = useSolanaWallet();
 
+  const alephAdapter = useAlephStore((state) => state.connectedAdapter);
+
   const { connectors: configuredConnectors } = useTangledConfig();
 
   const tronConnectors = useTronStore((state) => state.connectors);
@@ -30,7 +33,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
       icon: connector.icon ?? '',
       type: 'evm',
       installed: isEVMWalletInstalled(connector.id),
-      downloadUrl: undefined,
+      url: undefined,
     }));
   }, [evmConnectors]);
 
@@ -44,7 +47,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         icon: wallet.adapter.icon,
         type: 'solana',
         installed: wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported',
-        downloadUrl: wallet.adapter.url,
+        url: wallet.adapter.url,
       }));
 
     const suggested =
@@ -63,15 +66,32 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
       icon: connector.adapter.icon,
       type: 'tron',
       installed: connector.adapter.readyState !== 'NotFound' && connector.adapter.readyState !== 'Loading',
-      downloadUrl: connector.adapter.url,
+      url: connector.adapter.url,
     }));
   }, [tronConnectors]);
+
+  const extendedAlephWallets = useMemo<Wallet<'aleph_zero'>[]>(() => {
+    const walletList = alephAdapter?.walletsList;
+
+    const detected: Wallet<'aleph_zero'>[] =
+      alephAdapter?.walletsFromRegistry.map((wallet) => ({
+        id: wallet.slug.toLowerCase(),
+        name: wallet.name,
+        connector: alephAdapter,
+        icon: wallet.image.default,
+        type: 'aleph_zero',
+        installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
+        url: wallet.homepage,
+      })) ?? [];
+
+    return detected;
+  }, [alephAdapter]);
 
   return {
     evm: extendedEvmWallets,
     solana: extendedSolanaWallets,
     tron: extendedTronWallets,
-    aleph_zero: [],
+    aleph_zero: extendedAlephWallets,
     bitcoin: [],
     casper: [],
     cosmos: [],

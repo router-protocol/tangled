@@ -1,3 +1,4 @@
+import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import {
   Adapter as TronAdapter,
@@ -36,7 +37,9 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
     ? SolanaAdapter
     : T extends 'tron'
       ? TronAdapter
-      : DefaultConnector;
+      : T extends 'aleph_zero'
+        ? NightlyConnectAdapter
+        : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;

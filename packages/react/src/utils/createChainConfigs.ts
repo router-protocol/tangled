@@ -49,6 +49,10 @@ const createChainConfigs = (
         case 'casper':
           break;
         case 'aleph_zero':
+          supportedChains.aleph_zero.push({
+            ...CHAIN_DATA[CHAIN_ID[chain]],
+            ...overrides?.[chain],
+          } as ChainData<'aleph_zero'>);
           break;
         case 'bitcoin':
           break;
