@@ -58,8 +58,6 @@ export const useConnect = () => {
     // },
   });
 
-  // console.log("connectWallet connectWallet - ", connectWallet)
-
   return {
     connect: connectWallet,
     isLoading: mutation.isPending,
