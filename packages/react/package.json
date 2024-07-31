@@ -1,11 +1,14 @@
 {
   "name": "@tangled3/react",
-  "private": true,
-  "version": "0.0.1",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": false,
   "scripts": {
     "watch": "tsc -w -p ./tsconfig.json",
