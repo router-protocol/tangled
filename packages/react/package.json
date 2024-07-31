@@ -1,5 +1,5 @@
 {
-  "name": "@tangled/react",
+  "name": "@tangled3/react",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -22,7 +22,7 @@
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/web3.js": "^1.91.2",
-    "@tangled/solana-react": "workspace:*",
+    "@tangled3/solana-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
     "@tronweb3/tronwallet-adapters": "^1.2.1",

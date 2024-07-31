@@ -1,4 +1,4 @@
-import { TangledContextProvider } from '@tangled/react';
+import { TangledContextProvider } from '@tangled3/react';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App.tsx';

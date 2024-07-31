@@ -1,5 +1,5 @@
 import { WalletName } from '@solana/wallet-adapter-base';
-import { useWallet as useSolanaWallet } from '@tangled/solana-react';
+import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';

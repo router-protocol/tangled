@@ -59,10 +59,10 @@ importers:
 
   example:
     dependencies:
-      '@tangled/react':
+      '@tangled3/react':
         specifier: workspace:*
         version: link:../packages/react
-      '@tangled/ui':
+      '@tangled3/ui':
         specifier: workspace:*
         version: link:../packages/ui
       react:
@@ -120,7 +120,7 @@ importers:
       '@solana/web3.js':
         specifier: ^1.91.2
         version: 1.93.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@tangled/solana-react':
+      '@tangled3/solana-react':
         specifier: workspace:*
         version: link:../solana-react
       '@tanstack/react-query':

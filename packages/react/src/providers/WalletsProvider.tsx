@@ -1,4 +1,4 @@
-import { useWallet as useSolanaWallet } from '@tangled/solana-react';
+import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections } from 'wagmi';
 import { useAlephStore } from '../hooks/useAlephStore.js';

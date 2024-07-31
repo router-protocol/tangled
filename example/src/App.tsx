@@ -1,4 +1,4 @@
-import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled/react';
+import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled3/react';
 import './App.css';
 
 function App() {

@@ -1,5 +1,5 @@
 // import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
-import { useWallet as useSolanaWallet } from '@tangled/solana-react';
+import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMemo } from 'react';
 import { useConnectors as useEVMConnectors } from 'wagmi';
 import { ChainType } from '../types/index.js';
