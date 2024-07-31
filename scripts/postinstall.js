@@ -1,4 +1,5 @@
 /* eslint-disable no-console */
+import { execSync } from 'child_process';
 import { readFileSync, writeFileSync } from 'fs';
 import { join } from 'path';
 
@@ -23,6 +24,12 @@ try {
   } else {
     console.log(`No update needed for ${packageName}/package.json`);
   }
+
+  // pnpm build
+  console.log('Building the project...');
+  execSync('pnpm build', { stdio: 'inherit' });
+
+  console.log('Successfully built the project');
 } catch (error) {
   console.error(`Error updating ${packageName}/package.json:`, error);
 }
