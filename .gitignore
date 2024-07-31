@@ -42,3 +42,5 @@ next-env.d.ts
 /.nuxt/
 /.output/
 
+
+pnpm-publish-summary.json
