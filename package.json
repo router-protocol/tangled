@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "sideEffects": false,
   "type": "module",
   "workspaces": [
     "packages/*"
@@ -23,6 +23,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@changesets/cli": "^2.27.7",
     "cpy-cli": "^5.0.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
