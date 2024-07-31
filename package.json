@@ -3,6 +3,9 @@
   "description": "",
   "main": "index.js",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "postinstall": "node ./scripts/postinstall.js",
     "dev:example": "pnpm --filter @tangled3/react-example dev",
@@ -18,7 +21,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "cpy-cli": "^5.0.0",
     "eslint": "^8.57.0",

@@ -1,8 +1,9 @@
 {
   "name": "@tangled3/react",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
+  "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.d.ts",
   "sideEffects": false,
@@ -16,6 +17,9 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
   },
   "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
+  "contributors": [
+    "Ankit Singh <ankit.singh.zm@gmail.com>"
+  ],
   "dependencies": {
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
     "@safe-global/safe-apps-sdk": "^9.0.0",
