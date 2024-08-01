@@ -6,6 +6,7 @@ import { useConnect as useWagmiConnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useSuiContext } from './useSuiContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
@@ -15,6 +16,7 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
+  const { connect: connectSuiWallet } = useSuiContext();
 
   const connectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {
@@ -38,13 +40,15 @@ export const useConnect = () => {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'aleph_zero') {
         await connectAlephWallet(walletInstance.name);
+      } else if (params.chainType === 'sui') {
+        await connectSuiWallet(walletInstance.name);
       } else {
         await walletInstance.connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectAlephWallet, connectEVM, connectSolanaWallet, connectTronWallet, wallets],
+    [connectAlephWallet, connectEVM, connectSolanaWallet, connectSuiWallet, connectTronWallet, wallets],
   );
 
   const mutation = useMutation({

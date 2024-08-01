@@ -6,6 +6,7 @@ import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { isEVMWalletInstalled } from '../utils/isEVMWalletInstalled.js';
 import { useAlephStore } from './useAlephStore.js';
+import { useSuiStore } from './useSuiStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -20,6 +21,8 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
   const { wallets: solanaWallets } = useSolanaWallet();
 
   const alephAdapter = useAlephStore((state) => state.connectedAdapter);
+
+  const suiAdapter = useSuiStore((state) => state.connectedAdapter);
 
   const { connectors: configuredConnectors } = useTangledConfig();
 
@@ -87,6 +90,26 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
     return detected;
   }, [alephAdapter]);
 
+  //sui
+  const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
+    const walletList = suiAdapter?.walletsList;
+
+    const detected: Wallet<'sui'>[] =
+      suiAdapter?.walletsList.map((wallet) => ({
+        id: wallet.slug.toLowerCase(),
+        name: wallet.name,
+        connector: suiAdapter,
+        icon: wallet.image.default,
+        type: 'sui',
+        installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
+        url: wallet.homepage,
+      })) ?? [];
+
+    console.log('sui wallet list - ', walletList, suiAdapter);
+
+    return detected;
+  }, [suiAdapter]);
+
   return {
     evm: extendedEvmWallets,
     solana: extendedSolanaWallets,
@@ -96,6 +119,6 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
     casper: [],
     cosmos: [],
     near: [],
-    sui: [],
+    sui: extendedSuiWallets,
   };
 };

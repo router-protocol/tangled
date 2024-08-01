@@ -45,6 +45,10 @@ const createChainConfigs = (
           } as ChainData<'solana'>);
           break;
         case 'sui':
+          supportedChains.sui.push({
+            ...CHAIN_DATA[CHAIN_ID[chain]],
+            ...overrides?.[chain],
+          } as ChainData<'sui'>);
           break;
         case 'casper':
           break;
