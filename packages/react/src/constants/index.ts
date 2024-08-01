@@ -16,6 +16,7 @@ import {
   polygon,
   polygonZkEvm,
   scroll,
+  sui,
   tronMainnet,
   zkSync,
 } from '../chains/index.js';
@@ -54,6 +55,7 @@ export const CHAIN_ID = {
   // solana
 
   // sui
+  sui: 'sui',
 
   // casper
 
@@ -94,6 +96,9 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // aleph
   [CHAIN_ID.aleph_zero]: alephZero,
 
+  //sui
+  [CHAIN_ID.sui]: sui,
+
   // testnets
   // 5: goerli,
   // 80001: polygonMumbai,
@@ -121,4 +126,5 @@ export const DEFAULT_CHAINS = [
   'scroll',
   'zksync',
   'aleph_zero',
+  'sui',
 ] as Chain[];
