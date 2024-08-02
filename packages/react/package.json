@@ -1,19 +1,20 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.d.ts",
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "directory": "dist"
   },
   "sideEffects": false,
   "scripts": {
     "watch": "tsc -w -p ./tsconfig.json",
     "build": "pnpm clean && pnpm build:esm && pnpm build:postcompile && pnpm build:clean",
-    "build:esm": "tsc --build",
+    "build:esm": "tsc --build --verbose",
     "build:postcompile": "node ../../scripts/postcompile.js && cpy 'src/**/*' dist",
     "build:clean": "rm -rf tsconfig.tsbuildinfo ./dist/tsconfig.tsbuildinfo ./dist/tsconfig.cjs.tsbuildinfo",
     "clean": "pnpm build:clean && rm -rf dist",
@@ -27,7 +28,6 @@
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/wallet-adapter-base": "^0.9.23",
-    "@solana/wallet-adapter-react": "^0.15.35",
     "@solana/web3.js": "^1.91.2",
     "@tangled3/solana-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
@@ -53,7 +53,10 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "@tanstack/react-query": "^5.44.0",
+    "react": ">=18",
+    "react-dom": ">=18",
+    "viem": "^2.13.8",
+    "wagmi": "^2.9.11"
   }
 }

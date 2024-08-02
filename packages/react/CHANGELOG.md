@@ -1,5 +1,13 @@
 # @tangled3/react
 
+## 1.0.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @tangled3/solana-react@1.1.1
+- fix publishing directory
+
 ## 1.0.0
 
 ### Major Changes
