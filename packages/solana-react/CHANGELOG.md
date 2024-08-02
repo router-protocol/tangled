@@ -1,5 +1,17 @@
 # @tangled3/solana-react
 
+## 1.1.1
+
+### Patch Changes
+
+- fix package.json
+
+## 1.0.1
+
+### Patch Changes
+
+- fix package exports
+
 ## 1.0.0
 
 ### Major Changes
