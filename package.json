@@ -13,6 +13,7 @@
     "build:solana": "pnpm --filter @tangled3/solana-react build",
     "build:react": "pnpm --filter @tangled3/react build",
     "build:example": "pnpm --filter @tangled3/react-example build",
+    "clean": "pnpm exec clean",
     "prepare": "husky && husky install",
     "lint": "eslint packages",
     "lint:fix": "eslint packages --fix",
