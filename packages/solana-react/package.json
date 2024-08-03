@@ -39,7 +39,11 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "react": ">=18.2.0",
-    "@tanstack/react-query": "^5.44.0"
+    "react": ">=18",
+    "@tanstack/react-query": "^5.44.0",
+    "@solana-mobile/wallet-adapter-mobile": "^2.1.3",
+    "@solana/wallet-adapter-base": "^0.9.23",
+    "@solana/wallet-standard-wallet-adapter-react": "^1.1.2",
+    "@solana/web3.js": "^1.91.2"
   }
 }

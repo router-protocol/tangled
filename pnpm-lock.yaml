@@ -64,7 +64,7 @@ importers:
     dependencies:
       '@tangled3/react':
         specifier: workspace:*
-        version: link:../packages/react
+        version: link:../packages/react/dist
       '@tangled3/ui':
         specifier: workspace:*
         version: link:../packages/ui
@@ -132,9 +132,6 @@ importers:
       '@tronweb3/tronwallet-adapters':
         specifier: ^1.2.1
         version: 1.2.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)
-      '@wagmi/connectors':
-        specifier: ^5.0.12
-        version: 5.0.12(e7vtfu7owz22lwzk3qmo3c6oai)
       '@wagmi/core':
         specifier: ^2.11.0
         version: 2.11.0(@tanstack/query-core@5.44.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10))
@@ -181,6 +178,7 @@ importers:
       typescript:
         specifier: ^5.2.2
         version: 5.4.5
+    publishDirectory: dist
 
   packages/solana-react:
     dependencies:
@@ -2544,16 +2542,6 @@ packages:
     resolution: {integrity: sha512-rTCC+gVHw0Z/n2wo0Bea+uMzPiH2FVpbShMPOdhJ0qTItf8JPkUIxFrjg01x/OikHTgc0bu3IP7v+7iQzyUuEQ==}
     peerDependencies:
       '@wagmi/core': 2.10.5
-      typescript: '>=5.0.4'
-      viem: 2.x
-    peerDependenciesMeta:
-      typescript:
-        optional: true
-
-  '@wagmi/connectors@5.0.12':
-    resolution: {integrity: sha512-pHXH/+n0wTdPJqfgOrqR1qhIc+AnelX101gJc1RCDDKDzxC6U0CudVX7dias9rlgcqOc9IgKqCH1JfRSu3nDyw==}
-    peerDependencies:
-      '@wagmi/core': 2.11.0
       typescript: '>=5.0.4'
       viem: 2.x
     peerDependenciesMeta:
@@ -10247,46 +10235,6 @@ snapshots:
       '@safe-global/safe-apps-provider': 0.18.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
       '@safe-global/safe-apps-sdk': 8.1.0(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
       '@wagmi/core': 2.10.5(@tanstack/query-core@5.44.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10))
-      '@walletconnect/ethereum-provider': 2.13.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)
-      '@walletconnect/modal': 2.6.2(@types/react@18.3.3)(react@18.3.1)
-      cbw-sdk: '@coinbase/wallet-sdk@3.9.3'
-      viem: 2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
-    optionalDependencies:
-      typescript: 5.4.5
-    transitivePeerDependencies:
-      - '@azure/app-configuration'
-      - '@azure/cosmos'
-      - '@azure/data-tables'
-      - '@azure/identity'
-      - '@azure/keyvault-secrets'
-      - '@azure/storage-blob'
-      - '@capacitor/preferences'
-      - '@netlify/blobs'
-      - '@planetscale/database'
-      - '@react-native-async-storage/async-storage'
-      - '@types/react'
-      - '@upstash/redis'
-      - '@vercel/kv'
-      - bufferutil
-      - encoding
-      - ioredis
-      - react
-      - react-dom
-      - react-i18next
-      - react-native
-      - rollup
-      - supports-color
-      - uWebSockets.js
-      - utf-8-validate
-      - zod
-
-  '@wagmi/connectors@5.0.12(e7vtfu7owz22lwzk3qmo3c6oai)':
-    dependencies:
-      '@coinbase/wallet-sdk': 4.0.3
-      '@metamask/sdk': 0.20.5(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react-i18next@13.5.0(i18next@22.5.1)(react-dom@18.3.1(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1))(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10))(react@18.3.1)(rollup@4.18.0)(utf-8-validate@5.0.10)
-      '@safe-global/safe-apps-provider': 0.18.1(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
-      '@safe-global/safe-apps-sdk': 8.1.0(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
-      '@wagmi/core': 2.11.0(@tanstack/query-core@5.44.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10))
       '@walletconnect/ethereum-provider': 2.13.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)
       '@walletconnect/modal': 2.6.2(@types/react@18.3.3)(react@18.3.1)
       cbw-sdk: '@coinbase/wallet-sdk@3.9.3'

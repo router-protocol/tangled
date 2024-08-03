@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { injected } from '@wagmi/connectors';
+import { injected } from 'wagmi/connectors';
 import { isEVMWalletInstalled } from '../../utils/isEVMWalletInstalled.js';
 
 export const metaMask = /*@__PURE__*/ injected({
