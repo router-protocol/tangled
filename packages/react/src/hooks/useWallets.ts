@@ -1,4 +1,5 @@
 // import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
+import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled/solana-react';
 import { useMemo } from 'react';
 import { useConnectors as useEVMConnectors } from 'wagmi';
@@ -6,10 +7,8 @@ import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { isEVMWalletInstalled } from '../utils/isEVMWalletInstalled.js';
 import { useAlephStore } from './useAlephStore.js';
-import { useSuiStore } from './useSuiStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
-
 /**
  * A hook that returns the connectors for a given chain type.
  * If no type is provided, it returns all connectors.
@@ -22,7 +21,7 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   const alephAdapter = useAlephStore((state) => state.connectedAdapter);
 
-  const suiAdapter = useSuiStore((state) => state.connectedAdapter);
+  const suiWallets = useSuiWallets();
 
   const { connectors: configuredConnectors } = useTangledConfig();
 
@@ -92,23 +91,21 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   //sui
   const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
-    const walletList = suiAdapter?.walletsList;
+    console.log('sui wallet list - ', suiWallets);
 
     const detected: Wallet<'sui'>[] =
-      suiAdapter?.walletsList.map((wallet) => ({
-        id: wallet.slug.toLowerCase(),
+      suiWallets.map((wallet) => ({
+        id: wallet.name,
         name: wallet.name,
-        connector: suiAdapter,
-        icon: wallet.image.default,
+        connector: wallet,
+        icon: wallet.icon.toString(),
         type: 'sui',
-        installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
-        url: wallet.homepage,
+        installed: true,
+        url: '',
       })) ?? [];
 
-    console.log('sui wallet list - ', walletList, suiAdapter);
-
     return detected;
-  }, [suiAdapter]);
+  }, [suiWallets]);
 
   return {
     evm: extendedEvmWallets,

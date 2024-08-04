@@ -1,8 +1,8 @@
+import { useCurrentWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections } from 'wagmi';
 import { useAlephStore } from '../hooks/useAlephStore.js';
-import { useSuiStore } from '../hooks/useSuiStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
@@ -16,11 +16,9 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const alephConnectors = useAlephStore((state) => state.connectors);
   const alephAccounts = useAlephStore((state) => state.connectedAdapter);
 
-  const suiConnectors = useSuiStore((state) => state.connectors);
-  const suiAccounts = useAlephStore((state) => state.connectedAdapter);
-
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
+  const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useCurrentWallet();
 
   // update wallet store states when connections change for individual providers
   // evm
@@ -149,41 +147,28 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   //sui
   useEffect(() => {
-    (async () => {
-      const _suiAccounts: { [x: string]: ConnectedAccount } = {};
-      const _suiWallets: { [x: string]: ConnectedWallet<'sui'> } = {};
+    const _suiAccounts: { [x: string]: ConnectedAccount } = {};
+    const _suiWallets: { [x: string]: ConnectedWallet<'sui'> } = {};
 
-      if (!suiConnectors) return;
+    if (suiWalletStatus !== 'connected') return;
 
-      for (const [name, adapter] of Object.entries(suiConnectors)) {
-        const accounts = await adapter.getAccounts();
-        const address = accounts[0]?.address ?? '';
+    _suiAccounts[currentSuiWallet.name] = {
+      address: currentSuiWallet.accounts[0].address,
+      chainId: chains.sui[0].id,
+      chainType: 'sui',
+      wallet: currentSuiWallet.name,
+    };
 
-        if (address === '') {
-          continue;
-        }
+    _suiWallets[currentSuiWallet.name] = {
+      address: currentSuiWallet.accounts[0].address,
+      chainId: chains.sui[0].id,
+      chainType: 'sui',
+      connector: currentSuiWallet,
+    };
 
-        _suiAccounts[name] = {
-          address: address,
-          chainId: chains.sui[0].id,
-          chainType: 'sui',
-          wallet: name,
-        };
-
-        _suiWallets[name] = {
-          address: address,
-          chainId: chains.sui[0].id,
-          chainType: 'sui',
-          connector: adapter,
-        };
-      }
-
-      setChainConnectedAccounts({ sui: _suiAccounts });
-      setConnectedWallets({
-        sui: _suiWallets,
-      });
-    })();
-  }, [setChainConnectedAccounts, setConnectedWallets, suiAccounts, suiConnectors, chains.sui]);
+    setChainConnectedAccounts({ sui: _suiAccounts });
+    setConnectedWallets({ sui: _suiWallets });
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.sui, suiWalletStatus, currentSuiWallet]);
 
   return <>{children}</>;
 };
