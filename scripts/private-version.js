@@ -6,7 +6,7 @@ import { dirname, join } from 'path';
 const { readFileSync, writeFile } = fsExtra;
 const { sync } = fastGlob;
 
-const privatePackages = ['@tangled/react'];
+const privatePackages = ['@tangled3/react'];
 const packagesPath = join(process.cwd(), 'packages');
 const directoryPackages = sync('*/package.json', {
   cwd: join(process.cwd(), 'packages'),

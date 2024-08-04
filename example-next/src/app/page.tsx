@@ -1,7 +1,27 @@
-import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled3/react';
-import './App.css';
+'use client';
 
-function App() {
+import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled3/react';
+import dynamic from 'next/dynamic';
+
+const TangledContextProvider = dynamic(() => import('@tangled3/react').then((mod) => mod.TangledContextProvider), {
+  ssr: false,
+});
+
+export default function HomePage() {
+  return (
+    <TangledContextProvider
+      config={{
+        projectName: 'Next.js Example',
+        chainConfigs: {},
+      }}
+    >
+      <main className='flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white'>
+        <Example />
+      </main>
+    </TangledContextProvider>
+  );
+}
+const Example = () => {
   const accounts = useAccounts();
   const wallets = useWallets();
 
@@ -39,7 +59,14 @@ function App() {
                 <span>{account.chainType}</span>
                 <span>{account.wallet}</span>
 
-                <button onClick={() => disconnect({ chainType: account.chainType, walletId: account.wallet })}>
+                <button
+                  onClick={() =>
+                    disconnect({
+                      chainType: account.chainType,
+                      walletId: account.wallet,
+                    })
+                  }
+                >
                   Disconnect
                 </button>
               </li>
@@ -92,6 +119,4 @@ function App() {
       </div>
     </div>
   );
-}
-
-export default App;
+};
