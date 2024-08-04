@@ -17,7 +17,7 @@ export const sui: ChainData = {
   blockExplorers: {
     default: {
       name: 'Subscan',
-      url: 'https://alephzero.subscan.io/',
+      url: 'https://suiscan.xyz/',
     },
   },
 } as const;
