@@ -1,5 +1,5 @@
 import { useDisconnectWallet as useSuiDisconnectWallet } from '@mysten/dapp-kit';
-import { useWallet as useSolanaWallet } from '@tangled/solana-react';
+import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useDisconnect as useEVMDisconnect } from 'wagmi';
