@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.1.1
+
+### Minor Changes
+
+- remove react query provider from tangled context
+
 ## 1.0.1
 
 ### Patch Changes
