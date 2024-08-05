@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export const isEVMWalletInstalled = (id: string): boolean => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
   switch (id) {
     case 'gate':
       return (window as any)?.gatewallet;
