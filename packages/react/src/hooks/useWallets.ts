@@ -31,6 +31,20 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
+    if (options?.onlyInstalled) {
+      return evmConnectors
+        .filter((connector) => isEVMWalletInstalled(connector.id))
+        .map((connector) => ({
+          id: connector.id,
+          name: connector.name,
+          connector: connector,
+          icon: connector.icon ?? '',
+          type: 'evm',
+          installed: true,
+          url: undefined,
+        }));
+    }
+
     return evmConnectors.map((connector) => ({
       id: connector.id,
       name: connector.name,
@@ -40,7 +54,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       installed: isEVMWalletInstalled(connector.id),
       url: undefined,
     }));
-  }, [evmConnectors]);
+  }, [evmConnectors, options?.onlyInstalled]);
 
   const extendedSolanaWallets = useMemo<Wallet<'solana'>[]>(() => {
     const detected: Wallet<'solana'>[] = solanaWallets
