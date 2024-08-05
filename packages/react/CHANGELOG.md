@@ -1,6 +1,6 @@
 # @tangled3/react
 
-## 1.2.0
+## 1.2.1
 
 ### Minor Changes
 
