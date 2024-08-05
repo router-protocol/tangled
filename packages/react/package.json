@@ -28,7 +28,6 @@
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
-    "@nightlylabs/wallet-selector-sui": "^0.3.2",
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/web3.js": "^1.91.2",
