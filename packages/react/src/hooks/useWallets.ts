@@ -79,7 +79,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }));
 
     if (options?.onlyInstalled) {
-      return detected;
+      return detected.filter((wallet) => wallet.installed);
     }
 
     const suggested: Wallet<'tron'>[] =
