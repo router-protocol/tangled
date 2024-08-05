@@ -91,8 +91,6 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
 
   //sui
   const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
-    console.log('sui wallet list - ', suiWallets);
-
     const detected: Wallet<'sui'>[] =
       suiWallets.map((wallet) => ({
         id: wallet.name,

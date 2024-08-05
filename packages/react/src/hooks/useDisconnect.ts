@@ -15,7 +15,7 @@ export const useDisConnect = () => {
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
   const { disconnect: disconnectAlephWallet } = useAlephContext();
-  const { mutate: disconnect } = useSuiDisconnectWallet();
+  const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
 
   const disconnectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {
@@ -41,15 +41,14 @@ export const useDisConnect = () => {
       } else if (params.chainType === 'aleph_zero') {
         await disconnectAlephWallet();
       } else if (params.chainType === 'sui') {
-        console.log('sui disconnect called');
-        disconnect();
+        disconnectSuiWallet();
       } else {
         await walletInstance.connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [disconnect, disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, wallets],
+    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectSuiWallet, disconnectTronWallet, wallets],
   );
 
   const mutation = useMutation({

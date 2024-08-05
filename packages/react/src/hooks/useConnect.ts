@@ -1,4 +1,4 @@
-import { useConnectWallet } from '@mysten/dapp-kit';
+import { useConnectWallet as useSuiConnectWallet } from '@mysten/dapp-kit';
 import { WalletName } from '@solana/wallet-adapter-base';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
@@ -16,7 +16,7 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
-  const { mutate: connectSuiWallet } = useConnectWallet();
+  const { mutate: connectSuiWallet } = useSuiConnectWallet();
 
   const connectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {

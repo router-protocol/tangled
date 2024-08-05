@@ -150,21 +150,21 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     const _suiAccounts: { [x: string]: ConnectedAccount } = {};
     const _suiWallets: { [x: string]: ConnectedWallet<'sui'> } = {};
 
-    if (suiWalletStatus !== 'connected') return;
+    if (suiWalletStatus === 'connected') {
+      _suiAccounts[currentSuiWallet.name] = {
+        address: currentSuiWallet.accounts[0].address,
+        chainId: chains.sui[0].id,
+        chainType: 'sui',
+        wallet: currentSuiWallet.name,
+      };
 
-    _suiAccounts[currentSuiWallet.name] = {
-      address: currentSuiWallet.accounts[0].address,
-      chainId: chains.sui[0].id,
-      chainType: 'sui',
-      wallet: currentSuiWallet.name,
-    };
-
-    _suiWallets[currentSuiWallet.name] = {
-      address: currentSuiWallet.accounts[0].address,
-      chainId: chains.sui[0].id,
-      chainType: 'sui',
-      connector: currentSuiWallet,
-    };
+      _suiWallets[currentSuiWallet.name] = {
+        address: currentSuiWallet.accounts[0].address,
+        chainId: chains.sui[0].id,
+        chainType: 'sui',
+        connector: currentSuiWallet,
+      };
+    }
 
     setChainConnectedAccounts({ sui: _suiAccounts });
     setConnectedWallets({ sui: _suiWallets });
