@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.2.2
+
+### Patch Changes
+
+- fix tron and evm installed-only list
+
 ## 1.2.1
 
 ### Minor Changes
