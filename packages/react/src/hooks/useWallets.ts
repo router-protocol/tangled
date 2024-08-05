@@ -9,12 +9,17 @@ import { useAlephStore } from './useAlephStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
+type UseWalletsOptions = {
+  onlyInstalled?: boolean;
+};
+
 /**
  * A hook that returns the connectors for a given chain type.
  * If no type is provided, it returns all connectors.
+ * @param options {@link UseWalletsOptions}
  * @returns An array of supported connectors
  */
-export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
+export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: Wallet<key>[] } => {
   const evmConnectors = useEVMConnectors();
 
   const { wallets: solanaWallets } = useSolanaWallet();
@@ -50,16 +55,20 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         url: wallet.adapter.url,
       }));
 
+    if (options?.onlyInstalled) {
+      return detected;
+    }
+
     const suggested =
       configuredConnectors.solana?.filter(
         (connector) => detected.find((wallet) => wallet.name === connector.name) === undefined,
       ) ?? [];
 
     return detected.concat(suggested);
-  }, [configuredConnectors.solana, solanaWallets]);
+  }, [configuredConnectors.solana, options?.onlyInstalled, solanaWallets]);
 
   const extendedTronWallets = useMemo<Wallet<'tron'>[]>(() => {
-    return Object.values(tronConnectors).map((connector) => ({
+    const detected: Wallet<'tron'>[] = Object.values(tronConnectors).map((connector) => ({
       id: connector.adapter.name,
       name: connector.adapter.name,
       connector: connector.adapter,
@@ -68,12 +77,31 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
       installed: connector.adapter.readyState !== 'NotFound' && connector.adapter.readyState !== 'Loading',
       url: connector.adapter.url,
     }));
-  }, [tronConnectors]);
+
+    if (options?.onlyInstalled) {
+      return detected;
+    }
+
+    const suggested: Wallet<'tron'>[] =
+      configuredConnectors.tron
+        ?.filter((connector) => detected.find((wallet) => wallet.name === connector.name) === undefined)
+        .map((connector) => ({
+          id: connector.name,
+          name: connector.name,
+          connector: connector,
+          icon: connector.icon,
+          type: 'tron',
+          installed: false,
+          url: connector.url,
+        })) ?? [];
+
+    return detected.concat(suggested);
+  }, [configuredConnectors.tron, options?.onlyInstalled, tronConnectors]);
 
   const extendedAlephWallets = useMemo<Wallet<'aleph_zero'>[]>(() => {
     const walletList = alephAdapter?.walletsList;
 
-    const detected: Wallet<'aleph_zero'>[] =
+    const registryWallets: Wallet<'aleph_zero'>[] =
       alephAdapter?.walletsFromRegistry.map((wallet) => ({
         id: wallet.slug.toLowerCase(),
         name: wallet.name,
@@ -84,8 +112,12 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         url: wallet.homepage,
       })) ?? [];
 
-    return detected;
-  }, [alephAdapter]);
+    if (options?.onlyInstalled) {
+      return registryWallets.filter((wallet) => wallet.installed);
+    }
+
+    return registryWallets;
+  }, [alephAdapter, options?.onlyInstalled]);
 
   return {
     evm: extendedEvmWallets,
