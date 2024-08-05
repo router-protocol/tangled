@@ -31,18 +31,17 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
+    const installed = evmConnectors.filter((connector) => isEVMWalletInstalled(connector.id));
     if (options?.onlyInstalled) {
-      return evmConnectors
-        .filter((connector) => isEVMWalletInstalled(connector.id))
-        .map((connector) => ({
-          id: connector.id,
-          name: connector.name,
-          connector: connector,
-          icon: connector.icon ?? '',
-          type: 'evm',
-          installed: true,
-          url: undefined,
-        }));
+      return installed.map((connector) => ({
+        id: connector.id,
+        name: connector.name,
+        connector: connector,
+        icon: connector.icon ?? '',
+        type: 'evm',
+        installed: true,
+        url: undefined,
+      }));
     }
 
     return evmConnectors.map((connector) => ({
