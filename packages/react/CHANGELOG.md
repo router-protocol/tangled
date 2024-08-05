@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.2.0
+
+### Minor Changes
+
+- add filters to useWallets options and bug fixes for server env
+
 ## 1.1.1
 
 ### Minor Changes
