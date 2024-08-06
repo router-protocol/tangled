@@ -7,22 +7,15 @@ import { ChainData } from '../types/index.js';
  * @param adapters - Supported wallet adapters for the Sui Zero.
  * @returns The Sui Zero provider context with the connect and disconnect functions.
  */
-export const SuiProvider = ({
-  children,
-  // chains
-}: {
-  children: React.ReactNode;
-  chains: ChainData<'sui'>[];
-}) => {
+export const SuiProvider = ({ children, chains }: { children: React.ReactNode; chains: ChainData<'sui'>[] }) => {
   const { networkConfig } = createNetworkConfig({
-    localnet: { url: getFullnodeUrl('localnet') },
-    mainnet: { url: getFullnodeUrl('mainnet') },
+    suiNetwork: { url: getFullnodeUrl(chains[0].name.split('-')[1] as 'mainnet' | 'testnet') },
   });
 
   return (
     <SuiClientProvider
       networks={networkConfig}
-      network='mainnet'
+      network='suiNetwork'
     >
       <WalletProvider autoConnect>{children}</WalletProvider>
     </SuiClientProvider>

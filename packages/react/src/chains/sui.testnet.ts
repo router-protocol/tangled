@@ -2,8 +2,8 @@ import { getFullnodeUrl } from '@mysten/sui/client';
 import { ChainData } from '../types/index.js';
 
 export const sui: ChainData = {
-  id: 'sui',
-  name: 'sui-mainnet',
+  id: 'sui-testnet',
+  name: 'sui-testnet',
   type: 'sui',
   nativeCurrency: {
     name: 'Sui',
@@ -12,13 +12,13 @@ export const sui: ChainData = {
   },
   rpcUrls: {
     default: {
-      http: [getFullnodeUrl('mainnet')],
+      http: [...getFullnodeUrl('testnet')],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Suiscan',
-      url: 'https://suiscan.xyz/',
+      name: 'Suiscan Testnet',
+      url: 'https://suiscan.xyz/testnet',
     },
   },
 } as const;
