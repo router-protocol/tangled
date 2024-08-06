@@ -68,6 +68,9 @@ importers:
       '@tangled3/ui':
         specifier: workspace:*
         version: link:../packages/ui
+      '@tanstack/react-query':
+        specifier: ^5.44.0
+        version: 5.44.0(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -202,6 +205,9 @@ importers:
       '@wagmi/core':
         specifier: ^2.11.0
         version: 2.11.0(@tanstack/query-core@5.44.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
+      detect-browser:
+        specifier: ^5.3.0
+        version: 5.3.0
       immer:
         specifier: ^10.1.1
         version: 10.1.1

@@ -6,10 +6,28 @@ import {
   NetworkType as TronNetworkType,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { Mutable } from '@wagmi/core/internal';
-import { Connector as EVMConnector } from 'wagmi';
+import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainType } from '../types/index.js';
 
-export type Wallet<C extends ChainType = ChainType> = {
+export type ChainConnectors = {
+  evm: CreateConnectorFn[];
+  tron: TronAdapter[];
+  solana: Wallet<'solana'>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  near: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  cosmos: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  sui: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  casper: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  aleph_zero: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  bitcoin: any[];
+};
+
+export type WalletBase<C extends ChainType = ChainType> = {
   id: string;
   name: string;
   type: C;
@@ -20,6 +38,12 @@ export type Wallet<C extends ChainType = ChainType> = {
   hidden?: boolean;
   connector?: WalletInstance<C>;
 };
+
+export type Wallet<C extends ChainType = ChainType> = C extends 'evm'
+  ? {
+      getWalletConnectDeeplink?: (uri: string) => string;
+    } & WalletBase<C>
+  : WalletBase;
 
 type DefaultConnector = {
   name: string;

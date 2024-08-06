@@ -1,6 +1,6 @@
-import { CreateConnectorFn } from '@wagmi/core';
 import { Chain as ViemChain } from 'viem';
 import { CHAIN_ID } from '../constants/index.js';
+import { ChainConnectors } from './wallet.js';
 
 export const CHAIN_TYPES = [
   'evm',
@@ -58,7 +58,10 @@ export interface TangledConfig {
   // Enable testnets. Defaults to false. If true, only testnet chains will be provided in the context.
   // testnet?: boolean;
 
-  evmConnectors?: CreateConnectorFn[];
+  /** Walletconnect project ID */
+  projectId: string;
+
+  chainConnectors?: Partial<ChainConnectors>;
 }
 
 type ChainRpcUrls = {

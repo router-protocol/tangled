@@ -1,7 +1,8 @@
 import { ReactNode, createContext, useState } from 'react';
 import { SupportedChainsByType, TangledConfig } from '../types/index.js';
+import { ChainConnectors } from '../types/wallet.js';
 import createChainConfigs from '../utils/createChainConfigs.js';
-import { ChainConnectors, createChainConnectors } from '../utils/createChainConnectors.js';
+import { createChainConnectors } from '../utils/createChainConnectors.js';
 import { AlephProvider } from './AlephProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
@@ -19,7 +20,7 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
     return createChainConfigs(config.chains, config.chainConfigs);
   });
   const [connectors] = useState(() => {
-    return createChainConnectors({ evm: config.evmConnectors });
+    return createChainConnectors(config);
   });
 
   return (
