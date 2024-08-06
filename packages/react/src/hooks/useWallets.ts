@@ -2,10 +2,10 @@
 import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMemo } from 'react';
-import { useConnectors as useEVMConnectors } from 'wagmi';
+import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
+import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
-import { isEVMWalletInstalled } from '../utils/isEVMWalletInstalled.js';
 import { useAlephStore } from './useAlephStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
@@ -34,28 +34,44 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
-    const installed = evmConnectors.filter((connector) => isEVMWalletInstalled(connector.id));
-    if (options?.onlyInstalled) {
-      return installed.map((connector) => ({
+    const prepareWallets = (connector: Connector) => {
+      const walletId = Object.keys(walletConfigs).find(
+        (id) =>
+          id // where id is comma seperated list
+            .split(',')
+            .map((i) => i.trim())
+            .indexOf(connector.id) !== -1,
+      );
+
+      const c: Wallet<'evm'> = {
         id: connector.id,
-        name: connector.name,
-        connector: connector,
+        name: connector.name ?? connector.id ?? connector.type,
         icon: connector.icon ?? '',
+        connector,
+        installed: connector.type === 'injected' && connector.id !== 'metaMask',
         type: 'evm',
-        installed: true,
-        url: undefined,
-      }));
+      };
+
+      if (walletId) {
+        const wallet = walletConfigs[walletId];
+
+        return {
+          ...c,
+          ...wallet,
+          installed: typeof wallet.isInstalled === 'function' ? wallet.isInstalled() : wallet.isInstalled,
+        };
+      }
+
+      return c;
+    };
+
+    const wallets: Wallet<'evm'>[] = evmConnectors.map((c) => prepareWallets(c));
+
+    if (options?.onlyInstalled) {
+      return wallets.filter((wallet) => wallet.installed);
     }
 
-    return evmConnectors.map((connector) => ({
-      id: connector.id,
-      name: connector.name,
-      connector: connector,
-      icon: connector.icon ?? '',
-      type: 'evm',
-      installed: isEVMWalletInstalled(connector.id),
-      url: undefined,
-    }));
+    return wallets;
   }, [evmConnectors, options?.onlyInstalled]);
 
   const extendedSolanaWallets = useMemo<Wallet<'solana'>[]>(() => {

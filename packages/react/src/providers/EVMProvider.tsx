@@ -24,6 +24,9 @@ const EVMProvider = ({
       connectors: props.connectors,
       multiInjectedProviderDiscovery: true,
       ssr: true,
+      batch: {
+        multicall: true,
+      },
     });
   });
 
