@@ -14,6 +14,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         config={{
           projectName: 'Tangled Example',
           chainConfigs: {},
+          projectId: '41980758771052df3f01be0a46f172a5',
         }}
       >
         <App />
