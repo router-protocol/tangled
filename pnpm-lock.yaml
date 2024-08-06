@@ -68,6 +68,9 @@ importers:
       '@tangled3/ui':
         specifier: workspace:*
         version: link:../packages/ui
+      '@tanstack/react-query':
+        specifier: ^5.44.0
+        version: 5.44.0(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
