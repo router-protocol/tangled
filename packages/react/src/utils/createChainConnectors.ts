@@ -2,6 +2,7 @@ import { Adapter as TronAdapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { CreateConnectorFn } from 'wagmi';
 import * as evmConnectors from '../connectors/evm/connectors.js';
 import * as solConnectors from '../connectors/solana/connectors.js';
+import * as suiConnectors from '../connectors/sui/connectors.js';
 import * as tronConnectors from '../connectors/tron/connectors.js';
 import { CHAIN_TYPES } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
@@ -40,6 +41,14 @@ export const createChainConnectors = (overrides: Partial<ChainConnectors>): Chai
     solConnectors.phantom,
     solConnectors.solflare,
     solConnectors.backpack,
+  ];
+
+  connectors.sui = [
+    ...(overrides.sui ?? []),
+    suiConnectors.suiWallet,
+    suiConnectors.martianSuiWallet,
+    suiConnectors.suiet,
+    suiConnectors.nightly,
   ];
 
   return connectors;

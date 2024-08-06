@@ -102,8 +102,13 @@ export const useWallets = (): { [key in ChainType]: Wallet<key>[] } => {
         url: '',
       })) ?? [];
 
-    return detected;
-  }, [suiWallets]);
+    const suggested =
+      configuredConnectors.sui?.filter(
+        (connector) => detected.find((wallet) => wallet.name === connector.name) === undefined,
+      ) ?? [];
+
+    return detected.concat(suggested);
+  }, [configuredConnectors.sui, suiWallets]);
 
   return {
     evm: extendedEvmWallets,
