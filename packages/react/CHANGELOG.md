@@ -1,5 +1,23 @@
 # @tangled3/react
 
+## 1.2.2
+
+### Patch Changes
+
+- fix tron and evm installed-only list
+
+## 1.2.1
+
+### Minor Changes
+
+- add filters to useWallets options and bug fixes for server env
+
+## 1.1.1
+
+### Minor Changes
+
+- remove react query provider from tangled context
+
 ## 1.0.1
 
 ### Patch Changes

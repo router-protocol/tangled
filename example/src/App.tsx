@@ -65,12 +65,13 @@ function App() {
                   key={wallet.id}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '2ch 1fr 1fr 1fr 1fr',
+                    gridTemplateColumns: '2ch 1fr 1fr 1fr 1fr 1fr 1fr',
                     gap: '1rem',
                   }}
                 >
                   <span>{wallet.installed ? '✅' : '❌'}</span>
                   <span>{wallet.name}</span>
+                  <span>{wallet.id}</span>
                   <img
                     src={wallet.icon}
                     alt=''
@@ -79,11 +80,8 @@ function App() {
                   />
                   {wallet.installed ? (
                     <button onClick={() => connect({ walletId: wallet.id, chainType })}>connect</button>
-                  ) : wallet.url ? (
-                    <a href={wallet.url}>Install Link</a>
-                  ) : (
-                    <span>Not Installed</span>
-                  )}
+                  ) : null}
+                  {wallet.url ? <a href={wallet.url}>Install Link</a> : <span>Not Installed</span>}
                 </li>
               ))}
             </ul>

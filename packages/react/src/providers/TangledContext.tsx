@@ -1,4 +1,3 @@
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode, createContext, useState } from 'react';
 import { SupportedChainsByType, TangledConfig } from '../types/index.js';
 import createChainConfigs from '../utils/createChainConfigs.js';
@@ -16,8 +15,6 @@ export const TangledContext = createContext({
   connectors: {} as ChainConnectors,
 });
 
-const queryClient = new QueryClient();
-
 export const TangledContextProvider = ({ children, config }: { children: ReactNode; config: TangledConfig }) => {
   const [chains] = useState(() => {
     return createChainConfigs(config.chains, config.chainConfigs);
@@ -28,15 +25,14 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
 
   return (
     <TangledContext.Provider value={{ config, chains, connectors }}>
-      <QueryClientProvider client={queryClient}>
-        <EVMProvider
-          chains={chains.evm}
-          connectors={connectors.evm}
+      <EVMProvider
+        chains={chains.evm}
+        connectors={connectors.evm}
+      >
+        <TronProvider
+          adapters={connectors.tron}
+          chains={chains.tron}
         >
-          <TronProvider
-            adapters={connectors.tron}
-            chains={chains.tron}
-          >
             <SolanaProvider network={chains.solana[0]}>
               <AlephProvider chains={chains.aleph_zero}>
                 <SuiProvider chains={chains.sui}>
@@ -46,7 +42,6 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
             </SolanaProvider>
           </TronProvider>
         </EVMProvider>
-      </QueryClientProvider>
     </TangledContext.Provider>
   );
 };

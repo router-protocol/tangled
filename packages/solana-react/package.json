@@ -18,7 +18,8 @@
     "build:postcompile": "node ../../scripts/postcompile.js && cpy 'src/**/*' dist",
     "build:clean": "rm -rf tsconfig.tsbuildinfo ./dist/tsconfig.tsbuildinfo ./dist/tsconfig.cjs.tsbuildinfo",
     "clean": "pnpm build:clean && rm -rf dist",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "prepublishOnly": "pnpm build"
   },
   "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
   "dependencies": {

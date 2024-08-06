@@ -20,7 +20,7 @@ import {
   tronMainnet,
   zkSync,
 } from '../chains/index.js';
-import { Chain, ChainData, ChainId } from '../types/index.js';
+import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export const CHAIN_ID = {
   // evm
@@ -105,6 +105,18 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // 43113: avalancheFuji,
   // 534351: scrollSepolia,
   // 11155111: sepolia,
+} as const;
+
+export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
+  evm: 'Ethereum',
+  cosmos: 'Cosmos',
+  tron: 'Tron',
+  near: 'Near',
+  solana: 'Solana',
+  sui: 'Sui',
+  casper: 'Casper',
+  aleph_zero: 'Aleph Zero',
+  bitcoin: 'Bitcoin',
 } as const;
 
 export const DEFAULT_CHAINS = [

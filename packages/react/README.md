@@ -13,6 +13,35 @@ Built with @shadcn/ui and tailwind so you can paint it your way :D
 yarn add @tangled3/react
 ```
 
+OR
+
+```sh
+pnpm i @tangled3/react
+```
+
+### Usage
+
+```tsx
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { TangledProvider } from '@tangled3/react';
+
+export default function App({ Component, pageProps }) {
+  return (
+    <QueryClientProvider client={new QueryClient()}>
+      <TangledProvider
+        config={{
+          projectName: 'multi chain project',
+          chainConfigs: {},
+          // chains
+        }}
+      >
+        <Component {...pageProps} />
+      </TangledProvider>
+    </QueryClientProvider>
+  );
+}
+```
+
 ### Feat List
 
 #### Supported Chain Types
