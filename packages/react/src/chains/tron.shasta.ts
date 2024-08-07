@@ -1,8 +1,8 @@
 import { ChainData } from '../types/index.js';
 
-export const tronMainnet: ChainData = {
-  id: '0x2b6653dc',
-  name: 'Tron',
+export const tronShasta: ChainData = {
+  id: '0x94a9059e',
+  name: 'Tron Shasta',
   type: 'tron',
   nativeCurrency: {
     name: 'TRX',
@@ -17,7 +17,7 @@ export const tronMainnet: ChainData = {
   blockExplorers: {
     default: {
       name: 'Tronscan',
-      url: 'https://tronscan.org',
+      url: 'https://shasta.tronscan.org',
     },
   },
 } as const;

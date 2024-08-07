@@ -19,6 +19,7 @@ import {
   tronMainnet,
   zkSync,
 } from '../chains/index.js';
+import { tronShasta } from '../chains/tron.shasta.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export const CHAIN_ID = {
@@ -44,9 +45,8 @@ export const CHAIN_ID = {
   // cosmos
 
   // tron
-  // tron: '0x2b6653dc',
-  tronMainnet: 'tron-mainnet',
-  // tronShasta: 'tron-shasta',
+  tronMainnet: '0x2b6653dc',
+  tronShasta: '0x94a9059e',
   // tronNile: 'tron-nile',
 
   // near
@@ -88,7 +88,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,
-  // [CHAIN_ID.tronShasta]: tronShasta,
+  [CHAIN_ID.tronShasta]: tronShasta,
   // [CHAIN_ID.tronNile]: tronNile,
 
   // aleph
