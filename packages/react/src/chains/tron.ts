@@ -3,6 +3,7 @@ import { ChainData } from '../types/index.js';
 export const tronMainnet: ChainData = {
   id: '0x2b6653dc',
   name: 'Tron',
+  tronName: 'Mainnet',
   type: 'tron',
   nativeCurrency: {
     name: 'TRX',

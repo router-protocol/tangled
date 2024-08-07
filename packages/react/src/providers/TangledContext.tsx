@@ -33,7 +33,7 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
     );
   });
   const [connectors] = useState(() => {
-    return createChainConnectors(config);
+    return createChainConnectors(config, chains);
   });
 
   return (

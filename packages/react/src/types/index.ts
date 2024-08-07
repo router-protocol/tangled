@@ -43,7 +43,9 @@ export type NonEVMChain = {
 
 export type ChainData<T extends ChainType = ChainType> = T extends 'evm'
   ? { type: 'evm' } & ViemChain
-  : { type: T } & NonEVMChain;
+  : T extends 'tron'
+    ? { type: 'tron'; tronName: 'Mainnet' | 'Shasta' | 'Nile' } & NonEVMChain
+    : { type: T } & NonEVMChain;
 
 // use generic to type ChainData according to ChainType
 export type SupportedChainsByType = { [key in ChainType]: ChainData<key>[] };
