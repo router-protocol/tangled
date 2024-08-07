@@ -146,7 +146,7 @@ const CurrentAccountAndWallet = () => {
             {currentAccount?.address?.slice(0, 6)}...{currentAccount?.address?.slice(-4)}
           </span>
           <span>[[{currentAccount?.chainType}]]</span>
-          <span>{chain?.name}</span>
+          <span>{chain?.name ?? 'Unknown'}</span>
           <span> [{currentAccount?.chainId}]</span>
         </div>
       </div>
