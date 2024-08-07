@@ -52,7 +52,7 @@ export type DefaultConnector = {
   url?: string;
   id?: string;
   connect: () => Promise<void>;
-  disconnect: () => void;
+  disconnect: () => Promise<void>;
 };
 
 // TODO: Add accurate types for each chain wallet

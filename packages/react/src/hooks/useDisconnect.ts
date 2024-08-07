@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
-import { Wallet, WalletInstance } from '../types/wallet.js';
+import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -42,7 +42,8 @@ export const useDisConnect = () => {
       } else if (params.chainType === 'sui') {
         disconnectSuiWallet();
       } else {
-        await walletInstance.connector.connect();
+        const connector = walletInstance.connector as DefaultConnector;
+        await connector.disconnect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
