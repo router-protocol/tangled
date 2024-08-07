@@ -1,4 +1,4 @@
-import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled/react';
+import { CHAIN_TYPES, useAccounts, useConnect, useDisConnect, useWallets } from '@tangled3/react';
 import './App.css';
 
 function App() {
@@ -24,7 +24,7 @@ function App() {
                 key={`${account.address}-${account.wallet}`}
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 1fr 1fr 1fr 1fr 1fr',
+                  gridTemplateColumns: '5ch 15ch 15ch 1fr 25ch 25ch 1fr',
                   gap: '1rem',
                 }}
               >
@@ -34,10 +34,13 @@ function App() {
                   width={32}
                   height={32}
                 />
-                <span>{account.address}</span>
+                <span>
+                  {account.address.slice(0, 6)}...{account.address.slice(-4)}
+                </span>
                 <span>{account.chainId}</span>
                 <span>{account.chainType}</span>
                 <span>{account.wallet}</span>
+                <span>{wallets[account.chainType].find((wallet) => wallet.id === account.wallet)?.name}</span>
 
                 <button onClick={() => disconnect({ chainType: account.chainType, walletId: account.wallet })}>
                   Disconnect
@@ -65,12 +68,13 @@ function App() {
                   key={wallet.id}
                   style={{
                     display: 'grid',
-                    gridTemplateColumns: '2ch 1fr 1fr 1fr 1fr',
+                    gridTemplateColumns: '2ch 15ch 25ch 5ch 1fr 1fr 1fr',
                     gap: '1rem',
                   }}
                 >
                   <span>{wallet.installed ? '✅' : '❌'}</span>
                   <span>{wallet.name}</span>
+                  <span>{wallet.id}</span>
                   <img
                     src={wallet.icon}
                     alt=''
@@ -79,10 +83,18 @@ function App() {
                   />
                   {wallet.installed ? (
                     <button onClick={() => connect({ walletId: wallet.id, chainType })}>connect</button>
-                  ) : wallet.url ? (
-                    <a href={wallet.url}>Install Link</a>
                   ) : (
-                    <span>Not Installed</span>
+                    <span></span>
+                  )}
+                  {wallet.url ? (
+                    <a
+                      style={{ width: 'fit-content' }}
+                      href={wallet.url}
+                    >
+                      Install Link
+                    </a>
+                  ) : (
+                    'No Install Link'
                   )}
                 </li>
               ))}

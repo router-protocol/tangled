@@ -1,5 +1,5 @@
 {
-  "name": "@tangled/react-example",
+  "name": "@tangled3/react-example",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,8 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tangled/react": "workspace:*",
-    "@tangled/ui": "workspace:*",
+    "@tangled3/react": "workspace:*",
+    "@tangled3/ui": "workspace:*",
+    "@tanstack/react-query": "^5.44.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

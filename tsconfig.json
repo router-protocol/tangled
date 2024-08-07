@@ -18,7 +18,7 @@
     "composite": true,
     "baseUrl": "./",
     "paths": {
-      "@tangled/react": ["./packages/react/src"]
+      "@tangled3/react": ["./packages/react/src"]
     }
   },
   "exclude": ["**/.*/", "**/build", "**/dist", "node_modules", ".yarn"]

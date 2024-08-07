@@ -1,15 +1,17 @@
 import { WalletName } from '@solana/wallet-adapter-base';
-import { useWallet as useSolanaWallet } from '@tangled/solana-react';
+import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import useIsMobile from './useIsMobile.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
 export const useConnect = () => {
+  const isMobile = useIsMobile();
   const wallets = useWallets();
   const { connectAsync: connectEVM } = useWagmiConnect();
   const { connect: connectSolanaWallet } = useSolanaWallet();
@@ -35,6 +37,8 @@ export const useConnect = () => {
       } else if (params.chainType === 'tron') {
         await connectTronWallet(walletInstance.id);
       } else if (params.chainType === 'evm') {
+        console.log('isMobile', isMobile);
+
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'aleph_zero') {
         await connectAlephWallet(walletInstance.name);
@@ -44,7 +48,7 @@ export const useConnect = () => {
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectAlephWallet, connectEVM, connectSolanaWallet, connectTronWallet, wallets],
+    [connectAlephWallet, connectEVM, connectSolanaWallet, connectTronWallet, isMobile, wallets],
   );
 
   const mutation = useMutation({
@@ -53,9 +57,9 @@ export const useConnect = () => {
     onError: (error) => {
       console.error(error);
     },
-    // onSuccess: (p) => {
-    //   // console.log('Connected', p.id);
-    // },
+    onSuccess: (data) => {
+      console.log('useConnected Connected to', data.id);
+    },
   });
 
   return {
