@@ -112,7 +112,7 @@ export const AlephProvider = ({
     return () => {
       unsubscribe();
     };
-  });
+  }, [connectedAdapter, setConnectors]);
 
   // Eager connect when the page reloads
   useEffect(() => {
