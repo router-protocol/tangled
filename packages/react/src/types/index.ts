@@ -21,7 +21,7 @@ export type ChainId = (typeof CHAIN_ID)[keyof typeof CHAIN_ID];
 
 export type NonEVMChain = {
   type: Exclude<ChainType, 'evm'>;
-  id: string;
+  id: ChainId;
   name: string;
   nativeCurrency: {
     name: string;
