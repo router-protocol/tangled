@@ -27,7 +27,7 @@ export const AlephProvider = ({
   // chains
 }: {
   children: React.ReactNode;
-  chains: ChainData<'aleph_zero'>[];
+  chains: ChainData<'alephZero'>[];
 }) => {
   const alephStore = useRef(createAlephStore()).current;
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);

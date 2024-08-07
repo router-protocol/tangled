@@ -63,7 +63,7 @@ export const CHAIN_ID = {
 
   // casper
 
-  aleph_zero: 'aleph_zero',
+  alephZero: 'alephZero',
 
   // testnets
   // goerli: '5',
@@ -98,7 +98,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // [CHAIN_ID.tronNile]: tronNile,
 
   // aleph
-  [CHAIN_ID.aleph_zero]: alephZero,
+  [CHAIN_ID.alephZero]: alephZero,
 
   // solana
   [CHAIN_ID.solana]: solana,
@@ -121,7 +121,7 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   solana: 'Solana',
   sui: 'Sui',
   casper: 'Casper',
-  aleph_zero: 'Aleph Zero',
+  alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
 } as const;
 
@@ -143,5 +143,5 @@ export const DEFAULT_CHAINS = [
   'polygon_zkevm',
   'scroll',
   'zksync',
-  'aleph_zero',
+  'alephZero',
 ] as Chain[];

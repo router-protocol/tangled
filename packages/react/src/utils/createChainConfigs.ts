@@ -10,7 +10,7 @@ const createChainConfigs = (
   // const evmChainConfigs: ChainData[] = [];
 
   let supportedChains: SupportedChainsByType = {
-    aleph_zero: [],
+    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
@@ -48,11 +48,11 @@ const createChainConfigs = (
           break;
         case 'casper':
           break;
-        case 'aleph_zero':
-          supportedChains.aleph_zero.push({
+        case 'alephZero':
+          supportedChains.alephZero.push({
             ...CHAIN_DATA[CHAIN_ID[chain]],
             ...overrides?.[chain],
-          } as ChainData<'aleph_zero'>);
+          } as ChainData<'alephZero'>);
           break;
         case 'bitcoin':
           break;

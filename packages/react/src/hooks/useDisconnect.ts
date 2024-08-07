@@ -39,7 +39,7 @@ export const useDisConnect = () => {
         await disconnectTronWallet();
       } else if (params.chainType === 'evm') {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
-      } else if (params.chainType === 'aleph_zero') {
+      } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
       } else {
         await walletInstance.connector.connect();

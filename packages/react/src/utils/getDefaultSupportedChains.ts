@@ -1,4 +1,4 @@
-import { alephZero } from '../chains/aleph_zero.js';
+import { alephZero } from '../chains/alephZero.js';
 import * as evm from '../chains/evm.js';
 import { solana } from '../chains/solana.js';
 import { tronMainnet } from '../chains/tron.js';
@@ -6,7 +6,7 @@ import { ChainData, SupportedChainsByType } from '../types/index.js';
 
 const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => {
   const supportedChains: SupportedChainsByType = {
-    aleph_zero: [],
+    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
@@ -42,7 +42,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     ] as ChainData<'evm'>[];
     supportedChains.solana = [solana] as ChainData<'solana'>[];
     supportedChains.tron = [tronMainnet] as ChainData<'tron'>[];
-    supportedChains.aleph_zero = [alephZero] as ChainData<'aleph_zero'>[];
+    supportedChains.alephZero = [alephZero] as ChainData<'alephZero'>[];
   }
 
   return supportedChains;

@@ -1,4 +1,4 @@
-export * from './aleph_zero.js';
+export * from './alephZero.js';
 export * from './evm.js';
 export * from './evm.testnet.js';
 export * from './solana.js';

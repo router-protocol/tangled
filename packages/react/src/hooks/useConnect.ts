@@ -45,7 +45,7 @@ export const useConnect = () => {
         await connectTronWallet(walletInstance.id);
       } else if (params.chainType === 'evm') {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
-      } else if (params.chainType === 'aleph_zero') {
+      } else if (params.chainType === 'alephZero') {
         await connectAlephWallet(walletInstance.name);
       } else {
         await walletInstance.connector.connect();

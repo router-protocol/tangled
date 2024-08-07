@@ -18,7 +18,7 @@ export type ChainConnectors = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   casper: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  aleph_zero: any[];
+  alephZero: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
 };
@@ -57,7 +57,7 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
     ? SolanaAdapter
     : T extends 'tron'
       ? TronAdapter
-      : T extends 'aleph_zero'
+      : T extends 'alephZero'
         ? NightlyConnectAdapter
         : DefaultConnector;
 

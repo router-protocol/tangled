@@ -10,7 +10,7 @@ export const CHAIN_TYPES = [
   'solana',
   'sui',
   'casper',
-  'aleph_zero',
+  'alephZero',
   'bitcoin',
 ] as const;
 

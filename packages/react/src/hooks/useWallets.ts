@@ -127,16 +127,16 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return detected.concat(suggested);
   }, [configuredConnectors.tron, options?.onlyInstalled, tronConnectors]);
 
-  const extendedAlephWallets = useMemo<Wallet<'aleph_zero'>[]>(() => {
+  const extendedAlephWallets = useMemo<Wallet<'alephZero'>[]>(() => {
     const walletList = alephAdapter?.walletsList;
 
-    const registryWallets: Wallet<'aleph_zero'>[] =
+    const registryWallets: Wallet<'alephZero'>[] =
       alephAdapter?.walletsFromRegistry.map((wallet) => ({
         id: wallet.slug.toLowerCase(),
         name: wallet.name,
         connector: alephAdapter,
         icon: wallet.image.default,
-        type: 'aleph_zero',
+        type: 'alephZero',
         installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
         url: wallet.homepage,
       })) ?? [];
@@ -152,7 +152,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     evm: extendedEvmWallets,
     solana: extendedSolanaWallets,
     tron: extendedTronWallets,
-    aleph_zero: extendedAlephWallets,
+    alephZero: extendedAlephWallets,
     bitcoin: [],
     casper: [],
     cosmos: [],
