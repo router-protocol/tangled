@@ -5,6 +5,7 @@ import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
+import { ChainId } from '../types/index.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
