@@ -233,6 +233,9 @@ importers:
         specifier: ^4.5.2
         version: 4.5.2(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1)
     devDependencies:
+      '@mysten/wallet-standard':
+        specifier: 0.12.14
+        version: 0.12.14(typescript@5.4.5)
       '@types/react':
         specifier: ^18.2.66
         version: 18.3.3
@@ -10814,7 +10817,7 @@ snapshots:
 
   '@solana/wallet-standard-util@1.1.1':
     dependencies:
-      '@noble/curves': 1.4.0
+      '@noble/curves': 1.4.2
       '@solana/wallet-standard-chains': 1.1.0
       '@solana/wallet-standard-features': 1.2.0
 

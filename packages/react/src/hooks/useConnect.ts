@@ -5,7 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
-import { Wallet, WalletInstance } from '../types/wallet.js';
+import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
 import useIsMobile from './useIsMobile.js';
 import { useTronContext } from './useTronContext.js';
@@ -45,9 +45,10 @@ export const useConnect = () => {
       } else if (params.chainType === 'aleph_zero') {
         await connectAlephWallet(walletInstance.name);
       } else if (params.chainType === 'sui') {
-        connectSuiWallet({ wallet: walletInstance.connector });
+        connectSuiWallet({ wallet: walletInstance.connector as WalletInstance<'sui'> });
       } else {
-        await walletInstance.connector.connect();
+        const connector = walletInstance.connector as DefaultConnector;
+        await connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };

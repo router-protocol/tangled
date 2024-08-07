@@ -1,3 +1,4 @@
+import { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import {
@@ -43,14 +44,14 @@ export type Wallet<C extends ChainType = ChainType> = C extends 'evm'
   ? {
       getWalletConnectDeeplink?: (uri: string) => string;
     } & WalletBase<C>
-  : WalletBase;
+  : WalletBase<C>;
 
-type DefaultConnector = {
+export type DefaultConnector = {
   name: string;
   icon: string;
   url?: string;
   id?: string;
-  connect: () => void;
+  connect: () => Promise<void>;
   disconnect: () => void;
 };
 
@@ -64,7 +65,7 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
       : T extends 'aleph_zero'
         ? NightlyConnectAdapter
         : T extends 'sui'
-          ? any
+          ? WalletWithRequiredFeatures
           : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
