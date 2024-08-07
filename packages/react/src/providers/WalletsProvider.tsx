@@ -14,9 +14,16 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const tronConnectors = useTronStore((state) => state.connectors);
   const alephConnectors = useAlephStore((state) => state.connectors);
   const alephAccounts = useAlephStore((state) => state.connectedAdapter);
+  const alephAddress = useAlephStore((state) => state.address);
 
+  // Wallet store states
+  const currentWallet = useWalletsStore((state) => state.currentWallet);
+  const recentWallet = useWalletsStore((state) => state.recentWallet);
+  const connectedAccountsByChain = useWalletsStore((state) => state.connectedAccountsByChain);
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
+  const setCurrentAccount = useWalletsStore((state) => state.setCurrentAccount);
+  const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
 
   // update wallet store states when connections change for individual providers
   // evm
@@ -27,7 +34,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     for (const connection of evmConnections) {
       _evmAccounts[connection.connector.id] = {
         address: connection.accounts?.[0],
-        chainId: connection.chainId.toString(),
+        chainId: connection.chainId.toString() as ChainId,
         chainType: 'evm',
         wallet: connection.connector.id,
       };
@@ -35,7 +42,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       _evmWallets[connection.connector.id] = {
         address: connection.accounts?.[0],
         loading: false,
-        chainId: connection.chainId.toString(),
+        chainId: connection.chainId.toString() as ChainId,
         chainType: 'evm',
         connector: connection.connector,
       };
@@ -57,14 +64,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _solanaAccounts[wallet.name] = {
         address: wallet.publicKey.toBase58(),
-        chainId: chains.solana[0].id,
+        chainId: chains.solana[0].id as ChainId,
         chainType: 'solana',
         wallet: wallet.name,
       };
 
       _solanaWallets[wallet.name] = {
         address: wallet.publicKey.toBase58(),
-        chainId: chains.solana[0].id,
+        chainId: chains.solana[0].id as ChainId,
         chainType: 'solana',
       };
     }
@@ -87,14 +94,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _tronAccounts[connector.adapter.name] = {
         address: connector.account,
-        chainId: chains.tron[0].id,
+        chainId: connector.network as ChainId,
         chainType: 'tron',
         wallet: connector.adapter.name,
       };
 
       _tronWallets[connector.adapter.name] = {
         address: connector.account,
-        chainId: chains.tron[0].id,
+        chainId: connector.network as ChainId,
         chainType: 'tron',
         connector: connector.adapter,
       };
@@ -142,6 +149,39 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       });
     })();
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.aleph_zero, alephConnectors]);
+  // when currentWallet changes, update currentAccount
+  useEffect(() => {
+    if (!currentWallet) {
+      setCurrentAccount(undefined);
+      return;
+    }
+    const connectedAccountsByChain = useWalletsStore.getState().connectedAccountsByChain;
+
+    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find(
+      (account) => account.wallet === currentWallet.id,
+    );
+
+    if (currentAccount) {
+      setCurrentAccount(currentAccount);
+    } else {
+      setCurrentAccount(undefined);
+      setCurrentWallet(undefined);
+    }
+  }, [currentWallet, setCurrentAccount, setCurrentWallet]);
+
+  // when connectedAccounts change, try connecting to recent wallet
+  useEffect(() => {
+    if (!recentWallet) return;
+
+    const recentAccount = Object.values(connectedAccountsByChain[recentWallet.type]).find(
+      (account) => account.wallet === recentWallet.id,
+    );
+
+    if (recentAccount) {
+      setCurrentWallet(recentWallet);
+      setCurrentAccount(recentAccount);
+    }
+  }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
 
   return <>{children}</>;
 };
