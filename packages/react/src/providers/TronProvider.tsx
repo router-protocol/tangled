@@ -66,6 +66,20 @@ export const TronProvider = ({
     setConnectedAdapter(undefined);
   }, [setConnectedAdapter]);
 
+  const handleChainChanged = useCallback(
+    ({ chainId }: any) => {
+      if (!connectedAdapter) return;
+      console.log('Chain changed', chainId);
+      setConnector({
+        adapter: connectedAdapter,
+        account: connectedAdapter?.address,
+        network: chainId,
+        readyState: connectedAdapter?.state,
+      });
+    },
+    [connectedAdapter, setConnector],
+  );
+
   ///////////////////
   ///// Effects /////
   ///////////////////
@@ -84,18 +98,18 @@ export const TronProvider = ({
       connectedAdapter.on('error', handleError);
       connectedAdapter.on('accountsChanged', handleAccountChange, connectedAdapter);
       connectedAdapter.on('disconnect', handleDisconnect);
-      // connectedAdapter.on('chainChanged', handleChainChanged);
+      connectedAdapter.on('chainChanged', handleChainChanged);
       // connectedAdapter.on('readyStateChanged', handleReadyStateChanged);
       return () => {
         connectedAdapter.off('connect', handleConnect);
         connectedAdapter.off('error', handleError);
         connectedAdapter.off('accountsChanged', handleAccountChange);
         connectedAdapter.off('disconnect', handleDisconnect);
-        // connectedAdapter.off('chainChanged', handleChainChanged);
+        connectedAdapter.off('chainChanged', handleChainChanged);
         // connectedAdapter.off('readyStateChanged', handleReadyStateChanged);
       };
     }
-  }, [handleConnect, handleError, handleAccountChange, handleDisconnect, connectedAdapter]);
+  }, [handleConnect, handleError, handleAccountChange, handleDisconnect, connectedAdapter, handleChainChanged]);
 
   useEffect(() => {
     return () => {
