@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.3.0
+
+### Minor Changes
+
+- fix evm connection and add walletconnect, coinbase support
+
 ## 1.2.2
 
 ### Patch Changes
