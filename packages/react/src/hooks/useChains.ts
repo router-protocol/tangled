@@ -8,7 +8,7 @@ import { ChainData, ChainType } from '../types/index.js';
  * @param type The type of chain to return
  * @returns An array of `ChainData<type>`
  */
-export const useChains = <T extends ChainType>(type: T | undefined): ChainData[] => {
+export const useChains = <T extends ChainType>(type?: T): ChainData[] => {
   const { chains } = useContext(TangledContext);
 
   return useMemo(() => {

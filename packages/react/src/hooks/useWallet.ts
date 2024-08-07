@@ -8,8 +8,15 @@ import { useWallets } from './useWallets.js';
  * @param walletId The id of the wallet to return
  * @returns wallet {@link Wallet}
  */
-export const useWallet = <C extends ChainType = ChainType>(chainType: C, walletId: string): Wallet<C> | undefined => {
+export const useWallet = <C extends ChainType = ChainType>(
+  chainType: C | undefined,
+  walletId: string | undefined,
+): Wallet<C> | undefined => {
   const wallets = useWallets();
+
+  if (!chainType || !walletId) {
+    return undefined;
+  }
 
   return wallets[chainType].find((wallet) => wallet.id === walletId);
 };

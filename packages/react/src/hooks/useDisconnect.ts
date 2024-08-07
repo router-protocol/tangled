@@ -8,6 +8,10 @@ import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
+export interface DisconnectParams {
+  walletId: string;
+  chainType: ChainType;
+}
 export const useDisConnect = () => {
   const wallets = useWallets();
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
@@ -16,7 +20,7 @@ export const useDisConnect = () => {
   const { disconnect: disconnectAlephWallet } = useAlephContext();
 
   const disconnectWallet = useCallback(
-    async (params: { walletId: string; chainType: ChainType }) => {
+    async (params: DisconnectParams) => {
       const walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
