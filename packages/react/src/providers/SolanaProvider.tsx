@@ -18,7 +18,15 @@ import { ChainData } from '../types/index.js';
  */
 const wallets: Adapter[] = [];
 
-export const SolanaProvider: FC<PropsWithChildren & { network: ChainData<'solana'> }> = ({ children, network }) => {
+interface SolanaProviderProps {
+  /**
+   * @notice Only one network is used since Solana connection
+   * provider can not be initialised with multiple networks
+   */
+  network: ChainData<'solana'>;
+}
+
+export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ children, network }) => {
   const [endpoint] = useState(() => {
     if (!network) throw new Error('Network not provided');
 
