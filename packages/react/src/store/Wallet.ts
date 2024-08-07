@@ -6,12 +6,15 @@ import { ConnectedAccount, ConnectedAccountsByChain, CurrentWallet, WalletsByCha
 interface WalletState {
   currentWallet: CurrentWallet | undefined;
   currentAccount: ConnectedAccount | undefined;
+  recentWallet: CurrentWallet | undefined;
 
   connectedWalletsByChain: WalletsByChain;
   connectedAccountsByChain: ConnectedAccountsByChain;
 
   setCurrentWallet: (wallet: CurrentWallet | undefined) => void;
   setCurrentAccount: (account: ConnectedAccount | undefined) => void;
+
+  setRecentWallet: (wallet: CurrentWallet | undefined) => void;
 
   setConnectedWallets: (chainWallets: Partial<WalletsByChain>) => void;
 
@@ -25,6 +28,7 @@ export const useWalletsStore = create<WalletState>()(
       (set) => ({
         currentWallet: undefined,
         currentAccount: undefined,
+        recentWallet: undefined,
 
         connectedWalletsByChain: CHAIN_TYPES.reduce((acc, chain) => ({ ...acc, [chain]: {} }), {}) as WalletsByChain,
 
@@ -35,6 +39,7 @@ export const useWalletsStore = create<WalletState>()(
 
         setCurrentWallet: (wallet) => set(() => ({ currentWallet: wallet })),
         setCurrentAccount: (account) => set(() => ({ currentAccount: account })),
+        setRecentWallet: (wallet) => set(() => ({ recentWallet: wallet })),
 
         setConnectedWallets: (chainWallets) =>
           set((state) => ({ connectedWalletsByChain: { ...state.connectedWalletsByChain, ...chainWallets } })),
