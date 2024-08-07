@@ -4,14 +4,14 @@ import { CHAIN_TYPES } from '../types/index.js';
 import { ConnectedAccount, ConnectedAccountsByChain, CurrentWallet, WalletsByChain } from '../types/wallet.js';
 
 interface WalletState {
-  currentWallet: CurrentWallet;
-  currentAccount: ConnectedAccount;
+  currentWallet: CurrentWallet | undefined;
+  currentAccount: ConnectedAccount | undefined;
 
   connectedWalletsByChain: WalletsByChain;
   connectedAccountsByChain: ConnectedAccountsByChain;
 
-  setCurrentWallet: (wallet: CurrentWallet) => void;
-  setCurrentAccount: (account: ConnectedAccount) => void;
+  setCurrentWallet: (wallet: CurrentWallet | undefined) => void;
+  setCurrentAccount: (account: ConnectedAccount | undefined) => void;
 
   setConnectedWallets: (chainWallets: Partial<WalletsByChain>) => void;
 
@@ -23,8 +23,8 @@ export const useWalletsStore = create<WalletState>()(
   devtools(
     persist(
       (set) => ({
-        currentWallet: { id: '', type: 'evm' },
-        currentAccount: { address: '', chainId: '', chainType: 'evm', wallet: '' },
+        currentWallet: undefined,
+        currentAccount: undefined,
 
         connectedWalletsByChain: CHAIN_TYPES.reduce((acc, chain) => ({ ...acc, [chain]: {} }), {}) as WalletsByChain,
 
@@ -49,6 +49,7 @@ export const useWalletsStore = create<WalletState>()(
         partialize: (state) => ({
           currentWallet: state.currentWallet,
           currentAccount: state.currentAccount,
+          recentWallet: state.recentWallet,
         }),
       },
     ),
