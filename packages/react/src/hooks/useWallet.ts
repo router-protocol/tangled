@@ -14,7 +14,7 @@ export const useWallet = <C extends ChainType = ChainType>(
 ): Wallet<C> | undefined => {
   const wallets = useWallets();
 
-  if (!chainType || !walletId) {
+  if (!chainType || !walletId || !wallets[chainType]) {
     return undefined;
   }
 
