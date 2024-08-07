@@ -42,11 +42,11 @@ export const TronProvider = ({
   ///////////////////
   const handleConnect = useCallback(
     function (this: Adapter, address: string) {
-      setAddress(address);
-      setConnector({ adapter: this, account: address, network: undefined, readyState: this.state });
-      setConnectedAdapter(this);
+      if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
+      const connector = tronStore.getState().connectors[this.name];
+      setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
     },
-    [setAddress, setConnectedAdapter, setConnector],
+    [setAddress, setConnector, tronStore],
   );
 
   const handleError = useCallback((error: Error) => {
@@ -55,11 +55,11 @@ export const TronProvider = ({
 
   const handleAccountChange = useCallback(
     function (this: Adapter, address: string) {
-      setAddress(address);
-      setConnector({ adapter: this, account: address, network: undefined, readyState: this.state });
-      setConnectedAdapter(this);
+      if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
+      const connector = tronStore.getState().connectors[this.name];
+      setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
     },
-    [setAddress, setConnectedAdapter, setConnector],
+    [setAddress, setConnector, tronStore],
   );
 
   const handleDisconnect = useCallback(() => {
@@ -67,17 +67,17 @@ export const TronProvider = ({
   }, [setConnectedAdapter]);
 
   const handleChainChanged = useCallback(
-    ({ chainId }: any) => {
-      if (!connectedAdapter) return;
-      console.log('Chain changed', chainId);
+    function (this: Adapter, { chainId }: any) {
+      if (!this) return;
+
       setConnector({
-        adapter: connectedAdapter,
-        account: connectedAdapter?.address,
+        adapter: this,
+        account: this?.address,
         network: chainId,
-        readyState: connectedAdapter?.state,
+        readyState: this?.state,
       });
     },
-    [connectedAdapter, setConnector],
+    [setConnector],
   );
 
   ///////////////////
@@ -88,28 +88,35 @@ export const TronProvider = ({
       setConnector({ adapter: this, account: this.address, network: undefined, readyState: this.state });
     }
 
-    adapters.forEach((adapter) => adapter.on('stateChanged', handleStateChange, adapter));
-    return () => adapters.forEach((adapter) => adapter.off('stateChanged', handleStateChange, adapter));
-  }, [adapters, setConnector]);
+    adapters.forEach((adapter) => {
+      adapter.on('stateChanged', handleStateChange, adapter);
+      adapter.on('connect', handleConnect, adapter);
+      adapter.on('accountsChanged', handleAccountChange, adapter);
+      adapter.on('chainChanged', handleChainChanged, adapter);
+      adapter.on('error', handleError);
+      adapter.on('disconnect', handleDisconnect);
+    });
 
-  useEffect(() => {
-    if (connectedAdapter) {
-      connectedAdapter.on('connect', handleConnect, connectedAdapter);
-      connectedAdapter.on('error', handleError);
-      connectedAdapter.on('accountsChanged', handleAccountChange, connectedAdapter);
-      connectedAdapter.on('disconnect', handleDisconnect);
-      connectedAdapter.on('chainChanged', handleChainChanged);
-      // connectedAdapter.on('readyStateChanged', handleReadyStateChanged);
-      return () => {
-        connectedAdapter.off('connect', handleConnect);
-        connectedAdapter.off('error', handleError);
-        connectedAdapter.off('accountsChanged', handleAccountChange);
-        connectedAdapter.off('disconnect', handleDisconnect);
-        connectedAdapter.off('chainChanged', handleChainChanged);
-        // connectedAdapter.off('readyStateChanged', handleReadyStateChanged);
-      };
-    }
-  }, [handleConnect, handleError, handleAccountChange, handleDisconnect, connectedAdapter, handleChainChanged]);
+    return () => {
+      adapters.forEach((adapter) => {
+        adapter.off('stateChanged', handleStateChange, adapter);
+        adapter.off('connect', handleConnect, adapter);
+        adapter.off('accountsChanged', handleAccountChange, adapter);
+        adapter.off('chainChanged', handleChainChanged, adapter);
+        adapter.off('error', handleError);
+        adapter.off('disconnect', handleDisconnect);
+      });
+    };
+  }, [
+    adapters,
+    handleAccountChange,
+    handleChainChanged,
+    handleConnect,
+    handleDisconnect,
+    handleError,
+    setConnector,
+    tronStore,
+  ]);
 
   useEffect(() => {
     return () => {
@@ -147,12 +154,6 @@ export const TronProvider = ({
     },
     onSuccess: (data) => {
       setConnectedAdapter(data.adapter);
-      setConnector({
-        adapter: data.adapter,
-        account: data.account,
-        network: undefined,
-        readyState: data.adapter.state,
-      });
     },
   });
 
