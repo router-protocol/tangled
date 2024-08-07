@@ -1,7 +1,7 @@
 import { ChainData } from '../types/index.js';
 
 export const alephZero: ChainData = {
-  id: 'aleph-zero',
+  id: 'aleph_zero',
   name: 'Aleph Zero',
   type: 'aleph_zero',
   nativeCurrency: {
