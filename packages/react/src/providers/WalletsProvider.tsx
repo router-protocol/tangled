@@ -130,14 +130,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
         _alephAccounts[name] = {
           address: address,
-          chainId: chains.alephZero[0].id,
+          chainId: undefined,
           chainType: 'alephZero',
           wallet: name,
         };
 
         _alephWallets[name] = {
           address: address,
-          chainId: chains.alephZero[0].id,
+          chainId: undefined,
           chainType: 'alephZero',
           connector: adapter,
         };
@@ -149,6 +149,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       });
     })();
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors]);
+
   // when currentWallet changes, update currentAccount
   useEffect(() => {
     if (!currentWallet) {
