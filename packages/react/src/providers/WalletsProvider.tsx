@@ -15,7 +15,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const tronConnectors = useTronStore((state) => state.connectors);
   const alephConnectors = useAlephStore((state) => state.connectors);
   const alephAccounts = useAlephStore((state) => state.connectedAdapter);
-  const alephAddress = useAlephStore((state) => state.address);
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -117,7 +116,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     (async () => {
       const _alephAccounts: { [x: string]: ConnectedAccount } = {};
-      const _alephWallets: { [x: string]: ConnectedWallet<'aleph_zero'> } = {};
+      const _alephWallets: { [x: string]: ConnectedWallet<'alephZero'> } = {};
 
       if (!alephConnectors) return;
 
@@ -131,25 +130,25 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
         _alephAccounts[name] = {
           address: address,
-          chainId: chains.aleph_zero[0].id,
-          chainType: 'aleph_zero',
+          chainId: chains.alephZero[0].id,
+          chainType: 'alephZero',
           wallet: name,
         };
 
         _alephWallets[name] = {
           address: address,
-          chainId: chains.aleph_zero[0].id,
-          chainType: 'aleph_zero',
+          chainId: chains.alephZero[0].id,
+          chainType: 'alephZero',
           connector: adapter,
         };
       }
 
-      setChainConnectedAccounts({ aleph_zero: _alephAccounts });
+      setChainConnectedAccounts({ alephZero: _alephAccounts });
       setConnectedWallets({
-        aleph_zero: _alephWallets,
+        alephZero: _alephWallets,
       });
     })();
-  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.aleph_zero, alephConnectors]);
+  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors]);
   // when currentWallet changes, update currentAccount
   useEffect(() => {
     if (!currentWallet) {
