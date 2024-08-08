@@ -93,7 +93,10 @@ export const AlephProvider = ({
       if (!connectedAdapter) return;
 
       await connectedAdapter.disconnect();
+
       setConnectors(connectedAdapter);
+      setConnectedAdapter(connectedAdapter);
+      setAddress('');
     },
   });
 
