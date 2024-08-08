@@ -111,7 +111,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       tron: _tronWallets,
     });
-  }, [chains.tron, setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
+  }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
   useEffect(() => {
     (async () => {
@@ -174,9 +174,10 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!recentWallet) return;
 
-    const recentAccount = Object.values(connectedAccountsByChain[recentWallet.type]).find(
-      (account) => account.wallet === recentWallet.id,
-    );
+    const connectedAccounts = connectedAccountsByChain[recentWallet.type];
+    if (!connectedAccounts) return;
+
+    const recentAccount = Object.values(connectedAccounts).find((account) => account.wallet === recentWallet.id);
 
     if (recentAccount) {
       setCurrentWallet(recentWallet);
