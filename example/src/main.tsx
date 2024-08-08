@@ -17,7 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           projectId: '41980758771052df3f01be0a46f172a5',
         }}
       >
-        <App />
+        <main className='flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white'>
+          <App />
+        </main>
       </TangledContextProvider>
     </QueryClientProvider>
   </React.StrictMode>,

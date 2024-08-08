@@ -11,7 +11,7 @@ import {
   useWallets,
 } from '@tangled3/react';
 
-function Example() {
+export function Example() {
   const accounts = useAccounts();
   const wallets = useWallets();
 
@@ -120,7 +120,6 @@ function Example() {
     </div>
   );
 }
-export default Example;
 
 const CurrentAccountAndWallet = () => {
   const currentAccount = useCurrentAccount();

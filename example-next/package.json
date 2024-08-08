@@ -13,6 +13,7 @@
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tangled3/react": "workspace:*",
     "@tangled3/ui": "workspace:*",
+    "@tanstack/react-query": "^5.44.0",
     "geist": "^1.3.0",
     "next": "^14.2.4",
     "react": "^18.3.1",
