@@ -103,16 +103,17 @@ export const AlephProvider = ({
       return;
     }
 
-    const handleAccountsUpdate = async () => {
+    const handleAccountsUpdate = (acc: { address: string }[]) => {
+      if (!acc[0]) return;
       setConnectors(connectedAdapter);
+      setAddress(acc[0].address);
     };
 
-    connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     const unsubscribe = connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     return () => {
       unsubscribe();
     };
-  });
+  }, [connectedAdapter, setConnectors, setAddress]);
 
   // Eager connect when the page reloads
   useEffect(() => {

@@ -15,6 +15,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const tronConnectors = useTronStore((state) => state.connectors);
   const alephConnectors = useAlephStore((state) => state.connectors);
   const alephAccounts = useAlephStore((state) => state.connectedAdapter);
+  const alephAddress = useAlephStore((state) => state.address);
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -114,41 +115,38 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
   useEffect(() => {
-    (async () => {
-      const _alephAccounts: { [x: string]: ConnectedAccount } = {};
-      const _alephWallets: { [x: string]: ConnectedWallet<'alephZero'> } = {};
+    const _alephAccounts: { [x: string]: ConnectedAccount } = {};
+    const _alephWallets: { [x: string]: ConnectedWallet<'alephZero'> } = {};
 
-      if (!alephConnectors) return;
+    if (!alephConnectors) return;
 
-      for (const [name, adapter] of Object.entries(alephConnectors)) {
-        const accounts = await adapter.accounts.get();
-        const address = accounts[0]?.address ?? '';
+    for (const [name, adapter] of Object.entries(alephConnectors)) {
+      const address = alephAddress ?? '';
 
-        if (address === '') {
-          continue;
-        }
-
-        _alephAccounts[name] = {
-          address: address,
-          chainId: undefined,
-          chainType: 'alephZero',
-          wallet: name,
-        };
-
-        _alephWallets[name] = {
-          address: address,
-          chainId: undefined,
-          chainType: 'alephZero',
-          connector: adapter,
-        };
+      if (address === '') {
+        continue;
       }
 
-      setChainConnectedAccounts({ alephZero: _alephAccounts });
-      setConnectedWallets({
-        alephZero: _alephWallets,
-      });
-    })();
-  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors]);
+      _alephAccounts[name] = {
+        address: address,
+        chainId: undefined,
+        chainType: 'alephZero',
+        wallet: name,
+      };
+
+      _alephWallets[name] = {
+        address: address,
+        chainId: undefined,
+        chainType: 'alephZero',
+        connector: adapter,
+      };
+    }
+
+    setChainConnectedAccounts({ alephZero: _alephAccounts });
+    setConnectedWallets({
+      alephZero: _alephWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors, alephAddress]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {
