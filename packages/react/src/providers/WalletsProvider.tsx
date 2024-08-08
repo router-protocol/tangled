@@ -118,8 +118,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     const _alephAccounts: { [x: string]: ConnectedAccount } = {};
     const _alephWallets: { [x: string]: ConnectedWallet<'alephZero'> } = {};
 
-    if (!alephConnectors) return;
-
     for (const [name, adapter] of Object.entries(alephConnectors)) {
       const address = alephAddress ?? '';
 
@@ -154,7 +152,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       setCurrentAccount(undefined);
       return;
     }
-    const connectedAccountsByChain = useWalletsStore.getState().connectedAccountsByChain;
 
     const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find(
       (account) => account.wallet === currentWallet.id,
@@ -166,7 +163,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       setCurrentAccount(undefined);
       setCurrentWallet(undefined);
     }
-  }, [currentWallet, setCurrentAccount, setCurrentWallet]);
+  }, [currentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
 
   // when connectedAccounts change, try connecting to recent wallet
   useEffect(() => {

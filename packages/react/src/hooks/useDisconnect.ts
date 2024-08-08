@@ -42,10 +42,8 @@ export const useDisConnect = () => {
       } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
       } else {
-        await walletInstance.connector.connect();
+        await walletInstance.connector.disconnect();
       }
-
-      return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
     [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, wallets],
   );
@@ -56,9 +54,6 @@ export const useDisConnect = () => {
     onError: (error) => {
       console.error(error);
     },
-    // onSuccess: (p) => {
-    //   // console.log('Connected', p.id);
-    // },
   });
 
   return {
