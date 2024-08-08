@@ -6,7 +6,7 @@ import { useSwitchChain } from 'wagmi';
 import { ChainData, ChainId } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { useChains } from './useChains.js';
-import useCurrentAccount from './useCurrentAccount.js';
+import { useCurrentAccount } from './useCurrentAccount.js';
 import { useWallet } from './useWallet.js';
 
 const useNetwork = () => {

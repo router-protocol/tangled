@@ -1,7 +1,5 @@
 import { useWalletsStore } from '../store/Wallet.js';
 
-const useCurrentAccount = () => {
+export const useCurrentAccount = () => {
   return useWalletsStore((state) => state.currentAccount);
 };
-
-export default useCurrentAccount;
