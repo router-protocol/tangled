@@ -20,7 +20,7 @@ export const useDisConnect = () => {
   const disconnectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {
       const walletInstance: Wallet | undefined = wallets[params.chainType].find((wallet) => {
-        return wallet.id.toLowerCase() === params.walletId.toLowerCase();
+        return wallet.id === params.walletId;
       });
 
       if (!walletInstance) {

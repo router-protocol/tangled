@@ -1,4 +1,4 @@
-import { useCurrentWallet } from '@mysten/dapp-kit';
+import { useCurrentWallet as useSuiCurrentWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections } from 'wagmi';
@@ -18,7 +18,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
-  const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useCurrentWallet();
+  const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
 
   // update wallet store states when connections change for individual providers
   // evm
