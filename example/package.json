@@ -13,8 +13,10 @@
     "@tangled3/react": "workspace:*",
     "@tangled3/ui": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
+    "crypto": "npm:crypto-browserify",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "stream": "npm:stream-browserify"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",
