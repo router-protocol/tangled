@@ -10,7 +10,7 @@ export type UseTokenParams = {
   /** Chain ID of token */
   chainId: ChainId;
   /** Token Address */
-  address: string | undefined;
+  token: string | undefined;
   /** Account to fetch balance and allowance for */
   account?: string;
   /** Allowance spender */
@@ -41,7 +41,7 @@ export type UseTokenReturn = {
   isLoading: boolean;
 };
 
-export const useToken = ({ chainId, account, address, spender }: UseTokenParams): UseTokenReturn => {
+export const useToken = ({ chainId, account, token, spender }: UseTokenParams): UseTokenReturn => {
   const chain = useChain(chainId);
   const wagmiConfig = useWagmiConfig();
 
@@ -50,13 +50,13 @@ export const useToken = ({ chainId, account, address, spender }: UseTokenParams)
     error,
     isLoading: isMetadataLoading,
   } = useQuery({
-    queryKey: ['token', chainId, address, account, spender],
+    queryKey: ['token', chainId, token, account, spender],
     queryFn: async () => {
-      if (!chain || !address) {
+      if (!chain || !token) {
         throw new Error('Missing required parameters');
       }
 
-      const result = await getTokenMetadata({ address, chain, wagmiConfig });
+      const result = await getTokenMetadata({ address: token, chain, wagmiConfig });
 
       return result as TokenMetadata;
     },
@@ -65,14 +65,14 @@ export const useToken = ({ chainId, account, address, spender }: UseTokenParams)
   });
 
   const { data: balanceAndAllowance, isLoading: isBalanceAndAllowanceLoading } = useQuery({
-    queryKey: ['balance and allowance', chainId, address, account, spender, tokenMetadata],
+    queryKey: ['balance and allowance', chainId, token, account, spender, tokenMetadata],
     queryFn: async () => {
-      if (!account || !address || !tokenMetadata || !chain) {
+      if (!account || !token || !tokenMetadata || !chain) {
         throw new Error('Missing required parameters');
       }
 
       const { balance, allowance } = await getTokenBalanceAndAllowance({
-        address,
+        token: token,
         account,
         spender,
         chain,

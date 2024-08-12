@@ -132,3 +132,13 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
 } as const;
+
+/**
+ * The native ETH address.
+ */
+export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+/**
+ * The native SOL address.
+ */
+export const SOL_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';

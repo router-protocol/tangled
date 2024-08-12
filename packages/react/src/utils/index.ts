@@ -1,24 +1,34 @@
 import { detect } from 'detect-browser';
 
-const detectBrowser = () => {
+export const detectBrowser = () => {
   const browser = detect();
   return browser?.name ?? '';
 };
-const detectOS = () => {
+export const detectOS = () => {
   const browser = detect();
   return browser?.os ?? '';
 };
 
-const isIOS = () => {
+export const isIOS = () => {
   const os = detectOS();
   return os.toLowerCase().includes('ios');
 };
-const isAndroid = () => {
+export const isAndroid = () => {
   const os = detectOS();
   return os.toLowerCase().includes('android');
 };
-const isMobile = () => {
+export const isMobile = () => {
   return isAndroid() || isIOS();
 };
 
-export { detectBrowser, detectOS, isAndroid, isIOS, isMobile };
+export const areTokensEqual = (tokenA: string | undefined, tokenB: string | undefined) => {
+  if (!tokenA || !tokenB) return false;
+  if (tokenA.length !== tokenB.length) return false;
+
+  for (let i = 0; i < tokenA.length; i++) {
+    if (tokenA.charCodeAt(i) !== tokenB.charCodeAt(i)) {
+      return false;
+    }
+  }
+  return true;
+};
