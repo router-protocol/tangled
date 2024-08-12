@@ -1,6 +1,6 @@
 import { ChainData } from '../types/index.js';
 
-export const solanaTestnet: ChainData = {
+export const solanaTestnet: ChainData<'solana'> = {
   id: 'solanaTestnet',
   name: 'Solana Testnet',
   type: 'solana',
@@ -11,7 +11,7 @@ export const solanaTestnet: ChainData = {
   },
   rpcUrls: {
     default: {
-      http: [''],
+      http: ['https://api.testnet.solana.com'],
     },
   },
   blockExplorers: {

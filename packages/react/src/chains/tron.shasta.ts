@@ -14,6 +14,9 @@ export const tronShasta: ChainData = {
     default: {
       http: [''],
     },
+    fullNode: {
+      http: ['https://api.shasta.trongrid.io'],
+    },
   },
   blockExplorers: {
     default: {

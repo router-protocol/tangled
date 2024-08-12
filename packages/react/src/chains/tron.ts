@@ -14,6 +14,9 @@ export const tronMainnet: ChainData = {
     default: {
       http: [''],
     },
+    fullNode: {
+      http: ['https://api.trongrid.io'],
+    },
   },
   blockExplorers: {
     default: {
