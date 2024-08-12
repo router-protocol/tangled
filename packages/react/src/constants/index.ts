@@ -73,6 +73,14 @@ export const CHAIN_ID = {
   // sepolia: '11155111',
 } as const;
 
+export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
+  (acc, key) => {
+    acc[CHAIN_ID[key as Chain]] = key;
+    return acc;
+  },
+  {} as Record<string, string>,
+) as Record<ChainId, Chain>;
+
 export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrum]: arbitrum,
   [CHAIN_ID.avalanche]: avalanche,
@@ -124,24 +132,3 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
 } as const;
-
-export const DEFAULT_CHAINS = [
-  'arbitrum',
-  'avalanche',
-  'base',
-  'binance',
-  'blast',
-  'boba',
-  'ethereum',
-  'linea',
-  'manta',
-  'mantle',
-  'metis',
-  'mode',
-  'optimism',
-  'polygon',
-  'polygon_zkevm',
-  'scroll',
-  'zksync',
-  'alephZero',
-] as Chain[];
