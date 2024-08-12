@@ -19,8 +19,8 @@ export type ChainType = (typeof CHAIN_TYPES)[number];
 export type Chain = keyof typeof CHAIN_ID;
 export type ChainId = (typeof CHAIN_ID)[keyof typeof CHAIN_ID];
 
-export type NonEVMChain = {
-  type: Exclude<ChainType, 'evm'>;
+export type ChainDataGeneric = {
+  type: ChainType;
   id: ChainId;
   name: string;
   nativeCurrency: {
@@ -44,8 +44,8 @@ export type NonEVMChain = {
 export type ChainData<T extends ChainType = ChainType> = T extends 'evm'
   ? { type: 'evm' } & ViemChain
   : T extends 'tron'
-    ? { type: 'tron'; tronName: 'Mainnet' | 'Shasta' | 'Nile' } & NonEVMChain
-    : { type: T } & NonEVMChain;
+    ? { type: 'tron'; tronName: 'Mainnet' | 'Shasta' | 'Nile' } & ChainDataGeneric
+    : { type: T } & ChainDataGeneric;
 
 // use generic to type ChainData according to ChainType
 export type SupportedChainsByType = { [key in ChainType]: ChainData<key>[] };
@@ -54,7 +54,7 @@ export interface TangledConfig {
   // The name of the project.
   projectName: string;
   // Override default supported chains
-  chains?: Chain[];
+  chains?: SupportedChainsByType;
   // Override default chain configs. TODO: Add chain config type
   chainConfigs: Partial<Record<Chain, ChainConfig>>;
   // Enable testnets. Defaults to false. If true, only testnet chains will be provided in the context.
