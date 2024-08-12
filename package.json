@@ -18,7 +18,8 @@
     "lint": "eslint packages",
     "lint:fix": "eslint packages --fix",
     "format": "prettier --check . --config ./prettier.config.cjs",
-    "format:fix": "prettier --write . --config ./prettier.config.cjs"
+    "format:fix": "prettier --write . --config ./prettier.config.cjs",
+    "watch:react": "pnpm --filter @tangled3/react watch"
   },
   "keywords": [],
   "author": "",
