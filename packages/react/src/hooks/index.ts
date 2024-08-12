@@ -11,6 +11,7 @@ export * from './useDisconnect.js';
 export * from './useIsMobile.js';
 export * from './useNetwork.js';
 export * from './useTangledConfig.js';
+export * from './useToken.js';
 export * from './useTronStore.js';
 export * from './useWallet.js';
 export * from './useWallets.js';
