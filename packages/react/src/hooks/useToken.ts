@@ -50,7 +50,7 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
     error,
     isLoading: isMetadataLoading,
   } = useQuery({
-    queryKey: ['token', chainId, token, account, spender],
+    queryKey: ['token', chain, token],
     queryFn: async () => {
       if (!chain || !token) {
         throw new Error('Missing required parameters');
@@ -62,10 +62,11 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
     },
     staleTime: 1000 * 60 * 60, // 1 hour
     refetchOnWindowFocus: false,
+    enabled: Boolean(token && chain),
   });
 
   const { data: balanceAndAllowance, isLoading: isBalanceAndAllowanceLoading } = useQuery({
-    queryKey: ['balance and allowance', chainId, token, account, spender, tokenMetadata],
+    queryKey: ['balance and allowance', token, account, spender, tokenMetadata],
     queryFn: async () => {
       if (!account || !token || !tokenMetadata || !chain) {
         throw new Error('Missing required parameters');
@@ -92,6 +93,7 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
     },
     staleTime: 1000 * 30, // 30 seconds
     refetchOnWindowFocus: true,
+    enabled: Boolean(tokenMetadata && account && chain),
   });
 
   return {
