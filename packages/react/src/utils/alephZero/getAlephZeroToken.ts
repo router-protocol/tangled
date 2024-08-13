@@ -26,7 +26,7 @@ export const getAlephZeroTokenBalanceAndAllowance = async ({
     proofSize: PROOFSIZE,
   });
 
-  const { output: balanceOutput, result: balanceResult } = await contract.query['psp22::balance_of'](
+  const { output: balanceOutput, result: balanceResult } = await contract.query['psp22::balanceOf'](
     account,
     {
       value: 0,
@@ -66,37 +66,28 @@ export const getAlephZeroTokenMetadata = async ({ api, token }: { api: ApiPromis
     proofSize: PROOFSIZE,
   });
 
-  const { output: symbolOutput, result: symbolResult } = await contract.query['PSP22Metadata::token_symbol'](
-    queryAccount,
-    {
-      value: 0,
-      gasLimit: gasLimit as any,
-    },
-    token,
-  );
+  const { output: symbolOutput } = await contract.query['psp22Metadata::tokenSymbol'](queryAccount, {
+    value: 0,
+    gasLimit: gasLimit as any,
+  });
+  const symbol = symbolOutput?.toPrimitive() as { ok: string };
 
-  const { output: nameOutput, result: nameResult } = await contract.query['PSP22Metadata::token_name'](
-    queryAccount,
-    {
-      value: 0,
-      gasLimit: gasLimit as any,
-    },
-    token,
-  );
+  const { output: nameOutput } = await contract.query['psp22Metadata::tokenName'](queryAccount, {
+    value: 0,
+    gasLimit: gasLimit as any,
+  });
+  const name = nameOutput?.toPrimitive() as { ok: string };
 
-  const { output: decimalsOutput, result: decimalsResult } = await contract.query['PSP22Metadata::token_decimals'](
-    queryAccount,
-    {
-      value: 0,
-      gasLimit: gasLimit as any,
-    },
-    token,
-  );
+  const { output: decimalsOutput } = await contract.query['psp22Metadata::tokenDecimals'](queryAccount, {
+    value: 0,
+    gasLimit: gasLimit as any,
+  });
+  const decimals = decimalsOutput?.toPrimitive() as { ok: number };
 
   return {
-    symbol: symbolResult.isOk ? symbolOutput?.toHuman()?.toString() ?? '' : '',
-    name: nameResult.isOk ? nameOutput?.toHuman()?.toString() ?? '' : '',
-    decimals: decimalsResult.isOk ? Number(decimalsOutput?.toHuman()) ?? '' : 0,
+    symbol: symbol.ok,
+    name: name.ok,
+    decimals: decimals.ok,
     address: token,
   };
 };

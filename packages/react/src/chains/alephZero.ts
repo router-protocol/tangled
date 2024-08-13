@@ -12,6 +12,7 @@ export const alephZero: ChainData = {
   rpcUrls: {
     default: {
       http: [''],
+      webSocket: ['wss://ws.azero.dev'],
     },
   },
   blockExplorers: {
