@@ -1,5 +1,12 @@
 import { detect } from 'detect-browser';
 
+/**
+ * This is a workaround for the issue with BigInt serialization in JSON.stringify
+ */
+(BigInt.prototype as any).toJSON = function () {
+  return this.toString();
+};
+
 export const detectBrowser = () => {
   const browser = detect();
   return browser?.name ?? '';
