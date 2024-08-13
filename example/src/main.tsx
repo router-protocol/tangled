@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
               ...solana,
               rpcUrls: {
                 default: {
-                  http: [import.meta.env.VITE_SOLANA_MAINNET_API_URL ?? 'https://api.mainnet-beta.solana.com'],
+                  http: [process.env.REACT_APP_PUBLIC_SOLANA_MAINNET_API_URL ?? 'https://api.mainnet-beta.solana.com'],
                 },
               },
             },
