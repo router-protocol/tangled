@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { ChainId } from '../types/index.js';
 import { useChain } from './useChain.js';
 
+import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
 import { formatUnits } from 'viem';
 import { useConfig as useWagmiConfig } from 'wagmi';
 import { getTokenBalanceAndAllowance, getTokenMetadata } from '../utils/getToken.js';
@@ -44,6 +45,7 @@ export type UseTokenReturn = {
 export const useToken = ({ chainId, account, token, spender }: UseTokenParams): UseTokenReturn => {
   const chain = useChain(chainId);
   const wagmiConfig = useWagmiConfig();
+  const { connection: solanaConnection } = useSolanaConnection();
 
   const {
     data: tokenMetadata,
@@ -56,7 +58,7 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
         throw new Error('Missing required parameters');
       }
 
-      const result = await getTokenMetadata({ address: token, chain, wagmiConfig });
+      const result = await getTokenMetadata({ address: token, chain, wagmiConfig, solanaConnection });
 
       return result as TokenMetadata;
     },
@@ -78,6 +80,7 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
         spender,
         chain,
         wagmiConfig,
+        solanaConnection,
       });
 
       return {

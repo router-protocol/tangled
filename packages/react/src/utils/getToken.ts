@@ -1,4 +1,4 @@
-import { Connection, ParsedAccountData, PublicKey } from '@solana/web3.js';
+import { ParsedAccountData, PublicKey, Connection as SolanaConnection } from '@solana/web3.js';
 import { getBalance } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { Config } from 'wagmi';
@@ -13,8 +13,9 @@ type GetTokenMetadataParams = {
   address: string;
   chain: ChainData;
   wagmiConfig: Config;
+  solanaConnection: SolanaConnection;
 };
-export const getTokenMetadata = async ({ address, chain, wagmiConfig }: GetTokenMetadataParams) => {
+export const getTokenMetadata = async ({ address, chain, wagmiConfig, solanaConnection }: GetTokenMetadataParams) => {
   // evm chain
   if (chain?.type === 'evm') {
     if (areTokensEqual(address, ETH_ADDRESS)) {
@@ -44,10 +45,8 @@ export const getTokenMetadata = async ({ address, chain, wagmiConfig }: GetToken
   }
 
   if (chain.type === 'solana') {
-    const connection = new Connection(chain.rpcUrls.default.http[0], 'confirmed');
-
     const pbKey = new PublicKey(address);
-    const mint = await connection.getParsedAccountInfo(pbKey);
+    const mint = await solanaConnection.getParsedAccountInfo(pbKey);
     const parsed = (mint.value?.data as ParsedAccountData)?.parsed;
 
     // TODO: add token fetch from metadata
@@ -72,6 +71,7 @@ type GetTokenBalanceAndAllowanceParams = {
   spender: string | undefined;
   chain: ChainData;
   wagmiConfig: Config;
+  solanaConnection: SolanaConnection;
 };
 export const getTokenBalanceAndAllowance = async ({
   token,
@@ -79,6 +79,7 @@ export const getTokenBalanceAndAllowance = async ({
   spender,
   chain,
   wagmiConfig,
+  solanaConnection,
 }: GetTokenBalanceAndAllowanceParams) => {
   // evm chain
   if (chain?.type === 'evm') {
@@ -119,17 +120,16 @@ export const getTokenBalanceAndAllowance = async ({
   }
 
   if (chain.type === 'solana') {
-    const connection = new Connection(chain.rpcUrls.default.http[0], 'confirmed');
     const pbKey = new PublicKey(token);
 
     // if asset is native solana token
     if (areTokensEqual(token, SOL_ADDRESS)) {
-      const balance = BigInt(await connection.getBalance(pbKey));
+      const balance = BigInt(await solanaConnection.getBalance(pbKey));
       return { balance, allowance: 0n };
     }
 
     const { balance, allowance } = await getSolanaTokenBalanceAndAllowance({
-      connection,
+      connection: solanaConnection,
       account: new PublicKey(account),
       token: pbKey,
       spender: spender ? new PublicKey(spender) : undefined,
