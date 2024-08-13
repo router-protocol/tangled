@@ -30,6 +30,9 @@ export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ ch
   const [endpoint] = useState(() => {
     if (!network) throw new Error('Network not provided');
 
+    const apiUrl = network.rpcUrls.default.http[0];
+    if (apiUrl) return apiUrl;
+
     if (network.id === 'solana') {
       return clusterApiUrl(WalletAdapterNetwork.Mainnet);
     }
