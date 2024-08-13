@@ -25,17 +25,18 @@ export const TronContext = createContext<TronContextValues>({
 export const TronProvider = ({
   children,
   adapters,
-  // chains,
+  chains,
 }: {
   children: React.ReactNode;
   chains: ChainData<'tron'>[];
   adapters: Adapter[];
 }) => {
-  const tronStore = useRef(createTronStore({ adapters })).current;
+  const tronStore = useRef(createTronStore({ adapters, chain: chains[0] })).current;
   const connectedAdapter = useStore(tronStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(tronStore, (state) => state.setConnectedAdapter);
   const setConnector = useStore(tronStore, (state) => state.setConnector);
   const setAddress = useStore(tronStore, (state) => state.setAddress);
+  const tronWeb = useStore(tronStore, (state) => state.tronweb);
 
   ///////////////////
   ///// Handlers ////
@@ -119,10 +120,14 @@ export const TronProvider = ({
   ]);
 
   useEffect(() => {
+    if (!connectedAdapter) return;
+
+    if (connectedAdapter.address) tronWeb.setAddress(connectedAdapter.address);
+
     return () => {
-      connectedAdapter?.disconnect();
+      connectedAdapter.disconnect();
     };
-  }, [connectedAdapter]);
+  }, [connectedAdapter, tronWeb]);
 
   // autoconnect
   useEffect(() => {

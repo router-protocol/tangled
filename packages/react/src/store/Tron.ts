@@ -1,9 +1,13 @@
 import { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
+import { TronWeb } from 'tronweb';
 import { createStore } from 'zustand';
+import { ChainData } from '../types/index.js';
 import { TronAdapterData } from '../types/wallet.js';
+import { getTronWeb } from '../utils/tron/getTronweb.js';
 
 interface TronProps {
   adapters: Adapter[];
+  chain: ChainData<'tron'>;
 }
 
 export interface TronState {
@@ -12,11 +16,13 @@ export interface TronState {
   };
   connectedAdapter: Adapter | undefined;
   address: string | null;
+  tronweb: TronWeb;
 
   setAddress: (address: string) => void;
   setConnector: (connector: TronAdapterData) => void;
   setConnectors: (connectors: TronState['connectors']) => void;
   setConnectedAdapter: (adapter: Adapter | undefined) => void;
+  setTronweb: (tronweb: TronWeb) => void;
 }
 
 export type TronStore = ReturnType<typeof createTronStore>;
@@ -26,11 +32,13 @@ export const createTronStore = (props: TronProps) => {
     connectors: {},
     connectedAdapter: undefined,
     address: null,
+    tronweb: getTronWeb(props.chain),
 
     setAddress: () => {},
     setConnector: () => {},
     setConnectors: () => {},
     setConnectedAdapter: () => {},
+    setTronweb: () => {},
   };
 
   return createStore<TronState>((set) => ({
@@ -49,5 +57,6 @@ export const createTronStore = (props: TronProps) => {
     setConnector: (connector) =>
       set((state) => ({ connectors: { ...state.connectors, [connector.adapter.name]: connector } })),
     setConnectors: (connectors) => set(() => ({ connectors })),
+    setTronweb: (tronweb) => set(() => ({ tronweb })),
   }));
 };
