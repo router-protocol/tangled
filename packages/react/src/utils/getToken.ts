@@ -1,3 +1,4 @@
+import { type ApiPromise } from '@polkadot/api';
 import { ParsedAccountData, PublicKey, Connection as SolanaConnection } from '@solana/web3.js';
 import { getBalance } from '@wagmi/core';
 import { type TronWeb } from 'tronweb';
@@ -6,24 +7,41 @@ import { Config } from 'wagmi';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { ChainData } from '../types/index.js';
+import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { areTokensEqual } from './index.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
 
-type GetTokenMetadataParams = {
-  token: string;
-  chain: ChainData;
+type Connectors = {
   wagmiConfig: Config;
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
+  alephZeroApi: ApiPromise;
 };
+
+type GetTokenMetadataParams = {
+  token: string;
+  chain: ChainData;
+  connectors: Connectors;
+};
+type TokenMetadata = {
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+};
+/**
+ * Get token metadata
+ * @param token - Token address
+ * @param chain - {@link ChainData}
+ * @param connectors {@link Connectors}
+ * @returns Token metadata {@link TokenMetadata}
+ */
 export const getTokenMetadata = async ({
   token,
   chain,
-  wagmiConfig,
-  solanaConnection,
-  tronWeb,
-}: GetTokenMetadataParams) => {
+  connectors,
+}: GetTokenMetadataParams): Promise<TokenMetadata> => {
   // evm chain
   if (chain?.type === 'evm') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
@@ -35,12 +53,12 @@ export const getTokenMetadata = async ({
       };
     }
 
-    const { name, symbol, decimals } = await getEVMTokenMetadata(token, Number(chain.id), wagmiConfig);
+    const { name, symbol, decimals } = await getEVMTokenMetadata(token, Number(chain.id), connectors.wagmiConfig);
     return { name, symbol, decimals, address: token };
   }
 
   if (chain.type === 'tron') {
-    const contract = tronWeb.contract(trc20Abi, token);
+    const contract = connectors.tronWeb.contract(trc20Abi, token);
 
     let name = contract.name().call();
     let symbol = contract.symbol().call();
@@ -53,7 +71,7 @@ export const getTokenMetadata = async ({
 
   if (chain.type === 'solana') {
     const pbKey = new PublicKey(token);
-    const mint = await solanaConnection.getParsedAccountInfo(pbKey);
+    const mint = await connectors.solanaConnection.getParsedAccountInfo(pbKey);
     const parsed = (mint.value?.data as ParsedAccountData)?.parsed;
 
     // TODO: add token fetch from metadata
@@ -69,6 +87,10 @@ export const getTokenMetadata = async ({
     }
   }
 
+  if (chain.type === 'alephZero') {
+    return await getAlephZeroTokenMetadata({ api: connectors.alephZeroApi, token });
+  }
+
   throw new Error('Chain type not supported');
 };
 
@@ -77,50 +99,51 @@ type GetTokenBalanceAndAllowanceParams = {
   account: string;
   spender: string | undefined;
   chain: ChainData;
-  wagmiConfig: Config;
-  solanaConnection: SolanaConnection;
-  tronWeb: TronWeb;
+  connectors: {
+    wagmiConfig: Config;
+    solanaConnection: SolanaConnection;
+    tronWeb: TronWeb;
+    alephZeroApi: ApiPromise;
+  };
 };
+/**
+ * Get token balance and allowance for a given account and spender
+ * @param token - Token address
+ * @param account - Account address
+ * @param spender - Spender address
+ * @param chain - Chain data
+ * @param connectors - {@link Connectors}
+ * @returns Token balance and allowance as bigint
+ */
 export const getTokenBalanceAndAllowance = async ({
   token,
   account,
   spender,
   chain,
-  wagmiConfig,
-  solanaConnection,
-  tronWeb,
+  connectors,
 }: GetTokenBalanceAndAllowanceParams) => {
   // evm chain
   if (chain?.type === 'evm') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return {
-        balance: getBalance(wagmiConfig, {
+        balance: getBalance(connectors.wagmiConfig, {
           address: account as EVMAddress,
           chainId: Number(chain.id),
         }),
         allowance: BigInt(0),
       };
     }
-    const balanceAndAllowance = await getEVMTokenBalanceAndAllowance(
-      token,
-      account,
-      spender,
-      Number(chain.id),
-      wagmiConfig,
-    );
-    const balance = balanceAndAllowance.balance;
-    const allowance = balanceAndAllowance.allowance;
-    return { balance, allowance };
+    return await getEVMTokenBalanceAndAllowance(token, account, spender, Number(chain.id), connectors.wagmiConfig);
   }
 
   if (chain.type === 'tron') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      const balance = BigInt(await tronWeb.trx.getBalance(account));
+      const balance = BigInt(await connectors.tronWeb.trx.getBalance(account));
       const allowance = BigInt(0);
       return { balance, allowance };
     }
 
-    const contract = tronWeb.contract(trc20Abi, token);
+    const contract = connectors.tronWeb.contract(trc20Abi, token);
     const balance = await contract.balanceOf(account).call();
     const allowance = spender ? await contract.allowance(account, spender).call() : BigInt(0);
     return { balance, allowance };
@@ -131,18 +154,27 @@ export const getTokenBalanceAndAllowance = async ({
 
     // if asset is native solana token
     if (areTokensEqual(token, SOL_ADDRESS)) {
-      const balance = BigInt(await solanaConnection.getBalance(pbKey));
+      const balance = BigInt(await connectors.solanaConnection.getBalance(pbKey));
       return { balance, allowance: 0n };
     }
 
     const { balance, allowance } = await getSolanaTokenBalanceAndAllowance({
-      connection: solanaConnection,
+      connection: connectors.solanaConnection,
       account: new PublicKey(account),
       token: pbKey,
       spender: spender ? new PublicKey(spender) : undefined,
     });
 
     return { balance, allowance };
+  }
+
+  if (chain.type === 'alephZero') {
+    return getAlephZeroTokenBalanceAndAllowance({
+      api: connectors.alephZeroApi,
+      account,
+      token,
+      spender,
+    });
   }
 
   throw new Error('Chain type not supported');
