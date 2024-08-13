@@ -1,5 +1,5 @@
 {
-  "name": "@tangled3/react-example",
+  "name": "@tangled3/example-react",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -13,6 +13,7 @@
     "@tangled3/react": "workspace:*",
     "@tangled3/ui": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
+    "@tanstack/react-query-devtools": "^5.51.23",
     "crypto": "npm:crypto-browserify",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
