@@ -68,7 +68,7 @@ export default function App({ Component, pageProps }) {
 | Tron      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
 | Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    | :x:                    |
 | Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    | :x:                    |
-| AlephZero | :white_check_mark:     | :x:                | :x:                    | :x:                    | :x:                    | :x:                    |
+| AlephZero | :white_check_mark:     | :white_check_mark: | :x:                    | :x:                    | :x:                    | :x:                    |
 | Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    | :x:                    |
 | Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    | :x:                    |
 
