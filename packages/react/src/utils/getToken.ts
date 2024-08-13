@@ -1,24 +1,32 @@
 import { ParsedAccountData, PublicKey, Connection as SolanaConnection } from '@solana/web3.js';
 import { getBalance } from '@wagmi/core';
+import { type TronWeb } from 'tronweb';
 import { Address as EVMAddress } from 'viem';
 import { Config } from 'wagmi';
+import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { ChainData } from '../types/index.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { areTokensEqual } from './index.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
-import { getTronWeb } from './tron/getTronweb.js';
 
 type GetTokenMetadataParams = {
-  address: string;
+  token: string;
   chain: ChainData;
   wagmiConfig: Config;
   solanaConnection: SolanaConnection;
+  tronWeb: TronWeb;
 };
-export const getTokenMetadata = async ({ address, chain, wagmiConfig, solanaConnection }: GetTokenMetadataParams) => {
+export const getTokenMetadata = async ({
+  token,
+  chain,
+  wagmiConfig,
+  solanaConnection,
+  tronWeb,
+}: GetTokenMetadataParams) => {
   // evm chain
   if (chain?.type === 'evm') {
-    if (areTokensEqual(address, ETH_ADDRESS)) {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
       return {
         name: chain.nativeCurrency.name,
         symbol: chain.nativeCurrency.symbol,
@@ -27,25 +35,24 @@ export const getTokenMetadata = async ({ address, chain, wagmiConfig, solanaConn
       };
     }
 
-    const { name, symbol, decimals } = await getEVMTokenMetadata(address, Number(chain.id), wagmiConfig);
-    return { name, symbol, decimals, address };
+    const { name, symbol, decimals } = await getEVMTokenMetadata(token, Number(chain.id), wagmiConfig);
+    return { name, symbol, decimals, address: token };
   }
 
   if (chain.type === 'tron') {
-    const tronWeb = getTronWeb(chain);
+    const contract = tronWeb.contract(trc20Abi, token);
 
-    const contract = await tronWeb.contract().at(address);
     let name = contract.name().call();
     let symbol = contract.symbol().call();
     let decimals = contract.decimals().call();
 
     [name, symbol, decimals] = await Promise.all([name, symbol, decimals]);
 
-    return { name, symbol, decimals, address };
+    return { name, symbol, decimals: Number(decimals), address: token };
   }
 
   if (chain.type === 'solana') {
-    const pbKey = new PublicKey(address);
+    const pbKey = new PublicKey(token);
     const mint = await solanaConnection.getParsedAccountInfo(pbKey);
     const parsed = (mint.value?.data as ParsedAccountData)?.parsed;
 
@@ -55,7 +62,7 @@ export const getTokenMetadata = async ({ address, chain, wagmiConfig, solanaConn
         name: '',
         symbol: '',
         decimals: parsed.info.decimals,
-        address,
+        address: token,
       };
     } else {
       throw new Error('Token metadata not found');
@@ -72,6 +79,7 @@ type GetTokenBalanceAndAllowanceParams = {
   chain: ChainData;
   wagmiConfig: Config;
   solanaConnection: SolanaConnection;
+  tronWeb: TronWeb;
 };
 export const getTokenBalanceAndAllowance = async ({
   token,
@@ -80,6 +88,7 @@ export const getTokenBalanceAndAllowance = async ({
   chain,
   wagmiConfig,
   solanaConnection,
+  tronWeb,
 }: GetTokenBalanceAndAllowanceParams) => {
   // evm chain
   if (chain?.type === 'evm') {
@@ -105,15 +114,13 @@ export const getTokenBalanceAndAllowance = async ({
   }
 
   if (chain.type === 'tron') {
-    const tronWeb = getTronWeb(chain);
-
     if (areTokensEqual(token, ETH_ADDRESS)) {
       const balance = BigInt(await tronWeb.trx.getBalance(account));
       const allowance = BigInt(0);
       return { balance, allowance };
     }
 
-    const contract = await tronWeb.contract().at(token);
+    const contract = tronWeb.contract(trc20Abi, token);
     const balance = await contract.balanceOf(account).call();
     const allowance = spender ? await contract.allowance(account, spender).call() : BigInt(0);
     return { balance, allowance };

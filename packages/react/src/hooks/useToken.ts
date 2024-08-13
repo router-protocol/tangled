@@ -6,6 +6,7 @@ import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
 import { formatUnits } from 'viem';
 import { useConfig as useWagmiConfig } from 'wagmi';
 import { getTokenBalanceAndAllowance, getTokenMetadata } from '../utils/getToken.js';
+import { useTronStore } from './useTronStore.js';
 
 export type UseTokenParams = {
   /** Chain ID of token */
@@ -46,19 +47,20 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
   const chain = useChain(chainId);
   const wagmiConfig = useWagmiConfig();
   const { connection: solanaConnection } = useSolanaConnection();
+  const tronWeb = useTronStore((state) => state.tronweb);
 
   const {
     data: tokenMetadata,
     error,
     isLoading: isMetadataLoading,
   } = useQuery({
-    queryKey: ['token', chain, token],
+    queryKey: ['token', chain?.id, token],
     queryFn: async () => {
       if (!chain || !token) {
         throw new Error('Missing required parameters');
       }
 
-      const result = await getTokenMetadata({ address: token, chain, wagmiConfig, solanaConnection });
+      const result = await getTokenMetadata({ token, chain, wagmiConfig, solanaConnection, tronWeb });
 
       return result as TokenMetadata;
     },
@@ -68,7 +70,7 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
   });
 
   const { data: balanceAndAllowance, isLoading: isBalanceAndAllowanceLoading } = useQuery({
-    queryKey: ['balance and allowance', token, account, spender, tokenMetadata],
+    queryKey: ['balance and allowance', chain?.id, token, account, spender, tokenMetadata?.decimals],
     queryFn: async () => {
       if (!account || !token || !tokenMetadata || !chain) {
         throw new Error('Missing required parameters');
@@ -81,6 +83,7 @@ export const useToken = ({ chainId, account, token, spender }: UseTokenParams): 
         chain,
         wagmiConfig,
         solanaConnection,
+        tronWeb,
       });
 
       return {
