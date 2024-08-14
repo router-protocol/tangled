@@ -6,6 +6,12 @@
   "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.d.ts",
+  "exports": {
+    "./provider": {
+      "types": "./_esm/providers/TangledContext.d.ts",
+      "default": "./_esm/providers/TangledContext.js"
+    }
+  },
   "publishConfig": {
     "access": "public",
     "directory": "dist"
