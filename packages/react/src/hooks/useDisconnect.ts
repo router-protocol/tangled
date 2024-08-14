@@ -12,7 +12,7 @@ export interface DisconnectParams {
   walletId: string;
   chainType: ChainType;
 }
-export const useDisConnect = () => {
+export const useDisconnect = () => {
   const wallets = useWallets();
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();

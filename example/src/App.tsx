@@ -6,7 +6,7 @@ import {
   useConnect,
   useCurrentAccount,
   useCurrentWallet,
-  useDisConnect,
+  useDisconnect,
   useWallet,
   useWallets,
 } from '@tangled3/react';
@@ -184,7 +184,7 @@ const CurrentAccountAndWallet = () => {
 };
 
 const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
-  const { disconnect } = useDisConnect();
+  const { disconnect } = useDisconnect();
   const { connect } = useConnect();
   const wallet = useWallet(account.chainType, account.wallet);
   const chain = useChain(account.chainId);
