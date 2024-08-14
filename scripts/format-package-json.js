@@ -22,6 +22,7 @@ export async function createPackageFile(packagePath, path) {
     main: './_esm/index.js',
     types: './_esm/index.d.ts',
     exports: {
+      ...packageDataOther.exports,
       '.': {
         types: './_esm/index.d.ts',
         default: './_esm/index.js',
