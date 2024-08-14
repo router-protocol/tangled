@@ -1,8 +1,8 @@
 import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
 import { useQuery } from '@tanstack/react-query';
 import { useConfig as useWagmiConfig } from 'wagmi';
+import { getTokenMetadata } from '../actions/getToken.js';
 import { ChainId } from '../types/index.js';
-import { getTokenMetadata } from '../utils/getToken.js';
 import { useAlephStore } from './useAlephStore.js';
 import { useChain } from './useChain.js';
 import { useTronStore } from './useTronStore.js';

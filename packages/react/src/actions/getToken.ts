@@ -7,9 +7,9 @@ import { Config } from 'wagmi';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { ChainData } from '../types/index.js';
+import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
-import { areTokensEqual } from './index.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
 
 type Connectors = {
