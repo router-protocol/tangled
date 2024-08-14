@@ -1,5 +1,4 @@
 import { useMutation } from '@tanstack/react-query';
-
 import { WalletSwitchChainError } from '@tronweb3/tronwallet-abstract-adapter';
 import { useCallback } from 'react';
 import { useSwitchChain } from 'wagmi';
@@ -9,7 +8,7 @@ import { useChains } from './useChains.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useWallet } from './useWallet.js';
 
-const useNetwork = () => {
+export const useNetwork = () => {
   const currentAccount = useCurrentAccount();
   const currentWalletInstance = useWallet(currentAccount?.chainType, currentAccount?.wallet);
   const chains = useChains(currentAccount?.chainType);
@@ -64,5 +63,3 @@ const useNetwork = () => {
 
   return { network: currentAccount?.chainId, switchNetwork: mutate, switchNetworkAsync: mutateAsync };
 };
-
-export default useNetwork;
