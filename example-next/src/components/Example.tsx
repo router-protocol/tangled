@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CHAIN_TYPES,
   ConnectedAccount,
