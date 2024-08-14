@@ -1,13 +1,10 @@
-import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
 import { useQuery } from '@tanstack/react-query';
 import { formatUnits } from 'viem';
-import { useConfig as useWagmiConfig } from 'wagmi';
 import { getTokenBalanceAndAllowance } from '../actions/getToken.js';
 import { ChainId } from '../types/index.js';
-import { useAlephStore } from './useAlephStore.js';
 import { useChain } from './useChain.js';
+import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useToken } from './useToken.js';
-import { useTronStore } from './useTronStore.js';
 
 export type UseTokenParams = {
   /** Chain ID of token */
@@ -24,10 +21,7 @@ export type UseTokenParams = {
 
 export const useTokenForAccount = ({ chainId, account, token, spender }: UseTokenParams) => {
   const chain = useChain(chainId);
-  const wagmiConfig = useWagmiConfig();
-  const { connection: solanaConnection } = useSolanaConnection();
-  const tronWeb = useTronStore((state) => state.tronweb);
-  const alephZeroApi = useAlephStore((state) => state.api);
+  const connectionOrConfig = useConnectionOrConfig();
 
   const { data: tokenMetadata } = useToken({ chainId, token });
 
@@ -37,8 +31,8 @@ export const useTokenForAccount = ({ chainId, account, token, spender }: UseToke
       if (!account || !token || !tokenMetadata || !chain) {
         throw new Error('Missing required parameters');
       }
-      if (!alephZeroApi) {
-        throw new Error('Aleph Zero Api not found');
+      if (!connectionOrConfig) {
+        throw new Error('Connections or config not found');
       }
 
       const { balance, allowance } = await getTokenBalanceAndAllowance({
@@ -46,12 +40,7 @@ export const useTokenForAccount = ({ chainId, account, token, spender }: UseToke
         account,
         spender,
         chain,
-        connectors: {
-          wagmiConfig,
-          solanaConnection,
-          tronWeb,
-          alephZeroApi,
-        },
+        config: connectionOrConfig,
       });
 
       return {
