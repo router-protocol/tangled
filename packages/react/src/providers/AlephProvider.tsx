@@ -23,14 +23,8 @@ export const AlephContext = createContext<AlephContextValues>({
  * @param adapters - Supported wallet adapters for the Aleph Zero.
  * @returns The Aleph Zero provider context with the connect and disconnect functions.
  */
-export const AlephProvider = ({
-  children,
-  chains,
-}: {
-  children: React.ReactNode;
-  chains: ChainData<'alephZero'>[];
-}) => {
-  const alephStore = useRef(createAlephStore({ chain: chains[0] })).current;
+export const AlephProvider = ({ children, chain }: { children: React.ReactNode; chain: ChainData<'alephZero'> }) => {
+  const alephStore = useRef(createAlephStore({ chain })).current;
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
   const wsProvider = useStore(alephStore, (state) => state.wsProvider);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);

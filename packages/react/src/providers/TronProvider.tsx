@@ -25,13 +25,13 @@ export const TronContext = createContext<TronContextValues>({
 export const TronProvider = ({
   children,
   adapters,
-  chains,
+  chain,
 }: {
   children: React.ReactNode;
-  chains: ChainData<'tron'>[];
+  chain: ChainData<'tron'>;
   adapters: Adapter[];
 }) => {
-  const tronStore = useRef(createTronStore({ adapters, chain: chains[0] })).current;
+  const tronStore = useRef(createTronStore({ adapters, chain: chain })).current;
   const connectedAdapter = useStore(tronStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(tronStore, (state) => state.setConnectedAdapter);
   const setConnector = useStore(tronStore, (state) => state.setConnector);

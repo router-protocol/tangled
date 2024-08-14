@@ -23,23 +23,23 @@ interface SolanaProviderProps {
    * @notice Only one network is used since Solana connection
    * provider can not be initialised with multiple networks
    */
-  network: ChainData<'solana'>;
+  chain: ChainData<'solana'>;
 }
 
-export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ children, network }) => {
+export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ children, chain }) => {
   const [endpoint] = useState(() => {
-    if (!network) throw new Error('Network not provided');
+    if (!chain) throw new Error('Network not provided');
 
-    const apiUrl = network.rpcUrls.default.http[0];
+    const apiUrl = chain.rpcUrls.default.http[0];
     if (apiUrl) return apiUrl;
 
-    if (network.id === 'solana') {
+    if (chain.id === 'solana') {
       return clusterApiUrl(WalletAdapterNetwork.Mainnet);
     }
-    if (network.id === 'solanaTestnet') {
+    if (chain.id === 'solanaTestnet') {
       return clusterApiUrl(WalletAdapterNetwork.Testnet);
     }
-    if (network.id === 'solanaDevnet') {
+    if (chain.id === 'solanaDevnet') {
       return clusterApiUrl(WalletAdapterNetwork.Devnet);
     }
     return clusterApiUrl(WalletAdapterNetwork.Testnet);
