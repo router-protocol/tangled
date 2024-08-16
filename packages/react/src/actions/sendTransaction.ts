@@ -1,9 +1,9 @@
-import { WalletAdapter as SolanaWalletAdapter } from '@solana/wallet-adapter-base';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
 import { ChainData, ChainType } from '../types/index.js';
+import { WalletInstance } from '../types/wallet.js';
 
 export type SendTransactionParams<C extends ChainType = ChainType> = {
   chain: ChainData<C>;
@@ -13,7 +13,7 @@ export type SendTransactionParams<C extends ChainType = ChainType> = {
   args: TransactionArgs<C>;
   overrides: any;
   config: ConnectionOrConfig & {
-    solanaWallet: SolanaWalletAdapter;
+    connector: WalletInstance<C>;
   };
 };
 
@@ -86,8 +86,9 @@ export const sendTransactionToChain = async <C extends ChainType>({
       throw new Error(`Transaction simulation failed with error ${JSON.stringify(simulationResult.value.err)}`);
     }
 
+    const walletConnector = config.connector as WalletInstance<'solana'>;
     // send transaction to Solana chain
-    const txSignature = await config.solanaWallet.sendTransaction(versionedTx, config.solanaConnection);
+    const txSignature = await walletConnector.sendTransaction(versionedTx, config.solanaConnection);
     return txSignature;
   }
 

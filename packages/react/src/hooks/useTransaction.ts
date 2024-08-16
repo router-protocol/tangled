@@ -35,7 +35,7 @@ export const useSendTransaction = () => {
       }
 
       // check if chain type wallet is connected to chain
-      if (!walletInstance || !currentAccount || walletInstance.type !== chain.type) {
+      if (!currentAccount || walletInstance?.type !== chain.type || !walletInstance?.connector) {
         throw new Error(`${chain.type} wallet is not connected`);
       }
 
@@ -62,7 +62,7 @@ export const useSendTransaction = () => {
         from,
         value,
         args,
-        config: connectionOrConfig,
+        config: { ...connectionOrConfig, connector: walletInstance.connector },
         overrides,
       });
     },
