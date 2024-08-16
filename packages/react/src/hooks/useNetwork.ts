@@ -23,7 +23,7 @@ const useNetwork = () => {
         throw new Error('No wallet connector found');
       }
 
-      const chain = chains.find((chain) => chain.id === chainId);
+      const chain = chains.find((chain) => chain.id.toString() === chainId);
 
       if (chain?.type === 'evm') {
         const switchedChain = await switchChainAsync({
