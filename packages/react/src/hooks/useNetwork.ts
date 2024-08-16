@@ -51,7 +51,7 @@ const useNetwork = () => {
     [chains, currentWalletInstance, switchChainAsync],
   );
 
-  const { mutate, mutateAsync } = useMutation({
+  const { mutate, mutateAsync, isPending } = useMutation({
     mutationKey: ['switch-network', currentAccount?.wallet],
     mutationFn: switchNetwork,
     onError: (error) => {
@@ -62,7 +62,12 @@ const useNetwork = () => {
     },
   });
 
-  return { network: currentAccount?.chainId, switchNetwork: mutate, switchNetworkAsync: mutateAsync };
+  return {
+    network: currentAccount?.chainId,
+    switchNetwork: mutate,
+    switchNetworkAsync: mutateAsync,
+    isPending,
+  };
 };
 
 export default useNetwork;
