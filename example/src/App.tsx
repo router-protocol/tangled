@@ -1,15 +1,19 @@
 import {
   CHAIN_TYPES,
+  ChainId,
   ConnectedAccount,
   useAccounts,
   useChain,
+  useChains,
   useConnect,
   useCurrentAccount,
   useCurrentWallet,
-  useDisConnect,
+  useDisconnect,
   useWallet,
   useWallets,
 } from '@tangled3/react';
+import { useEffect, useState } from 'react';
+import useNetwork from '../../packages/react/dist/_esm/hooks/useNetwork';
 
 function Example() {
   const accounts = useAccounts();
@@ -127,6 +131,27 @@ const CurrentAccountAndWallet = () => {
   const currentWallet = useCurrentWallet();
   const chain = useChain(currentAccount?.chainId);
   const wallet = useWallet(currentAccount?.chainType, currentAccount?.wallet);
+  const { switchNetworkAsync, isPending } = useNetwork();
+  const chains = useChains(currentAccount?.chainType);
+  const [selectedChain, setSelectedChain] = useState(currentAccount?.chainId);
+
+  const handleChainChange = (chainId: ChainId) => {
+    // optimistically update UI immediately
+    setSelectedChain(chainId);
+
+    switchNetworkAsync(chainId)
+      .then(() => {
+        // ui remains unchanged
+      })
+      .catch(() => {
+        // on error, revert to the original chain
+        setSelectedChain(currentAccount?.chainId);
+      });
+  };
+
+  useEffect(() => {
+    setSelectedChain(currentAccount?.chainId);
+  }, [currentAccount?.chainId]);
 
   return (
     <div className='grid grid-cols-2'>
@@ -155,7 +180,28 @@ const CurrentAccountAndWallet = () => {
                 {currentAccount?.address?.slice(0, 6)}...{currentAccount?.address?.slice(-4)}
               </td>
               <td className='px-4 py-2 w-[15ch]'>[[{currentAccount?.chainType}]]</td>
-              <td className='px-4 py-2 w-[10ch]'>{chain?.name ?? 'Unknown'}</td>
+              <td className='px-4 py-2 w-[15ch]'>
+                {chain ? (
+                  <select
+                    id='chain'
+                    className='h-12 border border-gray-300 text-gray-600 text-base rounded-lg block w-full focus:outline-none'
+                    onChange={(e) => handleChainChange(e.target.value as ChainId)}
+                    disabled={isPending}
+                    value={selectedChain}
+                  >
+                    {chains.map((chain) => (
+                      <option
+                        key={chain.id}
+                        value={chain.id}
+                      >
+                        {chain.name}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  'Unknown'
+                )}
+              </td>
               <td className='px-4 py-2 w-[auto]'>[{currentAccount?.chainId}]</td>
             </tr>
           </tbody>
@@ -184,7 +230,7 @@ const CurrentAccountAndWallet = () => {
 };
 
 const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
-  const { disconnect } = useDisConnect();
+  const { disconnect } = useDisconnect();
   const { connect } = useConnect();
   const wallet = useWallet(account.chainType, account.wallet);
   const chain = useChain(account.chainId);

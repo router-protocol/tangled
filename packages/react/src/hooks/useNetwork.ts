@@ -22,7 +22,7 @@ export const useNetwork = () => {
         throw new Error('No wallet connector found');
       }
 
-      const chain = chains.find((chain) => chain.id === chainId);
+      const chain = chains.find((chain) => chain.id.toString() === chainId);
 
       if (chain?.type === 'evm') {
         const switchedChain = await switchChainAsync({
@@ -50,7 +50,7 @@ export const useNetwork = () => {
     [chains, currentWalletInstance, switchChainAsync],
   );
 
-  const { mutate, mutateAsync } = useMutation({
+  const { mutate, mutateAsync, isPending } = useMutation({
     mutationKey: ['switch-network', currentAccount?.wallet],
     mutationFn: switchNetwork,
     onError: (error) => {
@@ -61,5 +61,10 @@ export const useNetwork = () => {
     },
   });
 
-  return { network: currentAccount?.chainId, switchNetwork: mutate, switchNetworkAsync: mutateAsync };
+  return {
+    network: currentAccount?.chainId,
+    switchNetwork: mutate,
+    switchNetworkAsync: mutateAsync,
+    isPending,
+  };
 };
