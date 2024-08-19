@@ -1,5 +1,5 @@
 'use client';
-import { TangledContextProvider } from '@tangled3/react';
+import { TangledContextProvider, solana } from '@tangled3/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
@@ -12,7 +12,17 @@ const Providers = ({ children }: { children: ReactNode }) => {
       <TangledContextProvider
         config={{
           projectName: 'Tangled Example',
-          chainConfigs: {},
+          chainConfigs: {
+            solana: {
+              ...solana,
+              rpcUrls: {
+                default: {
+                  http: [process.env.NEXT_PUBLIC_SOLANA_API ?? 'https://api.mainnet-beta.solana.com'],
+                },
+              },
+            },
+          },
+
           projectId: '41980758771052df3f01be0a46f172a5',
         }}
       >
