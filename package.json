@@ -9,6 +9,7 @@
   "scripts": {
     "postinstall": "node ./scripts/postinstall.js",
     "dev:example": "pnpm --filter @tangled3/example-react dev",
+    "dev:example-next": "pnpm --filter @tangled3/example-next dev",
     "build": "pnpm build:solana && pnpm build:react",
     "build:solana": "pnpm --filter @tangled3/solana-react build",
     "build:react": "pnpm --filter @tangled3/react build",
