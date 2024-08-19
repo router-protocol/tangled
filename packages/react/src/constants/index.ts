@@ -48,8 +48,8 @@ export const CHAIN_ID = {
   // cosmos
 
   // tron
-  tronMainnet: '0x2b6653dc',
-  tronShasta: '0x94a9059e',
+  tronMainnet: 'tronMainnet',
+  tronShasta: 'tronShasta',
   // tronNile: 'tron-nile',
 
   // near

@@ -1,7 +1,8 @@
 import { ChainData } from '../types/index.js';
 
 export const tronMainnet: ChainData = {
-  id: '0x2b6653dc',
+  id: 'tronMainnet',
+  trxId: '0x2b6653dc',
   name: 'Tron',
   tronName: 'Mainnet',
   type: 'tron',

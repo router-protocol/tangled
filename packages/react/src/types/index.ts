@@ -44,7 +44,7 @@ export type ChainDataGeneric = {
 export type ChainData<T extends ChainType = ChainType> = T extends 'evm'
   ? { type: 'evm' } & ViemChain
   : T extends 'tron'
-    ? { type: 'tron'; tronName: 'Mainnet' | 'Shasta' | 'Nile' } & ChainDataGeneric
+    ? { type: 'tron'; tronName: 'Mainnet' | 'Shasta' | 'Nile'; trxId: string } & ChainDataGeneric
     : { type: T } & ChainDataGeneric;
 
 // use generic to type ChainData according to ChainType
