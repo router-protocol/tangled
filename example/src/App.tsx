@@ -9,12 +9,12 @@ import {
   useCurrentAccount,
   useCurrentWallet,
   useDisconnect,
+  useNetwork,
   useToken,
   useWallet,
   useWallets,
 } from '@tangled3/react';
 import { useEffect, useState } from 'react';
-import useNetwork from '../../packages/react/dist/_esm/hooks/useNetwork';
 
 function Example() {
   const accounts = useAccounts();
@@ -23,8 +23,8 @@ function Example() {
   const { connect } = useConnect();
 
   const { data: t1 } = useToken({
-    chainId: 'alephZero',
-    token: '5FYFojNCJVFR2bBNKfAePZCa72ZcVX5yeTv8K9bzeUo8D83Z',
+    chainId: '0x2b6653dc',
+    token: 'TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8',
   });
   useEffect(() => {
     console.log('t1', t1);
