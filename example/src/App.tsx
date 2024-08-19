@@ -9,6 +9,7 @@ import {
   useCurrentAccount,
   useCurrentWallet,
   useDisconnect,
+  useToken,
   useWallet,
   useWallets,
 } from '@tangled3/react';
@@ -20,6 +21,14 @@ function Example() {
   const wallets = useWallets();
 
   const { connect } = useConnect();
+
+  const { data: t1 } = useToken({
+    chainId: 'alephZero',
+    token: '5FYFojNCJVFR2bBNKfAePZCa72ZcVX5yeTv8K9bzeUo8D83Z',
+  });
+  useEffect(() => {
+    console.log('t1', t1);
+  }, [t1]);
 
   return (
     <div className='space-y-8 p-8'>
