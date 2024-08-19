@@ -3,7 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Example from './Example.tsx';
+import Example from './components/Example';
 import './index.css';
 
 const queryClient = new QueryClient();

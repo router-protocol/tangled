@@ -21,7 +21,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       className={`${GeistSans.variable}`}
     >
       <body className='bg-neutral-800'>
-        <Providers>{children}</Providers>
+        <Providers>
+          <main className='flex min-h-screen flex-col items-center text-white p-8'>{children}</main>
+        </Providers>
       </body>
     </html>
   );
