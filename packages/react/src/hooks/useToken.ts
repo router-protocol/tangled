@@ -11,11 +11,12 @@ export type UseTokenParams = {
   token: string | undefined;
 };
 
-type TokenMetadata = {
+export type TokenMetadata = {
   address: string;
   name: string;
   symbol: string;
   decimals: number;
+  chainId: ChainId;
 };
 
 export const useToken = ({ chainId, token }: UseTokenParams) => {

@@ -7,7 +7,8 @@ import { Config } from 'wagmi';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { ConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
-import { ChainData } from '../types/index.js';
+import { TokenMetadata } from '../hooks/useToken.js';
+import { ChainData, ChainId } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
@@ -18,12 +19,7 @@ type GetTokenMetadataParams = {
   chain: ChainData;
   config: ConnectionOrConfig;
 };
-type TokenMetadata = {
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
-};
+
 /**
  * Get token metadata
  * @param token - Token address
@@ -40,14 +36,18 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
         symbol: chain.nativeCurrency.symbol,
         decimals: chain.nativeCurrency.decimals,
         address: ETH_ADDRESS,
+        chainId: chain.id.toString() as ChainId,
       };
     }
 
     const { name, symbol, decimals } = await getEVMTokenMetadata(token, Number(chain.id), config.wagmiConfig);
-    return { name, symbol, decimals, address: token };
+    return { name, symbol, decimals, address: token, chainId: chain.id.toString() as ChainId };
   }
 
   if (chain.type === 'tron') {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
     const contract = config.tronWeb.contract(trc20Abi, token);
 
     let name = contract.name().call();
@@ -56,10 +56,14 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
 
     [name, symbol, decimals] = await Promise.all([name, symbol, decimals]);
 
-    return { name, symbol, decimals: Number(decimals), address: token };
+    return { name, symbol, decimals: Number(decimals), address: token, chainId: chain.id };
   }
 
   if (chain.type === 'solana') {
+    if (areTokensEqual(token, SOL_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: SOL_ADDRESS, chainId: chain.id };
+    }
+
     const pbKey = new PublicKey(token);
     const mint = await config.solanaConnection.getParsedAccountInfo(pbKey);
     const parsed = (mint.value?.data as ParsedAccountData)?.parsed;
@@ -71,6 +75,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
         symbol: '',
         decimals: parsed.info.decimals,
         address: token,
+        chainId: chain.id,
       };
     } else {
       throw new Error('Token metadata not found');
@@ -78,7 +83,14 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   }
 
   if (chain.type === 'alephZero') {
-    return await getAlephZeroTokenMetadata({ api: config.alephZeroApi, token });
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
+    const res = await getAlephZeroTokenMetadata({ api: config.alephZeroApi, token });
+    return {
+      ...res,
+      chainId: chain.id,
+    };
   }
 
   throw new Error('Chain type not supported');
