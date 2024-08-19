@@ -44,7 +44,7 @@ export const Token = (token: TokenMetadata) => {
   const dataOK = fetchedToken?.symbol === token.symbol && fetchedToken.decimals === token.decimals;
   return (
     <tr className='border-b border-gray-700'>
-      <td className='px-4 py-2'>{token.address}</td>
+      <td className='px-4 py-2 max-w-[10ch] overflow-hidden text-ellipsis'>{token.address}</td>
       <td className='px-4 py-2'>{chain?.name}</td>
       <td className='px-4 py-2'>{chain?.type}</td>
       <td className='px-4 py-2'>{fetchedToken?.name}</td>
@@ -86,6 +86,27 @@ const tokens: TokenMetadata[] = [
     chainId: 'solana',
   },
   {
+    address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+    decimals: 6,
+    name: 'USDC',
+    symbol: 'USDC',
+    chainId: 'solana',
+  },
+  {
+    address: 'So11111111111111111111111111111111111111112',
+    decimals: 9,
+    name: 'Wrapped SOL',
+    symbol: 'WSOL',
+    chainId: 'solana',
+  },
+  {
+    address: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+    decimals: 6,
+    name: 'USDT',
+    symbol: 'USDT',
+    chainId: 'solana',
+  },
+  {
     address: ETH_ADDRESS,
     decimals: 6,
     name: 'Tron TRX',
@@ -93,10 +114,24 @@ const tokens: TokenMetadata[] = [
     chainId: 'tronMainnet',
   },
   {
+    address: 'TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8',
+    decimals: 6,
+    name: 'Tron USDC',
+    symbol: 'USDC',
+    chainId: 'tronMainnet',
+  },
+  {
     address: ETH_ADDRESS,
     decimals: 12,
     name: 'Aleph Zero AZERO',
     symbol: 'AZERO',
+    chainId: 'alephZero',
+  },
+  {
+    address: '5FYFojNCJVFR2bBNKfAePZCa72ZcVX5yeTv8K9bzeUo8D83Z',
+    decimals: 6,
+    name: 'USDC',
+    symbol: 'USDC',
     chainId: 'alephZero',
   },
 ];
