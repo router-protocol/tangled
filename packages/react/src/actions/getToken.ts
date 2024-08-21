@@ -1,24 +1,14 @@
-import { type ApiPromise } from '@polkadot/api';
-import { ParsedAccountData, PublicKey, Connection as SolanaConnection } from '@solana/web3.js';
+import { ParsedAccountData, PublicKey } from '@solana/web3.js';
 import { getBalance } from '@wagmi/core';
-import { type TronWeb } from 'tronweb';
 import { Address as EVMAddress } from 'viem';
-import { Config } from 'wagmi';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
-import { ConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
 import { TokenMetadata } from '../hooks/useToken.js';
-import { ChainData, ChainId } from '../types/index.js';
+import { ChainData, ChainId, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
-
-type GetTokenMetadataParams = {
-  token: string;
-  chain: ChainData;
-  config: ConnectionOrConfig;
-};
 
 /**
  * Get token metadata
@@ -96,17 +86,12 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   throw new Error('Chain type not supported');
 };
 
-type GetTokenBalanceAndAllowanceParams = {
+export type GetTokenBalanceAndAllowanceParams = {
   token: string;
   account: string;
   spender: string | undefined;
   chain: ChainData;
-  config: {
-    wagmiConfig: Config;
-    solanaConnection: SolanaConnection;
-    tronWeb: TronWeb;
-    alephZeroApi: ApiPromise;
-  };
+  config: ConnectionOrConfig;
 };
 /**
  * Get token balance and allowance for a given account and spender

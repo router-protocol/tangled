@@ -1,4 +1,9 @@
+import { type ApiPromise } from '@polkadot/api';
+import { Connection as SolanaConnection } from '@solana/web3.js';
+import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
+import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
+import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
 import { ChainConnectors } from './wallet.js';
 
@@ -86,3 +91,22 @@ export interface ChainConfig {
     default: ChainRpcUrls;
   };
 }
+
+export type ConnectionOrConfig = {
+  wagmiConfig: WagmiConfig;
+  solanaConnection: SolanaConnection;
+  tronWeb: TronWeb;
+  alephZeroApi: ApiPromise;
+};
+
+export type GetTokenMetadataParams = {
+  token: string;
+  chain: ChainData;
+  config: ConnectionOrConfig;
+};
+
+export type TransactionReceipt<C extends ChainType = ChainType> = C extends 'evm'
+  ? EVMTxReceipt
+  : C extends 'tron'
+    ? TronWebTypes.TransactionInfo
+    : unknown;

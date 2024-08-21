@@ -1,8 +1,8 @@
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
-import { ConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
-import { ChainData, ChainType } from '../types/index.js';
+
+import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 
 export type SendTransactionParams<C extends ChainType = ChainType> = {
