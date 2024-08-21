@@ -1,5 +1,15 @@
 # @tangled3/react
 
+## 1.4.0
+
+### Minor Changes
+
+- Added utility hooks to interact with chains, tokens, and transactions
+  1. useSendTransaction
+  2. useToken
+  3. useTransactionReceipt
+  4. useWaitForTransaction
+
 ## 1.3.0
 
 ### Minor Changes
