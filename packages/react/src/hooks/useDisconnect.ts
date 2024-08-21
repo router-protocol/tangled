@@ -8,7 +8,11 @@ import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
-export const useDisConnect = () => {
+export interface DisconnectParams {
+  walletId: string;
+  chainType: ChainType;
+}
+export const useDisconnect = () => {
   const wallets = useWallets();
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
@@ -16,7 +20,7 @@ export const useDisConnect = () => {
   const { disconnect: disconnectAlephWallet } = useAlephContext();
 
   const disconnectWallet = useCallback(
-    async (params: { walletId: string; chainType: ChainType }) => {
+    async (params: DisconnectParams) => {
       const walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
@@ -35,13 +39,11 @@ export const useDisConnect = () => {
         await disconnectTronWallet();
       } else if (params.chainType === 'evm') {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
-      } else if (params.chainType === 'aleph_zero') {
+      } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
       } else {
-        await walletInstance.connector.connect();
+        await walletInstance.connector.disconnect();
       }
-
-      return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
     [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, wallets],
   );
@@ -52,9 +54,6 @@ export const useDisConnect = () => {
     onError: (error) => {
       console.error(error);
     },
-    // onSuccess: (p) => {
-    //   // console.log('Connected', p.id);
-    // },
   });
 
   return {

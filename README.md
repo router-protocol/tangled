@@ -13,6 +13,35 @@ Built with @shadcn/ui and tailwind so you can paint it your way :D
 yarn add @tangled3/react
 ```
 
+OR
+
+```sh
+pnpm i @tangled3/react
+```
+
+### Usage
+
+```tsx
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { TangledProvider } from '@tangled3/react';
+
+export default function App({ Component, pageProps }) {
+  return (
+    <QueryClientProvider client={new QueryClient()}>
+      <TangledProvider
+        config={{
+          projectName: 'multi chain project',
+          chainConfigs: {},
+          // chains
+        }}
+      >
+        <Component {...pageProps} />
+      </TangledProvider>
+    </QueryClientProvider>
+  );
+}
+```
+
 ### Feat List
 
 #### Supported Chain Types
@@ -22,6 +51,29 @@ yarn add @tangled3/react
 3. Tron
 4. Cosmos
 5. Near
+6. AlephZero
+7. Sui
+8. Bitcoin
+
+### Support Table
+
+:small_orange_diamond: - In Progress
+:white_check_mark: - Supported
+:x: - Not Supported
+
+| Chain     | Wallet Connection      | Token Fetch        | Transaction Handlers   | Tx Watch               | Tx Receipt             |
+| --------- | ---------------------- | ------------------ | ---------------------- | ---------------------- | ---------------------- |
+| EVM       | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
+| Solana    | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
+| Tron      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
+| AlephZero | :white_check_mark:     | :white_check_mark: | :x:                    | :x:                    | :x:                    |
+| Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
+| Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Casper    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Ton       | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Algorand  | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 
 #### Hooks
 

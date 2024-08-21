@@ -7,8 +7,13 @@ import { ChainData, ChainId, ChainType } from '../types/index.js';
  * @param chainId The type of chain to return
  * @returns An array of `ChainData<ChainType>`
  */
-export const useChain = <T extends ChainType>(chainId: ChainId, type: T) => {
-  const { chains } = useContext(TangledContext);
+export const useChain = <T extends ChainType = ChainType>(chainId: ChainId | undefined): ChainData<T> | undefined => {
+  const { chainsById } = useContext(TangledContext);
 
-  return useMemo(() => chains[type].find((chain) => chain.id === chainId) as ChainData<T>, [chains, chainId, type]);
+  return useMemo(() => {
+    if (chainId && chainsById[chainId]) {
+      return chainsById[chainId] as ChainData<T>;
+    }
+    return undefined;
+  }, [chainsById, chainId]);
 };

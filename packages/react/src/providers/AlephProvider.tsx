@@ -1,4 +1,5 @@
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
+import { ApiPromise } from '@polkadot/api';
 import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
@@ -22,18 +23,14 @@ export const AlephContext = createContext<AlephContextValues>({
  * @param adapters - Supported wallet adapters for the Aleph Zero.
  * @returns The Aleph Zero provider context with the connect and disconnect functions.
  */
-export const AlephProvider = ({
-  children,
-  // chains
-}: {
-  children: React.ReactNode;
-  chains: ChainData<'aleph_zero'>[];
-}) => {
-  const alephStore = useRef(createAlephStore()).current;
+export const AlephProvider = ({ children, chain }: { children: React.ReactNode; chain: ChainData<'alephZero'> }) => {
+  const alephStore = useRef(createAlephStore({ chain })).current;
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
+  const wsProvider = useStore(alephStore, (state) => state.wsProvider);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
   const setAddress = useStore(alephStore, (state) => state.setAddress);
+  const setApi = useStore(alephStore, (state) => state.setApi);
 
   // Build and set Nightly Adapter
   // Used build instead of buildLazy to fix nightlyAdapter loading issue while fetching supported nigthly wallet list(walletsFromRegistry)
@@ -57,6 +54,16 @@ export const AlephProvider = ({
       }
     })();
   }, [setConnectedAdapter]);
+
+  useEffect(() => {
+    ApiPromise.create({ provider: wsProvider })
+      .then((api) => {
+        setApi(api);
+      })
+      .catch((error) => {
+        console.error('Error creating AlephZero API:', error);
+      });
+  }, [wsProvider, setApi]);
 
   /////////////////
   /// Mutations ///
@@ -93,7 +100,10 @@ export const AlephProvider = ({
       if (!connectedAdapter) return;
 
       await connectedAdapter.disconnect();
+
       setConnectors(connectedAdapter);
+      setConnectedAdapter(connectedAdapter);
+      setAddress('');
     },
   });
 
@@ -103,16 +113,17 @@ export const AlephProvider = ({
       return;
     }
 
-    const handleAccountsUpdate = async () => {
+    const handleAccountsUpdate = (acc: { address: string }[]) => {
+      if (!acc[0]) return;
       setConnectors(connectedAdapter);
+      setAddress(acc[0].address);
     };
 
-    connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     const unsubscribe = connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     return () => {
       unsubscribe();
     };
-  });
+  }, [connectedAdapter, setConnectors, setAddress]);
 
   // Eager connect when the page reloads
   useEffect(() => {

@@ -1,13 +1,9 @@
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
-import {
-  Adapter as TronAdapter,
-  AdapterState as TronAdapterReadyState,
-  NetworkType as TronNetworkType,
-} from '@tronweb3/tronwallet-abstract-adapter';
+import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@tronweb3/tronwallet-abstract-adapter';
 import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
-import { ChainType } from '../types/index.js';
+import { ChainId, ChainType } from '../types/index.js';
 
 export type ChainConnectors = {
   evm: CreateConnectorFn[];
@@ -22,7 +18,7 @@ export type ChainConnectors = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   casper: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  aleph_zero: any[];
+  alephZero: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
 };
@@ -61,21 +57,21 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
     ? SolanaAdapter
     : T extends 'tron'
       ? TronAdapter
-      : T extends 'aleph_zero'
+      : T extends 'alephZero'
         ? NightlyConnectAdapter
         : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;
   loading?: boolean;
-  chainId: string | undefined;
+  chainId: ChainId | undefined;
   chainType: T;
   connector?: WalletInstance<T>;
 };
 
 export type ConnectedAccount = {
   address: string;
-  chainId: string;
+  chainId: ChainId | undefined;
   chainType: ChainType;
   wallet: string;
 };
@@ -103,5 +99,5 @@ export type TronAdapterData = {
   adapter: TronAdapter;
   readyState: TronAdapterReadyState;
   account: string | null;
-  network: TronNetworkType | undefined;
+  network: string | undefined;
 };

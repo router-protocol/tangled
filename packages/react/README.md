@@ -54,7 +54,23 @@ export default function App({ Component, pageProps }) {
 6. AlephZero
 7. Sui
 8. Bitcoin
-9. Cosmos
+
+### Support Table
+
+:small_orange_diamond: - In Progress
+:white_check_mark: - Supported
+:x: - Not Supported
+
+| Chain     | Wallet Connection      | Token Fetch        | Token Handlers         | Transaction Handlers   | Tx Watch | Tx Receipt |
+| --------- | ---------------------- | ------------------ | ---------------------- | ---------------------- | -------- | ---------- |
+| EVM       | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :x:      | :x:        |
+| Solana    | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :x:      | :x:        |
+| Tron      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :x:      | :x:        |
+| Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:      | :x:        |
+| Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:      | :x:        |
+| AlephZero | :white_check_mark:     | :white_check_mark: | :x:                    | :x:                    | :x:      | :x:        |
+| Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:      | :x:        |
+| Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:      | :x:        |
 
 #### Hooks
 

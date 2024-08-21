@@ -18,17 +18,28 @@ import { ChainData } from '../types/index.js';
  */
 const wallets: Adapter[] = [];
 
-export const SolanaProvider: FC<PropsWithChildren & { network: ChainData<'solana'> }> = ({ children, network }) => {
-  const [endpoint] = useState(() => {
-    if (!network) throw new Error('Network not provided');
+interface SolanaProviderProps {
+  /**
+   * @notice Only one network is used since Solana connection
+   * provider can not be initialised with multiple networks
+   */
+  chain: ChainData<'solana'>;
+}
 
-    if (network.id === 'solana') {
+export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ children, chain }) => {
+  const [endpoint] = useState(() => {
+    if (!chain) throw new Error('Network not provided');
+
+    const apiUrl = chain.rpcUrls.default.http[0];
+    if (apiUrl) return apiUrl;
+
+    if (chain.id === 'solana') {
       return clusterApiUrl(WalletAdapterNetwork.Mainnet);
     }
-    if (network.id === 'solanaTestnet') {
+    if (chain.id === 'solanaTestnet') {
       return clusterApiUrl(WalletAdapterNetwork.Testnet);
     }
-    if (network.id === 'solanaDevnet') {
+    if (chain.id === 'solanaDevnet') {
       return clusterApiUrl(WalletAdapterNetwork.Devnet);
     }
     return clusterApiUrl(WalletAdapterNetwork.Testnet);

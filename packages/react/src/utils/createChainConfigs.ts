@@ -1,16 +1,14 @@
-import { CHAIN_DATA, CHAIN_ID } from '../constants/index.js';
-import { Chain, ChainConfig, ChainData, SupportedChainsByType } from '../types/index.js';
+import { CHAIN_DATA, CHAIN_NAME } from '../constants/index.js';
+import { Chain, ChainConfig, ChainData, ChainId, SupportedChainsByType } from '../types/index.js';
 import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
-  chains: Chain[] | undefined,
+  chains: SupportedChainsByType | undefined,
   overrides?: Partial<Record<Chain, ChainConfig>>,
   testnet?: boolean,
 ): SupportedChainsByType => {
-  // const evmChainConfigs: ChainData[] = [];
-
   let supportedChains: SupportedChainsByType = {
-    aleph_zero: [],
+    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
@@ -21,48 +19,44 @@ const createChainConfigs = (
     tron: [],
   };
 
-  if (chains) {
-    for (const chain of chains) {
-      const chainType = CHAIN_DATA[CHAIN_ID[chain]].type;
+  const defaultChains = getDefaultSupportedChains(testnet);
 
-      switch (chainType) {
-        case 'evm':
-          supportedChains.evm.push({
-            ...CHAIN_DATA[CHAIN_ID[chain]],
-            ...overrides?.[chain],
-          } as ChainData<'evm'>);
-          break;
-        case 'tron':
-          break;
-        case 'near':
-          break;
-        case 'cosmos':
-          break;
-        case 'solana':
-          supportedChains.solana.push({
-            ...CHAIN_DATA[CHAIN_ID[chain]],
-            ...overrides?.[chain],
-          } as ChainData<'solana'>);
-          break;
-        case 'sui':
-          break;
-        case 'casper':
-          break;
-        case 'aleph_zero':
-          supportedChains.aleph_zero.push({
-            ...CHAIN_DATA[CHAIN_ID[chain]],
-            ...overrides?.[chain],
-          } as ChainData<'aleph_zero'>);
-          break;
-        case 'bitcoin':
-          break;
-        default:
-          break;
-      }
-    }
+  if (chains) {
+    supportedChains = overrideChainConfig(chains, overrides);
   } else {
-    // Default to all chains
-    supportedChains = getDefaultSupportedChains(testnet);
+    // Override with custom configs
+    supportedChains = overrideChainConfig(defaultChains, overrides);
+  }
+
+  return supportedChains;
+};
+
+const overrideChainConfig = (
+  chainsByType: SupportedChainsByType,
+  overrides: Partial<Record<Chain, ChainConfig>> | undefined,
+) => {
+  const supportedChains: SupportedChainsByType = {
+    alephZero: [],
+    bitcoin: [],
+    casper: [],
+    cosmos: [],
+    evm: [],
+    near: [],
+    solana: [],
+    sui: [],
+    tron: [],
+  };
+
+  for (const chains of Object.values(chainsByType)) {
+    for (const chain of chains) {
+      const chainId = chain.id.toString() as ChainId;
+      const chainData = {
+        ...CHAIN_DATA[chainId],
+        ...overrides?.[CHAIN_NAME[chainId]],
+      } as ChainData;
+      // @ts-expect-error - Interesction type reduces to never
+      supportedChains[chain.type].push(chainData);
+    }
   }
 
   return supportedChains;

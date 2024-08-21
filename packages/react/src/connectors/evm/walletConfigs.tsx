@@ -1,4 +1,4 @@
-import { hasInjectedProvider } from '../../utils/evm/getInjectedConnector.js';
+import { hasInjectedProvider } from '../../actions/evm/getInjectedConnector.js';
 import { isAndroid, isIOS, isMobile } from '../../utils/index.js';
 
 /**
