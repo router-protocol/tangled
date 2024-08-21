@@ -13,6 +13,7 @@ export * from './useNetwork.js';
 export * from './useSendTransaction.js';
 export * from './useTangledConfig.js';
 export * from './useToken.js';
+export * from './useTokenForAccount.js';
 export * from './useTransactionReceipt.js';
 export * from './useTronStore.js';
 export * from './useWaitForTransaction.js';

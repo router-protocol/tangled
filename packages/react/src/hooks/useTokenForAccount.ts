@@ -6,7 +6,7 @@ import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useToken } from './useToken.js';
 
-export type UseTokenParams = {
+export type UseTokenForAccountParams = {
   /** Chain ID of token */
   chainId: ChainId;
   /** Token Address */
@@ -19,7 +19,7 @@ export type UseTokenParams = {
   subscribe?: boolean;
 };
 
-export const useTokenForAccount = ({ chainId, account, token, spender }: UseTokenParams) => {
+export const useTokenForAccount = ({ chainId, account, token, spender }: UseTokenForAccountParams) => {
   const chain = useChain(chainId);
   const connectionOrConfig = useConnectionOrConfig();
 
