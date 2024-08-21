@@ -12,6 +12,10 @@ type UseSendTransactionParams = Omit<SendTransactionParams, 'chain'> & {
   chainId: ChainId;
 };
 
+/**
+ * Send transaction Hook
+ * @returns Mutation object
+ */
 export const useSendTransaction = () => {
   const chains = useChains();
   const connectionOrConfig = useConnectionOrConfig();
