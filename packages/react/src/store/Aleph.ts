@@ -1,8 +1,7 @@
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
-import { ApiPromise, WsProvider } from '@polkadot/api';
+import type { ApiPromise, WsProvider } from '@polkadot/api';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { ChainData } from '../types/index.js';
 
 export interface AlephState {
   connectors: {
@@ -11,33 +10,31 @@ export interface AlephState {
   connectedAdapter: NightlyConnectAdapter | undefined;
   address: string | null;
 
-  wsProvider: WsProvider;
+  wsProvider: WsProvider | undefined;
   api: ApiPromise | undefined;
 
   setAddress: (address: string) => void;
   setConnectors: (connector: NightlyConnectAdapter) => void;
   setConnectedAdapter: (adapter: NightlyConnectAdapter | undefined) => void;
+  setWsProvider: (wsProvider: WsProvider) => void;
   setApi: (api: ApiPromise) => void;
 }
 
 export type AlephStore = ReturnType<typeof createAlephStore>;
 
-type AlephProps = {
-  chain: ChainData<'alephZero'>;
-};
-
-export const createAlephStore = (props: AlephProps) => {
+export const createAlephStore = () => {
   const DEFAULT_ALEPH_STATE: AlephState = {
     connectors: {},
     connectedAdapter: undefined,
     address: null,
 
-    wsProvider: new WsProvider(props.chain.rpcUrls.default.webSocket?.[0]),
+    wsProvider: undefined,
     api: undefined,
 
     setAddress: () => {},
     setConnectors: () => {},
     setConnectedAdapter: () => {},
+    setWsProvider: () => {},
     setApi: () => {},
   };
 
@@ -60,6 +57,7 @@ export const createAlephStore = (props: AlephProps) => {
           selectedWallet.name.toLowerCase();
         set(() => ({ connectors: { [slug]: connector } }));
       },
+      setWsProvider: (wsProvider) => set(() => ({ wsProvider })),
       setApi: (api) => set(() => ({ api })),
     })),
   );

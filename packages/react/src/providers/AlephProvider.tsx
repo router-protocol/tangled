@@ -1,8 +1,8 @@
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
-import { ApiPromise } from '@polkadot/api';
 import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
+import { useIsClient } from '../hooks/useIsClient.js';
 import { AlephStore, createAlephStore } from '../store/Aleph.js';
 import { ChainData, ChainId } from '../types/index.js';
 
@@ -24,13 +24,15 @@ export const AlephContext = createContext<AlephContextValues>({
  * @returns The Aleph Zero provider context with the connect and disconnect functions.
  */
 export const AlephProvider = ({ children, chain }: { children: React.ReactNode; chain: ChainData<'alephZero'> }) => {
-  const alephStore = useRef(createAlephStore({ chain })).current;
+  const alephStore = useRef(createAlephStore()).current;
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
-  const wsProvider = useStore(alephStore, (state) => state.wsProvider);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
   const setAddress = useStore(alephStore, (state) => state.setAddress);
+  const setWsProvider = useStore(alephStore, (state) => state.setWsProvider);
   const setApi = useStore(alephStore, (state) => state.setApi);
+
+  const isClient = useIsClient();
 
   // Build and set Nightly Adapter
   // Used build instead of buildLazy to fix nightlyAdapter loading issue while fetching supported nigthly wallet list(walletsFromRegistry)
@@ -56,14 +58,30 @@ export const AlephProvider = ({ children, chain }: { children: React.ReactNode; 
   }, [setConnectedAdapter]);
 
   useEffect(() => {
-    ApiPromise.create({ provider: wsProvider })
-      .then((api) => {
-        setApi(api);
-      })
-      .catch((error) => {
-        console.error('Error creating AlephZero API:', error);
-      });
-  }, [wsProvider, setApi]);
+    if (!isClient) return;
+    if (!chain.rpcUrls.default.webSocket) {
+      console.error('AlephZero WebSocket URL not found');
+      return;
+    }
+    const wsUrl = chain.rpcUrls.default.webSocket[0];
+
+    const setProviders = async () => {
+      const { ApiPromise, WsProvider } = await import('@polkadot/api');
+
+      const wsProvider = new WsProvider(wsUrl);
+
+      setWsProvider(wsProvider);
+      ApiPromise.create({ provider: wsProvider })
+        .then((api) => {
+          setApi(api);
+        })
+        .catch((error) => {
+          console.error('Error creating AlephZero API:', error);
+        });
+    };
+
+    setProviders();
+  }, [chain, isClient, setApi, setWsProvider]);
 
   /////////////////
   /// Mutations ///
