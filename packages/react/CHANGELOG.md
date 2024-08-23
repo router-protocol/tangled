@@ -1,5 +1,17 @@
 # @tangled3/react
 
+## 1.4.2
+
+### Patch Changes
+
+- fix: memoise hook returns
+
+## 1.4.1
+
+### Patch Changes
+
+- Fixed aleph zero ws provider initialisation
+
 ## 1.4.0
 
 ### Minor Changes

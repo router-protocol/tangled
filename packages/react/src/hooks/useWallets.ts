@@ -148,15 +148,18 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return registryWallets;
   }, [alephAdapter, options?.onlyInstalled]);
 
-  return {
-    evm: extendedEvmWallets,
-    solana: extendedSolanaWallets,
-    tron: extendedTronWallets,
-    alephZero: extendedAlephWallets,
-    bitcoin: [],
-    casper: [],
-    cosmos: [],
-    near: [],
-    sui: [],
-  };
+  return useMemo(
+    () => ({
+      evm: extendedEvmWallets,
+      solana: extendedSolanaWallets,
+      tron: extendedTronWallets,
+      alephZero: extendedAlephWallets,
+      bitcoin: [],
+      casper: [],
+      cosmos: [],
+      near: [],
+      sui: [],
+    }),
+    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets],
+  );
 };

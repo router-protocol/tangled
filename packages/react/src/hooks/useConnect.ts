@@ -11,7 +11,9 @@ import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
 export const useConnect = () => {
-  const wallets = useWallets();
+  const wallets = useWallets({
+    onlyInstalled: true,
+  });
   const { connectAsync: connectEVM } = useWagmiConnect();
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
@@ -78,6 +80,5 @@ export const useConnect = () => {
     connect: mutation.mutate,
     isLoading: mutation.isPending,
     error: mutation.error,
-    wallets,
   };
 };
