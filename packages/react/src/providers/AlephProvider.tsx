@@ -2,6 +2,7 @@ import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
+import { useIsClient } from '../hooks/useIsClient.js';
 import { AlephStore, createAlephStore } from '../store/Aleph.js';
 import { ChainData, ChainId } from '../types/index.js';
 
@@ -22,18 +23,16 @@ export const AlephContext = createContext<AlephContextValues>({
  * @param adapters - Supported wallet adapters for the Aleph Zero.
  * @returns The Aleph Zero provider context with the connect and disconnect functions.
  */
-export const AlephProvider = ({
-  children,
-  // chains
-}: {
-  children: React.ReactNode;
-  chains: ChainData<'aleph_zero'>[];
-}) => {
+export const AlephProvider = ({ children, chain }: { children: React.ReactNode; chain: ChainData<'alephZero'> }) => {
   const alephStore = useRef(createAlephStore()).current;
   const connectedAdapter = useStore(alephStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(alephStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(alephStore, (state) => state.setConnectors);
   const setAddress = useStore(alephStore, (state) => state.setAddress);
+  const setWsProvider = useStore(alephStore, (state) => state.setWsProvider);
+  const setApi = useStore(alephStore, (state) => state.setApi);
+
+  const isClient = useIsClient();
 
   // Build and set Nightly Adapter
   // Used build instead of buildLazy to fix nightlyAdapter loading issue while fetching supported nigthly wallet list(walletsFromRegistry)
@@ -57,6 +56,32 @@ export const AlephProvider = ({
       }
     })();
   }, [setConnectedAdapter]);
+
+  useEffect(() => {
+    if (!isClient) return;
+    if (!chain.rpcUrls.default.webSocket) {
+      console.error('AlephZero WebSocket URL not found');
+      return;
+    }
+    const wsUrl = chain.rpcUrls.default.webSocket[0];
+
+    const setProviders = async () => {
+      const { ApiPromise, WsProvider } = await import('@polkadot/api');
+
+      const wsProvider = new WsProvider(wsUrl);
+
+      setWsProvider(wsProvider);
+      ApiPromise.create({ provider: wsProvider })
+        .then((api) => {
+          setApi(api);
+        })
+        .catch((error) => {
+          console.error('Error creating AlephZero API:', error);
+        });
+    };
+
+    setProviders();
+  }, [chain, isClient, setApi, setWsProvider]);
 
   /////////////////
   /// Mutations ///
@@ -93,7 +118,10 @@ export const AlephProvider = ({
       if (!connectedAdapter) return;
 
       await connectedAdapter.disconnect();
+
       setConnectors(connectedAdapter);
+      setConnectedAdapter(connectedAdapter);
+      setAddress('');
     },
   });
 
@@ -103,16 +131,17 @@ export const AlephProvider = ({
       return;
     }
 
-    const handleAccountsUpdate = async () => {
+    const handleAccountsUpdate = (acc: { address: string }[]) => {
+      if (!acc[0]) return;
       setConnectors(connectedAdapter);
+      setAddress(acc[0].address);
     };
 
-    connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     const unsubscribe = connectedAdapter.accounts.subscribe(handleAccountsUpdate);
     return () => {
       unsubscribe();
     };
-  });
+  }, [connectedAdapter, setConnectors, setAddress]);
 
   // Eager connect when the page reloads
   useEffect(() => {

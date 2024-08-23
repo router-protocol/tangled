@@ -1,13 +1,14 @@
+import { WalletConnectAdapter as TronWalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
 import { coinbaseWallet, walletConnect } from 'wagmi/connectors';
 import * as solConnectors from '../connectors/solana/connectors.js';
 import * as suiConnectors from '../connectors/sui/connectors.js';
 import * as tronConnectors from '../connectors/tron/connectors.js';
-import { CHAIN_TYPES, TangledConfig } from '../types/index.js';
+import { CHAIN_TYPES, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
 
 // export type ChainConnectors = { [key in ChainType]: any };
 
-export const createChainConnectors = (config: TangledConfig): ChainConnectors => {
+export const createChainConnectors = (config: TangledConfig, chains: SupportedChainsByType): ChainConnectors => {
   const overrides = config.chainConnectors ?? {};
 
   const connectors: ChainConnectors = CHAIN_TYPES.reduce((acc, type) => {
@@ -25,7 +26,15 @@ export const createChainConnectors = (config: TangledConfig): ChainConnectors =>
   });
   connectors.evm = [...(overrides.evm ?? []), walletconnectConnector, coinbaseWalletConnector];
 
-  connectors.tron = [...(overrides.tron ?? []), tronConnectors.tronLinkAdapter];
+  const tronChain = chains.tron[0];
+  const tronWalletConnectAdapter = new TronWalletConnectAdapter({
+    network: tronChain.tronName,
+    options: {
+      relayUrl: 'wss://relay.walletconnect.com',
+      projectId: config.projectId,
+    },
+  });
+  connectors.tron = [...(overrides.tron ?? []), tronConnectors.tronLinkAdapter, tronWalletConnectAdapter];
 
   connectors.solana = [
     ...(overrides.solana ?? []),

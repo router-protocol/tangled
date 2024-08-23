@@ -9,7 +9,11 @@ import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
-export const useDisConnect = () => {
+export interface DisconnectParams {
+  walletId: string;
+  chainType: ChainType;
+}
+export const useDisconnect = () => {
   const wallets = useWallets();
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
@@ -18,10 +22,10 @@ export const useDisConnect = () => {
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
 
   const disconnectWallet = useCallback(
-    async (params: { walletId: string; chainType: ChainType }) => {
-      const walletInstance: Wallet | undefined = wallets[params.chainType].find((wallet) => {
-        return wallet.id === params.walletId;
-      });
+    async (params: DisconnectParams) => {
+      const walletInstance: Wallet | undefined = wallets[params.chainType].find(
+        (wallet) => wallet.id === params.walletId,
+      );
 
       if (!walletInstance) {
         throw new Error('Wallet not found');
@@ -37,7 +41,7 @@ export const useDisConnect = () => {
         await disconnectTronWallet();
       } else if (params.chainType === 'evm') {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
-      } else if (params.chainType === 'aleph_zero') {
+      } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
       } else if (params.chainType === 'sui') {
         disconnectSuiWallet();
@@ -45,8 +49,6 @@ export const useDisConnect = () => {
         const connector = walletInstance.connector as DefaultConnector;
         await connector.disconnect();
       }
-
-      return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
     [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectSuiWallet, disconnectTronWallet, wallets],
   );
@@ -57,9 +59,6 @@ export const useDisConnect = () => {
     onError: (error) => {
       console.error(error);
     },
-    // onSuccess: (p) => {
-    //   // console.log('Connected', p.id);
-    // },
   });
 
   return {

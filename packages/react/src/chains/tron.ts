@@ -1,8 +1,10 @@
 import { ChainData } from '../types/index.js';
 
 export const tronMainnet: ChainData = {
-  id: 'tron-mainnet',
+  id: 'tronMainnet',
+  trxId: '0x2b6653dc',
   name: 'Tron',
+  tronName: 'Mainnet',
   type: 'tron',
   nativeCurrency: {
     name: 'TRX',
@@ -12,6 +14,9 @@ export const tronMainnet: ChainData = {
   rpcUrls: {
     default: {
       http: [''],
+    },
+    fullNode: {
+      http: ['https://api.trongrid.io'],
     },
   },
   blockExplorers: {

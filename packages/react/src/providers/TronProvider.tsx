@@ -25,28 +25,29 @@ export const TronContext = createContext<TronContextValues>({
 export const TronProvider = ({
   children,
   adapters,
-  // chains,
+  chain,
 }: {
   children: React.ReactNode;
-  chains: ChainData<'tron'>[];
+  chain: ChainData<'tron'>;
   adapters: Adapter[];
 }) => {
-  const tronStore = useRef(createTronStore({ adapters })).current;
+  const tronStore = useRef(createTronStore({ adapters, chain: chain })).current;
   const connectedAdapter = useStore(tronStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(tronStore, (state) => state.setConnectedAdapter);
   const setConnector = useStore(tronStore, (state) => state.setConnector);
   const setAddress = useStore(tronStore, (state) => state.setAddress);
+  const tronWeb = useStore(tronStore, (state) => state.tronweb);
 
   ///////////////////
   ///// Handlers ////
   ///////////////////
   const handleConnect = useCallback(
     function (this: Adapter, address: string) {
-      setAddress(address);
-      setConnector({ adapter: this, account: address, network: undefined, readyState: this.state });
-      setConnectedAdapter(this);
+      if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
+      const connector = tronStore.getState().connectors[this.name];
+      setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
     },
-    [setAddress, setConnectedAdapter, setConnector],
+    [setAddress, setConnector, tronStore],
   );
 
   const handleError = useCallback((error: Error) => {
@@ -55,16 +56,30 @@ export const TronProvider = ({
 
   const handleAccountChange = useCallback(
     function (this: Adapter, address: string) {
-      setAddress(address);
-      setConnector({ adapter: this, account: address, network: undefined, readyState: this.state });
-      setConnectedAdapter(this);
+      if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
+      const connector = tronStore.getState().connectors[this.name];
+      setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
     },
-    [setAddress, setConnectedAdapter, setConnector],
+    [setAddress, setConnector, tronStore],
   );
 
   const handleDisconnect = useCallback(() => {
     setConnectedAdapter(undefined);
   }, [setConnectedAdapter]);
+
+  const handleChainChanged = useCallback(
+    function (this: Adapter, { chainId }: any) {
+      if (!this) return;
+
+      setConnector({
+        adapter: this,
+        account: this?.address,
+        network: chainId,
+        readyState: this?.state,
+      });
+    },
+    [setConnector],
+  );
 
   ///////////////////
   ///// Effects /////
@@ -74,34 +89,45 @@ export const TronProvider = ({
       setConnector({ adapter: this, account: this.address, network: undefined, readyState: this.state });
     }
 
-    adapters.forEach((adapter) => adapter.on('stateChanged', handleStateChange, adapter));
-    return () => adapters.forEach((adapter) => adapter.off('stateChanged', handleStateChange, adapter));
-  }, [adapters, setConnector]);
+    adapters.forEach((adapter) => {
+      adapter.on('stateChanged', handleStateChange, adapter);
+      adapter.on('connect', handleConnect, adapter);
+      adapter.on('accountsChanged', handleAccountChange, adapter);
+      adapter.on('chainChanged', handleChainChanged, adapter);
+      adapter.on('error', handleError);
+      adapter.on('disconnect', handleDisconnect);
+    });
 
-  useEffect(() => {
-    if (connectedAdapter) {
-      connectedAdapter.on('connect', handleConnect, connectedAdapter);
-      connectedAdapter.on('error', handleError);
-      connectedAdapter.on('accountsChanged', handleAccountChange, connectedAdapter);
-      connectedAdapter.on('disconnect', handleDisconnect);
-      // connectedAdapter.on('chainChanged', handleChainChanged);
-      // connectedAdapter.on('readyStateChanged', handleReadyStateChanged);
-      return () => {
-        connectedAdapter.off('connect', handleConnect);
-        connectedAdapter.off('error', handleError);
-        connectedAdapter.off('accountsChanged', handleAccountChange);
-        connectedAdapter.off('disconnect', handleDisconnect);
-        // connectedAdapter.off('chainChanged', handleChainChanged);
-        // connectedAdapter.off('readyStateChanged', handleReadyStateChanged);
-      };
-    }
-  }, [handleConnect, handleError, handleAccountChange, handleDisconnect, connectedAdapter]);
-
-  useEffect(() => {
     return () => {
-      connectedAdapter?.disconnect();
+      adapters.forEach((adapter) => {
+        adapter.off('stateChanged', handleStateChange, adapter);
+        adapter.off('connect', handleConnect, adapter);
+        adapter.off('accountsChanged', handleAccountChange, adapter);
+        adapter.off('chainChanged', handleChainChanged, adapter);
+        adapter.off('error', handleError);
+        adapter.off('disconnect', handleDisconnect);
+      });
     };
-  }, [connectedAdapter]);
+  }, [
+    adapters,
+    handleAccountChange,
+    handleChainChanged,
+    handleConnect,
+    handleDisconnect,
+    handleError,
+    setConnector,
+    tronStore,
+  ]);
+
+  useEffect(() => {
+    if (!connectedAdapter) return;
+
+    if (connectedAdapter.address) tronWeb.setAddress(connectedAdapter.address);
+
+    return () => {
+      connectedAdapter.disconnect();
+    };
+  }, [connectedAdapter, tronWeb]);
 
   // autoconnect
   useEffect(() => {
@@ -133,12 +159,6 @@ export const TronProvider = ({
     },
     onSuccess: (data) => {
       setConnectedAdapter(data.adapter);
-      setConnector({
-        adapter: data.adapter,
-        account: data.account,
-        network: undefined,
-        readyState: data.adapter.state,
-      });
     },
   });
 

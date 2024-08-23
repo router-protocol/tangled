@@ -1,11 +1,17 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.3.0",
+  "version": "1.4.2",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
   "types": "./src/index.d.ts",
+  "exports": {
+    "./provider": {
+      "types": "./_esm/providers/TangledContext.d.ts",
+      "default": "./_esm/providers/TangledContext.js"
+    }
+  },
   "publishConfig": {
     "access": "public",
     "directory": "dist"
@@ -29,9 +35,12 @@
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
+    "@polkadot/api": "^12.3.1",
+    "@polkadot/api-contract": "^12.3.1",
     "@safe-global/safe-apps-sdk": "^9.0.0",
+    "@solana/spl-token": "^0.4.8",
     "@solana/wallet-adapter-base": "^0.9.23",
-    "@solana/web3.js": "^1.91.2",
+    "@solana/web3.js": "^1.94.0",
     "@tangled3/solana-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
@@ -41,6 +50,7 @@
     "immer": "^10.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "tronweb": "6.0.0-beta.4",
     "viem": "^2.13.8",
     "wagmi": "^2.9.11",
     "zustand": "^4.5.2"

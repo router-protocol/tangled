@@ -16,10 +16,14 @@ import {
   polygon,
   polygonZkEvm,
   scroll,
+  solana,
   sui,
   tronMainnet,
   zkSync,
 } from '../chains/index.js';
+import { solanaDevnet } from '../chains/solana.devnet.js';
+import { solanaTestnet } from '../chains/solana.testnet.js';
+import { tronShasta } from '../chains/tron.shasta.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export const CHAIN_ID = {
@@ -45,21 +49,23 @@ export const CHAIN_ID = {
   // cosmos
 
   // tron
-  // tron: '0x2b6653dc',
-  tronMainnet: 'tron-mainnet',
-  // tronShasta: 'tron-shasta',
+  tronMainnet: 'tronMainnet',
+  tronShasta: 'tronShasta',
   // tronNile: 'tron-nile',
 
   // near
 
   // solana
+  solana: 'solana',
+  solanaTestnet: 'solanaTestnet',
+  solanaDevnet: 'solanaDevnet',
 
   // sui
   sui: 'sui',
 
   // casper
 
-  aleph_zero: 'aleph_zero',
+  alephZero: 'alephZero',
 
   // testnets
   // goerli: '5',
@@ -68,6 +74,14 @@ export const CHAIN_ID = {
   // scrollSepolia: '534351',
   // sepolia: '11155111',
 } as const;
+
+export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
+  (acc, key) => {
+    acc[CHAIN_ID[key as Chain]] = key;
+    return acc;
+  },
+  {} as Record<string, string>,
+) as Record<ChainId, Chain>;
 
 export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrum]: arbitrum,
@@ -90,11 +104,16 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,
-  // [CHAIN_ID.tronShasta]: tronShasta,
+  [CHAIN_ID.tronShasta]: tronShasta,
   // [CHAIN_ID.tronNile]: tronNile,
 
   // aleph
-  [CHAIN_ID.aleph_zero]: alephZero,
+  [CHAIN_ID.alephZero]: alephZero,
+
+  // solana
+  [CHAIN_ID.solana]: solana,
+  [CHAIN_ID.solanaTestnet]: solanaTestnet,
+  [CHAIN_ID.solanaDevnet]: solanaDevnet,
 
   //sui
   [CHAIN_ID.sui]: sui,
@@ -115,28 +134,16 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   solana: 'Solana',
   sui: 'Sui',
   casper: 'Casper',
-  aleph_zero: 'Aleph Zero',
+  alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
 } as const;
 
-export const DEFAULT_CHAINS = [
-  'arbitrum',
-  'avalanche',
-  'base',
-  'binance',
-  'blast',
-  'boba',
-  'ethereum',
-  'linea',
-  'manta',
-  'mantle',
-  'metis',
-  'mode',
-  'optimism',
-  'polygon',
-  'polygon_zkevm',
-  'scroll',
-  'zksync',
-  'aleph_zero',
-  'sui',
-] as Chain[];
+/**
+ * The native ETH address.
+ */
+export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+/**
+ * The native SOL address.
+ */
+export const SOL_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';

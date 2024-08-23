@@ -1,4 +1,4 @@
-import { alephZero } from '../chains/aleph_zero.js';
+import { alephZero } from '../chains/alephZero.js';
 import * as evm from '../chains/evm.js';
 import { solana } from '../chains/solana.js';
 import { sui } from '../chains/sui.js';
@@ -7,7 +7,7 @@ import { ChainData, SupportedChainsByType } from '../types/index.js';
 
 const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => {
   const supportedChains: SupportedChainsByType = {
-    aleph_zero: [],
+    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
