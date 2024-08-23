@@ -6,6 +6,7 @@ import { createChainConnectors } from '../utils/createChainConnectors.js';
 import { AlephProvider } from './AlephProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
+import { SuiProvider } from './SuiProvider.js';
 import { TronProvider } from './TronProvider.js';
 import WalletsProvider from './WalletsProvider.js';
 
@@ -46,9 +47,11 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
           adapters={connectors.tron}
           chain={chains.tron[0]}
         >
-          <SolanaProvider chain={chains.solana[0]}>
-            <AlephProvider chain={chains.alephZero[0]}>
-              <WalletsProvider>{children}</WalletsProvider>
+          <SolanaProvider network={chains.solana[0]}>
+            <AlephProvider chains={chains.aleph_zero}>
+              <SuiProvider chains={chains.sui}>
+                <WalletsProvider>{children}</WalletsProvider>
+              </SuiProvider>
             </AlephProvider>
           </SolanaProvider>
         </TronProvider>

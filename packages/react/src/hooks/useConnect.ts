@@ -1,3 +1,4 @@
+import { useConnectWallet as useSuiConnectWallet } from '@mysten/dapp-kit';
 import { WalletName } from '@solana/wallet-adapter-base';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
@@ -5,7 +6,7 @@ import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
-import { Wallet, WalletInstance } from '../types/wallet.js';
+import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -18,6 +19,7 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
+  const { mutate: connectSuiWallet } = useSuiConnectWallet();
 
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
@@ -49,13 +51,16 @@ export const useConnect = () => {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'alephZero') {
         await connectAlephWallet(walletInstance.name);
+      } else if (params.chainType === 'sui') {
+        connectSuiWallet({ wallet: walletInstance.connector as WalletInstance<'sui'> });
       } else {
-        await walletInstance.connector.connect();
+        const connector = walletInstance.connector as DefaultConnector;
+        await connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectAlephWallet, connectEVM, connectSolanaWallet, connectTronWallet, connectedWallets, wallets],
+    [connectAlephWallet, connectEVM, connectSolanaWallet, connectSuiWallet, connectTronWallet, connectedWallets, wallets],
   );
 
   const mutation = useMutation({

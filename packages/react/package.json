@@ -32,6 +32,8 @@
     "Ankit Singh <ankit.singh.zm@gmail.com>"
   ],
   "dependencies": {
+    "@mysten/dapp-kit": "^0.14.14",
+    "@mysten/sui": "^1.4.0",
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
     "@polkadot/api": "^12.3.1",
     "@polkadot/api-contract": "^12.3.1",
@@ -61,7 +63,8 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "@mysten/wallet-standard": "0.12.14"
   },
   "peerDependencies": {
     "@tanstack/react-query": "^5.44.0",

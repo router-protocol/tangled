@@ -1,3 +1,4 @@
+import { useCurrentWallet as useSuiCurrentWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections } from 'wagmi';
@@ -25,6 +26,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
   const setCurrentAccount = useWalletsStore((state) => state.setCurrentAccount);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
+  
+  const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
 
   // update wallet store states when connections change for individual providers
   // evm
@@ -179,6 +182,31 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       setCurrentAccount(recentAccount);
     }
   }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
+
+  //sui
+  useEffect(() => {
+    const _suiAccounts: { [x: string]: ConnectedAccount } = {};
+    const _suiWallets: { [x: string]: ConnectedWallet<'sui'> } = {};
+
+    if (suiWalletStatus === 'connected') {
+      _suiAccounts[currentSuiWallet.name] = {
+        address: currentSuiWallet.accounts[0].address,
+        chainId: chains.sui[0].id,
+        chainType: 'sui',
+        wallet: currentSuiWallet.name,
+      };
+
+      _suiWallets[currentSuiWallet.name] = {
+        address: currentSuiWallet.accounts[0].address,
+        chainId: chains.sui[0].id,
+        chainType: 'sui',
+        connector: currentSuiWallet,
+      };
+    }
+
+    setChainConnectedAccounts({ sui: _suiAccounts });
+    setConnectedWallets({ sui: _suiWallets });
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.sui, suiWalletStatus, currentSuiWallet]);
 
   return <>{children}</>;
 };

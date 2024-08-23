@@ -17,6 +17,7 @@ import {
   polygonZkEvm,
   scroll,
   solana,
+  sui,
   tronMainnet,
   zkSync,
 } from '../chains/index.js';
@@ -60,6 +61,7 @@ export const CHAIN_ID = {
   solanaDevnet: 'solanaDevnet',
 
   // sui
+  sui: 'sui',
 
   // casper
 
@@ -112,6 +114,9 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.solana]: solana,
   [CHAIN_ID.solanaTestnet]: solanaTestnet,
   [CHAIN_ID.solanaDevnet]: solanaDevnet,
+
+  //sui
+  [CHAIN_ID.sui]: sui,
 
   // testnets
   // 5: goerli,

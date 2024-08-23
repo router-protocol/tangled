@@ -1,9 +1,10 @@
+import { useDisconnectWallet as useSuiDisconnectWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
-import { Wallet, WalletInstance } from '../types/wallet.js';
+import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -18,6 +19,7 @@ export const useDisconnect = () => {
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
   const { disconnect: disconnectAlephWallet } = useAlephContext();
+  const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
@@ -41,11 +43,14 @@ export const useDisconnect = () => {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
+      } else if (params.chainType === 'sui') {
+        disconnectSuiWallet();
       } else {
-        await walletInstance.connector.disconnect();
+        const connector = walletInstance.connector as DefaultConnector;
+        await connector.disconnect();
       }
     },
-    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, wallets],
+    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectSuiWallet, disconnectTronWallet, wallets],
   );
 
   const mutation = useMutation({
