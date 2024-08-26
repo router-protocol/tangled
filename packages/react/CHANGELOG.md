@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.4.5
+
+### Patch Changes
+
+- fix: added async connect
+
 ## 1.4.4
 
 ### Patch Changes
