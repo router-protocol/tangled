@@ -29,7 +29,16 @@ export const walletConfigs: {
     isInstalled: () =>
       isMobile() ? hasInjectedProvider({ flag: 'isTrust' }) : hasInjectedProvider({ flag: 'isTrustWallet' }),
   },
-  'coinbaseWallet, com.coinbase.wallet, coinbaseWalletSDK': {
+  'coinbaseWallet, com.coinbase.wallet': {
+    name: 'Coinbase Injected Wallet',
+    url: '',
+    getWalletConnectDeeplink: (uri: string) => {
+      return `${uri}`;
+    },
+    isInstalled: false,
+    icon: '',
+  },
+  coinbaseWalletSDK: {
     name: 'Coinbase Wallet',
     url: 'https://www.coinbase.com/wallet/getting-started-extension',
     getWalletConnectDeeplink: (uri: string) => {
