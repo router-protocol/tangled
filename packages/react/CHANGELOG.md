@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.4.3
+
+### Patch Changes
+
+- fix coinbase duplicate connectors
+
 ## 1.4.2
 
 ### Patch Changes
