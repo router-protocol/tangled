@@ -47,8 +47,8 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
           adapters={connectors.tron}
           chain={chains.tron[0]}
         >
-          <SolanaProvider network={chains.solana[0]}>
-            <AlephProvider chains={chains.aleph_zero}>
+          <SolanaProvider chain={chains.solana[0]}>
+            <AlephProvider chain={chains.alephZero[0]}>
               <SuiProvider chains={chains.sui}>
                 <WalletsProvider>{children}</WalletsProvider>
               </SuiProvider>

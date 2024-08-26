@@ -43,7 +43,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     ] as ChainData<'evm'>[];
     supportedChains.solana = [solana] as ChainData<'solana'>[];
     supportedChains.tron = [tronMainnet] as ChainData<'tron'>[];
-    supportedChains.aleph_zero = [alephZero] as ChainData<'aleph_zero'>[];
+    supportedChains.alephZero = [alephZero] as ChainData<'alephZero'>[];
     supportedChains.sui = [sui] as ChainData<'sui'>[];
   }
 
