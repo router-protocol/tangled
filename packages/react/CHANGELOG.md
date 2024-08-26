@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.4.4
+
+### Patch Changes
+
+- fix: hide coinbase injected connector
+
 ## 1.4.3
 
 ### Patch Changes
