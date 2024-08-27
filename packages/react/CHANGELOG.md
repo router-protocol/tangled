@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.4.6
+
+### Patch Changes
+
+- fix: fresh build
+
 ## 1.4.5
 
 ### Patch Changes
