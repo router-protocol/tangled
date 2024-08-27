@@ -120,7 +120,7 @@ export const WalletProvider = ({
   const { mutateAsync: handleAutoConnectRequest, isPending: isAutoConnecting } = useMutation({
     mutationKey: ['autoConnect'],
     mutationFn: async () => {
-      if (!autoConnect || !connectedAdapter) return;
+      if (!autoConnect || !connectedAdapter || connectedAdapter.readyState !== WalletReadyState.Installed) return;
       // If autoConnect is true or returns true, use the default autoConnect behavior.
       if (autoConnect === true || (await autoConnect(connectedAdapter))) {
         if (walletName) {
@@ -300,10 +300,8 @@ export const WalletProvider = ({
     if (
       connected ||
       !handleAutoConnectRequest ||
-      !(
-        connectedWallet?.readyState === WalletReadyState.Installed ||
-        connectedWallet?.readyState === WalletReadyState.Loadable
-      )
+      connectedWallet?.readyState === WalletReadyState.Installed ||
+      connectedWallet?.readyState === WalletReadyState.Loadable
     )
       return;
 

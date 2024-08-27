@@ -1,5 +1,13 @@
 # @tangled3/react
 
+## 1.4.7
+
+### Patch Changes
+
+- fix solana autoconnect conditions
+- Updated dependencies
+  - @tangled3/solana-react@1.1.2
+
 ## 1.4.6
 
 ### Patch Changes
