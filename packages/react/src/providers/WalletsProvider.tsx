@@ -26,7 +26,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
   const setCurrentAccount = useWalletsStore((state) => state.setCurrentAccount);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
-  
+
   const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
 
   // update wallet store states when connections change for individual providers

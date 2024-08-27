@@ -60,7 +60,15 @@ export const useConnect = () => {
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectAlephWallet, connectEVM, connectSolanaWallet, connectSuiWallet, connectTronWallet, connectedWallets, wallets],
+    [
+      connectAlephWallet,
+      connectEVM,
+      connectSolanaWallet,
+      connectSuiWallet,
+      connectTronWallet,
+      connectedWallets,
+      wallets,
+    ],
   );
 
   const mutation = useMutation({

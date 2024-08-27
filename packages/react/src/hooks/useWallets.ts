@@ -182,8 +182,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       casper: [],
       cosmos: [],
       near: [],
-      sui: [],
+      sui: extendedSuiWallets,
     }),
-    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets],
+    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets, extendedSuiWallets],
   );
 };

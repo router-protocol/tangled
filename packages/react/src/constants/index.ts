@@ -17,13 +17,14 @@ import {
   polygonZkEvm,
   scroll,
   solana,
+  solanaDevnet,
+  solanaTestnet,
   sui,
+  suiTestnet,
   tronMainnet,
+  tronShasta,
   zkSync,
 } from '../chains/index.js';
-import { solanaDevnet } from '../chains/solana.devnet.js';
-import { solanaTestnet } from '../chains/solana.testnet.js';
-import { tronShasta } from '../chains/tron.shasta.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export const CHAIN_ID = {
@@ -62,6 +63,7 @@ export const CHAIN_ID = {
 
   // sui
   sui: 'sui',
+  suiTestnet: 'suiTestnet',
 
   // casper
 
@@ -117,6 +119,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
 
   //sui
   [CHAIN_ID.sui]: sui,
+  [CHAIN_ID.suiTestnet]: suiTestnet,
 
   // testnets
   // 5: goerli,
