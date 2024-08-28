@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.4.8
+
+### Patch Changes
+
+- fix get token balance return
+
 ## 1.4.7
 
 ### Patch Changes
