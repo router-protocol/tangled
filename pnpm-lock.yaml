@@ -232,6 +232,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.44.0
         version: 5.44.0(react@18.3.1)
+      '@tonconnect/ui-react':
+        specifier: ^2.0.9
+        version: 2.0.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tronweb3/tronwallet-abstract-adapter':
         specifier: ^1.1.6
         version: 1.1.6
@@ -2716,6 +2719,27 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
+  '@tonconnect/isomorphic-eventsource@0.0.2':
+    resolution: {integrity: sha512-B4UoIjPi0QkvIzZH5fV3BQLWrqSYABdrzZQSI9sJA9aA+iC0ohOzFwVVGXanlxeDAy1bcvPbb29f6sVUk0UnnQ==}
+
+  '@tonconnect/isomorphic-fetch@0.0.3':
+    resolution: {integrity: sha512-jIg5nTrDwnite4fXao3dD83eCpTvInTjZon/rZZrIftIegh4XxyVb5G2mpMqXrVGk1e8SVXm3Kj5OtfMplQs0w==}
+
+  '@tonconnect/protocol@2.2.6':
+    resolution: {integrity: sha512-kyoDz5EqgsycYP+A+JbVsAUYHNT059BCrK+m0pqxykMODwpziuSAXfwAZmHcg8v7NB9VKYbdFY55xKeXOuEd0w==}
+
+  '@tonconnect/sdk@3.0.5':
+    resolution: {integrity: sha512-ow0qnN4s3iQ/r2uXobZ7YzdQBtan/36CgCT9IP35G07g38UxsUXwzw8ANmJTDj/JPiQcIKuYBMfIwIX9zLM0wg==}
+
+  '@tonconnect/ui-react@2.0.9':
+    resolution: {integrity: sha512-wN7tEZpQiRYSUcdNAxFsDkk5TYo8krIu00ZLE1R5kXyr+XpO120jOmTEweBSXvIzTgEVkD/PxDZbBQQxRTXsUw==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
+
+  '@tonconnect/ui@2.0.9':
+    resolution: {integrity: sha512-ZxofTBf81NqrxyD0ybI8AuFHN11uKVg/00xTDFhP5FoPB8rYC7En9qE2VJ6IvwvtTpmh8jspi2ancOHUMBoCQA==}
+
   '@tronweb3/google-protobuf@3.21.2':
     resolution: {integrity: sha512-IVcT2GfWX3K6tHUVhs14NP5uzKhQt4KeDya1g9ACxuZsUzsaoGUIGzceK2Ltu7xp1YV94AaHOf4yxLAivlvEkQ==}
 
@@ -3207,6 +3231,7 @@ packages:
 
   '@walletconnect/sign-client@2.11.0':
     resolution: {integrity: sha512-H2ukscibBS+6WrzQWh+WyVBqO5z4F5et12JcwobdwgHnJSlqIoZxqnUYYWNCI5rUR5UKsKWaUyto4AE9N5dw4Q==}
+    deprecated: Reliability and performance greatly improved - please see https://github.com/WalletConnect/walletconnect-monorepo/releases
 
   '@walletconnect/sign-client@2.13.0':
     resolution: {integrity: sha512-En7KSvNUlQFx20IsYGsFgkNJ2lpvDvRsSFOT5PTdGskwCkUfOpB33SQJ6nCrN19gyoKPNvWg80Cy6MJI0TjNYA==}
@@ -3723,6 +3748,9 @@ packages:
 
   citty@0.1.6:
     resolution: {integrity: sha512-tskPPKEs8D2KPafUypv2gxwJP8h/OaJmC82QQGGDQcHvXX43xF2VDACcJVmZ0EuSxkpO9Kc4MlrA3q0+FG58AQ==}
+
+  classnames@2.5.1:
+    resolution: {integrity: sha512-saHYOzhIQs6wy2sVxTM6bUDsQO4F50V9RQ22qBpEdCW+I+/Wmke2HOl6lS6dTpdxVhb88/I6+Hs+438c3lfUow==}
 
   clean-stack@4.2.0:
     resolution: {integrity: sha512-LYv6XPxoyODi36Dp976riBtSY27VmFo+MKqEU9QCCWyTrdEPDog+RWA7xQWHi6Vbp61j5c4cdzzX1NidnwtUWg==}
@@ -4534,6 +4562,10 @@ packages:
   events@3.3.0:
     resolution: {integrity: sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==}
     engines: {node: '>=0.8.x'}
+
+  eventsource@2.0.2:
+    resolution: {integrity: sha512-IzUmBGPR3+oUG9dUeXynyNmf91/3zUSJg1lCktzKw47OXuhco54U3r9B7O4XX+Rb1Itm9OZ2b0RkTs10bICOxA==}
+    engines: {node: '>=12.0.0'}
 
   evp_bytestokey@1.0.3:
     resolution: {integrity: sha512-/f2Go4TognH/KvCISP7OUsHn85hT9nUkxxA9BEWxFn+Oj9o8ZNLm/40hdlgSLyuOimsrTKLUMEorQexp/aPQeA==}
@@ -7203,6 +7235,12 @@ packages:
   tty-browserify@0.0.1:
     resolution: {integrity: sha512-C3TaO7K81YvjCgQH9Q1S3R3P3BtN3RIM8n+OvX4il1K1zgE8ZhI0op7kClgkxtutIE8hQrcrHBXvIheqKUUCxw==}
 
+  tweetnacl-util@0.15.1:
+    resolution: {integrity: sha512-RKJBIj8lySrShN4w6i/BonWp2Z/uxwC3h4y7xsRrpP59ZboCd0GpEVsOnMDYLMmKBpYhb5TgHzZXy7wTfYFBRw==}
+
+  tweetnacl@1.0.3:
+    resolution: {integrity: sha512-6rt+RN7aOi1nGMyC4Xa5DdYiukl2UWCbcJft7YhxReBGQD7OAM8Pbxw6YMo4r2diNEA8FEmu32YOn9rhaiE5yw==}
+
   type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
     engines: {node: '>= 0.8.0'}
@@ -7262,6 +7300,9 @@ packages:
     resolution: {integrity: sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==}
     engines: {node: '>=14.17'}
     hasBin: true
+
+  ua-parser-js@1.0.38:
+    resolution: {integrity: sha512-Aq5ppTOfvrCMgAPneW1HfWj66Xi7XL+/mIy996R1/CLS/rcyJQm6QZdsKrUeivDFQ+Oc9Wyuwor8Ze8peEoUoQ==}
 
   ufo@1.5.3:
     resolution: {integrity: sha512-Y7HYmWaFwPUmkoQCUIAYpKqkOf+SbVj/2fJJZ4RJMCfZp0rTGwRbzQD+HghfnhKOjL9E01okqz+ncJskGYfBNw==}
@@ -11401,6 +11442,46 @@ snapshots:
       '@tanstack/query-core': 5.44.0
       react: 18.3.1
 
+  '@tonconnect/isomorphic-eventsource@0.0.2':
+    dependencies:
+      eventsource: 2.0.2
+
+  '@tonconnect/isomorphic-fetch@0.0.3':
+    dependencies:
+      node-fetch: 2.7.0
+    transitivePeerDependencies:
+      - encoding
+
+  '@tonconnect/protocol@2.2.6':
+    dependencies:
+      tweetnacl: 1.0.3
+      tweetnacl-util: 0.15.1
+
+  '@tonconnect/sdk@3.0.5':
+    dependencies:
+      '@tonconnect/isomorphic-eventsource': 0.0.2
+      '@tonconnect/isomorphic-fetch': 0.0.3
+      '@tonconnect/protocol': 2.2.6
+    transitivePeerDependencies:
+      - encoding
+
+  '@tonconnect/ui-react@2.0.9(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@tonconnect/ui': 2.0.9
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+    transitivePeerDependencies:
+      - encoding
+
+  '@tonconnect/ui@2.0.9':
+    dependencies:
+      '@tonconnect/sdk': 3.0.5
+      classnames: 2.5.1
+      deepmerge: 4.3.1
+      ua-parser-js: 1.0.38
+    transitivePeerDependencies:
+      - encoding
+
   '@tronweb3/google-protobuf@3.21.2': {}
 
   '@tronweb3/tronwallet-abstract-adapter@1.1.6':
@@ -13291,6 +13372,8 @@ snapshots:
     dependencies:
       consola: 3.2.3
 
+  classnames@2.5.1: {}
+
   clean-stack@4.2.0:
     dependencies:
       escape-string-regexp: 5.0.0
@@ -14392,6 +14475,8 @@ snapshots:
   eventemitter3@5.0.1: {}
 
   events@3.3.0: {}
+
+  eventsource@2.0.2: {}
 
   evp_bytestokey@1.0.3:
     dependencies:
@@ -17388,6 +17473,10 @@ snapshots:
 
   tty-browserify@0.0.1: {}
 
+  tweetnacl-util@0.15.1: {}
+
+  tweetnacl@1.0.3: {}
+
   type-check@0.4.0:
     dependencies:
       prelude-ls: 1.2.1
@@ -17445,6 +17534,8 @@ snapshots:
   typescript@5.4.5: {}
 
   typescript@5.5.4: {}
+
+  ua-parser-js@1.0.38: {}
 
   ufo@1.5.3: {}
 

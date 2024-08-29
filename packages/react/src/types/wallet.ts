@@ -21,6 +21,8 @@ export type ChainConnectors = {
   alephZero: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ton: any[];
 };
 
 export type WalletBase<C extends ChainType = ChainType> = {

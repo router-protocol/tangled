@@ -154,6 +154,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       solana: extendedSolanaWallets,
       tron: extendedTronWallets,
       alephZero: extendedAlephWallets,
+      ton: [],
       bitcoin: [],
       casper: [],
       cosmos: [],

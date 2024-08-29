@@ -17,6 +17,7 @@ export const CHAIN_TYPES = [
   'casper',
   'alephZero',
   'bitcoin',
+  'ton',
 ] as const;
 
 export type ChainType = (typeof CHAIN_TYPES)[number];
