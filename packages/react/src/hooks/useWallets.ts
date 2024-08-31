@@ -1,6 +1,7 @@
 // import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
-import { useMemo } from 'react';
+import { useTonConnectUI } from '@tonconnect/ui-react';
+import { useEffect, useMemo, useState } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { ChainType } from '../types/index.js';
@@ -29,6 +30,9 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const { connectors: configuredConnectors } = useTangledConfig();
 
   const tronConnectors = useTronStore((state) => state.connectors);
+
+  const [tonConnectUI] = useTonConnectUI();
+  const [tonWalletsList, setTonWalletsList] = useState<Wallet<'ton'>[]>([]);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector) => {
@@ -148,19 +152,43 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return registryWallets;
   }, [alephAdapter, options?.onlyInstalled]);
 
+  useEffect(() => {
+    if (tonConnectUI) {
+      tonConnectUI
+        .getWallets()
+        .then((wallets) => {
+          const extendedWallets: Wallet<'ton'>[] = wallets.map((wallet) => ({
+            id: wallet.appName,
+            name: wallet.name,
+            connector: tonConnectUI,
+            icon: wallet.imageUrl,
+            type: 'ton',
+            installed: wallets.map((wallet) => wallet.name).includes('Tonkeeper'), // TON TODO: fix this hardcoded value
+            url: wallet.aboutUrl,
+          }));
+          setTonWalletsList(extendedWallets);
+        })
+        .catch((error) => {
+          console.error('Error fetching ton wallets:', error);
+        });
+    }
+  }, [tonConnectUI]);
+
+  const extendedTonWallets = useMemo(() => tonWalletsList, [tonWalletsList]);
+
   return useMemo(
     () => ({
       evm: extendedEvmWallets,
       solana: extendedSolanaWallets,
       tron: extendedTronWallets,
       alephZero: extendedAlephWallets,
-      ton: [],
+      ton: extendedTonWallets,
       bitcoin: [],
       casper: [],
       cosmos: [],
       near: [],
       sui: [],
     }),
-    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets],
+    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets, extendedTonWallets],
   );
 };

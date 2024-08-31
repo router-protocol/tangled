@@ -7,6 +7,7 @@ import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
@@ -18,6 +19,7 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
+  const { connect: connectTonWallet } = useTonContext();
 
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
@@ -49,13 +51,24 @@ export const useConnect = () => {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'alephZero') {
         await connectAlephWallet(walletInstance.name);
+      } else if (params.chainType === 'ton') {
+        connectTonWallet(walletInstance.name);
       } else {
+        // @ts-expect-error - connect does not exist on TonConnectUI
         await walletInstance.connector.connect();
       }
 
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
-    [connectAlephWallet, connectEVM, connectSolanaWallet, connectTronWallet, connectedWallets, wallets],
+    [
+      connectAlephWallet,
+      connectEVM,
+      connectSolanaWallet,
+      connectTronWallet,
+      connectedWallets,
+      wallets,
+      connectTonWallet,
+    ],
   );
 
   const mutation = useMutation({
