@@ -5,6 +5,7 @@ import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
@@ -18,6 +19,7 @@ export const useDisconnect = () => {
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
   const { disconnect: disconnectAlephWallet } = useAlephContext();
+  const { disconnect: disconnectTonWallet } = useTonContext();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
@@ -41,11 +43,13 @@ export const useDisconnect = () => {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
+      } else if (params.chainType === 'ton') {
+        disconnectTonWallet();
       } else {
         await walletInstance.connector.disconnect();
       }
     },
-    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, wallets],
+    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, disconnectTonWallet, wallets],
   );
 
   const mutation = useMutation({
