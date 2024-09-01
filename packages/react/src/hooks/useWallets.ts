@@ -163,7 +163,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
             connector: tonConnectUI,
             icon: wallet.imageUrl,
             type: 'ton',
-            installed: wallets.map((wallet) => wallet.name).includes('Tonkeeper'), // TON TODO: fix this hardcoded value
+            installed: wallet.name === (tonConnectUI.connector.wallet?.device.appName ?? 'Tonkeeper'),
             url: wallet.aboutUrl,
           }));
           setTonWalletsList(extendedWallets);

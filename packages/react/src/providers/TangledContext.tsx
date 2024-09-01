@@ -50,7 +50,7 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
         >
           <SolanaProvider chain={chains.solana[0]}>
             <AlephProvider chain={chains.alephZero[0]}>
-              <TonConnectUIProvider manifestUrl=''>
+              <TonConnectUIProvider manifestUrl='http://localhost:3000/manifest.json'>
                 <TonProvider chain={chains.ton[0]}>
                   <WalletsProvider>{children}</WalletsProvider>
                 </TonProvider>
