@@ -70,6 +70,9 @@ export interface TangledConfig {
   projectId: string;
 
   chainConnectors?: Partial<ChainConnectors>;
+
+  /** Manifest url for ton connect */
+  tonconnectManifestUrl?: string;
 }
 
 type ChainRpcUrls = {

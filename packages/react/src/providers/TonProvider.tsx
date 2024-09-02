@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
-import { toUserFriendlyAddress, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
-import { createContext, useRef } from 'react';
+import { TonConnectUIProvider, toUserFriendlyAddress, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
+import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { createTonStore, TonStore } from '../store/Ton.js';
 import { ChainData, ChainId } from '../types/index.js';
@@ -31,6 +31,18 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
 
   const [tonConnectUI] = useTonConnectUI();
 
+  // subscribing to the wallet connection status change
+  useEffect(() => {
+    tonConnectUI.connector.onStatusChange((status) => {
+      if (status) {
+        console.log('tonconnectui status - ', status);
+        setAddress(toUserFriendlyAddress(tonConnectUI.connector.account!.address));
+        setConnectedAdapter(tonConnectUI);
+        setConnectors(tonConnectUI);
+      }
+    });
+  }, [tonConnectUI, setAddress, setConnectedAdapter, setConnectors]);
+
   /////////////////
   /// Mutations ///
   /////////////////
@@ -54,14 +66,15 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
       }
 
       tonConnectUI.connector.connect(tonWallet);
-      const address = toUserFriendlyAddress(tonConnectUI.connector.account!.address);
+      // const address = toUserFriendlyAddress(tonConnectUI.connector.account?.address as string);
 
-      return { account: address, chainId: undefined, adapter: tonConnectUI };
+      return { account: '', chainId: undefined, adapter: tonConnectUI };
     },
     onSuccess: (data) => {
-      setAddress(toUserFriendlyAddress(data.adapter.account!.address));
-      setConnectedAdapter(data.adapter);
-      setConnectors(data.adapter); // TON TODO: check if this is correct
+      console.log('data - ', data);
+      // setAddress(toUserFriendlyAddress(data.adapter.account?.address as string));
+      // setConnectedAdapter(data.adapter);
+      // setConnectors(data.adapter);
     },
   });
 
@@ -80,5 +93,9 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
     },
   });
 
-  return <TonContext.Provider value={{ store: tonStore, connect, disconnect }}>{children}</TonContext.Provider>;
+  return (
+    <TonConnectUIProvider manifestUrl='http://localhost:3000/manifest.json'>
+      <TonContext.Provider value={{ store: tonStore, connect, disconnect }}>{children}</TonContext.Provider>
+    </TonConnectUIProvider>
+  );
 };

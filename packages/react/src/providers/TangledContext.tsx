@@ -37,6 +37,9 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
   const [connectors] = useState(() => {
     return createChainConnectors(config, chains);
   });
+  const [tonconnectManifestUrl] = useState(() => {
+    return config.tonconnectManifestUrl;
+  });
 
   return (
     <TangledContext.Provider value={{ config, chains, connectors, chainsById }}>
@@ -50,7 +53,8 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
         >
           <SolanaProvider chain={chains.solana[0]}>
             <AlephProvider chain={chains.alephZero[0]}>
-              <TonConnectUIProvider manifestUrl='http://localhost:3000/manifest.json'>
+              {/* getting error if combined with TonProvider */}
+              <TonConnectUIProvider manifestUrl={tonconnectManifestUrl}>
                 <TonProvider chain={chains.ton[0]}>
                   <WalletsProvider>{children}</WalletsProvider>
                 </TonProvider>
