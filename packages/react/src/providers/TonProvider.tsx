@@ -53,6 +53,14 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
         throw new Error('No ton adapter found');
       }
 
+      if (tonConnectUI.connected) {
+        return {
+          account: toUserFriendlyAddress(tonConnectUI.connector.account!.address),
+          chainId: undefined,
+          adapter: tonConnectUI,
+        };
+      }
+
       let tonWallet: WalletInfo | undefined;
       try {
         const wallets = await tonConnectUI.getWallets();
@@ -66,6 +74,7 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
       }
 
       tonConnectUI.connector.connect(tonWallet);
+      // immediately after connect() the connector object is not updated yet
       // const address = toUserFriendlyAddress(tonConnectUI.connector.account?.address as string);
 
       return { account: '', chainId: undefined, adapter: tonConnectUI };
