@@ -52,7 +52,7 @@ export const useConnect = () => {
       } else if (params.chainType === 'alephZero') {
         await connectAlephWallet(walletInstance.name);
       } else if (params.chainType === 'ton') {
-        connectTonWallet(walletInstance.name);
+        connectTonWallet(walletInstance.id);
       } else {
         // @ts-expect-error - connect does not exist on TonConnectUI
         await walletInstance.connector.connect();

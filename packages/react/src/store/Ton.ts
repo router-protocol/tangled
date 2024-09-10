@@ -36,17 +36,15 @@ export const createTonStore = () => {
       setConnectedAdapter: (connectedAdapter) => set(() => ({ connectedAdapter })),
       setAddress: (address) => set(() => ({ address })),
       setConnectors: (connector) => {
-        if (!connector.wallet) return;
-        let slug: string | undefined;
-        connector
-          .getWallets()
-          .then((wallets) => {
-            slug = wallets.find((wallet) => wallet.name === connector.wallet?.device.appName)?.appName;
-          })
-          .catch((error) => {
-            throw new Error(error);
-          });
-        if (!slug) return;
+        if (!connector.wallet) {
+          console.error('no ton connector.wallet found');
+        }
+
+        const slug = connector.connector.wallet?.device.appName.toLowerCase(); // converting to lowercase to match the ton wallet id
+        if (!slug) {
+          console.error('no ton wallet slug found');
+          return;
+        }
         set(() => ({ connectors: { [slug as string]: connector } }));
       },
     })),

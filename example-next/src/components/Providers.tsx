@@ -25,7 +25,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
 
           projectId: '41980758771052df3f01be0a46f172a5',
 
-          tonconnectManifestUrl: 'http://localhost:3000/tonConnectManifest.json',
+          tonconnectManifestUrl: `${window.location.origin}/tonConnectManifest.json`,
         }}
       >
         {children}

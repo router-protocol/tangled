@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { TonConnectUIProvider, toUserFriendlyAddress, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
+import { toUserFriendlyAddress, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
 import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { createTonStore, TonStore } from '../store/Ton.js';
@@ -64,7 +64,7 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
       let tonWallet: WalletInfo | undefined;
       try {
         const wallets = await tonConnectUI.getWallets();
-        tonWallet = wallets.find((wallet) => wallet.name === adapterId);
+        tonWallet = wallets.find((wallet) => wallet.appName === adapterId);
 
         if (!tonWallet) {
           throw new Error(`Wallet with adapterId ${adapterId} not found`);
@@ -102,9 +102,5 @@ export const TonProvider = ({ children }: { children: React.ReactNode; chain: Ch
     },
   });
 
-  return (
-    <TonConnectUIProvider manifestUrl='http://localhost:3000/manifest.json'>
-      <TonContext.Provider value={{ store: tonStore, connect, disconnect }}>{children}</TonContext.Provider>
-    </TonConnectUIProvider>
-  );
+  return <TonContext.Provider value={{ store: tonStore, connect, disconnect }}>{children}</TonContext.Provider>;
 };
