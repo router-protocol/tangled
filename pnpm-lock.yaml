@@ -247,6 +247,9 @@ importers:
       immer:
         specifier: ^10.1.1
         version: 10.1.1
+      polkadot-types:
+        specifier: link:@polkadot/types^12.3.1
+        version: link:@polkadot/types^12.3.1
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -256,9 +259,6 @@ importers:
       tronweb:
         specifier: 6.0.0-beta.4
         version: 6.0.0-beta.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      types^12.3.1:
-        specifier: link:@polkadot/types^12.3.1
-        version: link:@polkadot/types^12.3.1
       viem:
         specifier: ^2.13.8
         version: 2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -3210,7 +3210,6 @@ packages:
 
   '@walletconnect/sign-client@2.11.0':
     resolution: {integrity: sha512-H2ukscibBS+6WrzQWh+WyVBqO5z4F5et12JcwobdwgHnJSlqIoZxqnUYYWNCI5rUR5UKsKWaUyto4AE9N5dw4Q==}
-    deprecated: Reliability and performance greatly improved - please see https://github.com/WalletConnect/walletconnect-monorepo/releases
 
   '@walletconnect/sign-client@2.13.0':
     resolution: {integrity: sha512-En7KSvNUlQFx20IsYGsFgkNJ2lpvDvRsSFOT5PTdGskwCkUfOpB33SQJ6nCrN19gyoKPNvWg80Cy6MJI0TjNYA==}
