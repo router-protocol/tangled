@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.5.0
+
+### Minor Changes
+
+- feat: token balances multicall action
+
 ## 1.4.8
 
 ### Patch Changes
