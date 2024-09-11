@@ -96,6 +96,7 @@ export const sendTransactionToChain = async <C extends ChainType>({
   if (chain.type === 'alephZero') {
     let txnHash: string | undefined = undefined;
     let block: string | undefined = undefined;
+    let extrinsicId: number | undefined = undefined;
 
     const walletConnector = config.connector as WalletInstance<'alephZero'>;
 
@@ -111,6 +112,7 @@ export const sendTransactionToChain = async <C extends ChainType>({
           if (method === 'ExtrinsicSuccess' && status.type === 'InBlock') {
             txnHash = txHash.toString();
             block = status.asFinalized.toHex();
+            extrinsicId = txIndex;
           } else if (method === 'ExtrinsicFailed') {
             throw new Error(`Transaction failed: ${method}`);
           }
@@ -125,6 +127,7 @@ export const sendTransactionToChain = async <C extends ChainType>({
     return {
       txHash: txnHash,
       block: block,
+      txIndex: extrinsicId,
     };
   }
 
