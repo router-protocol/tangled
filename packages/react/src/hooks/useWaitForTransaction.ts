@@ -8,7 +8,7 @@ export type UseWaitForTransactionParams = {
   /** Transaction hash */
   txHash: string | undefined;
   /** Chain ID of transaction */
-  chainId: ChainId;
+  chainId: ChainId | undefined;
   /** Transaction overrides {@link WatchTransactionOverrides} */
   overrides?: WatchTransactionOverrides;
 };

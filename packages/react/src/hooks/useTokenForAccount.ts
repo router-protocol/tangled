@@ -8,7 +8,7 @@ import { useToken } from './useToken.js';
 
 export type UseTokenForAccountParams = {
   /** Chain ID of token */
-  chainId: ChainId;
+  chainId: ChainId | undefined;
   /** Token Address */
   token: string | undefined;
   /** Account to fetch balance and allowance for */
