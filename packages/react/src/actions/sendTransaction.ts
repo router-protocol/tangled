@@ -3,7 +3,6 @@ import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
-import { useState } from 'react';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 
@@ -95,8 +94,8 @@ export const sendTransactionToChain = async <C extends ChainType>({
   }
 
   if (chain.type === 'alephZero') {
-    const [txHash, setTxHash] = useState('');
-    const [blockId, setBlockId] = useState('');
+    let txnHash: string | undefined = undefined;
+    let block: string | undefined = undefined;
 
     const walletConnector = config.connector as WalletInstance<'alephZero'>;
 
@@ -106,14 +105,12 @@ export const sendTransactionToChain = async <C extends ChainType>({
       from,
       { signer: walletConnector.signer as Signer },
       ({ events, status, txHash, txIndex }) => {
-        console.log('event event - ', events, status);
-        // @ts-ignore
         events.forEach(({ event }) => {
           const { method } = event;
 
           if (method === 'ExtrinsicSuccess' && status.type === 'InBlock') {
-            setTxHash(txHash.toString());
-            setBlockId(status.asFinalized.toHex());
+            txnHash = txHash.toString();
+            block = status.asFinalized.toHex();
           } else if (method === 'ExtrinsicFailed') {
             throw new Error(`Transaction failed: ${method}`);
           }
@@ -121,9 +118,13 @@ export const sendTransactionToChain = async <C extends ChainType>({
       },
     );
 
+    if (txnHash === undefined || block === undefined) {
+      throw 'Trasaction failed';
+    }
+
     return {
-      txHash: txHash,
-      block: blockId,
+      txHash: txnHash,
+      block: block,
     };
   }
 
