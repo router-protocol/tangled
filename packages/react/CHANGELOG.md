@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.5.1
+
+### Patch Changes
+
+- export actions
+
 ## 1.5.0
 
 ### Minor Changes

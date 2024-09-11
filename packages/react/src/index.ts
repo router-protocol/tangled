@@ -1,3 +1,5 @@
+// actions
+export * from './actions/index.js';
 // consts
 export * from './chains/index.js';
 export * from './constants/index.js';
