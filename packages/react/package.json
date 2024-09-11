@@ -21,7 +21,7 @@
     "watch": "tsc -w -p ./tsconfig.json",
     "build": "pnpm clean && pnpm build:esm && pnpm build:postcompile && pnpm build:clean",
     "build:esm": "tsc --build --verbose",
-    "build:postcompile": "node ../../scripts/postcompile.js && cpy 'src/**/*' dist",
+    "build:postcompile": "node ../../scripts/postcompile.js",
     "build:clean": "rm -rf tsconfig.tsbuildinfo ./dist/tsconfig.tsbuildinfo ./dist/tsconfig.cjs.tsbuildinfo",
     "clean": "pnpm build:clean && rm -rf dist",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
