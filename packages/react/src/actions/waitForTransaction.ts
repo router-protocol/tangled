@@ -21,8 +21,19 @@ export type WatchTransactionOverrides<C extends ChainType = ChainType> = Default
         }
       : any);
 
-export type WatchTransactionParams<C extends ChainType = ChainType> = {
+export type DefaultTransactionParams = {
   txHash: string;
+};
+
+export type TransactionParams<C extends ChainType = ChainType> = C extends 'alephZero'
+  ? {
+      blockHash: string;
+      extrinsicIndex: number;
+    }
+  : DefaultTransactionParams;
+
+export type WatchTransactionParams<C extends ChainType = ChainType> = {
+  transactionParams: TransactionParams<C>;
   chain: ChainData<C>;
   config: ConnectionOrConfig;
   overrides: WatchTransactionOverrides<C> | undefined;
@@ -32,7 +43,7 @@ const DEFAULT_POLLING_INTERVAL = 2500; // 2.5 seconds
 
 /**
  * Watch transaction
- * @param txHash - Transaction hash
+ * @param transactionParams - Transaction Parameters
  * @param chain - {@link ChainData}
  * @param config {@link ConnectionOrConfig}
  * @returns Transaction Receipt {@link TransactionReceipt}
@@ -41,9 +52,10 @@ export const waitForTransaction = async <C extends ChainType>({
   chain,
   config,
   overrides,
-  txHash,
+  transactionParams,
 }: WatchTransactionParams<C>): Promise<TransactionReceipt<C>> => {
   if (chain.type === 'evm') {
+    const { txHash } = transactionParams as TransactionParams<'evm'>;
     const evmOverrides = (overrides || {}) as WatchTransactionOverrides<'evm'>;
     const receipt = await waitForTransactionReceipt(config.wagmiConfig, {
       hash: txHash as `0x${string}`,
@@ -57,6 +69,7 @@ export const waitForTransaction = async <C extends ChainType>({
   if (chain.type === 'tron') {
     const txInfo = await pollCallback(
       async () => {
+        const { txHash } = transactionParams as TransactionParams<'tron'>;
         const tx = await config.tronWeb.trx.getConfirmedTransaction(txHash);
 
         // If transaction is not found, return undefined. This will trigger the next poll
@@ -74,6 +87,7 @@ export const waitForTransaction = async <C extends ChainType>({
   }
 
   if (chain.type === 'solana') {
+    const { txHash } = transactionParams as TransactionParams<'solana'>;
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'solana'>;
 
     const receipt = await pollCallback(
