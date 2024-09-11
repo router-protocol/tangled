@@ -44,6 +44,9 @@ export type ChainDataGeneric = {
       apiUrl?: string;
     };
   };
+  contracts?: {
+    [key: string]: string;
+  };
 };
 
 export type ChainData<T extends ChainType = ChainType> = T extends 'evm'
