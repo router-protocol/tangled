@@ -66,7 +66,7 @@ export default function App({ Component, pageProps }) {
 | EVM       | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
 | Solana    | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
 | Tron      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| AlephZero | :white_check_mark:     | :white_check_mark: | :x:                    | :x:                    | :x:                    |
+| AlephZero | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :small_orange_diamond: |
 | Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
 | Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
