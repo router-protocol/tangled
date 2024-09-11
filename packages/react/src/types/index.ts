@@ -109,4 +109,38 @@ export type TransactionReceipt<C extends ChainType = ChainType> = C extends 'evm
   ? EVMTxReceipt
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo
-    : unknown;
+    : C extends 'alephZero'
+      ? AlephTransactionData
+      : unknown;
+
+// custom types
+
+type ExtrinsicArg = {
+  toHuman: () => string;
+};
+
+type Extrinsic = {
+  hash: {
+    toHuman: () => string;
+  };
+  method: {
+    toHuman: () => string;
+  };
+  args: ExtrinsicArg[];
+};
+
+type ExtrinsicEvent = {
+  phase: { applyExtrinsic: number };
+  event: { index: string; data: any[] };
+  topics: string[];
+};
+
+type AlephTransactionData = {
+  blockHash: string;
+  extrinsicIndex: number;
+  extrinsic: Extrinsic;
+  extrinsicHash: string;
+  method: string;
+  args: string[];
+  events: ExtrinsicEvent[];
+};
