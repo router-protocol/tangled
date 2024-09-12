@@ -7,7 +7,7 @@ import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 
 export type UseTransactionReceiptParams = {
   /** Transaction hash {@link TransactionParams} */
-  transactionParams: TransactionParams;
+  transactionParams: TransactionParams | undefined;
   /** Chain ID of transaction */
   chainId: ChainId;
   /** Transaction overrides {@link GetTransactionReceiptOverrides} */
@@ -35,7 +35,7 @@ export const useTransactionReceipt = ({ transactionParams, chainId, overrides }:
         throw new Error('Chain is not supported');
       }
       if (!transactionParams) {
-        throw new Error('Transaction hash is required');
+        throw new Error('Transaction Params are required');
       }
 
       return await getTransactionReceipt({
