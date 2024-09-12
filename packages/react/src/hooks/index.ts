@@ -4,6 +4,7 @@ export * from './useChain.js';
 export * from './useChains.js';
 export * from './useConnect.js';
 export * from './useConnectedWallets.js';
+export * from './useConnectionOrConfig.js';
 export * from './useConnections.js';
 export * from './useCurrentAccount.js';
 export * from './useCurrentWallet.js';
