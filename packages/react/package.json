@@ -49,7 +49,6 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tronweb": "6.0.0-beta.4",
-    "polkadot-types": "link:@polkadot/types^12.3.1",
     "viem": "^2.13.8",
     "wagmi": "^2.9.11",
     "zustand": "^4.5.2"

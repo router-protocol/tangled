@@ -247,9 +247,6 @@ importers:
       immer:
         specifier: ^10.1.1
         version: 10.1.1
-      polkadot-types:
-        specifier: link:@polkadot/types^12.3.1
-        version: link:@polkadot/types^12.3.1
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -9934,12 +9931,6 @@ snapshots:
       '@polkadot/util-crypto': 12.6.2(@polkadot/util@12.6.2)
       tslib: 2.6.3
 
-  '@polkadot/keyring@12.6.2(@polkadot/util-crypto@12.6.2(@polkadot/util@13.0.2))(@polkadot/util@12.6.2)':
-    dependencies:
-      '@polkadot/util': 12.6.2
-      '@polkadot/util-crypto': 12.6.2(@polkadot/util@13.0.2)
-      tslib: 2.6.3
-
   '@polkadot/keyring@13.0.2(@polkadot/util-crypto@13.0.2(@polkadot/util@13.0.2))(@polkadot/util@13.0.2)':
     dependencies:
       '@polkadot/util': 13.0.2
@@ -10031,7 +10022,7 @@ snapshots:
 
   '@polkadot/rpc-provider@10.13.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
-      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2(@polkadot/util@13.0.2))(@polkadot/util@12.6.2)
+      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2(@polkadot/util@12.6.2))(@polkadot/util@12.6.2)
       '@polkadot/types': 10.13.1
       '@polkadot/types-support': 10.13.1
       '@polkadot/util': 12.6.2
@@ -10174,7 +10165,7 @@ snapshots:
 
   '@polkadot/types@10.13.1':
     dependencies:
-      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2(@polkadot/util@13.0.2))(@polkadot/util@12.6.2)
+      '@polkadot/keyring': 12.6.2(@polkadot/util-crypto@12.6.2(@polkadot/util@12.6.2))(@polkadot/util@12.6.2)
       '@polkadot/types-augment': 10.13.1
       '@polkadot/types-codec': 10.13.1
       '@polkadot/types-create': 10.13.1
