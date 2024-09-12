@@ -2,6 +2,7 @@ import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 
+import { Cell } from '@ton/core';
 import { CHAIN } from '@tonconnect/ui-react';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
@@ -131,7 +132,11 @@ export const sendTransactionToChain = async <C extends ChainType>({
     const walletConnector = config.connector as WalletInstance<'ton'>;
     const tx = await walletConnector.sendTransaction(transaction);
 
-    return tx.boc; // TON TODO: prepare txhash
+    const cell = Cell.fromBase64(tx.boc);
+    const buffer = cell.hash();
+    const hashHex = buffer.toString('hex');
+
+    return hashHex;
   }
 
   throw new Error('Chain not supported');
