@@ -6,7 +6,7 @@ import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 
 export type UseTransactionReceiptParams = {
-  /** Transaction hash {@link TransactionParams} */
+  /** Transaction Params {@link TransactionParams} */
   transactionParams: TransactionParams | undefined;
   /** Chain ID of transaction */
   chainId: ChainId;
