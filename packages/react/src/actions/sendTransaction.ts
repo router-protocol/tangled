@@ -2,6 +2,7 @@ import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 
+import { CHAIN } from '@tonconnect/ui-react';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 
@@ -33,7 +34,16 @@ type TransactionArgs<C extends ChainType> = C extends 'evm'
         ? {
             z: string;
           }
-        : never;
+        : C extends 'ton'
+          ? {
+              tonArgs: {
+                validUntil: number; // transaction deadline in unix epoch seconds.
+                network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
+                payload?: string;
+                stateInit?: string;
+              };
+            }
+          : never;
 
 /**
  * Send transaction. Does not wait for the transaction to be mined.
@@ -94,6 +104,34 @@ export const sendTransactionToChain = async <C extends ChainType>({
 
   if (chain.type === 'alephZero') {
     // send transaction to Aleph chain
+  }
+
+  if (chain.type === 'ton') {
+    const { tonArgs } = args as TransactionArgs<'ton'>;
+    const messages: Array<{
+      address: string;
+      amount: string;
+      payload?: string;
+      stateInit?: string;
+    }> = [
+      {
+        address: to,
+        amount: value.toString(),
+        payload: tonArgs.payload,
+        stateInit: tonArgs.stateInit,
+      },
+    ];
+    const transaction = {
+      from,
+      messages,
+      network: tonArgs.network,
+      validUntil: tonArgs.validUntil,
+    };
+
+    const walletConnector = config.connector as WalletInstance<'ton'>;
+    const tx = await walletConnector.sendTransaction(transaction);
+
+    return tx.boc; // TON TODO: prepare txhash
   }
 
   throw new Error('Chain not supported');
