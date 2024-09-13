@@ -22,8 +22,8 @@ export const TonContext = createContext<TonContextValues>({
  * @param adapters - Supported adapters for the Ton network.
  * @returns The Ton provider context with the connect and disconnect functions.
  */
-export const TonProvider = ({ children }: { children: React.ReactNode; chain: ChainData<'ton'> }) => {
-  const tonStore = useRef(createTonStore()).current;
+export const TonProvider = ({ children, chain }: { children: React.ReactNode; chain: ChainData<'ton'> }) => {
+  const tonStore = useRef(createTonStore({ chain: chain })).current;
   const connectedAdapter = useStore(tonStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(tonStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(tonStore, (state) => state.setConnectors);
