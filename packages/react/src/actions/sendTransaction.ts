@@ -2,6 +2,7 @@ import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 
+import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 
@@ -31,7 +32,7 @@ type TransactionArgs<C extends ChainType> = C extends 'evm'
         }
       : C extends 'alephZero'
         ? {
-            z: string;
+            submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
           }
         : never;
 
@@ -93,7 +94,41 @@ export const sendTransactionToChain = async <C extends ChainType>({
   }
 
   if (chain.type === 'alephZero') {
+    let txnHash: string | undefined = undefined;
+    let block: string | undefined = undefined;
+    let extrinsicId: number | undefined = undefined;
+
+    const walletConnector = config.connector as WalletInstance<'alephZero'>;
+
     // send transaction to Aleph chain
+    const { submittableExtrinsic } = args as TransactionArgs<'alephZero'>;
+    await submittableExtrinsic.signAndSend(
+      from,
+      { signer: walletConnector.signer as Signer },
+      ({ events, status, txHash, txIndex }) => {
+        events.forEach(({ event }) => {
+          const { method } = event;
+
+          if (method === 'ExtrinsicSuccess' && status.type === 'InBlock') {
+            txnHash = txHash.toString();
+            block = status.asFinalized.toHex();
+            extrinsicId = txIndex;
+          } else if (method === 'ExtrinsicFailed') {
+            throw new Error(`Transaction failed: ${method}`);
+          }
+        });
+      },
+    );
+
+    if (txnHash === undefined || block === undefined) {
+      throw 'Trasaction failed';
+    }
+
+    return {
+      txHash: txnHash,
+      block: block,
+      txIndex: extrinsicId,
+    };
   }
 
   throw new Error('Chain not supported');
