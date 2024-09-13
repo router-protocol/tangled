@@ -20,7 +20,12 @@ export type WatchTransactionOverrides<C extends ChainType = ChainType> = Default
       ? {
           maxSupportedTransactionVersion: number;
         }
-      : any);
+      : C extends 'ton'
+        ? {
+            accountAddress: string;
+            lt: string;
+          }
+        : any);
 
 export type WatchTransactionParams<C extends ChainType = ChainType> = {
   txHash: string;
@@ -97,9 +102,11 @@ export const waitForTransaction = async <C extends ChainType>({
   }
 
   if (chain.type === 'ton') {
+    const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;
+
     const receipt = await pollCallback(
       async () => {
-        return await config.tonClient.getTransaction(Address.parse(''), '', txHash);
+        return await config.tonClient.getTransaction(Address.parse(_overrides.accountAddress), _overrides.lt, txHash);
       },
       {
         interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
