@@ -135,11 +135,18 @@ const tokens: TokenMetadata[] = [
     chainId: 'alephZero',
   },
   {
-    address: '5CMdxZDuprVZKnw6tEWjhEtK17Z52PUJo2dj1JLdyKeuUcfH',
+    address: ETH_ADDRESS,
+    decimals: 9,
+    name: 'Toncoin',
+    symbol: 'TON',
+    chainId: '1100',
+  },
+  {
+    address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
     decimals: 6,
-    name: 'USDT',
+    name: 'Tether USD',
     symbol: 'USDT',
-    chainId: 'alephZero',
+    chainId: '1100',
   },
 ];
 

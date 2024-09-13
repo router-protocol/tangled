@@ -9,6 +9,7 @@ import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
+import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
 
 /**
  * Get token metadata
@@ -77,6 +78,17 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
     const res = await getAlephZeroTokenMetadata({ api: config.alephZeroApi, token });
+    return {
+      ...res,
+      chainId: chain.id,
+    };
+  }
+
+  if (chain.type === 'ton') {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
+    const res = await getTonTokenMetadata({ token, chain });
     return {
       ...res,
       chainId: chain.id,
@@ -165,6 +177,16 @@ export const getTokenBalanceAndAllowance = async ({
       account,
       token,
       spender,
+    });
+  }
+
+  if (chain.type === 'ton') {
+    return getTonTokenBalanceAndAllowance({
+      account,
+      token,
+      chain,
+      spender,
+      config,
     });
   }
 
