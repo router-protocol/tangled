@@ -1,3 +1,4 @@
+import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
@@ -86,6 +87,23 @@ export const waitForTransaction = async <C extends ChainType>({
       {
         interval: _overrides?.interval || DEFAULT_POLLING_INTERVAL,
         timeout: _overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+    return receipt as TransactionReceipt<C>;
+  }
+
+  if (chain.type === 'ton') {
+    const receipt = await pollCallback(
+      async () => {
+        return await config.tonClient.getTransaction(Address.parse(''), '', txHash);
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
       },
     );
 

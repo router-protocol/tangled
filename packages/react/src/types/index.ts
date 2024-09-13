@@ -1,5 +1,14 @@
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
+import {
+  AccountStatus,
+  CurrencyCollection,
+  Dictionary,
+  HashUpdate,
+  Message,
+  TonClient,
+  TransactionDescription,
+} from '@ton/ton';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
 import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
@@ -101,6 +110,7 @@ export type ConnectionOrConfig = {
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
   alephZeroApi: ApiPromise;
+  tonClient: TonClient;
 };
 
 export type GetTokenMetadataParams = {
@@ -113,4 +123,23 @@ export type TransactionReceipt<C extends ChainType = ChainType> = C extends 'evm
   ? EVMTxReceipt
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo
-    : unknown;
+    : C extends 'ton'
+      ? TonTransactionInfo
+      : unknown;
+
+// ton custom types
+type TonTransactionInfo = {
+  address: bigint;
+  description: TransactionDescription;
+  endStatus: AccountStatus;
+  inMessage: undefined | Message;
+  lt: bigint;
+  now: number;
+  oldStatus: AccountStatus;
+  outMessages: Dictionary<number, Message>;
+  outMessagesCount: number;
+  prevTransactionHash: bigint;
+  prevTransactionLt: bigint;
+  stateUpdate: HashUpdate;
+  totalFees: CurrencyCollection;
+};
