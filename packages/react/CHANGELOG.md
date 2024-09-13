@@ -1,5 +1,55 @@
 # @tangled3/react
 
+## 1.5.2
+
+### Patch Changes
+
+- export useConnectionOrConfig hook
+
+## 1.5.1
+
+### Patch Changes
+
+- export actions
+
+## 1.5.0
+
+### Minor Changes
+
+- feat: token balances multicall action
+
+## 1.4.8
+
+### Patch Changes
+
+- fix get token balance return
+
+## 1.4.7
+
+### Patch Changes
+
+- fix solana autoconnect conditions
+- Updated dependencies
+  - @tangled3/solana-react@1.1.2
+
+## 1.4.6
+
+### Patch Changes
+
+- fix: fresh build
+
+## 1.4.5
+
+### Patch Changes
+
+- fix: added async connect
+
+## 1.4.4
+
+### Patch Changes
+
+- fix: hide coinbase injected connector
+
 ## 1.4.3
 
 ### Patch Changes

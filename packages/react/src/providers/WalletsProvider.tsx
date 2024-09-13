@@ -1,6 +1,6 @@
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
-import { useConnections } from 'wagmi';
+import { useConnections as useEVMConnections } from 'wagmi';
 import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
@@ -11,7 +11,7 @@ import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const { chains } = useTangledConfig();
-  const evmConnections = useConnections();
+  const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
   const alephConnectors = useAlephStore((state) => state.connectors);

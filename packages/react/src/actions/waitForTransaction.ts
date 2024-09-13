@@ -27,8 +27,19 @@ export type WatchTransactionOverrides<C extends ChainType = ChainType> = Default
           }
         : any);
 
-export type WatchTransactionParams<C extends ChainType = ChainType> = {
+export type DefaultTransactionParams = {
   txHash: string;
+};
+
+export type TransactionParams<C extends ChainType = ChainType> = C extends 'alephZero'
+  ? {
+      blockHash: string;
+      extrinsicIndex: number;
+    }
+  : DefaultTransactionParams;
+
+export type WatchTransactionParams<C extends ChainType = ChainType> = {
+  transactionParams: TransactionParams<C>;
   chain: ChainData<C>;
   config: ConnectionOrConfig;
   overrides: WatchTransactionOverrides<C> | undefined;
@@ -38,7 +49,7 @@ const DEFAULT_POLLING_INTERVAL = 2500; // 2.5 seconds
 
 /**
  * Watch transaction
- * @param txHash - Transaction hash
+ * @param transactionParams - Transaction Parameters
  * @param chain - {@link ChainData}
  * @param config {@link ConnectionOrConfig}
  * @returns Transaction Receipt {@link TransactionReceipt}
@@ -47,9 +58,10 @@ export const waitForTransaction = async <C extends ChainType>({
   chain,
   config,
   overrides,
-  txHash,
+  transactionParams,
 }: WatchTransactionParams<C>): Promise<TransactionReceipt<C>> => {
   if (chain.type === 'evm') {
+    const { txHash } = transactionParams as TransactionParams<'evm'>;
     const evmOverrides = (overrides || {}) as WatchTransactionOverrides<'evm'>;
     const receipt = await waitForTransactionReceipt(config.wagmiConfig, {
       hash: txHash as `0x${string}`,
@@ -63,6 +75,7 @@ export const waitForTransaction = async <C extends ChainType>({
   if (chain.type === 'tron') {
     const txInfo = await pollCallback(
       async () => {
+        const { txHash } = transactionParams as TransactionParams<'tron'>;
         const tx = await config.tronWeb.trx.getConfirmedTransaction(txHash);
 
         // If transaction is not found, return undefined. This will trigger the next poll
@@ -80,6 +93,7 @@ export const waitForTransaction = async <C extends ChainType>({
   }
 
   if (chain.type === 'solana') {
+    const { txHash } = transactionParams as TransactionParams<'solana'>;
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'solana'>;
 
     const receipt = await pollCallback(
@@ -98,6 +112,54 @@ export const waitForTransaction = async <C extends ChainType>({
     if (!receipt) {
       throw new Error('Transaction not found');
     }
+    return receipt as TransactionReceipt<C>;
+  }
+
+  if (chain.type === 'alephZero') {
+    const { blockHash, extrinsicIndex } = transactionParams as TransactionParams<'alephZero'>;
+    const alephZero = config.alephZeroApi;
+
+    const receipt = await pollCallback(
+      async () => {
+        const signedBlock = await alephZero.rpc.chain.getBlock(blockHash);
+
+        // Get the specific extrinsic
+        const extrinsic = signedBlock.block.extrinsics[extrinsicIndex];
+
+        if (!extrinsic) {
+          throw new Error('Extrinsic not found');
+        }
+
+        // Get the events for this block
+        const apiAt = await alephZero.at(blockHash);
+        const allRecords = (await apiAt.query.system.events()).toPrimitive() as any[];
+
+        const extrinsicEvents = allRecords.filter(
+          (event) => event.phase.applyExtrinsic && event.phase.applyExtrinsic === extrinsicIndex,
+        );
+
+        const transactionData = {
+          blockHash,
+          extrinsicIndex,
+          extrinsic: extrinsic,
+          extrinsicHash: extrinsic.hash.toHuman(),
+          method: extrinsic.method.toHuman(),
+          args: extrinsic.args.map((arg) => arg.toHuman()),
+          events: extrinsicEvents,
+        };
+
+        return transactionData;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+
     return receipt as TransactionReceipt<C>;
   }
 

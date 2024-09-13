@@ -6,7 +6,7 @@ import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 
 export type UseTokenParams = {
   /** Chain ID of token */
-  chainId: ChainId;
+  chainId: ChainId | undefined;
   /** Token Address */
   token: string | undefined;
 };

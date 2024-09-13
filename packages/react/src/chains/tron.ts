@@ -11,6 +11,9 @@ export const tronMainnet: ChainData = {
     symbol: 'TRX',
     decimals: 6,
   },
+  contracts: {
+    multicall: 'TGXuuKAb4bnrn137u39EKbYzKNXvdCes98',
+  },
   rpcUrls: {
     default: {
       http: [''],

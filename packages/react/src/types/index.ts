@@ -6,6 +6,7 @@ import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
+import { AlephTransactionData } from './aleph.js';
 import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
 
@@ -46,6 +47,9 @@ export type ChainDataGeneric = {
       url: string;
       apiUrl?: string;
     };
+  };
+  contracts?: {
+    [key: string]: string;
   };
 };
 
@@ -116,6 +120,8 @@ export type TransactionReceipt<C extends ChainType = ChainType> = C extends 'evm
   ? EVMTxReceipt
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo
-    : C extends 'ton'
-      ? TonTransactionInfo
-      : unknown;
+    : C extends 'alephZero'
+      ? AlephTransactionData
+      : C extends 'ton'
+        ? TonTransactionInfo
+        : unknown;
