@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useWallets } from './useWallets.js';
@@ -15,12 +14,8 @@ export const useWallet = <C extends ChainType = ChainType>(
 ): Wallet<C> | undefined => {
   const wallets = useWallets();
 
-  const wallet = useMemo(() => {
-    if (!chainType || !walletId || !wallets[chainType]) {
-      return undefined;
-    }
-    return wallets[chainType].find((wallet) => wallet.id === walletId);
-  }, [wallets, chainType, walletId]);
-
-  return wallet;
+  if (!chainType || !walletId || !wallets[chainType]) {
+    return undefined;
+  }
+  return wallets[chainType].find((wallet) => wallet.id === walletId);
 };

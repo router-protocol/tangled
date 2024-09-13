@@ -1,5 +1,11 @@
 # @tangled3/solana-react
 
+## 1.1.2
+
+### Patch Changes
+
+- fix solana autoconnect conditions
+
 ## 1.1.1
 
 ### Patch Changes

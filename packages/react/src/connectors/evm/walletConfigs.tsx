@@ -13,6 +13,7 @@ export type WalletConfigProps = {
   url?: string;
   icon?: string;
   isInstalled: boolean | (() => boolean) | undefined;
+  hide?: boolean;
   // Create URI for QR code, where uri is encoded data from WalletConnect
   getWalletConnectDeeplink?: (uri: string) => string;
 };
@@ -29,7 +30,17 @@ export const walletConfigs: {
     isInstalled: () =>
       isMobile() ? hasInjectedProvider({ flag: 'isTrust' }) : hasInjectedProvider({ flag: 'isTrustWallet' }),
   },
-  'coinbaseWallet, com.coinbase.wallet, coinbaseWalletSDK': {
+  'coinbaseWallet, com.coinbase.wallet': {
+    name: 'Coinbase Injected Wallet',
+    url: '',
+    getWalletConnectDeeplink: (uri: string) => {
+      return `${uri}`;
+    },
+    isInstalled: false,
+    icon: '',
+    hide: true,
+  },
+  coinbaseWalletSDK: {
     name: 'Coinbase Wallet',
     url: 'https://www.coinbase.com/wallet/getting-started-extension',
     getWalletConnectDeeplink: (uri: string) => {

@@ -91,6 +91,7 @@ export const useConnect = () => {
 
   return {
     connect: mutation.mutate,
+    connectAsync: mutation.mutateAsync,
     isLoading: mutation.isPending,
     error: mutation.error,
   };

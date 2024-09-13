@@ -34,7 +34,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
-    const prepareWallets = (connector: Connector) => {
+    const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
       const walletId = Object.keys(walletConfigs).find(
         (id) =>
           id // where id is comma seperated list
@@ -54,6 +54,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
       if (walletId) {
         const wallet = walletConfigs[walletId];
+        if (wallet.hide) return undefined;
 
         return {
           ...c,
@@ -65,7 +66,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       return c;
     };
 
-    const wallets: Wallet<'evm'>[] = evmConnectors.map((c) => prepareWallets(c));
+    const wallets = evmConnectors.map((c) => prepareWallets(c)).filter((w) => w !== undefined) as Wallet<'evm'>[];
 
     if (options?.onlyInstalled) {
       return wallets.filter((wallet) => wallet.installed);

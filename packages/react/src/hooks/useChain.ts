@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { useContext } from 'react';
 import { TangledContext } from '../providers/TangledContext.js';
 import { ChainData, ChainId, ChainType } from '../types/index.js';
 
@@ -10,10 +10,8 @@ import { ChainData, ChainId, ChainType } from '../types/index.js';
 export const useChain = <T extends ChainType = ChainType>(chainId: ChainId | undefined): ChainData<T> | undefined => {
   const { chainsById } = useContext(TangledContext);
 
-  return useMemo(() => {
-    if (chainId && chainsById[chainId]) {
-      return chainsById[chainId] as ChainData<T>;
-    }
-    return undefined;
-  }, [chainsById, chainId]);
+  if (chainId && chainsById[chainId]) {
+    return chainsById[chainId] as ChainData<T>;
+  }
+  return undefined;
 };

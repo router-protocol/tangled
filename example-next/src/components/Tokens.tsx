@@ -134,6 +134,13 @@ const tokens: TokenMetadata[] = [
     symbol: 'USDC',
     chainId: 'alephZero',
   },
+  {
+    address: '5CMdxZDuprVZKnw6tEWjhEtK17Z52PUJo2dj1JLdyKeuUcfH',
+    decimals: 6,
+    name: 'USDT',
+    symbol: 'USDT',
+    chainId: 'alephZero',
+  },
 ];
 
 export default Tokens;

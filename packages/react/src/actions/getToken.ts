@@ -93,6 +93,10 @@ export type GetTokenBalanceAndAllowanceParams = {
   chain: ChainData;
   config: ConnectionOrConfig;
 };
+export type GetTokenBalanceAndAllowanceResponse = {
+  balance: bigint;
+  allowance: bigint;
+};
 /**
  * Get token balance and allowance for a given account and spender
  * @param token - Token address
@@ -108,15 +112,15 @@ export const getTokenBalanceAndAllowance = async ({
   spender,
   chain,
   config,
-}: GetTokenBalanceAndAllowanceParams) => {
+}: GetTokenBalanceAndAllowanceParams): Promise<GetTokenBalanceAndAllowanceResponse> => {
   // evm chain
   if (chain?.type === 'evm') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return {
-        balance: getBalance(config.wagmiConfig, {
+        balance: await getBalance(config.wagmiConfig, {
           address: account as EVMAddress,
           chainId: Number(chain.id),
-        }),
+        }).then((res) => BigInt(res.value)),
         allowance: BigInt(0),
       };
     }
