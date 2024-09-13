@@ -165,6 +165,7 @@ export const waitForTransaction = async <C extends ChainType>({
 
   if (chain.type === 'ton') {
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;
+    const { txHash } = transactionParams as TransactionParams<'ton'>;
 
     const receipt = await pollCallback(
       async () => {
