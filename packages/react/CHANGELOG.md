@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.5.3
+
+### Patch Changes
+
+- fix send transaction mutation arguments
+
 ## 1.5.2
 
 ### Patch Changes

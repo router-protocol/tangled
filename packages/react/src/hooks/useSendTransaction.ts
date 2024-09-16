@@ -8,7 +8,7 @@ import { useCurrentWallet } from './useCurrentWallet.js';
 import { useNetwork } from './useNetwork.js';
 import { useWallet } from './useWallet.js';
 
-type UseSendTransactionParams = Omit<SendTransactionParams, 'chain'> & {
+type UseSendTransactionParams = Omit<SendTransactionParams, 'chain' | 'config'> & {
   chainId: ChainId;
 };
 
