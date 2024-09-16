@@ -93,5 +93,18 @@ export const getTransactionReceipt = async <C extends ChainType>({
     return transactionData as TransactionReceipt<C>;
   }
 
+  if (chain.type === 'sui') {
+    const { txHash } = transactionParams as TransactionParams<'sui'>;
+
+    return (await config.suiClient.waitForTransaction({
+      digest: txHash,
+      options: {
+        showEffects: true,
+        showEvents: true,
+        showBalanceChanges: true,
+      },
+    })) as TransactionReceipt<C>;
+  }
+
   throw new Error('Chain type not supported');
 };

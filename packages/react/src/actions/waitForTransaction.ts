@@ -157,5 +157,31 @@ export const waitForTransaction = async <C extends ChainType>({
     return receipt as TransactionReceipt<C>;
   }
 
+  if (chain.type === 'sui') {
+    const { txHash } = transactionParams as TransactionParams<'sui'>;
+
+    const receipt = await pollCallback(
+      async () => {
+        return await config.suiClient.waitForTransaction({
+          digest: txHash,
+          options: {
+            showEffects: true,
+            showEvents: true,
+            showBalanceChanges: true,
+          },
+        });
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+    return receipt as TransactionReceipt<C>;
+  }
+
   throw new Error('Chain not supported');
 };

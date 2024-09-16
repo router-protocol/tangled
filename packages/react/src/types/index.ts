@@ -1,3 +1,4 @@
+import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
@@ -101,6 +102,7 @@ export type ConnectionOrConfig = {
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
   alephZeroApi: ApiPromise;
+  suiClient: SuiClient;
 };
 
 export type GetTokenMetadataParams = {
@@ -115,4 +117,6 @@ export type TransactionReceipt<C extends ChainType = ChainType> = C extends 'evm
     ? TronWebTypes.TransactionInfo
     : C extends 'alephZero'
       ? AlephTransactionData
-      : unknown;
+      : C extends 'sui'
+        ? SuiTransactionBlockResponse
+        : unknown;
