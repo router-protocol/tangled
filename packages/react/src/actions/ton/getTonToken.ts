@@ -23,8 +23,6 @@ export const getTonTokenMetadata = async ({ token, chain }: { token: string; cha
 export const getTonTokenBalanceAndAllowance = async ({
   account,
   token,
-  chain,
-  spender,
   config,
 }: {
   account: string;
@@ -34,7 +32,7 @@ export const getTonTokenBalanceAndAllowance = async ({
   config: ConnectionOrConfig;
 }) => {
   let balance = 0n;
-  let allowance = 0n;
+  const allowance = 0n;
 
   try {
     const jettonMaster = new JettonMaster(Address.parse(token));
@@ -45,11 +43,6 @@ export const getTonTokenBalanceAndAllowance = async ({
     const walletAddressContractCallResult = await config.tonClient.runMethod(walletAddress, 'get_wallet_data');
     const accountBalance = walletAddressContractCallResult.stack.readNumber();
     balance = BigInt(accountBalance);
-
-    if (spender) {
-      // TON TODO: fetch allowance
-      console.log('spender here', spender);
-    }
   } catch (error) {
     console.error('error - ', error);
   }
