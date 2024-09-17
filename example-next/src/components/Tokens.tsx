@@ -139,14 +139,14 @@ const tokens: TokenMetadata[] = [
     decimals: 9,
     name: 'Toncoin',
     symbol: 'TON',
-    chainId: '1100',
+    chainId: '-239',
   },
   {
     address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
     decimals: 6,
     name: 'Tether USD',
     symbol: 'USDT',
-    chainId: '1100',
+    chainId: '-239',
   },
 ];
 
