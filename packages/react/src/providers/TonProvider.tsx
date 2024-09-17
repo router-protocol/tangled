@@ -31,18 +31,6 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
 
   const [tonConnectUI] = useTonConnectUI();
 
-  // subscribing to the wallet connection status change
-  useEffect(() => {
-    tonConnectUI.connector.onStatusChange((status) => {
-      if (status) {
-        console.log('tonconnectui status - ', status);
-        setAddress(toUserFriendlyAddress(tonConnectUI.connector.account!.address));
-        setConnectedAdapter(tonConnectUI);
-        setConnectors(tonConnectUI);
-      }
-    });
-  }, [tonConnectUI, setAddress, setConnectedAdapter, setConnectors]);
-
   /////////////////
   /// Mutations ///
   /////////////////
@@ -62,28 +50,29 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
       }
 
       let tonWallet: WalletInfo | undefined;
-      try {
-        const wallets = await tonConnectUI.getWallets();
-        tonWallet = wallets.find((wallet) => wallet.appName === adapterId);
 
-        if (!tonWallet) {
-          throw new Error(`Wallet with adapterId ${adapterId} not found`);
+      if (adapterId === 'ton-connect') {
+        await tonConnectUI.openModal();
+      } else {
+        try {
+          const wallets = await tonConnectUI.getWallets();
+          tonWallet = wallets.find((wallet) => wallet.appName === adapterId);
+
+          if (!tonWallet) {
+            throw new Error(`Wallet with adapterId ${adapterId} not found`);
+          }
+        } catch (error) {
+          throw new Error('Error fetching ton wallets');
         }
-      } catch (error) {
-        throw new Error('Error fetching ton wallets');
       }
 
-      tonConnectUI.connector.connect(tonWallet);
-      // immediately after connect() the connector object is not updated yet
-      // const address = toUserFriendlyAddress(tonConnectUI.connector.account?.address as string);
+      if (tonWallet) {
+        tonConnectUI.connector.connect(tonWallet);
+      } else {
+        console.error('No wallet selected');
+      }
 
       return { account: '', chainId: undefined, adapter: tonConnectUI };
-    },
-    onSuccess: (data) => {
-      console.log('data - ', data);
-      // setAddress(toUserFriendlyAddress(data.adapter.account?.address as string));
-      // setConnectedAdapter(data.adapter);
-      // setConnectors(data.adapter);
     },
   });
 
@@ -101,6 +90,17 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
       setConnectedAdapter(connectedAdapter);
     },
   });
+
+  // subscribing to the wallet connection status change
+  useEffect(() => {
+    tonConnectUI.connector.onStatusChange((status) => {
+      if (status) {
+        setAddress(toUserFriendlyAddress(tonConnectUI.connector.account!.address));
+        setConnectedAdapter(tonConnectUI);
+        setConnectors(tonConnectUI);
+      }
+    });
+  }, [tonConnectUI, setAddress, setConnectedAdapter, setConnectors, connect]);
 
   return <TonContext.Provider value={{ store: tonStore, connect, disconnect }}>{children}</TonContext.Provider>;
 };

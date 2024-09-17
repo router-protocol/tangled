@@ -163,14 +163,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _tonAccounts[name] = {
         address: address,
-        chainId: undefined,
+        chainId: adapter.wallet?.account.chain,
         chainType: 'ton',
         wallet: name,
       };
 
       _tonWallets[name] = {
         address: address,
-        chainId: undefined,
+        chainId: adapter.wallet?.account.chain,
         chainType: 'ton',
         connector: adapter,
       };

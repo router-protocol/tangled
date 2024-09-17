@@ -1,9 +1,9 @@
 import { CHAIN } from '@tonconnect/ui-react';
 import { ChainData } from '../types/index.js';
 
-export const tonMainnet: ChainData = {
-  id: CHAIN.MAINNET, // '-239'
-  name: 'Ton',
+export const tonTestnet: ChainData = {
+  id: CHAIN.TESTNET, // '-3'
+  name: 'Ton Testnet',
   type: 'ton',
   nativeCurrency: {
     name: 'TON',
@@ -12,14 +12,14 @@ export const tonMainnet: ChainData = {
   },
   rpcUrls: {
     default: {
-      http: ['https://toncenter.com/api/v2/jsonRPC'],
+      http: ['https://testnet.toncenter.com/api/v2/jsonRPC'],
       webSocket: [''],
     },
   },
   blockExplorers: {
     default: {
       name: 'Tonscan',
-      url: 'https://tonscan.org/',
+      url: 'https://testnet.tonscan.org/',
     },
   },
 } as const;

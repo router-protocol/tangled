@@ -167,7 +167,18 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
             installed: wallet.name === (tonConnectUI.connector.wallet?.device.appName ?? 'Tonkeeper'), // using tonkeeper as default
             url: wallet.aboutUrl,
           }));
-          setTonWalletsList(extendedWallets);
+          // setTonWalletsList(extendedWallets);
+
+          const tonConnectOption: Wallet<'ton'> = {
+            id: 'ton-connect',
+            name: 'Ton Connect',
+            connector: tonConnectUI,
+            icon: 'https://tonconnect.io/favicon.ico',
+            type: 'ton',
+            installed: true,
+            url: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
+          };
+          setTonWalletsList([tonConnectOption, ...extendedWallets]);
         })
         .catch((error) => {
           console.error('Error fetching ton wallets:', error);

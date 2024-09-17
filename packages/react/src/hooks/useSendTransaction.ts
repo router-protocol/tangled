@@ -8,7 +8,7 @@ import { useCurrentWallet } from './useCurrentWallet.js';
 import { useNetwork } from './useNetwork.js';
 import { useWallet } from './useWallet.js';
 
-type UseSendTransactionParams = Omit<SendTransactionParams, 'chain'> & {
+type UseSendTransactionParams = Omit<SendTransactionParams, 'chain' | 'config'> & {
   chainId: ChainId;
 };
 
@@ -55,6 +55,9 @@ export const useSendTransaction = () => {
           console.error(e);
           throw e;
         });
+        if (chain.type === 'ton') {
+          console.error(`please switch to ${chain.name} manually`);
+        }
         if (!switchedChain || switchedChain.id !== chainId) {
           throw new Error('Failed to switch network');
         }

@@ -1,10 +1,11 @@
 import { Address, JettonMaster } from '@ton/ton';
+import { CHAIN } from '@tonconnect/ui-react';
 import { ChainData, ConnectionOrConfig } from '../../types/index.js';
 
 export const getTonTokenMetadata = async ({ token, chain }: { token: string; chain: ChainData<'ton'> }) => {
   const data = await (
     await fetch(
-      chain.id === '1100'
+      chain.id === CHAIN.MAINNET
         ? `https://toncenter.com/api/v3/jetton/masters?address=${token}&limit=128&offset=0`
         : `https://testnet.toncenter.com/api/v3/jetton/masters?address=${token}&limit=128&offset=0`,
     )
