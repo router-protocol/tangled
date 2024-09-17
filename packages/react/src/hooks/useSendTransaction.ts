@@ -8,7 +8,7 @@ import { useCurrentWallet } from './useCurrentWallet.js';
 import { useNetwork } from './useNetwork.js';
 import { useWallet } from './useWallet.js';
 
-type UseSendTransactionParams = Omit<SendTransactionParams, 'chain'> & {
+type UseSendTransactionParams = Omit<SendTransactionParams, 'chain' | 'config'> & {
   chainId: ChainId;
 };
 
@@ -27,7 +27,7 @@ export const useSendTransaction = () => {
   return useMutation({
     mutationKey: ['sendTransaction'],
     mutationFn: async ({ chainId, to, from, value, args, overrides }: UseSendTransactionParams) => {
-      if (!to || !from || !value) {
+      if (!to || !from) {
         throw new Error('Missing required parameters');
       }
       const chain = chains.find((chain) => chain.id === chainId);
