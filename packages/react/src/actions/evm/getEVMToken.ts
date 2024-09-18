@@ -46,7 +46,7 @@ export const getEVMTokenBalanceAndAllowance = async (
       args: [account as Address],
     },
   ];
-  if (!spender) {
+  if (spender) {
     calls.push({
       address: address as Address,
       abi: erc20Abi,

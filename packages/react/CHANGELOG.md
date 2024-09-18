@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.6
+
+### Patch Changes
+
+- fix: multicall allowance fetching condition
+
 ## 1.6.5
 
 ### Patch Changes
