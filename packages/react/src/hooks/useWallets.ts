@@ -173,10 +173,10 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
             id: 'ton-connect',
             name: 'Ton Connect',
             connector: tonConnectUI,
-            icon: 'https://tonconnect.io/favicon.ico',
+            icon: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
             type: 'ton',
             installed: true,
-            url: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
+            url: '',
           };
           setTonWalletsList([tonConnectOption, ...extendedWallets]);
         })

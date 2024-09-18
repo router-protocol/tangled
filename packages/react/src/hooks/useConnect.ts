@@ -3,6 +3,7 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
+import { createTonWalletInstance } from '../connectors/ton/connector.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
@@ -52,7 +53,11 @@ export const useConnect = () => {
       } else if (params.chainType === 'alephZero') {
         await connectAlephWallet(walletInstance.name);
       } else if (params.chainType === 'ton') {
-        connectTonWallet(walletInstance.id);
+        const connectedTonWallet = await connectTonWallet(walletInstance.id);
+        if (walletInstance.id === 'ton-connect') {
+          const tonWalletInstance = createTonWalletInstance(connectedTonWallet, walletInstance);
+          return { walletInstance: tonWalletInstance, name: tonWalletInstance.name, id: tonWalletInstance.id };
+        }
       } else {
         // @ts-expect-error - connect does not exist on TonConnectUI
         await walletInstance.connector.connect();

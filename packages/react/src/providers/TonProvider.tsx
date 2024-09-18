@@ -1,8 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
-import { toUserFriendlyAddress, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
+import { toUserFriendlyAddress, useTonConnectUI } from '@tonconnect/ui-react';
 import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
-import { createTonStore, TonStore } from '../store/Ton.js';
+import { connectExternalWallet } from '../connectors/ton/connector.js';
+import { TonStore, createTonStore } from '../store/Ton.js';
 import { ChainData, ChainId } from '../types/index.js';
 
 export interface TonContextValues {
@@ -49,27 +50,13 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
         };
       }
 
-      let tonWallet: WalletInfo | undefined;
-
-      if (adapterId === 'ton-connect') {
-        await tonConnectUI.openModal();
-      } else {
-        try {
-          const wallets = await tonConnectUI.getWallets();
-          tonWallet = wallets.find((wallet) => wallet.appName === adapterId);
-
-          if (!tonWallet) {
-            throw new Error(`Wallet with adapterId ${adapterId} not found`);
-          }
-        } catch (error) {
-          throw new Error('Error fetching ton wallets');
-        }
-      }
+      const wallets = await tonConnectUI.getWallets();
+      const tonWallet = wallets.find((wallet) => wallet.appName === adapterId);
 
       if (tonWallet) {
         tonConnectUI.connector.connect(tonWallet);
       } else {
-        console.error('No wallet selected');
+        await connectExternalWallet(tonConnectUI);
       }
 
       return { account: '', chainId: undefined, adapter: tonConnectUI };
