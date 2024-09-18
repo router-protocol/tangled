@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.7
+
+### Patch Changes
+
+- fix undefined allowance conversion to bigint
+
 ## 1.6.6
 
 ### Patch Changes

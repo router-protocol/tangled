@@ -62,6 +62,6 @@ export const getEVMTokenBalanceAndAllowance = async (
 
   return {
     balance: BigInt(balanceAndAllowance[0]),
-    allowance: BigInt(balanceAndAllowance[1]),
+    allowance: BigInt(balanceAndAllowance[1] ?? 0),
   };
 };
