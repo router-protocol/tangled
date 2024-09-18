@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.1
+
+### Patch Changes
+
+- fix: return ata results on useTokenForAccount
+
 ## 1.6.0
 
 ### Minor Changes
