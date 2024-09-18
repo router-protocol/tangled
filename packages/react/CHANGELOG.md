@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.3
+
+### Patch Changes
+
+- fix exports
+
 ## 1.6.2
 
 ### Patch Changes
