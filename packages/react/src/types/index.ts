@@ -25,7 +25,7 @@ export type ChainType = (typeof CHAIN_TYPES)[number];
 export type Chain = keyof typeof CHAIN_ID;
 export type ChainId = (typeof CHAIN_ID)[keyof typeof CHAIN_ID];
 
-export type ChainDataGeneric = {
+export interface ChainDataGeneric {
   type: ChainType;
   id: ChainId;
   name: string;
@@ -48,16 +48,30 @@ export type ChainDataGeneric = {
   contracts?: {
     [key: string]: string;
   };
+}
+
+export interface EVMChain extends ViemChain {
+  type: Extract<'evm', ChainType>;
+}
+
+export interface TronChain extends ChainDataGeneric {
+  type: Extract<'tron', ChainType>;
+  tronName: 'Mainnet' | 'Shasta' | 'Nile';
+  trxId: string;
+}
+
+// Exclude chains with custom types
+export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron'>;
+export type OtherChainData<T extends ChainType = OtherChainTypes> = ChainDataGeneric & {
+  type: T;
 };
 
-export type ChainData<T extends ChainType = ChainType> = T extends 'evm'
-  ? { type: 'evm' } & ViemChain
-  : T extends 'tron'
-    ? { type: 'tron'; tronName: 'Mainnet' | 'Shasta' | 'Nile'; trxId: string } & ChainDataGeneric
-    : { type: T } & ChainDataGeneric;
+// Chain data discriminated union for all supported chains
+export type ChainData = EVMChain | TronChain | OtherChainData;
 
-// use generic to type ChainData according to ChainType
-export type SupportedChainsByType = { [key in ChainType]: ChainData<key>[] };
+export type SupportedChainsByType = {
+  [K in ChainData as K['type']]: K[];
+};
 
 export interface TangledConfig {
   // The name of the project.
@@ -109,7 +123,7 @@ export type GetTokenMetadataParams = {
   config: ConnectionOrConfig;
 };
 
-export type TransactionReceipt<C extends ChainType = ChainType> = C extends 'evm'
+export type TransactionReceipt<C extends ChainType> = C extends 'evm'
   ? EVMTxReceipt
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo

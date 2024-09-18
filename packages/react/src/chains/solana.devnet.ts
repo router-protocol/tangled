@@ -1,6 +1,6 @@
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
-export const solanaDevnet: ChainData<'solana'> = {
+export const solanaDevnet: OtherChainData<'solana'> = {
   id: 'solanaDevnet',
   name: 'Solana Devnet',
   type: 'solana',

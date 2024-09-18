@@ -8,12 +8,16 @@ export type GetTransactionReceiptOverrides<C extends ChainType = ChainType> = C 
     }
   : any;
 
-export type GetTransactionReceiptParams<C extends ChainType = ChainType> = {
-  transactionParams: TransactionParams<C>;
-  chain: ChainData<C>;
+export type GetTransactionReceiptParams<CData extends ChainData> = {
+  transactionParams: TransactionParams<CData['type']>;
+  chain: CData;
   config: ConnectionOrConfig;
-  overrides: GetTransactionReceiptOverrides<C> | undefined;
+  overrides: GetTransactionReceiptOverrides<CData['type']> | undefined;
 };
+
+export type GetTransactionReceiptFunction = <CData extends ChainData = ChainData>(
+  params: GetTransactionReceiptParams<CData>,
+) => Promise<TransactionReceipt<CData['type']>>;
 
 /**
  * Get transaction receipt
@@ -22,12 +26,12 @@ export type GetTransactionReceiptParams<C extends ChainType = ChainType> = {
  * @param config {@link ConnectionOrConfig}
  * @returns Transaction Receipt {@link TransactionReceipt}
  */
-export const getTransactionReceipt = async <C extends ChainType>({
+export const getTransactionReceipt = (async ({
   transactionParams,
   chain,
   config,
   overrides = {} as GetTransactionReceiptOverrides,
-}: GetTransactionReceiptParams<C>): Promise<TransactionReceipt<C>> => {
+}) => {
   // evm chain
   if (chain.type === 'evm') {
     const { txHash } = transactionParams as TransactionParams<'evm'>;
@@ -35,12 +39,12 @@ export const getTransactionReceipt = async <C extends ChainType>({
       hash: txHash as `0x${string}`,
       chainId: chain.id,
     });
-    return receipt as TransactionReceipt<C>;
+    return receipt;
   }
 
   if (chain.type === 'tron') {
     const { txHash } = transactionParams as TransactionParams<'tron'>;
-    return (await config.tronWeb.trx.getTransactionInfo(txHash)) as TransactionReceipt<C>;
+    return await config.tronWeb.trx.getTransactionInfo(txHash);
   }
 
   if (chain.type === 'solana') {
@@ -52,7 +56,7 @@ export const getTransactionReceipt = async <C extends ChainType>({
     if (!result) {
       throw new Error('Transaction not found');
     }
-    return result as TransactionReceipt<C>;
+    return result;
   }
 
   if (chain.type === 'alephZero') {
@@ -90,8 +94,8 @@ export const getTransactionReceipt = async <C extends ChainType>({
       throw new Error('Transaction not found');
     }
 
-    return transactionData as TransactionReceipt<C>;
+    return transactionData;
   }
 
   throw new Error('Chain type not supported');
-};
+}) as GetTransactionReceiptFunction;

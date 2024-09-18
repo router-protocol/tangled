@@ -1,7 +1,7 @@
 import { TronWeb } from 'tronweb';
-import { ChainData } from '../../types/index.js';
+import { TronChain } from '../../types/index.js';
 
-export const getTronWeb = (chain: ChainData<'tron'>) => {
+export const getTronWeb = (chain: TronChain) => {
   const tronweb = new TronWeb({
     fullHost: chain.rpcUrls.fullNode.http[0] ?? '',
   });

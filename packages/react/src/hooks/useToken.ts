@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getTokenMetadata } from '../actions/getToken.js';
 import { ChainId } from '../types/index.js';
+import { QueryParameter } from '../types/properties.js';
 import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 
@@ -9,6 +10,7 @@ export type UseTokenParams = {
   chainId: ChainId | undefined;
   /** Token Address */
   token: string | undefined;
+  queryOptions?: QueryParameter;
 };
 
 export type TokenMetadata = {
@@ -19,7 +21,7 @@ export type TokenMetadata = {
   chainId: ChainId;
 };
 
-export const useToken = ({ chainId, token }: UseTokenParams) => {
+export const useToken = ({ chainId, token, queryOptions = {} }: UseTokenParams) => {
   const chain = useChain(chainId);
   const connectionOrConfig = useConnectionOrConfig();
 
@@ -44,5 +46,6 @@ export const useToken = ({ chainId, token }: UseTokenParams) => {
     staleTime: 1000 * 60 * 60, // 1 hour
     refetchOnWindowFocus: false,
     enabled: Boolean(token && chain),
+    ...queryOptions,
   });
 };

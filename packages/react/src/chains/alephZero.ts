@@ -1,6 +1,6 @@
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
-export const alephZero: ChainData = {
+export const alephZero: OtherChainData<'alephZero'> = {
   id: 'alephZero',
   name: 'Aleph Zero',
   type: 'alephZero',

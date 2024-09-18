@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react';
 import { Transport, http } from 'viem';
 import { CreateConnectorFn, WagmiProvider, createConfig } from 'wagmi';
-import { ChainData } from '../types/index.js';
+import { ChainData, EVMChain } from '../types/index.js';
 
 const EVMProvider = ({
   children,
@@ -13,7 +13,7 @@ const EVMProvider = ({
 }) => {
   const [wagmiConfig] = useState(() => {
     return createConfig({
-      chains: props.chains as [ChainData<'evm'>, ...ChainData<'evm'>[]],
+      chains: props.chains as [EVMChain, ...EVMChain[]],
       transports: props.chains.reduce(
         (acc, chain) => {
           acc[chain.id] = http();

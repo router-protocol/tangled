@@ -1,23 +1,18 @@
 import { useMutation } from '@tanstack/react-query';
 import { SendTransactionParams, sendTransactionToChain } from '../actions/sendTransaction.js';
-import { ChainId } from '../types/index.js';
-import { useChains } from './useChains.js';
+import { ChainData, ChainId } from '../types/index.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
 import { useNetwork } from './useNetwork.js';
 import { useWallet } from './useWallet.js';
 
-type UseSendTransactionParams = Omit<SendTransactionParams, 'chain' | 'config'> & {
-  chainId: ChainId;
-};
-
+type UseSendTransactionParams = Omit<SendTransactionParams<ChainData>, 'config'>;
 /**
  * Send transaction Hook
  * @returns Mutation object
  */
 export const useSendTransaction = () => {
-  const chains = useChains();
   const connectionOrConfig = useConnectionOrConfig();
   const currentWallet = useCurrentWallet();
   const currentAccount = useCurrentAccount();
@@ -26,11 +21,10 @@ export const useSendTransaction = () => {
 
   return useMutation({
     mutationKey: ['sendTransaction'],
-    mutationFn: async ({ chainId, to, from, value, args, overrides }: UseSendTransactionParams) => {
-      if (!to || !from || !value) {
+    mutationFn: async ({ chain, to, from, value, args, overrides }: UseSendTransactionParams) => {
+      if (!to || !from) {
         throw new Error('Missing required parameters');
       }
-      const chain = chains.find((chain) => chain.id === chainId);
       if (!chain) {
         throw new Error('Chain not found');
       }
@@ -49,13 +43,13 @@ export const useSendTransaction = () => {
       }
 
       // check chain id of wallet
-      if (network !== chainId) {
-        console.log('Switching network to', chainId);
-        const switchedChain = await switchNetworkAsync(chainId).catch((e) => {
+      if (network !== chain.id.toString()) {
+        console.log('Switching network to', chain.id.toString());
+        const switchedChain = await switchNetworkAsync(chain.id.toString() as ChainId).catch((e) => {
           console.error(e);
           throw e;
         });
-        if (!switchedChain || switchedChain.id !== chainId) {
+        if (!switchedChain || switchedChain.id !== chain.id.toString()) {
           throw new Error('Failed to switch network');
         }
       }
