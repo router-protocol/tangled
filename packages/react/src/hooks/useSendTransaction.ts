@@ -49,7 +49,7 @@ export const useSendTransaction = () => {
           console.error(e);
           throw e;
         });
-        if (!switchedChain || switchedChain.id !== chain.id.toString()) {
+        if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
           throw new Error('Failed to switch network');
         }
       }

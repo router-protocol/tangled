@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.8
+
+### Patch Changes
+
+- fix: chain id comparison
+
 ## 1.6.7
 
 ### Patch Changes
