@@ -1,7 +1,7 @@
 import { CHAIN } from '@tonconnect/ui-react';
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
-export const tonMainnet: ChainData = {
+export const tonMainnet: OtherChainData<'ton'> = {
   id: CHAIN.MAINNET, // '-239'
   name: 'Ton',
   type: 'ton',

@@ -4,7 +4,7 @@ import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { connectExternalWallet } from '../connectors/ton/connector.js';
 import { TonStore, createTonStore } from '../store/Ton.js';
-import { ChainData, ChainId } from '../types/index.js';
+import { ChainId, OtherChainData } from '../types/index.js';
 
 export interface TonContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
@@ -23,8 +23,8 @@ export const TonContext = createContext<TonContextValues>({
  * @param adapters - Supported adapters for the Ton network.
  * @returns The Ton provider context with the connect and disconnect functions.
  */
-export const TonProvider = ({ children, chain }: { children: React.ReactNode; chain: ChainData<'ton'> }) => {
-  const tonStore = useRef(createTonStore({ chain: chain })).current;
+export const TonProvider = ({ children, chain }: { children: React.ReactNode; chain: OtherChainData }) => {
+  const tonStore = useRef(createTonStore({ chain: chain as OtherChainData<'ton'> })).current;
   const connectedAdapter = useStore(tonStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(tonStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(tonStore, (state) => state.setConnectors);

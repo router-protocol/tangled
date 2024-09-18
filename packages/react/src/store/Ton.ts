@@ -3,10 +3,10 @@ import { TonConnectUI } from '@tonconnect/ui-react';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 import { getTonClient } from '../actions/ton/getTonClient.js';
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
 interface TonProps {
-  chain: ChainData<'ton'>;
+  chain: OtherChainData<'ton'>;
 }
 export interface TonState {
   connectors: {

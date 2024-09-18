@@ -180,7 +180,7 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     if (!receipt) {
       throw new Error('Transaction not found');
     }
-    return receipt as TransactionReceipt<C>;
+    return receipt;
   }
 
   throw new Error('Chain not supported');

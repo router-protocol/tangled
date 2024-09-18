@@ -1,7 +1,7 @@
 import { TonClient } from '@ton/ton';
-import { ChainData } from '../../types/index.js';
+import { OtherChainData } from '../../types/index.js';
 
-export const getTonClient = (chain: ChainData<'ton'>) => {
+export const getTonClient = (chain: OtherChainData<'ton'>) => {
   const tonClient = new TonClient({
     endpoint: chain.rpcUrls.default.http[0] ?? '',
   });

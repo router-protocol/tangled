@@ -1,11 +1,11 @@
 import { Address, JettonMaster } from '@ton/ton';
 import { CHAIN } from '@tonconnect/ui-react';
-import { ChainData, ConnectionOrConfig } from '../../types/index.js';
+import { ChainId, ConnectionOrConfig } from '../../types/index.js';
 
-export const getTonTokenMetadata = async ({ token, chain }: { token: string; chain: ChainData<'ton'> }) => {
+export const getTonTokenMetadata = async ({ token, chainId }: { token: string; chainId: ChainId }) => {
   const data = await (
     await fetch(
-      chain.id === CHAIN.MAINNET
+      chainId === CHAIN.MAINNET
         ? `https://toncenter.com/api/v3/jetton/masters?address=${token}&limit=128&offset=0`
         : `https://testnet.toncenter.com/api/v3/jetton/masters?address=${token}&limit=128&offset=0`,
     )
@@ -28,7 +28,6 @@ export const getTonTokenBalanceAndAllowance = async ({
 }: {
   account: string;
   token: string;
-  chain: ChainData<'ton'>;
   spender: string | undefined;
   config: ConnectionOrConfig;
 }) => {

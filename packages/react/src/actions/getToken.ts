@@ -88,7 +88,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
-    const res = await getTonTokenMetadata({ token, chain });
+    const res = await getTonTokenMetadata({ token, chainId: chain.id });
     return {
       ...res,
       chainId: chain.id,
@@ -193,7 +193,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     return getTonTokenBalanceAndAllowance({
       account,
       token,
-      chain,
       spender,
       config,
     });
