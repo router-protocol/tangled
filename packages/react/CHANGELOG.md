@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.2
+
+### Patch Changes
+
+- export token handler hook
+
 ## 1.6.1
 
 ### Patch Changes

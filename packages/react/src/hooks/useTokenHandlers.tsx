@@ -106,9 +106,6 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
         to: tokenAddress,
         value: 0n,
       });
-
-      // const signature = await wallet.sendTransaction(transaction, connection);
-      // const latestBlockHash = await connection.getLatestBlockhash();
     },
     [account, connectionOrConfig, sendTransaction],
   );
