@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { formatUnits } from 'viem';
 import { getTokenBalanceAndAllowance } from '../actions/getToken.js';
 import { ChainId } from '../types/index.js';
+import { QueryParameter } from '../types/properties.js';
 import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useToken } from './useToken.js';
@@ -16,10 +17,17 @@ export type UseTokenForAccountParams = {
   /** Allowance spender */
   spender: string | undefined;
   /** Subscribe to token balance and allowance changes for every block */
-  subscribe?: boolean;
+  // subscribe?: boolean;
+  queryOptions?: QueryParameter;
 };
 
-export const useTokenForAccount = ({ chainId, account, token, spender }: UseTokenForAccountParams) => {
+export const useTokenForAccount = ({
+  chainId,
+  account,
+  token,
+  spender,
+  queryOptions = {},
+}: UseTokenForAccountParams) => {
   const chain = useChain(chainId);
   const connectionOrConfig = useConnectionOrConfig();
 
@@ -57,5 +65,6 @@ export const useTokenForAccount = ({ chainId, account, token, spender }: UseToke
     staleTime: 1000 * 30, // 30 seconds
     refetchOnWindowFocus: true,
     enabled: Boolean(tokenMetadata && account && chain),
+    ...queryOptions,
   });
 };

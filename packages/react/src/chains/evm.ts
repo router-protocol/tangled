@@ -17,21 +17,22 @@ import {
   scroll as vScroll,
   zkSync as vZkSync,
 } from 'viem/chains';
+import { EVMChain } from '../types/index.js';
 
-export const arbitrum = { ...vArbitrum, type: 'evm' } as const;
-export const avalanche = { ...vAvalance, type: 'evm' } as const;
-export const base = { ...vBase, type: 'evm' } as const;
-export const blast = { ...vBlast, type: 'evm' } as const;
-export const boba = { ...vBoba, type: 'evm' } as const;
-export const binance = { ...vBsc, type: 'evm' } as const;
-export const ethereum = { ...vMainnet, type: 'evm' } as const;
-export const linea = { ...vLinea, type: 'evm' } as const;
-export const manta = { ...vManta, type: 'evm' } as const;
-export const mantle = { ...vMantle, type: 'evm' } as const;
-export const metis = { ...vMetis, type: 'evm' } as const;
-export const mode = { ...vMode, type: 'evm' } as const;
-export const optimism = { ...vOptimism, type: 'evm' } as const;
-export const polygon = { ...vPolygon, type: 'evm' } as const;
-export const polygonZkEvm = { ...vPolygonZkEvm, type: 'evm' } as const;
-export const scroll = { ...vScroll, type: 'evm' } as const;
-export const zkSync = { ...vZkSync, type: 'evm' } as const;
+export const arbitrum: EVMChain = { ...vArbitrum, type: 'evm' } as const;
+export const avalanche: EVMChain = { ...vAvalance, type: 'evm' } as const;
+export const base: EVMChain = { ...vBase, type: 'evm' } as const;
+export const blast: EVMChain = { ...vBlast, type: 'evm' } as const;
+export const boba: EVMChain = { ...vBoba, type: 'evm' } as const;
+export const binance: EVMChain = { ...vBsc, type: 'evm' } as const;
+export const ethereum: EVMChain = { ...vMainnet, type: 'evm' } as const;
+export const linea: EVMChain = { ...vLinea, type: 'evm' } as const;
+export const manta: EVMChain = { ...vManta, type: 'evm' } as const;
+export const mantle: EVMChain = { ...vMantle, type: 'evm' } as const;
+export const metis: EVMChain = { ...vMetis, type: 'evm' } as const;
+export const mode: EVMChain = { ...vMode, type: 'evm' } as const;
+export const optimism: EVMChain = { ...vOptimism, type: 'evm' } as const;
+export const polygon: EVMChain = { ...vPolygon, type: 'evm' } as const;
+export const polygonZkEvm: EVMChain = { ...vPolygonZkEvm, type: 'evm' } as const;
+export const scroll: EVMChain = { ...vScroll, type: 'evm' } as const;
+export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;

@@ -10,7 +10,7 @@ export type DefaultOverrides = {
   timeout: number;
 };
 
-export type WatchTransactionOverrides<C extends ChainType = ChainType> = DefaultOverrides &
+export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
   (C extends 'evm'
     ? {
         onReplaced: (replacement: ReplacementReturnType) => void;
@@ -31,19 +31,23 @@ export type DefaultTransactionParams = {
   txHash: string;
 };
 
-export type TransactionParams<C extends ChainType = ChainType> = C extends 'alephZero'
+export type TransactionParams<C extends ChainType> = C extends 'alephZero'
   ? {
       blockHash: string;
       extrinsicIndex: number;
     }
   : DefaultTransactionParams;
 
-export type WatchTransactionParams<C extends ChainType = ChainType> = {
-  transactionParams: TransactionParams<C>;
-  chain: ChainData<C>;
+export type WatchTransactionParams<CData extends ChainData> = {
+  transactionParams: TransactionParams<CData['type']>;
+  chain: ChainData;
   config: ConnectionOrConfig;
-  overrides: WatchTransactionOverrides<C> | undefined;
+  overrides: WatchTransactionOverrides<CData['type']> | undefined;
 };
+
+export type WatchTransactionFunction = <CData extends ChainData = ChainData>(
+  params: WatchTransactionParams<CData>,
+) => Promise<TransactionReceipt<CData['type']>>;
 
 const DEFAULT_POLLING_INTERVAL = 2500; // 2.5 seconds
 
@@ -54,22 +58,18 @@ const DEFAULT_POLLING_INTERVAL = 2500; // 2.5 seconds
  * @param config {@link ConnectionOrConfig}
  * @returns Transaction Receipt {@link TransactionReceipt}
  */
-export const waitForTransaction = async <C extends ChainType>({
-  chain,
-  config,
-  overrides,
-  transactionParams,
-}: WatchTransactionParams<C>): Promise<TransactionReceipt<C>> => {
+export const waitForTransaction = (async ({ chain, config, overrides, transactionParams }) => {
   if (chain.type === 'evm') {
     const { txHash } = transactionParams as TransactionParams<'evm'>;
     const evmOverrides = (overrides || {}) as WatchTransactionOverrides<'evm'>;
+
     const receipt = await waitForTransactionReceipt(config.wagmiConfig, {
       hash: txHash as `0x${string}`,
       chainId: chain.id,
 
       ...evmOverrides,
     });
-    return receipt as TransactionReceipt<C>;
+    return receipt;
   }
 
   if (chain.type === 'tron') {
@@ -89,7 +89,7 @@ export const waitForTransaction = async <C extends ChainType>({
       },
     );
     if (!txInfo) throw new Error('Transaction not found');
-    return txInfo as TransactionReceipt<C>;
+    return txInfo;
   }
 
   if (chain.type === 'solana') {
@@ -112,7 +112,7 @@ export const waitForTransaction = async <C extends ChainType>({
     if (!receipt) {
       throw new Error('Transaction not found');
     }
-    return receipt as TransactionReceipt<C>;
+    return receipt;
   }
 
   if (chain.type === 'alephZero') {
@@ -160,7 +160,7 @@ export const waitForTransaction = async <C extends ChainType>({
       throw new Error('Transaction not found');
     }
 
-    return receipt as TransactionReceipt<C>;
+    return receipt;
   }
 
   if (chain.type === 'ton') {
@@ -184,4 +184,4 @@ export const waitForTransaction = async <C extends ChainType>({
   }
 
   throw new Error('Chain not supported');
-};
+}) as WatchTransactionFunction;

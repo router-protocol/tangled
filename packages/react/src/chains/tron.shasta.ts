@@ -1,6 +1,6 @@
-import { ChainData } from '../types/index.js';
+import { TronChain } from '../types/index.js';
 
-export const tronShasta: ChainData = {
+export const tronShasta: TronChain = {
   id: 'tronShasta',
   trxId: '0x94a9059e',
   name: 'Tron Shasta',

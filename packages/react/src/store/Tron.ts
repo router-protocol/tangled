@@ -2,12 +2,12 @@ import { Adapter } from '@tronweb3/tronwallet-abstract-adapter';
 import { TronWeb } from 'tronweb';
 import { createStore } from 'zustand';
 import { getTronWeb } from '../actions/tron/getTronweb.js';
-import { ChainData } from '../types/index.js';
+import { TronChain } from '../types/index.js';
 import { TronAdapterData } from '../types/wallet.js';
 
 interface TronProps {
   adapters: Adapter[];
-  chain: ChainData<'tron'>;
+  chain: TronChain;
 }
 
 export interface TronState {

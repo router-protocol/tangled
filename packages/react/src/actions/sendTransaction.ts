@@ -1,51 +1,58 @@
-import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
-import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
-import { Address as EVMAddress } from 'viem';
-
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
+import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/core';
 import { CHAIN } from '@tonconnect/ui-react';
+import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
+import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 
-export type SendTransactionParams<C extends ChainType = ChainType> = {
-  chain: ChainData<C>;
+export type SendTransactionParams<CData extends ChainData> = {
+  chain: CData;
   to: string;
   from: string;
   value: bigint;
-  args: TransactionArgs<C>;
+  args: TransactionArgs<CData['type']>;
   overrides: any;
   config: ConnectionOrConfig & {
-    connector: WalletInstance<C>;
+    connector: WalletInstance<CData['type']>;
   };
 };
 
-type TransactionArgs<C extends ChainType> = C extends 'evm'
+type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
   ? {
       calldata: string;
     }
-  : C extends 'tron'
+  : CType extends 'solana'
     ? {
-        calldata: string;
+        versionedTx: SolanaVersionedTransaction;
       }
-    : C extends 'solana'
+    : CType extends 'alephZero'
       ? {
-          versionedTx: SolanaVersionedTransaction;
+          submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
         }
-      : C extends 'alephZero'
+      : CType extends 'ton'
         ? {
-            submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
+            tonArgs: {
+              validUntil: number; // transaction deadline in unix epoch seconds.
+              network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
+              payload?: string;
+              stateInit?: string;
+            };
           }
-        : C extends 'ton'
-          ? {
-              tonArgs: {
-                validUntil: number; // transaction deadline in unix epoch seconds.
-                network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
-                payload?: string;
-                stateInit?: string;
-              };
-            }
-          : never;
+        : never;
+
+type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
+  ? {
+      txHash: string;
+      block: string;
+      txIndex: number;
+    }
+  : { txHash: string };
+
+export type SendTransactionToChainFunction = <CData extends ChainData>(
+  params: SendTransactionParams<CData>,
+) => Promise<SendTransactionReturnType<CData['type']>>;
 
 /**
  * Send transaction. Does not wait for the transaction to be mined.
@@ -56,19 +63,11 @@ type TransactionArgs<C extends ChainType> = C extends 'evm'
  * @param args - Additional arguments
  * @param config - {@link ConnectionOrConfig}
  */
-export const sendTransactionToChain = async <C extends ChainType>({
-  chain,
-  to,
-  from,
-  value,
-  args,
-  config,
-  overrides,
-}: SendTransactionParams<C>) => {
+export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides }) => {
   if (chain.type === 'evm') {
     const { calldata } = args as TransactionArgs<'evm'>;
     // send transaction to EVM chain
-    const tx = await sendEVMTransaction(config.wagmiConfig, {
+    const txHash = await sendEVMTransaction(config.wagmiConfig, {
       account: from as EVMAddress,
       to: to as EVMAddress,
       value,
@@ -77,7 +76,9 @@ export const sendTransactionToChain = async <C extends ChainType>({
       ...overrides,
     });
 
-    return tx;
+    return {
+      txHash,
+    };
   }
 
   if (chain.type === 'tron') {
@@ -85,7 +86,10 @@ export const sendTransactionToChain = async <C extends ChainType>({
     // send transaction to Tron chain
     const signedTx = await config.tronWeb.trx.sign(calldata);
     const tx = await config.tronWeb.trx.sendHexTransaction(signedTx);
-    return tx.txid;
+
+    return {
+      txHash: tx.txid,
+    };
   }
 
   if (chain.type === 'solana') {
@@ -101,7 +105,8 @@ export const sendTransactionToChain = async <C extends ChainType>({
     const walletConnector = config.connector as WalletInstance<'solana'>;
     // send transaction to Solana chain
     const txSignature = await walletConnector.sendTransaction(versionedTx, config.solanaConnection);
-    return txSignature;
+
+    return { txHash: txSignature };
   }
 
   if (chain.type === 'alephZero') {
@@ -131,7 +136,7 @@ export const sendTransactionToChain = async <C extends ChainType>({
       },
     );
 
-    if (txnHash === undefined || block === undefined) {
+    if (txnHash === undefined || block === undefined || extrinsicId === undefined) {
       throw 'Trasaction failed';
     }
 
@@ -176,4 +181,4 @@ export const sendTransactionToChain = async <C extends ChainType>({
   }
 
   throw new Error('Chain not supported');
-};
+}) as SendTransactionToChainFunction;

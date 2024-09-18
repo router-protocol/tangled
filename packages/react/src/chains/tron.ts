@@ -1,6 +1,6 @@
-import { ChainData } from '../types/index.js';
+import { TronChain } from '../types/index.js';
 
-export const tronMainnet: ChainData = {
+export const tronMainnet: TronChain = {
   id: 'tronMainnet',
   trxId: '0x2b6653dc',
   name: 'Tron',
