@@ -40,7 +40,7 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
         args: [spender, amount] as [Address, bigint],
       });
 
-      await sendTransaction({
+      return await sendTransaction({
         args: {
           calldata,
         },
