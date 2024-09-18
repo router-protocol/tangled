@@ -128,4 +128,4 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
   });
 };
 
-export default useTokenHandlers;
+export { useTokenHandlers };
