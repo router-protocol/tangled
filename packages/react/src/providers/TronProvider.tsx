@@ -3,7 +3,7 @@ import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
 import { createContext, useCallback, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { TronStore, createTronStore } from '../store/Tron.js';
-import { ChainData, ChainId } from '../types/index.js';
+import { ChainId, TronChain } from '../types/index.js';
 
 export interface TronContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
@@ -28,7 +28,7 @@ export const TronProvider = ({
   chain,
 }: {
   children: React.ReactNode;
-  chain: ChainData<'tron'>;
+  chain: TronChain;
   adapters: Adapter[];
 }) => {
   const tronStore = useRef(createTronStore({ adapters, chain: chain })).current;

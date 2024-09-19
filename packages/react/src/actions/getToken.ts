@@ -4,7 +4,7 @@ import { Address as EVMAddress } from 'viem';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
-import { ChainData, ChainId, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
+import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
@@ -86,17 +86,28 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   throw new Error('Chain type not supported');
 };
 
-export type GetTokenBalanceAndAllowanceParams = {
+export type GetTokenBalanceAndAllowanceParams<CData extends ChainData> = {
   token: string;
   account: string;
   spender: string | undefined;
-  chain: ChainData;
+  chain: CData;
   config: ConnectionOrConfig;
 };
-export type GetTokenBalanceAndAllowanceResponse = {
-  balance: bigint;
-  allowance: bigint;
-};
+export type GetTokenBalanceAndAllowanceResponse<CType extends ChainType> = CType extends 'solana'
+  ? {
+      balance: bigint;
+      associatedTokenAccountAddress: string | undefined;
+      isAtaDeployed: boolean;
+      /** Delegated amount */
+      allowance: bigint;
+    }
+  : {
+      balance: bigint;
+      allowance: bigint;
+    };
+export type GetTokenBalanceAndAllowanceFunction = <CData extends ChainData>(
+  params: GetTokenBalanceAndAllowanceParams<CData>,
+) => Promise<GetTokenBalanceAndAllowanceResponse<CData['type']>>;
 /**
  * Get token balance and allowance for a given account and spender
  * @param token - Token address
@@ -106,23 +117,20 @@ export type GetTokenBalanceAndAllowanceResponse = {
  * @param config - {@link ConnectionOrConfig}
  * @returns Token balance and allowance as bigint
  */
-export const getTokenBalanceAndAllowance = async ({
-  token,
-  account,
-  spender,
-  chain,
-  config,
-}: GetTokenBalanceAndAllowanceParams): Promise<GetTokenBalanceAndAllowanceResponse> => {
+export const getTokenBalanceAndAllowance = (async (params) => {
+  const { token, account, spender, chain, config } = params;
+
   // evm chain
-  if (chain?.type === 'evm') {
+  if (chain.type === 'evm') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return {
+      const result = {
         balance: await getBalance(config.wagmiConfig, {
           address: account as EVMAddress,
           chainId: Number(chain.id),
         }).then((res) => BigInt(res.value)),
         allowance: BigInt(0),
       };
+      return result;
     }
     return await getEVMTokenBalanceAndAllowance(token, account, spender, Number(chain.id), config.wagmiConfig);
   }
@@ -149,14 +157,15 @@ export const getTokenBalanceAndAllowance = async ({
       return { balance, allowance: 0n };
     }
 
-    const { balance, allowance } = await getSolanaTokenBalanceAndAllowance({
-      connection: config.solanaConnection,
-      account: new PublicKey(account),
-      token: pbKey,
-      spender: spender ? new PublicKey(spender) : undefined,
-    });
+    const { balance, associatedTokenAccountAddress, isAtaDeployed, delegatedAmount } =
+      await getSolanaTokenBalanceAndAllowance({
+        connection: config.solanaConnection,
+        account: new PublicKey(account),
+        token: pbKey,
+        spender: spender ? new PublicKey(spender) : undefined,
+      });
 
-    return { balance, allowance };
+    return { balance, associatedTokenAccountAddress, isAtaDeployed, allowance: delegatedAmount };
   }
 
   if (chain.type === 'alephZero') {
@@ -169,4 +178,4 @@ export const getTokenBalanceAndAllowance = async ({
   }
 
   throw new Error('Chain type not supported');
-};
+}) as GetTokenBalanceAndAllowanceFunction;

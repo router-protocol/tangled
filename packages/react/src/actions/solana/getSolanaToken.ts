@@ -1,5 +1,6 @@
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID, getAssociatedTokenAddress } from '@solana/spl-token';
+import { getAssociatedTokenAddress } from '@solana/spl-token';
 import { Connection, PublicKey } from '@solana/web3.js';
+import { getProgramId } from './getProgramId.js';
 
 export const getSolanaTokenBalanceAndAllowance = async ({
   connection,
@@ -13,11 +14,10 @@ export const getSolanaTokenBalanceAndAllowance = async ({
   spender: PublicKey | undefined;
 }) => {
   let balance = BigInt(0);
-  let allowance = BigInt(0);
+  let delegatedAmount = BigInt(0);
+  let isAtaDeployed = false;
 
-  // Only USDC is an SPL token and others are in TOKEN22 format
-  const TokenProgram =
-    token.toString() === 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v' ? TOKEN_PROGRAM_ID : TOKEN_2022_PROGRAM_ID;
+  const TokenProgram = getProgramId(token.toString());
 
   // Get associated token account address
   const associatedTokenAccountAddress = await getAssociatedTokenAddress(token, account, true, TokenProgram);
@@ -33,20 +33,22 @@ export const getSolanaTokenBalanceAndAllowance = async ({
   }
 
   //   if spender, fetch allowance
-  if (spender) {
-    const tokenAccountInfo = await connection.getParsedAccountInfo(associatedTokenAccountAddress, 'confirmed');
-    if (!tokenAccountInfo.value) {
-      throw new Error('Token account info not found');
-    }
-    const accountData = tokenAccountInfo.value.data;
+  const tokenAccountInfo = await connection.getParsedAccountInfo(associatedTokenAccountAddress, 'confirmed');
+  if (tokenAccountInfo.value) {
+    isAtaDeployed = true;
 
-    const spenderPublicKey = new PublicKey(spender);
+    // Check delegated amount
+    if (spender) {
+      const accountData = tokenAccountInfo.value.data;
 
-    if ('parsed' in accountData) {
-      const parsedInfo = accountData.parsed.info;
-      allowance = parsedInfo.delegate === spenderPublicKey.toString() ? parsedInfo.delegatedAmount : 0n;
+      const spenderPublicKey = new PublicKey(spender);
+
+      if ('parsed' in accountData) {
+        const parsedInfo = accountData.parsed.info;
+        delegatedAmount = parsedInfo.delegate === spenderPublicKey.toString() ? parsedInfo.delegatedAmount : 0n;
+      }
     }
   }
 
-  return { balance, allowance };
+  return { balance, delegatedAmount, associatedTokenAccountAddress, isAtaDeployed };
 };

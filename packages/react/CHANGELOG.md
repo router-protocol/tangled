@@ -1,5 +1,65 @@
 # @tangled3/react
 
+## 1.6.8
+
+### Patch Changes
+
+- fix: chain id comparison
+
+## 1.6.7
+
+### Patch Changes
+
+- fix undefined allowance conversion to bigint
+
+## 1.6.6
+
+### Patch Changes
+
+- fix: multicall allowance fetching condition
+
+## 1.6.5
+
+### Patch Changes
+
+- fix: return transaction hash for evm token handler
+
+## 1.6.4
+
+### Patch Changes
+
+- fix exports... again
+
+## 1.6.3
+
+### Patch Changes
+
+- fix exports
+
+## 1.6.2
+
+### Patch Changes
+
+- export token handler hook
+
+## 1.6.1
+
+### Patch Changes
+
+- fix: return ata results on useTokenForAccount
+
+## 1.6.0
+
+### Minor Changes
+
+- refactor chain types and add token handler hooks
+
+## 1.5.3
+
+### Patch Changes
+
+- fix send transaction mutation arguments
+
 ## 1.5.2
 
 ### Patch Changes

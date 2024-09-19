@@ -54,7 +54,8 @@ const overrideChainConfig = (
         ...CHAIN_DATA[chainId],
         ...overrides?.[CHAIN_NAME[chainId]],
       } as ChainData;
-      // @ts-expect-error - Interesction type reduces to never
+
+      // @ts-expect-error - resolves to never
       supportedChains[chain.type].push(chainData);
     }
   }

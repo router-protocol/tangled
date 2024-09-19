@@ -2,7 +2,7 @@ import { Adapter, WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { clusterApiUrl } from '@solana/web3.js';
 import { ConnectionProvider, WalletProvider } from '@tangled3/solana-react';
 import { useState, type FC, type PropsWithChildren } from 'react';
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
 /**
  * Wallets that implement either of these standards will be available automatically.
@@ -23,7 +23,7 @@ interface SolanaProviderProps {
    * @notice Only one network is used since Solana connection
    * provider can not be initialised with multiple networks
    */
-  chain: ChainData<'solana'>;
+  chain: OtherChainData;
 }
 
 export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ children, chain }) => {
