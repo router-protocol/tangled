@@ -2,6 +2,7 @@ import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 
+import { Transaction } from '@mysten/sui/transactions';
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
@@ -34,7 +35,11 @@ type TransactionArgs<C extends ChainType> = C extends 'evm'
         ? {
             submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
           }
-        : never;
+        : C extends 'sui'
+          ? {
+              tx: Transaction;
+            }
+          : never;
 
 /**
  * Send transaction. Does not wait for the transaction to be mined.
@@ -129,6 +134,23 @@ export const sendTransactionToChain = async <C extends ChainType>({
       block: block,
       txIndex: extrinsicId,
     };
+  }
+
+  if (chain.type === 'sui') {
+    const { tx } = args as TransactionArgs<'sui'>;
+    const walletConnector = config.connector as WalletInstance<'sui'>;
+
+    if (!walletConnector || !walletConnector.features['sui:signAndExecuteTransaction']) {
+      throw new Error("Sui Conenctor don't support signAndExecuteTransaction");
+    }
+
+    const result = await walletConnector.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction({
+      transaction: tx,
+      chain: `sui:${chain.id.split('sui')[1].toLowerCase()}`,
+      account: walletConnector.accounts[0],
+    });
+
+    return result.digest;
   }
 
   throw new Error('Chain not supported');
