@@ -12,6 +12,8 @@ import {
   mantle,
   metis,
   mode,
+  near,
+  nearTestnet,
   optimism,
   polygon,
   polygonZkEvm,
@@ -53,6 +55,8 @@ export const CHAIN_ID = {
   // tronNile: 'tron-nile',
 
   // near
+  near: 'near',
+  nearTestnet: 'near-testnet',
 
   // solana
   solana: 'solana',
@@ -107,6 +111,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
 
   // aleph
   [CHAIN_ID.alephZero]: alephZero,
+
+  // near
+  [CHAIN_ID.near]: near,
+  [CHAIN_ID.nearTestnet]: nearTestnet,
 
   // solana
   [CHAIN_ID.solana]: solana,
