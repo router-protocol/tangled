@@ -1,14 +1,14 @@
 import { createNetworkConfig, SuiClientProvider, WalletProvider } from '@mysten/dapp-kit';
 import { getFullnodeUrl } from '@mysten/sui/client';
 import { useMemo, useState } from 'react';
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
 /**
  * @notice This provider is used to connect to the Sui using @mysten/sui sdk.
  * @param adapters - Supported wallet adapters for the Sui.
  * @returns The Sui provider context with the connect and disconnect functions.
  */
-export const SuiProvider = ({ children, chains }: { children: React.ReactNode; chains: ChainData<'sui'>[] }) => {
+export const SuiProvider = ({ children, chains }: { children: React.ReactNode; chains: OtherChainData[] }) => {
   const { networkConfig } = useMemo(() => {
     const config = chains.reduce(
       (acc, chain) => {

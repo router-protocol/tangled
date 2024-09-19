@@ -1,7 +1,7 @@
 import { getFullnodeUrl } from '@mysten/sui/client';
-import { ChainData } from '../types/index.js';
+import { OtherChainData } from '../types/index.js';
 
-export const suiTestnet: ChainData<'sui'> = {
+export const suiTestnet: OtherChainData<'sui'> = {
   id: 'suiTestnet',
   name: 'Sui Testnet',
   type: 'sui',

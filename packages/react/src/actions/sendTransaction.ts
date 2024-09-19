@@ -1,8 +1,8 @@
+import { Transaction } from '@mysten/sui/transactions';
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
-import { Transaction } from '@mysten/sui/transactions';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 
@@ -30,11 +30,11 @@ type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
       ? {
           submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
         }
-        : CType extends 'sui'
-          ? {
-              tx: Transaction;
-            }
-          : never;
+      : CType extends 'sui'
+        ? {
+            tx: Transaction;
+          }
+        : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
