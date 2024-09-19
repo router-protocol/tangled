@@ -40,6 +40,9 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
   const [tonconnectManifestUrl] = useState(() => {
     return config.tonconnectManifestUrl;
   });
+  const [twaReturnUrl] = useState(() => {
+    return config.twaReturnUrl;
+  });
 
   return (
     <TangledContext.Provider value={{ config, chains, connectors, chainsById }}>
@@ -56,9 +59,7 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
               {/* getting error if combined with TonProvider */}
               <TonConnectUIProvider
                 manifestUrl={tonconnectManifestUrl}
-                actionsConfiguration={{
-                  twaReturnUrl: 'https://t.me/wallet/start',
-                }}
+                actionsConfiguration={{ twaReturnUrl }}
               >
                 <TonProvider chain={chains.ton[0]}>
                   <WalletsProvider>{children}</WalletsProvider>

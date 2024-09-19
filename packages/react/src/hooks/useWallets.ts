@@ -1,9 +1,9 @@
 // import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
-import { useTonConnectUI } from '@tonconnect/ui-react';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
+import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useAlephStore } from './useAlephStore.js';
@@ -31,8 +31,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
   const tronConnectors = useTronStore((state) => state.connectors);
 
-  const [tonConnectUI] = useTonConnectUI();
-  const [tonWalletsList, setTonWalletsList] = useState<Wallet<'ton'>[]>([]);
+  const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -153,40 +152,35 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return registryWallets;
   }, [alephAdapter, options?.onlyInstalled]);
 
-  useEffect(() => {
-    if (tonConnectUI) {
-      tonConnectUI
-        .getWallets()
-        .then((wallets) => {
-          const extendedWallets: Wallet<'ton'>[] = wallets.map((wallet) => ({
-            id: wallet.appName,
-            name: wallet.name,
-            connector: tonConnectUI,
-            icon: wallet.imageUrl,
-            type: 'ton',
-            installed: wallet.name === (tonConnectUI.connector.wallet?.device.appName ?? 'Tonkeeper'), // using tonkeeper as default
-            url: wallet.aboutUrl,
-          }));
-          // setTonWalletsList(extendedWallets);
+  const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
+    const detected: Wallet<'ton'>[] = tonWallets.map((wallet) => ({
+      id: wallet.appName,
+      name: wallet.name,
+      connector: tonAdapter,
+      icon: wallet.imageUrl,
+      type: 'ton',
+      installed: wallet.name === (tonAdapter?.wallet?.device.appName ?? 'Tonkeeper'), // using Tonkeeper as default wallet
+      url: wallet.aboutUrl,
+    }));
 
-          const tonConnectOption: Wallet<'ton'> = {
-            id: 'ton-connect',
-            name: 'Ton Connect',
-            connector: tonConnectUI,
-            icon: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
-            type: 'ton',
-            installed: true,
-            url: '',
-          };
-          setTonWalletsList([tonConnectOption, ...extendedWallets]);
-        })
-        .catch((error) => {
-          console.error('Error fetching ton wallets:', error);
-        });
+    // for ton connect modal option
+    const tonConnectOption: Wallet<'ton'> = {
+      id: 'ton-connect',
+      name: 'Ton Connect',
+      connector: tonAdapter,
+      icon: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
+      type: 'ton',
+      installed: true,
+    };
+
+    const walletList = [tonConnectOption, ...detected];
+
+    if (options?.onlyInstalled) {
+      return walletList.filter((wallet) => wallet.installed);
     }
-  }, [tonConnectUI]);
 
-  const extendedTonWallets = useMemo(() => tonWalletsList, [tonWalletsList]);
+    return walletList;
+  }, [tonWallets, tonAdapter, options]);
 
   return useMemo(
     () => ({

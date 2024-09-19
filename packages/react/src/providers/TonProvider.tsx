@@ -1,21 +1,25 @@
 import { useMutation } from '@tanstack/react-query';
-import { toUserFriendlyAddress, useTonConnectUI } from '@tonconnect/ui-react';
-import { createContext, useEffect, useRef } from 'react';
+import { TonConnectUI, toUserFriendlyAddress, useTonConnectUI, WalletInfo } from '@tonconnect/ui-react';
+import { createContext, useEffect, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { connectExternalWallet } from '../connectors/ton/connector.js';
-import { TonStore, createTonStore } from '../store/Ton.js';
+import { createTonStore, TonStore } from '../store/Ton.js';
 import { ChainId, OtherChainData } from '../types/index.js';
 
 export interface TonContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
   disconnect: () => void;
   store: TonStore | null;
+  tonAdapter: TonConnectUI | undefined;
+  wallets: WalletInfo[];
 }
 
 export const TonContext = createContext<TonContextValues>({
   connect: async () => ({ account: '', chainId: undefined }),
   disconnect: async () => {},
   store: null,
+  tonAdapter: undefined,
+  wallets: [],
 });
 
 /**
@@ -31,6 +35,7 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
   const setAddress = useStore(tonStore, (state) => state.setAddress);
 
   const [tonConnectUI] = useTonConnectUI();
+  const [tonWallets, setTonWallets] = useState<WalletInfo[]>([]);
 
   /////////////////
   /// Mutations ///
@@ -50,8 +55,7 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
         };
       }
 
-      const wallets = await tonConnectUI.getWallets();
-      const tonWallet = wallets.find((wallet) => wallet.appName === adapterId);
+      const tonWallet = tonWallets.find((wallet) => wallet.appName === adapterId);
 
       if (tonWallet) {
         tonConnectUI.connector.connect(tonWallet);
@@ -89,5 +93,23 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
     });
   }, [tonConnectUI, setAddress, setConnectedAdapter, setConnectors, connect]);
 
-  return <TonContext.Provider value={{ store: tonStore, connect, disconnect }}>{children}</TonContext.Provider>;
+  // fetching supported ton wallets
+  useEffect(() => {
+    tonConnectUI
+      .getWallets()
+      .then((wallets) => {
+        setTonWallets(wallets);
+      })
+      .catch((error) => {
+        console.error('Failed to fetch ton wallets', error);
+      });
+  }, [tonConnectUI]);
+
+  return (
+    <TonContext.Provider
+      value={{ store: tonStore, connect, disconnect, wallets: tonWallets, tonAdapter: tonConnectUI }}
+    >
+      {children}
+    </TonContext.Provider>
+  );
 };

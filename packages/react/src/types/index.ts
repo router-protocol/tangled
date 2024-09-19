@@ -93,6 +93,8 @@ export interface TangledConfig {
 
   /** Manifest url for ton connect */
   tonconnectManifestUrl?: string;
+  /** Telegram mini app url */
+  twaReturnUrl?: `${string}://${string}`;
 }
 
 type ChainRpcUrls = {
