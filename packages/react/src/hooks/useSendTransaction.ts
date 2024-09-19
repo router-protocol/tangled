@@ -52,7 +52,7 @@ export const useSendTransaction = () => {
         if (chain.type === 'ton') {
           console.error(`please switch to ${chain.name} manually`);
         }
-        if (!switchedChain || switchedChain.id !== chain.id.toString()) {
+        if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
           throw new Error('Failed to switch network');
         }
       }

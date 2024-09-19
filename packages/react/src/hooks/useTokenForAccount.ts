@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { formatUnits } from 'viem';
-import { getTokenBalanceAndAllowance } from '../actions/getToken.js';
+import { GetTokenBalanceAndAllowanceResponse, getTokenBalanceAndAllowance } from '../actions/getToken.js';
 import { ChainId } from '../types/index.js';
 import { QueryParameter } from '../types/properties.js';
 import { useChain } from './useChain.js';
@@ -43,13 +43,33 @@ export const useTokenForAccount = ({
         throw new Error('Connections or config not found');
       }
 
-      const { balance, allowance } = await getTokenBalanceAndAllowance({
+      const tokenBalanceAndAllowanceResult = await getTokenBalanceAndAllowance({
         token: token,
         account,
         spender,
         chain,
         config: connectionOrConfig,
       });
+
+      const { balance, allowance } = tokenBalanceAndAllowanceResult;
+
+      if (chain.type === 'solana') {
+        const { associatedTokenAccountAddress, isAtaDeployed } =
+          tokenBalanceAndAllowanceResult as GetTokenBalanceAndAllowanceResponse<'solana'>;
+
+        return {
+          balance: {
+            value: balance as bigint,
+            formatted: formatUnits(balance, tokenMetadata?.decimals),
+          },
+          associatedTokenAccountAddress: associatedTokenAccountAddress,
+          isAtaDeployed: isAtaDeployed,
+          allowance: {
+            value: allowance as bigint,
+            formatted: formatUnits(allowance, tokenMetadata?.decimals),
+          },
+        };
+      }
 
       return {
         balance: {

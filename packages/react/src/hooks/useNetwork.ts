@@ -30,7 +30,7 @@ export const useNetwork = () => {
           connector: connector as WalletInstance<'evm'>,
         });
 
-        return chains.find((chain) => chain.id === switchedChain.id.toString());
+        return chains.find((chain) => chain.id === switchedChain.id);
       }
       if (chain?.type === 'tron') {
         try {

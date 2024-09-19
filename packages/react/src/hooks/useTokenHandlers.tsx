@@ -40,7 +40,7 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
         args: [spender, amount] as [Address, bigint],
       });
 
-      await sendTransaction({
+      return await sendTransaction({
         args: {
           calldata,
         },
@@ -106,9 +106,6 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
         to: tokenAddress,
         value: 0n,
       });
-
-      // const signature = await wallet.sendTransaction(transaction, connection);
-      // const latestBlockHash = await connection.getLatestBlockhash();
     },
     [account, connectionOrConfig, sendTransaction],
   );
@@ -131,4 +128,4 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
   });
 };
 
-export default useTokenHandlers;
+export { useTokenHandlers };

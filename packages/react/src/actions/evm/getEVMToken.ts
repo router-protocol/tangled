@@ -46,7 +46,7 @@ export const getEVMTokenBalanceAndAllowance = async (
       args: [account as Address],
     },
   ];
-  if (!spender) {
+  if (spender) {
     calls.push({
       address: address as Address,
       abi: erc20Abi,
@@ -62,6 +62,6 @@ export const getEVMTokenBalanceAndAllowance = async (
 
   return {
     balance: BigInt(balanceAndAllowance[0]),
-    allowance: BigInt(balanceAndAllowance[1]),
+    allowance: BigInt(balanceAndAllowance[1] ?? 0),
   };
 };
