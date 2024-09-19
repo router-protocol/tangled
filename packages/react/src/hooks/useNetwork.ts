@@ -13,7 +13,7 @@ export const useNetwork = () => {
   const currentAccount = useCurrentAccount();
   const currentWalletInstance = useWallet(currentAccount?.chainType, currentAccount?.wallet);
   const chains = useChains(currentAccount?.chainType);
-  const ctx = useSuiClientContext();
+  const { selectNetwork: selectSuiNetwork } = useSuiClientContext();
 
   const { switchChainAsync } = useSwitchChain();
 
@@ -51,7 +51,7 @@ export const useNetwork = () => {
 
       if (chain?.type === 'sui') {
         try {
-          ctx.selectNetwork(chain.id);
+          selectSuiNetwork(chain.id);
         } catch (e) {
           console.error(e);
           throw e;
@@ -60,7 +60,7 @@ export const useNetwork = () => {
         return;
       }
     },
-    [chains, currentWalletInstance, switchChainAsync, ctx.selectNetwork],
+    [chains, currentWalletInstance, switchChainAsync, selectSuiNetwork],
   );
 
   const { mutate, mutateAsync, isPending } = useMutation({

@@ -2,7 +2,6 @@ import { alephZero } from '../chains/alephZero.js';
 import * as evm from '../chains/evm.js';
 import { solana } from '../chains/solana.js';
 import { sui } from '../chains/sui.js';
-import { suiTestnet } from '../chains/sui.testnet.js';
 import { tronMainnet } from '../chains/tron.js';
 import { EVMChain, OtherChainData, SupportedChainsByType, TronChain } from '../types/index.js';
 
@@ -45,7 +44,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     supportedChains.solana = [solana] as OtherChainData<'solana'>[];
     supportedChains.tron = [tronMainnet] as TronChain[];
     supportedChains.alephZero = [alephZero] as OtherChainData<'alephZero'>[];
-    supportedChains.sui = [sui, suiTestnet] as OtherChainData<'sui'>[];
+    supportedChains.sui = [sui] as OtherChainData<'sui'>[];
   }
 
   return supportedChains;

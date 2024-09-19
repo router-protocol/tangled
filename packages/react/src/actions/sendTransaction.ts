@@ -145,13 +145,13 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const { tx } = args as TransactionArgs<'sui'>;
     const walletConnector = config.connector as WalletInstance<'sui'>;
 
-    if (!walletConnector || !walletConnector.features['sui:signAndExecuteTransaction']) {
+    if (!walletConnector.features['sui:signAndExecuteTransaction']) {
       throw new Error("Sui Conenctor don't support signAndExecuteTransaction");
     }
 
     const result = await walletConnector.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction({
       transaction: tx,
-      chain: `sui:${chain.id.split('sui')[1].toLowerCase()}`,
+      chain: `sui:${chain.networkIdentifier}`,
       account: walletConnector.accounts[0],
     });
 

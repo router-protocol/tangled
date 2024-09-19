@@ -62,7 +62,7 @@ export const CHAIN_ID = {
   solanaDevnet: 'solanaDevnet',
 
   // sui
-  sui: 'suiMainnet',
+  sui: 'sui',
   suiTestnet: 'suiTestnet',
 
   // casper

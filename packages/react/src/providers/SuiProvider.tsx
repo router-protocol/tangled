@@ -12,7 +12,7 @@ export const SuiProvider = ({ children, chains }: { children: React.ReactNode; c
   const { networkConfig } = useMemo(() => {
     const config = chains.reduce(
       (acc, chain) => {
-        const networkType = chain.id.split('sui')[1].toLowerCase() as 'mainnet' | 'testnet';
+        const networkType = chain.networkIdentifier as 'mainnet' | 'testnet';
         acc[chain.id] = { url: getFullnodeUrl(networkType) };
         return acc;
       },
@@ -22,7 +22,7 @@ export const SuiProvider = ({ children, chains }: { children: React.ReactNode; c
     return createNetworkConfig(config);
   }, [chains]);
 
-  const [activeNetwork, setActiveNetwork] = useState('suiMainnet');
+  const [activeNetwork, setActiveNetwork] = useState<string>(chains[0].id);
 
   return (
     <SuiClientProvider

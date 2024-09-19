@@ -29,6 +29,7 @@ export type ChainId = (typeof CHAIN_ID)[keyof typeof CHAIN_ID];
 export interface ChainDataGeneric {
   type: ChainType;
   id: ChainId;
+  networkIdentifier?: string;
   name: string;
   nativeCurrency: {
     name: string;

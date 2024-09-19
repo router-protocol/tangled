@@ -26,7 +26,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
   const setCurrentAccount = useWalletsStore((state) => state.setCurrentAccount);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
-  const ctx = useSuiClientContext();
+  const { network: currentSuiNetwork } = useSuiClientContext();
 
   const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
 
@@ -192,14 +192,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     if (suiWalletStatus === 'connected') {
       _suiAccounts[currentSuiWallet.name] = {
         address: currentSuiWallet.accounts[0].address,
-        chainId: ctx.network as ChainId,
+        chainId: currentSuiNetwork as ChainId,
         chainType: 'sui',
         wallet: currentSuiWallet.name,
       };
 
       _suiWallets[currentSuiWallet.name] = {
         address: currentSuiWallet.accounts[0].address,
-        chainId: ctx.network as ChainId,
+        chainId: currentSuiNetwork as ChainId,
         chainType: 'sui',
         connector: currentSuiWallet,
       };
@@ -207,7 +207,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
     setChainConnectedAccounts({ sui: _suiAccounts });
     setConnectedWallets({ sui: _suiWallets });
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.sui, suiWalletStatus, currentSuiWallet, ctx.network]);
+  }, [
+    setChainConnectedAccounts,
+    setConnectedWallets,
+    chains.sui,
+    suiWalletStatus,
+    currentSuiWallet,
+    currentSuiNetwork,
+  ]);
 
   return <>{children}</>;
 };

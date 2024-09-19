@@ -4,6 +4,7 @@ import { OtherChainData } from '../types/index.js';
 export const suiTestnet: OtherChainData<'sui'> = {
   id: 'suiTestnet',
   name: 'Sui Testnet',
+  networkIdentifier: 'testnet',
   type: 'sui',
   nativeCurrency: {
     name: 'Sui',
