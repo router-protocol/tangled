@@ -50,7 +50,7 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
       if (tonConnectUI.connected) {
         const connectedWalletId = tonConnectUI.wallet?.device.appName.toLowerCase();
         if (adapterId !== connectedWalletId) {
-          disconnect();
+          await disconnect();
         } else {
           return {
             account: toUserFriendlyAddress(tonConnectUI.connector.account!.address),
