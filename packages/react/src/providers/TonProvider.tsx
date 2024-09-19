@@ -48,11 +48,16 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
       }
 
       if (tonConnectUI.connected) {
-        return {
-          account: toUserFriendlyAddress(tonConnectUI.connector.account!.address),
-          chainId: undefined,
-          adapter: tonConnectUI,
-        };
+        const connectedWalletId = tonConnectUI.wallet?.device.appName.toLowerCase();
+        if (adapterId !== connectedWalletId) {
+          disconnect();
+        } else {
+          return {
+            account: toUserFriendlyAddress(tonConnectUI.connector.account!.address),
+            chainId: undefined,
+            adapter: tonConnectUI,
+          };
+        }
       }
 
       const tonWallet = tonWallets.find((wallet) => wallet.appName === adapterId);

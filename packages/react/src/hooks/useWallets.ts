@@ -159,7 +159,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       connector: tonAdapter,
       icon: wallet.imageUrl,
       type: 'ton',
-      installed: wallet.name === (tonAdapter?.wallet?.device.appName ?? 'Tonkeeper'), // using Tonkeeper as default wallet
+      // @ts-expect-error - `injected` doesn't exist on WalletInfo type
+      installed: wallet.injected,
       url: wallet.aboutUrl,
     }));
 
