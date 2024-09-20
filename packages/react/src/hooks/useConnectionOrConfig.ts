@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { useConfig as useWagmiConfig } from 'wagmi';
 import { ConnectionOrConfig } from '../types/index.js';
 import { useAlephStore } from './useAlephStore.js';
+import { useTonStore } from './useTonStore.js';
 import { useTronStore } from './useTronStore.js';
 
 /**
@@ -13,6 +14,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
   const { connection: solanaConnection } = useSolanaConnection();
   const tronWeb = useTronStore((state) => state.tronweb);
   const alephZeroApi = useAlephStore((state) => state.api);
+  const tonClient = useTonStore((state) => state.tonClient);
 
   return useMemo(() => {
     if (!alephZeroApi) return undefined;
@@ -22,6 +24,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
       solanaConnection,
       tronWeb,
       alephZeroApi: alephZeroApi,
+      tonClient,
     };
-  }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi]);
+  }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi, tonClient]);
 };

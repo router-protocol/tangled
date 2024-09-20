@@ -1,5 +1,6 @@
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
+import { TonConnectUI } from '@tonconnect/ui-react';
 import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@tronweb3/tronwallet-abstract-adapter';
 import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
@@ -21,6 +22,8 @@ export type ChainConnectors = {
   alephZero: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ton: any[];
 };
 
 export type WalletBase<C extends ChainType = ChainType> = {
@@ -59,7 +62,9 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
       ? TronAdapter
       : T extends 'alephZero'
         ? NightlyConnectAdapter
-        : DefaultConnector;
+        : T extends 'ton'
+          ? TonConnectUI
+          : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;
