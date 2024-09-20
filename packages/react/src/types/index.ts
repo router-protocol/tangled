@@ -29,7 +29,6 @@ export type ChainId = (typeof CHAIN_ID)[keyof typeof CHAIN_ID];
 export interface ChainDataGeneric {
   type: ChainType;
   id: ChainId;
-  networkIdentifier?: string;
   name: string;
   nativeCurrency: {
     name: string;
@@ -62,14 +61,19 @@ export interface TronChain extends ChainDataGeneric {
   trxId: string;
 }
 
+export interface SuiChainType extends ChainDataGeneric {
+  type: Extract<'sui', ChainType>;
+  suiNetwork: 'mainnet' | 'testnet' | 'devnet' | 'localnet';
+}
+
 // Exclude chains with custom types
-export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron'>;
+export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron' | 'sui'>;
 export type OtherChainData<T extends ChainType = OtherChainTypes> = ChainDataGeneric & {
   type: T;
 };
 
 // Chain data discriminated union for all supported chains
-export type ChainData = EVMChain | TronChain | OtherChainData;
+export type ChainData = EVMChain | TronChain | SuiChainType | OtherChainData;
 
 export type SupportedChainsByType = {
   [K in ChainData as K['type']]: K[];

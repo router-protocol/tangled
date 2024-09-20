@@ -151,7 +151,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
     const result = await walletConnector.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction({
       transaction: tx,
-      chain: `sui:${chain.networkIdentifier}`,
+      chain: `sui:${chain.suiNetwork}`,
       account: walletConnector.accounts[0],
     });
 

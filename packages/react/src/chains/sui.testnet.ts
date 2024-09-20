@@ -1,10 +1,10 @@
 import { getFullnodeUrl } from '@mysten/sui/client';
-import { OtherChainData } from '../types/index.js';
+import { SuiChainType } from '../types/index.js';
 
-export const suiTestnet: OtherChainData<'sui'> = {
+export const suiTestnet: SuiChainType = {
   id: 'suiTestnet',
   name: 'Sui Testnet',
-  networkIdentifier: 'testnet',
+  suiNetwork: 'testnet',
   type: 'sui',
   nativeCurrency: {
     name: 'Sui',
