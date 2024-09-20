@@ -220,6 +220,13 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       near: [],
       sui: extendedSuiWallets,
     }),
-    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets, extendedSuiWallets, extendedTonWallets],
+    [
+      extendedEvmWallets,
+      extendedSolanaWallets,
+      extendedTronWallets,
+      extendedAlephWallets,
+      extendedSuiWallets,
+      extendedTonWallets,
+    ],
   );
 };

@@ -54,7 +54,15 @@ export const useDisconnect = () => {
         await connector.disconnect();
       }
     },
-    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectSuiWallet, disconnectTronWallet, disconnectTonWallet, wallets],
+    [
+      disconnectAlephWallet,
+      disconnectEVM,
+      disconnectSolanaWallet,
+      disconnectSuiWallet,
+      disconnectTronWallet,
+      disconnectTonWallet,
+      wallets,
+    ],
   );
 
   const mutation = useMutation({
