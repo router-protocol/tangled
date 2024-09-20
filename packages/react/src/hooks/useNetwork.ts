@@ -52,6 +52,9 @@ export const useNetwork = () => {
       if (chain?.type === 'sui') {
         try {
           selectSuiNetwork(chain.id);
+
+          // temp fix
+          throw new Error('Failed to switch network on wallet, please switch manually');
         } catch (e) {
           console.error(e);
           throw e;

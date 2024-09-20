@@ -52,10 +52,6 @@ export const useSendTransaction = () => {
         if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
           throw new Error('Failed to switch network');
         }
-        // temp fix for sui
-        if (switchedChain.type == 'sui') {
-          throw new Error('Failed to switch network on wallet, please switch manually');
-        }
       }
 
       return sendTransactionToChain({
