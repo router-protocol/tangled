@@ -177,7 +177,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const buffer = cell.hash();
     const hashHex = buffer.toString('hex');
 
-    return hashHex;
+    return { txHash: hashHex };
   }
 
   throw new Error('Chain not supported');
