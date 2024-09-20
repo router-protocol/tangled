@@ -1,6 +1,6 @@
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
-import { Cell } from '@ton/core';
+import { Cell } from '@ton/ton';
 import { CHAIN } from '@tonconnect/ui-react';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';

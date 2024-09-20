@@ -8,7 +8,7 @@ import { ChainId, OtherChainData } from '../types/index.js';
 
 export interface TonContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
-  disconnect: () => void;
+  disconnect: () => Promise<void>;
   store: TonStore | null;
   tonAdapter: TonConnectUI | undefined;
   wallets: WalletInfo[];
@@ -79,7 +79,7 @@ export const TonProvider = ({ children, chain }: { children: React.ReactNode; ch
         throw new Error('No ton adapter found');
       }
 
-      connectedAdapter.connector.disconnect();
+      await connectedAdapter.connector.disconnect();
 
       setAddress('');
       setConnectors(connectedAdapter);

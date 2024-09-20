@@ -44,7 +44,7 @@ export const useDisconnect = () => {
       } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
       } else if (params.chainType === 'ton') {
-        disconnectTonWallet();
+        await disconnectTonWallet();
       } else {
         await walletInstance.connector.disconnect();
       }
