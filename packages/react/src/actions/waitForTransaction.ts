@@ -182,6 +182,11 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
         timeout: overrides?.timeout,
       },
     );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+    return receipt;
   }
 
   if (chain.type === 'ton') {
