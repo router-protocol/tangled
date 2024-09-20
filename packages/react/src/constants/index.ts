@@ -27,7 +27,6 @@ import {
 import { solanaDevnet } from '../chains/solana.devnet.js';
 import { solanaTestnet } from '../chains/solana.testnet.js';
 import { tonTestnet } from '../chains/ton.testnet.js';
-import { tronShasta } from '../chains/tron.shasta.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export * from './abi/index.js';

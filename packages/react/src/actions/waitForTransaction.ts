@@ -176,7 +176,13 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
             showBalanceChanges: true,
           },
         });
-      }
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+  }
 
   if (chain.type === 'ton') {
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;

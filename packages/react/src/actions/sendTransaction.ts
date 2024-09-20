@@ -35,16 +35,17 @@ type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
       : CType extends 'sui'
         ? {
             tx: Transaction;
-        }
-      : CType extends 'ton'
-        ? {
-            tonArgs: {
-              validUntil: number; // transaction deadline in unix epoch seconds.
-              network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
-              payload?: string;
-              stateInit?: string;
           }
-        : never;
+        : CType extends 'ton'
+          ? {
+              tonArgs: {
+                validUntil: number; // transaction deadline in unix epoch seconds.
+                network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
+                payload?: string;
+                stateInit?: string;
+              };
+            }
+          : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
