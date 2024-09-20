@@ -27,6 +27,8 @@ import { tonTestnet } from '../chains/ton.testnet.js';
 import { tronShasta } from '../chains/tron.shasta.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
+export * from './abi/index.js';
+
 export const CHAIN_ID = {
   // evm
   arbitrum: '42161',
