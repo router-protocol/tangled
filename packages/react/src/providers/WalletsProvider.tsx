@@ -4,6 +4,7 @@ import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
+import { useTonStore } from '../hooks/useTonStore.js';
 import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainId } from '../types/index.js';
@@ -17,6 +18,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const alephConnectors = useAlephStore((state) => state.connectors);
   const alephAccounts = useAlephStore((state) => state.connectedAdapter);
   const alephAddress = useAlephStore((state) => state.address);
+  const tonConnectors = useTonStore((state) => state.connectors);
+  const tonAddress = useTonStore((state) => state.address);
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -149,6 +152,39 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       alephZero: _alephWallets,
     });
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors, alephAddress]);
+
+  // ton
+  useEffect(() => {
+    const _tonAccounts: { [x: string]: ConnectedAccount } = {};
+    const _tonWallets: { [x: string]: ConnectedWallet<'ton'> } = {};
+
+    for (const [name, adapter] of Object.entries(tonConnectors)) {
+      const address = tonAddress ?? '';
+
+      if (address === '') {
+        continue;
+      }
+
+      _tonAccounts[name] = {
+        address: address,
+        chainId: adapter.wallet?.account.chain,
+        chainType: 'ton',
+        wallet: name,
+      };
+
+      _tonWallets[name] = {
+        address: address,
+        chainId: adapter.wallet?.account.chain,
+        chainType: 'ton',
+        connector: adapter,
+      };
+    }
+
+    setChainConnectedAccounts({ ton: _tonAccounts });
+    setConnectedWallets({
+      ton: _tonWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.ton, tonConnectors, tonAddress]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {

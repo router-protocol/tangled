@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.6.8",
+  "version": "1.6.10",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -43,6 +43,8 @@
     "@solana/web3.js": "^1.94.0",
     "@tangled3/solana-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
+    "@ton/ton": "^15.0.0",
+    "@tonconnect/ui-react": "^2.0.9",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
     "@tronweb3/tronwallet-adapters": "^1.2.1",
     "@wagmi/core": "^2.11.0",

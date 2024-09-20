@@ -1,5 +1,17 @@
 # @tangled3/react
 
+## 1.6.10
+
+### Patch Changes
+
+- export abi constants
+
+## 1.6.9
+
+### Patch Changes
+
+- fix useNetwork chain search
+
 ## 1.6.8
 
 ### Patch Changes
