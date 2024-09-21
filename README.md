@@ -72,7 +72,7 @@ export default function App({ Component, pageProps }) {
 | Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Casper    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Ton       | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Ton       | :white_check_mark:     | :x:                | :x:                    | :x:                    | :x:                    |
 | Algorand  | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 
 #### Hooks

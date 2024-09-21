@@ -1,3 +1,4 @@
+import { TonConnectUIProvider } from '@tonconnect/ui-react';
 import { ReactNode, createContext, useState } from 'react';
 import { ChainData, ChainId, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
@@ -6,6 +7,7 @@ import { createChainConnectors } from '../utils/createChainConnectors.js';
 import { AlephProvider } from './AlephProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
+import { TonProvider } from './TonProvider.js';
 import { TronProvider } from './TronProvider.js';
 import WalletsProvider from './WalletsProvider.js';
 
@@ -35,6 +37,12 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
   const [connectors] = useState(() => {
     return createChainConnectors(config, chains);
   });
+  const [tonconnectManifestUrl] = useState(() => {
+    return config.tonconnectManifestUrl;
+  });
+  const [twaReturnUrl] = useState(() => {
+    return config.twaReturnUrl;
+  });
 
   return (
     <TangledContext.Provider value={{ config, chains, connectors, chainsById }}>
@@ -48,7 +56,15 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
         >
           <SolanaProvider chain={chains.solana[0]}>
             <AlephProvider chain={chains.alephZero[0]}>
-              <WalletsProvider>{children}</WalletsProvider>
+              {/* getting error if combined with TonProvider */}
+              <TonConnectUIProvider
+                manifestUrl={tonconnectManifestUrl}
+                actionsConfiguration={{ twaReturnUrl }}
+              >
+                <TonProvider chain={chains.ton[0]}>
+                  <WalletsProvider>{children}</WalletsProvider>
+                </TonProvider>
+              </TonConnectUIProvider>
             </AlephProvider>
           </SolanaProvider>
         </TronProvider>

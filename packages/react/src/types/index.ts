@@ -1,11 +1,13 @@
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
+import { TonClient } from '@ton/ton';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
 import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
 import { AlephTransactionData } from './aleph.js';
+import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
 
 export const CHAIN_TYPES = [
@@ -18,6 +20,7 @@ export const CHAIN_TYPES = [
   'casper',
   'alephZero',
   'bitcoin',
+  'ton',
 ] as const;
 
 export type ChainType = (typeof CHAIN_TYPES)[number];
@@ -87,6 +90,11 @@ export interface TangledConfig {
   projectId: string;
 
   chainConnectors?: Partial<ChainConnectors>;
+
+  /** Manifest url for ton connect */
+  tonconnectManifestUrl?: string;
+  /** Telegram mini app url */
+  twaReturnUrl?: `${string}://${string}`;
 }
 
 type ChainRpcUrls = {
@@ -115,6 +123,7 @@ export type ConnectionOrConfig = {
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
   alephZeroApi: ApiPromise;
+  tonClient: TonClient;
 };
 
 export type GetTokenMetadataParams = {
@@ -129,4 +138,6 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
     ? TronWebTypes.TransactionInfo
     : C extends 'alephZero'
       ? AlephTransactionData
-      : unknown;
+      : C extends 'ton'
+        ? TonTransactionInfo
+        : unknown;

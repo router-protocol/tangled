@@ -17,6 +17,7 @@ const createChainConfigs = (
     solana: [],
     sui: [],
     tron: [],
+    ton: [],
   };
 
   const defaultChains = getDefaultSupportedChains(testnet);
@@ -45,6 +46,7 @@ const overrideChainConfig = (
     solana: [],
     sui: [],
     tron: [],
+    ton: [],
   };
 
   for (const chains of Object.values(chainsByType)) {

@@ -1,8 +1,9 @@
 // import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
+import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useAlephStore } from './useAlephStore.js';
@@ -29,6 +30,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const { connectors: configuredConnectors } = useTangledConfig();
 
   const tronConnectors = useTronStore((state) => state.connectors);
+
+  const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -149,18 +152,50 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return registryWallets;
   }, [alephAdapter, options?.onlyInstalled]);
 
+  const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
+    const detected: Wallet<'ton'>[] = tonWallets.map((wallet) => ({
+      id: wallet.appName,
+      name: wallet.name,
+      connector: tonAdapter,
+      icon: wallet.imageUrl,
+      type: 'ton',
+      // @ts-expect-error - `injected` doesn't exist on WalletInfo type
+      installed: wallet.injected,
+      url: wallet.aboutUrl,
+    }));
+
+    // for ton connect modal option
+    const tonConnectOption: Wallet<'ton'> = {
+      id: 'ton-connect',
+      name: 'Ton Connect',
+      connector: tonAdapter,
+      icon: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
+      type: 'ton',
+      installed: true,
+    };
+
+    const walletList = [tonConnectOption, ...detected];
+
+    if (options?.onlyInstalled) {
+      return walletList.filter((wallet) => wallet.installed);
+    }
+
+    return walletList;
+  }, [tonWallets, tonAdapter, options]);
+
   return useMemo(
     () => ({
       evm: extendedEvmWallets,
       solana: extendedSolanaWallets,
       tron: extendedTronWallets,
       alephZero: extendedAlephWallets,
+      ton: extendedTonWallets,
       bitcoin: [],
       casper: [],
       cosmos: [],
       near: [],
       sui: [],
     }),
-    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets],
+    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets, extendedTonWallets],
   );
 };

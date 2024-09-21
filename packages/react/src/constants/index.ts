@@ -19,13 +19,17 @@ import {
   polygonZkEvm,
   scroll,
   solana,
+  tonMainnet,
   tronMainnet,
   zkSync,
 } from '../chains/index.js';
 import { solanaDevnet } from '../chains/solana.devnet.js';
 import { solanaTestnet } from '../chains/solana.testnet.js';
+import { tonTestnet } from '../chains/ton.testnet.js';
 import { tronShasta } from '../chains/tron.shasta.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
+
+export * from './abi/index.js';
 
 export const CHAIN_ID = {
   // evm
@@ -68,6 +72,10 @@ export const CHAIN_ID = {
   // casper
 
   alephZero: 'alephZero',
+
+  // ton
+  tonMainnet: '-239',
+  tonTestnet: '-3',
 
   // testnets
   // goerli: '5',
@@ -121,6 +129,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.solanaTestnet]: solanaTestnet,
   [CHAIN_ID.solanaDevnet]: solanaDevnet,
 
+  // ton
+  [CHAIN_ID.tonMainnet]: tonMainnet,
+  [CHAIN_ID.tonTestnet]: tonTestnet,
+
   // testnets
   // 5: goerli,
   // 80001: polygonMumbai,
@@ -139,6 +151,7 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   casper: 'Casper',
   alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
+  ton: 'Ton',
 } as const;
 
 /**
