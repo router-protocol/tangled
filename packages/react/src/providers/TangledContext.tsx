@@ -7,6 +7,7 @@ import { createChainConnectors } from '../utils/createChainConnectors.js';
 import { AlephProvider } from './AlephProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
+import { SuiProvider } from './SuiProvider.js';
 import { TonProvider } from './TonProvider.js';
 import { TronProvider } from './TronProvider.js';
 import WalletsProvider from './WalletsProvider.js';
@@ -56,15 +57,17 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
         >
           <SolanaProvider chain={chains.solana[0]}>
             <AlephProvider chain={chains.alephZero[0]}>
-              {/* getting error if combined with TonProvider */}
-              <TonConnectUIProvider
-                manifestUrl={tonconnectManifestUrl}
-                actionsConfiguration={{ twaReturnUrl }}
-              >
-                <TonProvider chain={chains.ton[0]}>
-                  <WalletsProvider>{children}</WalletsProvider>
-                </TonProvider>
-              </TonConnectUIProvider>
+              <SuiProvider chains={chains.sui}>
+                {/* getting error if combined with TonProvider */}
+                <TonConnectUIProvider
+                  manifestUrl={tonconnectManifestUrl}
+                  actionsConfiguration={{ twaReturnUrl }}
+                >
+                  <TonProvider chain={chains.ton[0]}>
+                    <WalletsProvider>{children}</WalletsProvider>
+                  </TonProvider>
+                </TonConnectUIProvider>
+              </SuiProvider>
             </AlephProvider>
           </SolanaProvider>
         </TronProvider>

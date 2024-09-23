@@ -1,3 +1,4 @@
+import { Transaction } from '@mysten/sui/transactions';
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/ton';
@@ -31,16 +32,20 @@ type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
       ? {
           submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
         }
-      : CType extends 'ton'
+      : CType extends 'sui'
         ? {
-            tonArgs: {
-              validUntil: number; // transaction deadline in unix epoch seconds.
-              network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
-              payload?: string;
-              stateInit?: string;
-            };
+            tx: Transaction;
           }
-        : never;
+        : CType extends 'ton'
+          ? {
+              tonArgs: {
+                validUntil: number; // transaction deadline in unix epoch seconds.
+                network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
+                payload?: string;
+                stateInit?: string;
+              };
+            }
+          : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
@@ -145,6 +150,23 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       block: block,
       txIndex: extrinsicId,
     };
+  }
+
+  if (chain.type === 'sui') {
+    const { tx } = args as TransactionArgs<'sui'>;
+    const walletConnector = config.connector as WalletInstance<'sui'>;
+
+    if (!walletConnector.features['sui:signAndExecuteTransaction']) {
+      throw new Error("Sui Conenctor don't support signAndExecuteTransaction");
+    }
+
+    const result = await walletConnector.features['sui:signAndExecuteTransaction'].signAndExecuteTransaction({
+      transaction: tx,
+      chain: `sui:${chain.suiNetwork}`,
+      account: walletConnector.accounts[0],
+    });
+
+    return { txHash: result.digest };
   }
 
   if (chain.type === 'ton') {

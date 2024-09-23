@@ -1,3 +1,4 @@
+import { useSuiClient } from '@mysten/dapp-kit';
 import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
 import { useMemo } from 'react';
 import { useConfig as useWagmiConfig } from 'wagmi';
@@ -14,6 +15,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
   const { connection: solanaConnection } = useSolanaConnection();
   const tronWeb = useTronStore((state) => state.tronweb);
   const alephZeroApi = useAlephStore((state) => state.api);
+  const suiClient = useSuiClient();
   const tonClient = useTonStore((state) => state.tonClient);
 
   return useMemo(() => {
@@ -24,7 +26,8 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
       solanaConnection,
       tronWeb,
       alephZeroApi: alephZeroApi,
+      suiClient: suiClient,
       tonClient,
     };
-  }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi, tonClient]);
+  }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi, suiClient, tonClient]);
 };

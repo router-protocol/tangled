@@ -1,3 +1,4 @@
+import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useMutation } from '@tanstack/react-query';
 import { WalletSwitchChainError } from '@tronweb3/tronwallet-abstract-adapter';
 import { useCallback } from 'react';
@@ -12,6 +13,7 @@ export const useNetwork = () => {
   const currentAccount = useCurrentAccount();
   const currentWalletInstance = useWallet(currentAccount?.chainType, currentAccount?.wallet);
   const chains = useChains(currentAccount?.chainType);
+  const { selectNetwork: selectSuiNetwork } = useSuiClientContext();
 
   const { switchChainAsync } = useSwitchChain();
 
@@ -46,8 +48,22 @@ export const useNetwork = () => {
 
         return;
       }
+
+      if (chain?.type === 'sui') {
+        try {
+          selectSuiNetwork(chain.id);
+
+          // temp fix
+          throw new Error('Failed to switch network on wallet, please switch manually');
+        } catch (e) {
+          console.error(e);
+          throw e;
+        }
+
+        return;
+      }
     },
-    [chains, currentWalletInstance, switchChainAsync],
+    [chains, currentWalletInstance, switchChainAsync, selectSuiNetwork],
   );
 
   const { mutate, mutateAsync, isPending } = useMutation({

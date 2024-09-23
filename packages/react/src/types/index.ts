@@ -1,3 +1,4 @@
+import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { TonClient } from '@ton/ton';
@@ -63,14 +64,19 @@ export interface TronChain extends ChainDataGeneric {
   trxId: string;
 }
 
+export interface SuiChainType extends ChainDataGeneric {
+  type: Extract<'sui', ChainType>;
+  suiNetwork: 'mainnet' | 'testnet' | 'devnet' | 'localnet';
+}
+
 // Exclude chains with custom types
-export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron'>;
+export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron' | 'sui'>;
 export type OtherChainData<T extends ChainType = OtherChainTypes> = ChainDataGeneric & {
   type: T;
 };
 
 // Chain data discriminated union for all supported chains
-export type ChainData = EVMChain | TronChain | OtherChainData;
+export type ChainData = EVMChain | TronChain | SuiChainType | OtherChainData;
 
 export type SupportedChainsByType = {
   [K in ChainData as K['type']]: K[];
@@ -123,6 +129,7 @@ export type ConnectionOrConfig = {
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
   alephZeroApi: ApiPromise;
+  suiClient: SuiClient;
   tonClient: TonClient;
 };
 
@@ -138,6 +145,8 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
     ? TronWebTypes.TransactionInfo
     : C extends 'alephZero'
       ? AlephTransactionData
-      : C extends 'ton'
-        ? TonTransactionInfo
-        : unknown;
+      : C extends 'sui'
+        ? SuiTransactionBlockResponse
+        : C extends 'ton'
+          ? TonTransactionInfo
+          : unknown;

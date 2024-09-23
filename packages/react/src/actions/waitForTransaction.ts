@@ -163,6 +163,32 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     return receipt;
   }
 
+  if (chain.type === 'sui') {
+    const { txHash } = transactionParams as TransactionParams<'sui'>;
+
+    const receipt = await pollCallback(
+      async () => {
+        return await config.suiClient.waitForTransaction({
+          digest: txHash,
+          options: {
+            showEffects: true,
+            showEvents: true,
+            showBalanceChanges: true,
+          },
+        });
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+    return receipt;
+  }
+
   if (chain.type === 'ton') {
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;
     const { txHash } = transactionParams as TransactionParams<'ton'>;
