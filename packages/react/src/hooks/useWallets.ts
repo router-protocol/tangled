@@ -3,6 +3,7 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
+import { NearContext } from '../providers/NearProvider.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
@@ -32,6 +33,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
+
+  const { wallets: nearWallets } = useContext(NearContext);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -183,6 +186,24 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return walletList;
   }, [tonWallets, tonAdapter, options]);
 
+  const extendedNearWallets = useMemo<Wallet<'near'>[]>(() => {
+    const detected: Wallet<'near'>[] = nearWallets.map((wallet) => ({
+      id: wallet.id,
+      name: wallet.name,
+      connector: wallet,
+      icon: wallet.metadata.iconUrl,
+      type: 'near',
+      installed: wallet.metadata.available,
+      url: wallet.metadata.walletUrl,
+    }));
+
+    if (options?.onlyInstalled) {
+      return detected.filter((wallet) => wallet.installed);
+    }
+
+    return detected;
+  }, [nearWallets, options?.onlyInstalled]);
+
   return useMemo(
     () => ({
       evm: extendedEvmWallets,
@@ -193,9 +214,16 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       bitcoin: [],
       casper: [],
       cosmos: [],
-      near: [],
+      near: extendedNearWallets,
       sui: [],
     }),
-    [extendedEvmWallets, extendedSolanaWallets, extendedTronWallets, extendedAlephWallets, extendedTonWallets],
+    [
+      extendedEvmWallets,
+      extendedSolanaWallets,
+      extendedTronWallets,
+      extendedAlephWallets,
+      extendedTonWallets,
+      extendedNearWallets,
+    ],
   );
 };

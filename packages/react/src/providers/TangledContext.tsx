@@ -6,6 +6,7 @@ import createChainConfigs from '../utils/createChainConfigs.js';
 import { createChainConnectors } from '../utils/createChainConnectors.js';
 import { AlephProvider } from './AlephProvider.js';
 import EVMProvider from './EVMProvider.js';
+import { NearProvider } from './NearProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
 import { TonProvider } from './TonProvider.js';
 import { TronProvider } from './TronProvider.js';
@@ -62,7 +63,9 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
                 actionsConfiguration={{ twaReturnUrl }}
               >
                 <TonProvider chain={chains.ton[0]}>
-                  <WalletsProvider>{children}</WalletsProvider>
+                  <NearProvider>
+                    <WalletsProvider>{children}</WalletsProvider>
+                  </NearProvider>
                 </TonProvider>
               </TonConnectUIProvider>
             </AlephProvider>
