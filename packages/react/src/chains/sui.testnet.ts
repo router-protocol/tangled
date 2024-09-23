@@ -13,7 +13,7 @@ export const suiTestnet: SuiChainType = {
   },
   rpcUrls: {
     default: {
-      http: [...getFullnodeUrl('testnet')],
+      http: [getFullnodeUrl('testnet')],
     },
   },
   blockExplorers: {

@@ -168,6 +168,10 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
         url: '',
       })) ?? [];
 
+    if (options?.onlyInstalled) {
+      return detected;
+    }
+
     const suggested =
       configuredConnectors.sui?.filter(
         (connector) => detected.find((wallet) => wallet.name === connector.name) === undefined,

@@ -166,7 +166,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       account: walletConnector.accounts[0],
     });
 
-    return result.digest;
+    return { txHash: result.digest };
   }
 
   if (chain.type === 'ton') {
