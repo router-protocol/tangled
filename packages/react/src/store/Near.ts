@@ -1,17 +1,19 @@
-import { ModuleState } from '@near-wallet-selector/core';
+import { ModuleState, Wallet } from '@near-wallet-selector/core';
+// @ts-expect-error - SignMessageMethod has no exports
+import { SignMessageMethod } from '@near-wallet-selector/core/src/lib/wallet/index.js';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export interface NearState {
   connectors: {
-    [key in string]: ModuleState;
+    [key in string]: ModuleState<Wallet>;
   };
-  connectedAdapter: ModuleState;
+  connectedAdapter: Wallet & SignMessageMethod;
   address: string | null;
 
   setAddress: (address: string) => void;
-  setConnectors: (connector: ModuleState) => void;
-  setConnectedAdapter: (adapter: ModuleState | undefined) => void;
+  setConnectors: (connector: ModuleState<Wallet>) => void;
+  setConnectedAdapter: (adapter: (Wallet & SignMessageMethod) | undefined) => void;
 }
 
 export type NearStore = ReturnType<typeof createNearStore>;
@@ -33,7 +35,11 @@ export const createNearStore = () => {
       connectors: {},
       setConnectedAdapter: (connectedAdapter) => set(() => ({ connectedAdapter })),
       setAddress: (address) => set(() => ({ address })),
-      setConnectors: (connectors) => set(() => ({ connectors })),
+      setConnectors: (connector) => {
+        if (!connector) return;
+
+        set(() => ({ connectors: { [connector.id]: connector } }));
+      },
     })),
   );
 };

@@ -1,8 +1,5 @@
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
-import { NearStore, createNearStore } from '../store/Near.js';
-import { ChainId } from '../types/index.js';
-// import { useStore } from "zustand";
 import {
+  Account,
   ModuleState,
   Wallet,
   WalletSelector,
@@ -12,6 +9,11 @@ import {
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNightly } from '@near-wallet-selector/nightly';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
+import { useMutation } from '@tanstack/react-query';
+import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { useStore } from 'zustand';
+import { NearStore, createNearStore } from '../store/Near.js';
+import { ChainId } from '../types/index.js';
 
 export interface NearContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
@@ -36,12 +38,19 @@ export const NearContext = createContext<NearContextValues>({
  */
 export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   const nearStore = useRef(createNearStore()).current;
-  // const connectedAdapter = useStore(nearStore, (state) => state.connectedAdapter)
-  // const setConnectors = useStore(nearStore, (state) => state.connectors)
-  // const address = useStore(nearStore, (state) => state.address)
+  const connectedAdapter = useStore(nearStore, (state) => state.connectedAdapter);
+  const setConnectedAdapter = useStore(nearStore, (state) => state.setConnectedAdapter);
+  const setConnectors = useStore(nearStore, (state) => state.setConnectors);
+  // const address = useStore(nearStore, (state) => state.address);
+  const setAddress = useStore(nearStore, (state) => state.setAddress);
 
   const [selector, setSelector] = useState<WalletSelector | null>(null);
   const [wallets, setWallets] = useState<ModuleState[]>([]);
+
+  const ContractId = {
+    testnet: 'routetoken.i-swap.testnet',
+    mainnet: 'usdt.tether-token.near',
+  };
 
   const getWalletsWithSignMethods = async (state: WalletSelectorState) => {
     return await Promise.all(
@@ -87,34 +96,107 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
     const subscription = selector.store.observable.subscribe(async (state: WalletSelectorState) => {
       const nearWallets = await getWalletsWithSignMethods(state);
+      console.log('nearwallets - ', nearWallets);
       setWallets(nearWallets);
     });
 
     return () => subscription.unsubscribe();
   }, [selector]);
 
-  // useEffect(() => {
-  //   if (!selector || wallets.length === 0) return;
+  // Subscription for accounts
+  useEffect(() => {
+    if (!selector) {
+      return;
+    }
 
-  //   const getWallets = async () => {
-  //     const walletsWithSignMethods = await Promise.all(
-  //       wallets.map(async (wallet) => {
-  //         const walletWithMethods = await wallet.wallet();
-  //         return walletWithMethods;
-  //       }),
-  //     );
-  //     console.log('walletWithSignMethods - ', walletsWithSignMethods);
-  //   };
+    const updateAccounts = () => {
+      const state = selector.store.getState();
+      if (!state.accounts[0]) return;
 
-  //   getWallets();
-  // }, [selector, wallets]);
+      console.log('state.accounts - ', state.accounts);
+      setAddress(state.accounts[0].accountId);
+    };
+
+    // Subscribe to changes in the store
+    const subscription = selector.store.observable.subscribe(updateAccounts);
+
+    return () => subscription.unsubscribe();
+  }, [selector, setAddress]);
+
+  /////////////////
+  /// Mutations ///
+  /////////////////
+  const { mutateAsync: connect } = useMutation({
+    mutationKey: ['near connect'],
+    mutationFn: async (adapterId: string) => {
+      const adapter = wallets.find((wallet) => wallet.id === adapterId);
+      if (!adapter) {
+        throw new Error('Near adapter not found');
+      }
+      let accounts: Account[];
+
+      if (adapter.type === 'bridge') {
+        accounts = await adapter.signIn({
+          contractId: ContractId.testnet,
+          accounts: [],
+        });
+        return { account: accounts[0].accountId, chainId: undefined, adapter };
+      }
+
+      if (adapter.type === 'browser') {
+        accounts = await adapter.signIn({
+          contractId: ContractId.testnet,
+          accounts: [],
+          successUrl: adapter.metadata.successUrl,
+          failureUrl: adapter.metadata.failureUrl,
+        });
+        return { account: accounts[0].accountId, chainId: undefined, adapter };
+      }
+
+      accounts = await adapter.signIn({
+        contractId: ContractId.testnet,
+        accounts: [],
+      });
+      return { account: accounts[0].accountId, chainId: undefined, adapter };
+    },
+    onSuccess: (data) => {
+      setAddress(data.account);
+      setConnectors(data.adapter);
+      setConnectedAdapter(data.adapter);
+    },
+  });
+
+  const { mutateAsync: disconnect } = useMutation({
+    mutationKey: ['near disconnect'],
+    mutationFn: async () => {
+      if (!connectedAdapter) return;
+      await connectedAdapter.signOut();
+
+      setAddress('');
+      setConnectors(connectedAdapter);
+      setConnectedAdapter(undefined);
+    },
+  });
+
+  // Autoconnect to recent wallet
+  useEffect(() => {
+    (async function autoConnect() {
+      if (wallets.length) {
+        const selectedWalletId = localStorage.getItem('near-wallet-selector:selectedWalletId');
+        const parsedSelectedWalletId: string | null = selectedWalletId ? JSON.parse(selectedWalletId) : null;
+        console.log('recentWallets from localstorage - ', parsedSelectedWalletId);
+
+        if (parsedSelectedWalletId) await connect(parsedSelectedWalletId);
+      }
+    })();
+  }, [connectedAdapter, connect, wallets.length]);
 
   return (
     <NearContext.Provider
       value={{
         store: nearStore,
-        connect: async () => ({ account: '', chainId: undefined }),
-        disconnect: async () => {},
+        connect,
+        disconnect,
         wallets,
       }}
     >

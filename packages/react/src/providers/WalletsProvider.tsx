@@ -2,6 +2,7 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { useAlephStore } from '../hooks/useAlephStore.js';
+import { useNearStore } from '../hooks/useNearStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
 import { useTronStore } from '../hooks/useTronStore.js';
@@ -19,6 +20,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const alephAddress = useAlephStore((state) => state.address);
   const tonConnectors = useTonStore((state) => state.connectors);
   const tonAddress = useTonStore((state) => state.address);
+  const nearConnectors = useNearStore((state) => state.connectors);
+  const nearAddress = useNearStore((state) => state.address);
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -180,7 +183,40 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       ton: _tonWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.ton, tonConnectors, tonAddress]);
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.ton, tonConnectors, tonAddress]);
+
+  // near
+  useEffect(() => {
+    const _nearAccounts: { [x: string]: ConnectedAccount } = {};
+    const _nearWallets: { [x: string]: ConnectedWallet<'near'> } = {};
+
+    for (const [name, adapter] of Object.entries(nearConnectors)) {
+      const address = nearAddress ?? '';
+
+      if (address === '') {
+        continue;
+      }
+
+      _nearAccounts[name] = {
+        address: address,
+        chainId: undefined, // NEAR TODO: fix the chain id
+        chainType: 'near',
+        wallet: name,
+      };
+
+      _nearWallets[name] = {
+        address: address,
+        chainId: undefined, // NEAR TODO: fix the chain id
+        chainType: 'near',
+        connector: adapter,
+      };
+    }
+
+    setChainConnectedAccounts({ near: _nearAccounts });
+    setConnectedWallets({
+      near: _nearWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors, nearAddress]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {

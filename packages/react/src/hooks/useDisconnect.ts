@@ -5,6 +5,7 @@ import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -20,6 +21,7 @@ export const useDisconnect = () => {
   const { disconnect: disconnectTronWallet } = useTronContext();
   const { disconnect: disconnectAlephWallet } = useAlephContext();
   const { disconnect: disconnectTonWallet } = useTonContext();
+  const { disconnect: disconnectNearWallet } = useNearContext();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
@@ -45,11 +47,21 @@ export const useDisconnect = () => {
         await disconnectAlephWallet();
       } else if (params.chainType === 'ton') {
         await disconnectTonWallet();
+      } else if (params.chainType === 'near') {
+        await disconnectNearWallet();
       } else {
         await walletInstance.connector.disconnect();
       }
     },
-    [disconnectAlephWallet, disconnectEVM, disconnectSolanaWallet, disconnectTronWallet, disconnectTonWallet, wallets],
+    [
+      disconnectAlephWallet,
+      disconnectEVM,
+      disconnectSolanaWallet,
+      disconnectTronWallet,
+      disconnectTonWallet,
+      disconnectNearWallet,
+      wallets,
+    ],
   );
 
   const mutation = useMutation({

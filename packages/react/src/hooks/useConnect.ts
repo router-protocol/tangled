@@ -8,6 +8,7 @@ import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -21,6 +22,7 @@ export const useConnect = () => {
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
   const { connect: connectTonWallet } = useTonContext();
+  const { connect: connectNearWallet } = useNearContext();
 
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
@@ -58,6 +60,8 @@ export const useConnect = () => {
           const tonWalletInstance = createTonWalletInstance(connectedTonWallet, walletInstance);
           return { walletInstance: tonWalletInstance, name: tonWalletInstance.name, id: tonWalletInstance.id };
         }
+      } else if (params.chainType === 'near') {
+        await connectNearWallet(walletInstance.id);
       } else {
         // @ts-expect-error - connect does not exist on TonConnectUI
         await walletInstance.connector.connect();
@@ -73,6 +77,7 @@ export const useConnect = () => {
       connectedWallets,
       wallets,
       connectTonWallet,
+      connectNearWallet,
     ],
   );
 

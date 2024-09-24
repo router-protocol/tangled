@@ -189,7 +189,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const extendedNearWallets = useMemo<Wallet<'near'>[]>(() => {
     const detected: Wallet<'near'>[] = nearWallets.map((wallet) => ({
       id: wallet.id,
-      name: wallet.name,
+      name: wallet.metadata.name,
       connector: wallet,
       icon: wallet.metadata.iconUrl,
       type: 'near',
