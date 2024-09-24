@@ -194,7 +194,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       icon: wallet.metadata.iconUrl,
       type: 'near',
       installed: wallet.metadata.available,
-      url: wallet.metadata.walletUrl,
+      url: wallet.metadata.walletUrl || wallet.metadata.downloadUrl,
     }));
 
     if (options?.onlyInstalled) {
