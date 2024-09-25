@@ -1,3 +1,4 @@
+import { WalletSelector as NearWalletSelector } from '@near-wallet-selector/core';
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { TonClient } from '@ton/ton';
@@ -124,6 +125,7 @@ export type ConnectionOrConfig = {
   tronWeb: TronWeb;
   alephZeroApi: ApiPromise;
   tonClient: TonClient;
+  nearSelector: NearWalletSelector;
 };
 
 export type GetTokenMetadataParams = {

@@ -10,7 +10,7 @@ import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNightly } from '@near-wallet-selector/nightly';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { NearStore, createNearStore } from '../store/Near.js';
 import { ChainId } from '../types/index.js';
@@ -21,6 +21,7 @@ export interface NearContextValues {
   store: NearStore | null;
 
   wallets: ModuleState[];
+  nearSelector: WalletSelector;
 }
 
 export const NearContext = createContext<NearContextValues>({
@@ -29,6 +30,7 @@ export const NearContext = createContext<NearContextValues>({
   store: null,
 
   wallets: [],
+  nearSelector: {},
 });
 
 /**
@@ -63,7 +65,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   // Initializing the near wallet selector
   const init = useCallback(async () => {
     const _selector: WalletSelector = await setupWalletSelector({
-      network: 'testnet',
+      network: 'testnet', // NEAR TODO: change to mainnet
       modules: [
         setupMyNearWallet(),
         setupNightly(),
@@ -137,7 +139,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (adapter.type === 'bridge') {
         accounts = await adapter.signIn({
-          contractId: ContractId.testnet,
+          contractId: ContractId.testnet, // NEAR TODO: change to mainnet
           accounts: [],
         });
         return { account: accounts[0].accountId, chainId: undefined, adapter };
@@ -145,7 +147,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (adapter.type === 'browser') {
         accounts = await adapter.signIn({
-          contractId: ContractId.testnet,
+          contractId: ContractId.testnet, // NEAR TODO: change to mainnet
           accounts: [],
           successUrl: adapter.metadata.successUrl,
           failureUrl: adapter.metadata.failureUrl,
@@ -154,7 +156,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       accounts = await adapter.signIn({
-        contractId: ContractId.testnet,
+        contractId: ContractId.testnet, // NEAR TODO: change to mainnet
         accounts: [],
       });
       return { account: accounts[0].accountId, chainId: undefined, adapter };
@@ -191,16 +193,16 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
     })();
   }, [connectedAdapter, connect, wallets.length]);
 
-  return (
-    <NearContext.Provider
-      value={{
-        store: nearStore,
-        connect,
-        disconnect,
-        wallets,
-      }}
-    >
-      {children}
-    </NearContext.Provider>
+  const contextValues = useMemo<NearContextValues>(
+    () => ({
+      store: nearStore,
+      connect,
+      disconnect,
+      wallets,
+      nearSelector: selector!,
+    }),
+    [connect, disconnect, nearStore, selector, wallets],
   );
+
+  return <NearContext.Provider value={contextValues}>{children}</NearContext.Provider>;
 };

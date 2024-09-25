@@ -1,7 +1,9 @@
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
+import { NEAR_NETWORK_CONFIG } from '../actions/near/readCalls.js';
 import { useAlephStore } from '../hooks/useAlephStore.js';
+import { useConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
 import { useNearStore } from '../hooks/useNearStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
@@ -22,6 +24,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const tonAddress = useTonStore((state) => state.address);
   const nearConnectors = useNearStore((state) => state.connectors);
   const nearAddress = useNearStore((state) => state.address);
+  const config = useConnectionOrConfig();
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -199,14 +202,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _nearAccounts[name] = {
         address: address,
-        chainId: undefined, // NEAR TODO: fix the chain id
+        chainId: NEAR_NETWORK_CONFIG[config?.nearSelector.options.network.networkId] as ChainId,
         chainType: 'near',
         wallet: name,
       };
 
       _nearWallets[name] = {
         address: address,
-        chainId: undefined, // NEAR TODO: fix the chain id
+        chainId: NEAR_NETWORK_CONFIG[config?.nearSelector.options.network.networkId] as ChainId,
         chainType: 'near',
         connector: adapter,
       };
@@ -216,7 +219,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       near: _nearWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors, nearAddress]);
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors, nearAddress, config]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {
