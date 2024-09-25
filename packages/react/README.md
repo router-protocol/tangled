@@ -69,7 +69,7 @@ export default function App({ Component, pageProps }) {
 | AlephZero | :white_check_mark:     | :white_check_mark: | :x:                    | :x:                    | :x:                    |
 | Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
 | Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Near      | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :x:                    | :x:                    |
 | Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Casper    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Ton       | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
