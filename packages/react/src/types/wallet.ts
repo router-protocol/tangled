@@ -1,3 +1,4 @@
+import { Wallet as NearWallet } from '@near-wallet-selector/core';
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import { TonConnectUI } from '@tonconnect/ui-react';
@@ -5,6 +6,8 @@ import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@
 import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainId, ChainType } from '../types/index.js';
+// @ts-expect-error - SignMessageMethod has no exports
+import { SignMessageMethod } from '@near-wallet-selector/core/src/lib/wallet/index.js';
 
 export type ChainConnectors = {
   evm: CreateConnectorFn[];
@@ -64,7 +67,9 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
         ? NightlyConnectAdapter
         : T extends 'ton'
           ? TonConnectUI
-          : DefaultConnector;
+          : T extends 'near'
+            ? NearWallet & SignMessageMethod
+            : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;

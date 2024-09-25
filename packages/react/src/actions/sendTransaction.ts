@@ -6,6 +6,7 @@ import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
+import { NO_DEPOSIT, THIRTY_TGAS } from './near/readCalls.js';
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -40,7 +41,26 @@ type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
               stateInit?: string;
             };
           }
-        : never;
+        : CType extends 'near'
+          ? {
+              nearArgs: {
+                transactionType:
+                  | 'CreateAccount'
+                  | 'DeployContract'
+                  | 'FunctionCall'
+                  | 'Transfer'
+                  | 'Stake'
+                  | 'AddKey'
+                  | 'DeleteKey'
+                  | 'DeleteAccount';
+                signerId?: string;
+                methodName?: string;
+                args?: object;
+                gas?: string;
+                deposit?: string;
+              };
+            }
+          : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
@@ -178,6 +198,28 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const hashHex = buffer.toString('hex');
 
     return { txHash: hashHex };
+  }
+
+  if (chain.type === 'near') {
+    const { nearArgs } = args as TransactionArgs<'near'>;
+
+    // sendTransaction to NEAR chain
+    const tx = await config.connector.signAndSendTransaction({
+      receiverId: to,
+      signerId: nearArgs.signerId,
+      actions: [
+        {
+          type: nearArgs.transactionType,
+          params: {
+            methodName: nearArgs.methodName,
+            args: nearArgs.args,
+            gas: nearArgs.gas ?? THIRTY_TGAS,
+            deposit: nearArgs.transactionType === 'Transfer' ? value : nearArgs.deposit ?? NO_DEPOSIT,
+          },
+        },
+      ],
+    });
+    console.log('[NEAR] transaction - ', tx);
   }
 
   throw new Error('Chain not supported');

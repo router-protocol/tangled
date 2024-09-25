@@ -63,7 +63,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   // Initializing the near wallet selector
   const init = useCallback(async () => {
     const _selector: WalletSelector = await setupWalletSelector({
-      network: 'mainnet',
+      network: 'testnet',
       modules: [
         setupMyNearWallet(),
         setupNightly(),

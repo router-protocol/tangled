@@ -63,7 +63,6 @@ export const useConnect = () => {
       } else if (params.chainType === 'near') {
         await connectNearWallet(walletInstance.id);
       } else {
-        // @ts-expect-error - connect does not exist on TonConnectUI
         await walletInstance.connector.connect();
       }
 

@@ -1,6 +1,9 @@
 import { providers } from 'near-api-js';
 import { OtherChainData, OtherChainTypes } from '../../types/index.js';
 
+export const THIRTY_TGAS = '30000000000000';
+export const NO_DEPOSIT = '0';
+
 export async function viewMethodOnNear(
   chain: OtherChainData<OtherChainTypes>,
   token: string,
