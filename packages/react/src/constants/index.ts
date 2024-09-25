@@ -59,8 +59,8 @@ export const CHAIN_ID = {
   // tronNile: 'tron-nile',
 
   // near
-  near: 'near',
-  nearTestnet: 'near-testnet',
+  near: '397',
+  nearTestnet: '398',
 
   // solana
   solana: 'solana',

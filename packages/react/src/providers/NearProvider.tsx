@@ -6,11 +6,15 @@ import {
   WalletSelectorState,
   setupWalletSelector,
 } from '@near-wallet-selector/core';
+import { setupEthereumWallets } from '@near-wallet-selector/ethereum-wallets';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNightly } from '@near-wallet-selector/nightly';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
+import { Config, createConfig, http, injected } from '@wagmi/core';
+import { type Chain } from '@wagmi/core/chains';
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { walletConnect } from 'wagmi/connectors';
 import { useStore } from 'zustand';
 import { NearStore, createNearStore } from '../store/Near.js';
 import { ChainId } from '../types/index.js';
@@ -31,6 +35,47 @@ export const NearContext = createContext<NearContextValues>({
 
   wallets: [],
   nearSelector: {},
+});
+
+const near: Chain = {
+  id: 398,
+  name: 'NEAR Protocol Testnet',
+  nativeCurrency: {
+    decimals: 18,
+    name: 'NEAR',
+    symbol: 'NEAR',
+  },
+  rpcUrls: {
+    default: { http: ['https://near-wallet-relayer.testnet.aurora.dev'] },
+    public: { http: ['https://near-wallet-relayer.testnet.aurora.dev'] },
+  },
+  blockExplorers: {
+    default: {
+      name: 'NEAR Explorer',
+      url: 'https://testnet.nearblocks.io',
+    },
+  },
+  testnet: true,
+};
+
+const wagmiConfig: Config = createConfig({
+  chains: [near],
+  transports: {
+    [near.id]: http(),
+  },
+  connectors: [
+    walletConnect({
+      projectId: '41980758771052df3f01be0a46f172a5',
+      metadata: {
+        name: 'Tangled Next Example',
+        description: 'A next.js example for multi-wallet support',
+        url: 'https://near.github.io/wallet-selector',
+        icons: ['https://near.github.io/wallet-selector/favicon.ico'],
+      },
+      showQrModal: false,
+    }),
+    injected({ shimDisconnect: true }),
+  ],
 });
 
 /**
@@ -78,6 +123,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
             icons: [''],
           },
         }),
+        setupEthereumWallets({ wagmiConfig }),
       ],
     });
 

@@ -219,7 +219,8 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
         },
       ],
     });
-    console.log('[NEAR] transaction - ', tx);
+
+    return { txHash: tx.transaction.hash };
   }
 
   throw new Error('Chain not supported');

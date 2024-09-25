@@ -1,7 +1,7 @@
 import { OtherChainData } from '../types/index.js';
 
 export const nearTestnet: OtherChainData<'near'> = {
-  id: 'near-testnet',
+  id: '398',
   name: 'NEAR Testnet',
   type: 'near',
   nativeCurrency: {
