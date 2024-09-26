@@ -3,6 +3,7 @@ import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { TonClient } from '@ton/ton';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
+import { providers } from 'near-api-js';
 import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
@@ -142,4 +143,6 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
       ? AlephTransactionData
       : C extends 'ton'
         ? TonTransactionInfo
-        : unknown;
+        : C extends 'near'
+          ? providers.FinalExecutionOutcome
+          : unknown;

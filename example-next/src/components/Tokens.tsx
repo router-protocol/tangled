@@ -153,14 +153,14 @@ const tokens: TokenMetadata[] = [
     decimals: 24,
     name: 'NEAR',
     symbol: 'NEAR',
-    chainId: 'near',
+    chainId: '397',
   },
   {
     address: 'usdt.tether-token.near',
     decimals: 6,
     name: 'Tether USD',
     symbol: 'USDt',
-    chainId: 'near',
+    chainId: '397',
   },
 ];
 

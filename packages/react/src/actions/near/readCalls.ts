@@ -10,14 +10,18 @@ export const NEAR_NETWORK_CONFIG: Record<string, string> = {
   mainnet: CHAIN_ID.near,
 };
 
+export function getNearProvider(chain: OtherChainData<OtherChainTypes>) {
+  const url = chain.rpcUrls.default.http[0];
+  return new providers.JsonRpcProvider({ url });
+}
+
 export async function viewMethodOnNear(
   chain: OtherChainData<OtherChainTypes>,
   token: string,
   method: string,
   args = {},
 ) {
-  const url = chain.rpcUrls.default.http[0];
-  const provider = new providers.JsonRpcProvider({ url });
+  const provider = getNearProvider(chain);
 
   let res = await provider.query({
     request_type: 'call_function',

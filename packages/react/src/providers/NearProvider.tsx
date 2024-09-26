@@ -16,6 +16,7 @@ import { type Chain } from '@wagmi/core/chains';
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { walletConnect } from 'wagmi/connectors';
 import { useStore } from 'zustand';
+import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { NearStore, createNearStore } from '../store/Near.js';
 import { ChainId } from '../types/index.js';
 
@@ -58,26 +59,6 @@ const near: Chain = {
   testnet: true,
 };
 
-const wagmiConfig: Config = createConfig({
-  chains: [near],
-  transports: {
-    [near.id]: http(),
-  },
-  connectors: [
-    walletConnect({
-      projectId: '41980758771052df3f01be0a46f172a5',
-      metadata: {
-        name: 'Tangled Next Example',
-        description: 'A next.js example for multi-wallet support',
-        url: 'https://near.github.io/wallet-selector',
-        icons: ['https://near.github.io/wallet-selector/favicon.ico'],
-      },
-      showQrModal: false,
-    }),
-    injected({ shimDisconnect: true }),
-  ],
-});
-
 /**
  * @notice This provider is used to connect to the Near network.
  * @param adapters - Supported adapters for the Near network.
@@ -93,6 +74,28 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
   const [selector, setSelector] = useState<WalletSelector | null>(null);
   const [wallets, setWallets] = useState<ModuleState[]>([]);
+
+  const { config } = useTangledConfig();
+
+  const wagmiConfig: Config = createConfig({
+    chains: [near],
+    transports: {
+      [near.id]: http(),
+    },
+    connectors: [
+      walletConnect({
+        projectId: config.projectId,
+        metadata: {
+          name: 'Tangled Next Example',
+          description: 'Example dapp for multiple wallets integration',
+          url: '',
+          icons: [''],
+        },
+        showQrModal: false,
+      }),
+      injected({ shimDisconnect: true }),
+    ],
+  });
 
   const ContractId = {
     testnet: 'routetoken.i-swap.testnet',
@@ -115,7 +118,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
         setupMyNearWallet(),
         setupNightly(),
         setupWalletConnect({
-          projectId: '41980758771052df3f01be0a46f172a5',
+          projectId: config.projectId,
           metadata: {
             name: 'Tangled Next Example',
             description: 'Example dapp for multiple wallets integration',
