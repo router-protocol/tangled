@@ -8,11 +8,13 @@ import {
 } from '@near-wallet-selector/core';
 import { setupEthereumWallets } from '@near-wallet-selector/ethereum-wallets';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
+import { setupNearMobileWallet } from '@near-wallet-selector/near-mobile-wallet';
 import { setupNightly } from '@near-wallet-selector/nightly';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
 import { Config, createConfig, http, injected } from '@wagmi/core';
 import { type Chain } from '@wagmi/core/chains';
+import { createWeb3Modal } from '@web3modal/wagmi';
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { walletConnect } from 'wagmi/connectors';
 import { useStore } from 'zustand';
@@ -97,6 +99,13 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
     ],
   });
 
+  const web3Modal = createWeb3Modal({
+    wagmiConfig: wagmiConfig,
+    projectId: config.projectId,
+    enableOnramp: false,
+    allWallets: 'SHOW',
+  });
+
   const ContractId = {
     testnet: 'routetoken.i-swap.testnet',
     mainnet: 'usdt.tether-token.near',
@@ -117,6 +126,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       modules: [
         setupMyNearWallet(),
         setupNightly(),
+        setupNearMobileWallet(),
         setupWalletConnect({
           projectId: config.projectId,
           metadata: {
@@ -126,11 +136,12 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
             icons: [''],
           },
         }),
-        setupEthereumWallets({ wagmiConfig }),
+        setupEthereumWallets({ wagmiConfig, web3Modal }),
       ],
     });
 
     setSelector(_selector);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -198,7 +209,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
         accounts = await adapter.signIn({
           contractId: ContractId.testnet, // NEAR TODO: change to mainnet
           accounts: [],
-          successUrl: adapter.metadata.successUrl,
+          successUrl: adapter.metadata.successUrl || `${window.location.origin}/wallets/mynearwallet`,
           failureUrl: adapter.metadata.failureUrl,
         });
         return { account: accounts[0].accountId, chainId: undefined, adapter };
