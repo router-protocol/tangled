@@ -32,6 +32,8 @@
     "Ankit Singh <ankit.singh.zm@gmail.com>"
   ],
   "dependencies": {
+    "@mysten/dapp-kit": "^0.14.14",
+    "@mysten/sui": "^1.4.0",
     "@near-wallet-selector/core": "^8.9.13",
     "@near-wallet-selector/ethereum-wallets": "^8.9.13",
     "@near-wallet-selector/my-near-wallet": "^8.9.13",
@@ -62,6 +64,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@mysten/wallet-standard": "0.13.2",
     "@types/react": "^18.2.66",
     "@types/react-dom": "^18.2.22",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

@@ -1,4 +1,5 @@
 // import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
+import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
@@ -27,6 +28,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const { wallets: solanaWallets } = useSolanaWallet();
 
   const alephAdapter = useAlephStore((state) => state.connectedAdapter);
+
+  const suiWallets = useSuiWallets();
 
   const { connectors: configuredConnectors } = useTangledConfig();
 
@@ -155,6 +158,31 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return registryWallets;
   }, [alephAdapter, options?.onlyInstalled]);
 
+  //sui
+  const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
+    const detected: Wallet<'sui'>[] =
+      suiWallets.map((wallet) => ({
+        id: wallet.name,
+        name: wallet.name,
+        connector: wallet,
+        icon: wallet.icon.toString(),
+        type: 'sui',
+        installed: true,
+        url: '',
+      })) ?? [];
+
+    if (options?.onlyInstalled) {
+      return detected;
+    }
+
+    const suggested =
+      configuredConnectors.sui?.filter(
+        (connector) => detected.find((wallet) => wallet.name === connector.name) === undefined,
+      ) ?? [];
+
+    return detected.concat(suggested);
+  }, [configuredConnectors.sui, suiWallets]);
+
   const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
     const detected: Wallet<'ton'>[] = tonWallets.map((wallet) => ({
       id: wallet.appName,
@@ -215,14 +243,20 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       casper: [],
       cosmos: [],
       near: extendedNearWallets,
-      sui: [],
+      sui: extendedSuiWallets,
     }),
     [
       extendedEvmWallets,
+
       extendedSolanaWallets,
+
       extendedTronWallets,
+
       extendedAlephWallets,
+      extendedSuiWallets,
+
       extendedTonWallets,
+      ,
       extendedNearWallets,
     ],
   );

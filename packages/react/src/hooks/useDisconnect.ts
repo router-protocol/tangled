@@ -1,9 +1,10 @@
+import { useDisconnectWallet as useSuiDisconnectWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
-import { Wallet, WalletInstance } from '../types/wallet.js';
+import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
 import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
@@ -20,6 +21,7 @@ export const useDisconnect = () => {
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
   const { disconnect: disconnectAlephWallet } = useAlephContext();
+  const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
   const { disconnect: disconnectTonWallet } = useTonContext();
   const { disconnect: disconnectNearWallet } = useNearContext();
 
@@ -45,22 +47,32 @@ export const useDisconnect = () => {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'alephZero') {
         await disconnectAlephWallet();
+      } else if (params.chainType === 'sui') {
+        disconnectSuiWallet();
       } else if (params.chainType === 'ton') {
         await disconnectTonWallet();
       } else if (params.chainType === 'near') {
         await disconnectNearWallet();
       } else {
-        await walletInstance.connector.disconnect();
+        const connector = walletInstance.connector as DefaultConnector;
+        await connector.disconnect();
       }
     },
     [
       disconnectAlephWallet,
+
       disconnectEVM,
+
       disconnectSolanaWallet,
+      disconnectSuiWallet,
+
       disconnectTronWallet,
+
       disconnectTonWallet,
+
       disconnectNearWallet,
       wallets,
+      ,
     ],
   );
 
