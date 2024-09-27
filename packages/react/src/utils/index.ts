@@ -62,34 +62,20 @@ export const pollCallback = async <T, TArgs extends any[]>(
     throw new Error('Interval is required');
   }
 
-  return new Promise((resolve, reject) => {
-    const start = Date.now();
-    let result = fn(...args);
-    let intervalId: number;
+  const start = Date.now();
 
-    if (result) {
-      resolve(result);
+  let result: T | undefined;
+
+  // eslint-disable-next-line no-constant-condition
+  while (!result) {
+    result = fn(...args);
+
+    await new Promise((resolve) => setTimeout(resolve, options.interval));
+
+    if (options.timeout && Date.now() - start > options.timeout) {
+      throw new Error('Timeout');
     }
+  }
 
-    // eslint-disable-next-line prefer-const
-    intervalId = window.setInterval(() => {
-      try {
-        result = fn(...args);
-
-        // Resolve and clear the interval if result is valid
-        if (result) {
-          clearInterval(intervalId);
-          resolve(result);
-        }
-        // Reject and clear the interval if timeout occurs
-        if (options.timeout && Date.now() - start > options.timeout) {
-          clearInterval(intervalId);
-          reject('TimedOut');
-        }
-      } catch (e) {
-        clearInterval(intervalId);
-        reject(e);
-      }
-    }, options.interval);
-  });
+  return result;
 };

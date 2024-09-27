@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.6.11
+
+### Patch Changes
+
+- fix polling callback util
+
 ## 1.6.10
 
 ### Patch Changes
