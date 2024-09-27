@@ -54,7 +54,7 @@ export const areTokensEqual = (tokenA: string | undefined, tokenB: string | unde
  * @returns Promise of callback result, never undefined if resolved
  */
 export const pollCallback = async <T, TArgs extends any[]>(
-  fn: (...args: TArgs) => T | undefined,
+  fn: (...args: TArgs) => Promise<T | undefined>,
   options: { interval: number; timeout?: number },
   ...args: TArgs
 ): Promise<T> => {
@@ -68,7 +68,7 @@ export const pollCallback = async <T, TArgs extends any[]>(
 
   // eslint-disable-next-line no-constant-condition
   while (!result) {
-    result = fn(...args);
+    result = await fn(...args);
 
     await new Promise((resolve) => setTimeout(resolve, options.interval));
 
