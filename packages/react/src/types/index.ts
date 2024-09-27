@@ -103,6 +103,9 @@ export interface TangledConfig {
   tonconnectManifestUrl?: string;
   /** Telegram mini app url */
   twaReturnUrl?: `${string}://${string}`;
+
+  // Configure network environment of near-wallet-selector
+  nearNetwork: 'testnet' | 'mainnet';
 }
 
 type ChainRpcUrls = {

@@ -12,12 +12,10 @@ import { setupNearMobileWallet } from '@near-wallet-selector/near-mobile-wallet'
 import { setupNightly } from '@near-wallet-selector/nightly';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
-import { Config, createConfig, http, injected } from '@wagmi/core';
-import { type Chain } from '@wagmi/core/chains';
 import { createWeb3Modal } from '@web3modal/wagmi';
 import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { walletConnect } from 'wagmi/connectors';
 import { useStore } from 'zustand';
+import { createNearConfig } from '../connectors/near/connector.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { NearStore, createNearStore } from '../store/Near.js';
 import { ChainId } from '../types/index.js';
@@ -40,27 +38,6 @@ export const NearContext = createContext<NearContextValues>({
   nearSelector: {},
 });
 
-const near: Chain = {
-  id: 398,
-  name: 'NEAR Protocol Testnet',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'NEAR',
-    symbol: 'NEAR',
-  },
-  rpcUrls: {
-    default: { http: ['https://near-wallet-relayer.testnet.aurora.dev'] },
-    public: { http: ['https://near-wallet-relayer.testnet.aurora.dev'] },
-  },
-  blockExplorers: {
-    default: {
-      name: 'NEAR Explorer',
-      url: 'https://testnet.nearblocks.io',
-    },
-  },
-  testnet: true,
-};
-
 /**
  * @notice This provider is used to connect to the Near network.
  * @param adapters - Supported adapters for the Near network.
@@ -79,28 +56,10 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { config } = useTangledConfig();
 
-  const wagmiConfig: Config = createConfig({
-    chains: [near],
-    transports: {
-      [near.id]: http(),
-    },
-    connectors: [
-      walletConnect({
-        projectId: config.projectId,
-        metadata: {
-          name: 'Tangled Next Example',
-          description: 'Example dapp for multiple wallets integration',
-          url: '',
-          icons: [''],
-        },
-        showQrModal: false,
-      }),
-      injected({ shimDisconnect: true }),
-    ],
-  });
+  const nearWagmiConfig = createNearConfig(config.nearNetwork, config.projectId);
 
   const web3Modal = createWeb3Modal({
-    wagmiConfig: wagmiConfig,
+    wagmiConfig: nearWagmiConfig,
     projectId: config.projectId,
     enableOnramp: false,
     allWallets: 'SHOW',
@@ -122,7 +81,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   // Initializing the near wallet selector
   const init = useCallback(async () => {
     const _selector: WalletSelector = await setupWalletSelector({
-      network: 'testnet', // NEAR TODO: change to mainnet
+      network: config.nearNetwork,
       modules: [
         setupMyNearWallet(),
         setupNightly(),
@@ -136,7 +95,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
             icons: [''],
           },
         }),
-        setupEthereumWallets({ wagmiConfig, web3Modal }),
+        setupEthereumWallets({ wagmiConfig: nearWagmiConfig, web3Modal }),
       ],
     });
 
@@ -158,7 +117,6 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
     const subscription = selector.store.observable.subscribe(async (state: WalletSelectorState) => {
       const nearWallets = await getWalletsWithSignMethods(state);
-      console.log('nearwallets - ', nearWallets);
       setWallets(nearWallets);
     });
 
@@ -175,7 +133,6 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       const state = selector.store.getState();
       if (!state.accounts[0]) return;
 
-      console.log('state.accounts - ', state.accounts);
       setAddress(state.accounts[0].accountId);
     };
 
@@ -199,7 +156,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (adapter.type === 'bridge') {
         accounts = await adapter.signIn({
-          contractId: ContractId.testnet, // NEAR TODO: change to mainnet
+          contractId: ContractId[config.nearNetwork],
           accounts: [],
         });
         return { account: accounts[0].accountId, chainId: undefined, adapter };
@@ -207,7 +164,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
       if (adapter.type === 'browser') {
         accounts = await adapter.signIn({
-          contractId: ContractId.testnet, // NEAR TODO: change to mainnet
+          contractId: ContractId[config.nearNetwork],
           accounts: [],
           successUrl: adapter.metadata.successUrl || `${window.location.origin}/wallets/mynearwallet`,
           failureUrl: adapter.metadata.failureUrl,
@@ -216,7 +173,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       accounts = await adapter.signIn({
-        contractId: ContractId.testnet, // NEAR TODO: change to mainnet
+        contractId: ContractId[config.nearNetwork],
         accounts: [],
       });
       return { account: accounts[0].accountId, chainId: undefined, adapter };
@@ -246,7 +203,6 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       if (wallets.length) {
         const selectedWalletId = localStorage.getItem('near-wallet-selector:selectedWalletId');
         const parsedSelectedWalletId: string | null = selectedWalletId ? JSON.parse(selectedWalletId) : null;
-        console.log('recentWallets from localstorage - ', parsedSelectedWalletId);
 
         if (parsedSelectedWalletId) await connect(parsedSelectedWalletId);
       }
