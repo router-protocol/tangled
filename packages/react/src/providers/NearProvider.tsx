@@ -73,7 +73,11 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   const getWalletsWithSignMethods = async (state: WalletSelectorState) => {
     return await Promise.all(
       state.modules.map(async (wallet: ModuleState<Wallet>) => {
-        return await wallet.wallet();
+        if (wallet.metadata.available) {
+          return await wallet.wallet();
+        } else {
+          return wallet;
+        }
       }),
     );
   };
