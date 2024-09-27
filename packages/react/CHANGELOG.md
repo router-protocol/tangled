@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.7.0
+
+### Minor Changes
+
+- add sui and ton support
+
 ## 1.6.11
 
 ### Patch Changes
