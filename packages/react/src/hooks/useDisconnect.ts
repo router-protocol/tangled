@@ -60,19 +60,13 @@ export const useDisconnect = () => {
     },
     [
       disconnectAlephWallet,
-
       disconnectEVM,
-
       disconnectSolanaWallet,
       disconnectSuiWallet,
-
       disconnectTronWallet,
-
       disconnectTonWallet,
-
       disconnectNearWallet,
       wallets,
-      ,
     ],
   );
 

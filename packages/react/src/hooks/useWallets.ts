@@ -247,16 +247,11 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }),
     [
       extendedEvmWallets,
-
       extendedSolanaWallets,
-
       extendedTronWallets,
-
       extendedAlephWallets,
       extendedSuiWallets,
-
       extendedTonWallets,
-      ,
       extendedNearWallets,
     ],
   );
