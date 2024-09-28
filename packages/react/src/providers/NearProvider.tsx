@@ -55,7 +55,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
   const { config } = useTangledConfig();
 
-  const nearWagmiConfig = createNearConfig(config.nearNetwork, config.projectId);
+  const nearWagmiConfig = createNearConfig(config.nearNetwork, config.projectId, config.projectName);
 
   const web3Modal = createWeb3Modal({
     wagmiConfig: nearWagmiConfig,
@@ -91,8 +91,8 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
         setupWalletConnect({
           projectId: config.projectId,
           metadata: {
-            name: 'Tangled Next Example',
-            description: 'Example dapp for multiple wallets integration',
+            name: config.projectName,
+            description: '',
             url: '',
             icons: [''],
           },

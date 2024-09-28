@@ -4,7 +4,7 @@ import { walletConnect } from 'wagmi/connectors';
 import { near } from '../../chains/near.js';
 import { nearTestnet } from '../../chains/near.testnet.js';
 
-export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectId: string) => {
+export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectId: string, projectName: string) => {
   const selectedChain = networkType === 'mainnet' ? near : nearTestnet;
 
   const chainConfig: Chain = {
@@ -28,8 +28,8 @@ export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectId: 
       walletConnect({
         projectId,
         metadata: {
-          name: 'Tangled Next Example',
-          description: 'Example dapp for multiple wallets integration',
+          name: projectName,
+          description: '',
           url: '',
           icons: [''],
         },
