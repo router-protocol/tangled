@@ -27,6 +27,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
           projectId: '41980758771052df3f01be0a46f172a5',
           nearNetwork: 'mainnet',
+          tonconnectManifestUrl: `${window.location.origin}/tonconnect-manifest.json`,
         }}
       >
         <main className='flex min-h-screen flex-col items-center justify-center text-white bg-neutral-800'>

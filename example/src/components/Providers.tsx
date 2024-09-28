@@ -15,6 +15,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
           chainConfigs: {},
           projectId: '41980758771052df3f01be0a46f172a5',
           nearNetwork: 'mainnet',
+          tonconnectManifestUrl: `${window.location.origin}/tonconnect-manifest.json`,
         }}
       >
         {children}
