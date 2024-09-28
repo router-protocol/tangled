@@ -9,7 +9,6 @@ import {
 import { setupEthereumWallets } from '@near-wallet-selector/ethereum-wallets';
 import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNearMobileWallet } from '@near-wallet-selector/near-mobile-wallet';
-import { setupNightly } from '@near-wallet-selector/nightly';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
 import { createWeb3Modal } from '@web3modal/wagmi';
@@ -88,7 +87,6 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       network: config.nearNetwork,
       modules: [
         setupMyNearWallet(),
-        setupNightly(),
         setupNearMobileWallet(),
         setupWalletConnect({
           projectId: config.projectId,
