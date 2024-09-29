@@ -1,4 +1,6 @@
 export * from './alephZero.js';
+export * from './bitcoin.js';
+export * from './bitcoin.testnet.js';
 export * from './evm.js';
 export * from './evm.testnet.js';
 export * from './solana.devnet.js';

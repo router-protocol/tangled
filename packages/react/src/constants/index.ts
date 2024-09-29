@@ -4,6 +4,8 @@ import {
   avalanche,
   base,
   binance,
+  bitcoin,
+  bitcoinTestnet,
   blast,
   boba,
   ethereum,
@@ -77,6 +79,10 @@ export const CHAIN_ID = {
   tonMainnet: '-239',
   tonTestnet: '-3',
 
+  // bitcoin
+  bitcoin: 'bitcoin',
+  bitcoinTestnet: 'bitcoin-testnet',
+
   // testnets
   // goerli: '5',
   // fuji: '43113',
@@ -132,6 +138,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // ton
   [CHAIN_ID.tonMainnet]: tonMainnet,
   [CHAIN_ID.tonTestnet]: tonTestnet,
+
+  // bitcoin
+  [CHAIN_ID.bitcoin]: bitcoin,
+  [CHAIN_ID.bitcoinTestnet]: bitcoinTestnet,
 
   // testnets
   // 5: goerli,
