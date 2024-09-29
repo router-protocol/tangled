@@ -47,7 +47,6 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   const connectedAdapter = useStore(nearStore, (state) => state.connectedAdapter);
   const setConnectedAdapter = useStore(nearStore, (state) => state.setConnectedAdapter);
   const setConnectors = useStore(nearStore, (state) => state.setConnectors);
-  // const address = useStore(nearStore, (state) => state.address);
   const setAddress = useStore(nearStore, (state) => state.setAddress);
 
   const [selector, setSelector] = useState<WalletSelector | null>(null);
