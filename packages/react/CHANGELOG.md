@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.7.3
+
+### Patch Changes
+
+- chore: update tron chain ids
+
 ## 1.7.2
 
 ### Patch Changes
