@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.7.2
+
+### Patch Changes
+
+- export hook types
+
 ## 1.7.1
 
 ### Patch Changes

@@ -7,7 +7,7 @@ import { useCurrentWallet } from './useCurrentWallet.js';
 import { useNetwork } from './useNetwork.js';
 import { useWallet } from './useWallet.js';
 
-type UseSendTransactionParams = Omit<SendTransactionParams<ChainData>, 'config'>;
+export type SendTransactionMutationParams = Omit<SendTransactionParams<ChainData>, 'config'>;
 /**
  * Send transaction Hook
  * @returns Mutation object
@@ -21,7 +21,7 @@ export const useSendTransaction = () => {
 
   return useMutation({
     mutationKey: ['sendTransaction'],
-    mutationFn: async ({ chain, to, from, value, args, overrides }: UseSendTransactionParams) => {
+    mutationFn: async ({ chain, to, from, value, args, overrides }: SendTransactionMutationParams) => {
       if (!to || !from) {
         throw new Error('Missing required parameters');
       }
