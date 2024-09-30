@@ -72,7 +72,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
   useEffect(() => {
     (async function autoConnect() {
       try {
-        await connect('xdefi'); // BITCOIN TODO: figure out another way
+        await connect('io.xdefi'); // BITCOIN TODO: figure out another way
       } catch (error) {
         console.error('[BITCOIN] Auto connect failed', error);
       }
