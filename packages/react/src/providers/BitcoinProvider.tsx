@@ -43,6 +43,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
       }
 
       const provider = getBitcoinProvider();
+      await provider.changeNetwork('testnet'); // BITCOIN TODO: make this dynamic
       const accounts = await connectToBitcoin();
 
       if (accounts.length > 0) {

@@ -4,7 +4,7 @@ import { Address as EVMAddress } from 'viem';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
-import { BlockStreamResponse } from '../types/bitcoin.js';
+import { BitcoinBalanceResponse } from '../types/bitcoin.js';
 import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
@@ -203,7 +203,7 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     const network = chain.id === 'bitcoin' ? '' : 'testnet/';
     const blockstreamUrl = `https://blockstream.info/${network}api/address/${account}`;
 
-    const data: BlockStreamResponse = await fetch(blockstreamUrl).then((res) => res.json());
+    const data: BitcoinBalanceResponse = await fetch(blockstreamUrl).then((res) => res.json());
 
     const confirmedBalance = data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum;
     const mempoolBalance = data.mempool_stats.funded_txo_sum - data.mempool_stats.spent_txo_sum;

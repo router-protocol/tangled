@@ -1,4 +1,4 @@
-export interface BlockStreamResponse {
+export type BitcoinBalanceResponse = {
   address: string;
   chain_stats: {
     funded_txo_count: number;
@@ -14,4 +14,12 @@ export interface BlockStreamResponse {
     spent_txo_sum: number;
     tx_count: number;
   };
-}
+};
+
+export type BitcoinGasFeeResponse = {
+  fastestFee: number;
+  halfHourFee: number;
+  hourFee: number;
+  economyFee: number;
+  minimumFee: number;
+};
