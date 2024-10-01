@@ -1,6 +1,7 @@
 import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
+import { BitcoinTransactionStatus } from '../types/bitcoin.js';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
 
@@ -196,6 +197,44 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     const receipt = await pollCallback(
       async () => {
         return await config.tonClient.getTransaction(Address.parse(_overrides.accountAddress), _overrides.lt, txHash);
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+    return receipt;
+  }
+
+  if (chain.type === 'bitcoin') {
+    const { txHash } = transactionParams as TransactionParams<'bitcoin'>;
+
+    const receipt = await pollCallback(
+      async () => {
+        const network = chain.id === 'bitcoin' ? '' : 'testnet/';
+        const apiUrl = `https://mempool.space/${network}api/tx/${txHash}`;
+
+        try {
+          const response = await fetch(apiUrl);
+          if (!response.ok) {
+            console.error(`Failed to fetch transaction status: ${response.status}`);
+            return undefined;
+          }
+
+          const transactionData: BitcoinTransactionStatus = await response.json();
+
+          if (transactionData.status.confirmed) {
+            return transactionData;
+          } else {
+            return undefined;
+          }
+        } catch (error) {
+          throw new Error(`[BITCOIN] Error fetching Bitcoin transaction status: ${error}`);
+        }
       },
       {
         interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
