@@ -1,6 +1,5 @@
-import { getBitcoinProvider } from '../../connectors/bitcoin/connectors.js';
 import { BitcoinGasFeeResponse } from '../../types/bitcoin.js';
-import { OtherChainData, OtherChainTypes } from '../../types/index.js';
+import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
 
 export function removeHexPrefix(hexString: string) {
   if (hexString.startsWith('0x')) {
@@ -26,6 +25,7 @@ export async function getBitcoinGasFee(chain: OtherChainData<OtherChainTypes>) {
 }
 
 export async function signBitcoinTx({
+  config,
   chain,
   from,
   recipient,
@@ -33,6 +33,7 @@ export async function signBitcoinTx({
   memo,
   feeRate,
 }: {
+  config: ConnectionOrConfig;
   chain: OtherChainData<OtherChainTypes>;
   from: string;
   recipient: string;
@@ -41,10 +42,9 @@ export async function signBitcoinTx({
   feeRate?: number;
 }): Promise<string> {
   const fetchedFeeRate = await getBitcoinGasFee(chain);
-  const btcProvider = getBitcoinProvider();
 
   return new Promise((resolve, reject) => {
-    btcProvider.request(
+    config.bitcoinProvider.request(
       {
         method: 'transfer',
         params: [

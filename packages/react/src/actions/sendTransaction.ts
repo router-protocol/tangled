@@ -209,6 +209,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const { memo, feeRate } = args as TransactionArgs<'bitcoin'>;
     // send transaction to BITCOIN chain
     const txHash = await signBitcoinTx({
+      config,
       chain,
       from,
       recipient: to,

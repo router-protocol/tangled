@@ -10,12 +10,16 @@ export interface BitcoinContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
   disconnect: () => Promise<void>;
   store: BitcoinStore | null;
+
+  bitcoinProvider: object | null; // BITCOIN TODO: update the type
 }
 
 export const BitcoinContext = createContext<BitcoinContextValues>({
   connect: async () => ({ account: '', chainId: undefined }),
   disconnect: async () => {},
   store: null,
+
+  bitcoinProvider: null,
 });
 
 /**
@@ -34,6 +38,8 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
 
   const { config } = useTangledConfig();
 
+  const bitcoinProvider = useRef(getBitcoinProvider()).current;
+
   ///////////////////
   ///// Mutations ///
   ///////////////////
@@ -45,17 +51,20 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
         throw new Error('[BITCOIN] Adapter not found');
       }
 
-      const provider = getBitcoinProvider();
-      await provider.changeNetwork(config.bitcoinNetwork);
+      await bitcoinProvider?.changeNetwork(config.bitcoinNetwork);
       const accounts = await connectToBitcoin();
 
       if (accounts.length > 0) {
         // setting localStorage for handling autoconnect
         localStorage.setItem('xdefiConnection', 'true');
-        return { account: accounts[0], chainId: BITCOIN_CHAIN_CONFIG[provider.chainId], adapter: provider };
+        return {
+          account: accounts[0],
+          chainId: BITCOIN_CHAIN_CONFIG[bitcoinProvider.chainId],
+          adapter: bitcoinProvider,
+        };
       }
 
-      return { account: '', chainId: provider.chainId, adapter: provider };
+      return { account: '', chainId: bitcoinProvider.chainId, adapter: bitcoinProvider };
     },
     onSuccess: (data) => {
       setAddress(data.account);
@@ -95,6 +104,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
         store: bitcoinStore,
         connect,
         disconnect: disconnect,
+        bitcoinProvider: bitcoinProvider,
       }}
     >
       {children}
