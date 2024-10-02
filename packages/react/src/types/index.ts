@@ -95,6 +95,9 @@ export interface TangledConfig {
   /** Walletconnect project ID */
   projectId: string;
 
+  /** Bitcoin network configuration */
+  bitcoinNetwork: 'mainnet' | 'testnet';
+
   chainConnectors?: Partial<ChainConnectors>;
 
   /** Manifest url for ton connect */

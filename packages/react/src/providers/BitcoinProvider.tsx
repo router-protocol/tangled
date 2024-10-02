@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { BITCOIN_CHAIN_CONFIG, connectToBitcoin, getBitcoinProvider } from '../connectors/bitcoin/connectors.js';
+import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { BitcoinStore, createBitcoinStore } from '../store/Bitcoin.js';
 import { ChainId } from '../types/index.js';
 
@@ -31,6 +32,8 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
   const setConnectedAdapter = useStore(bitcoinStore, (state) => state.setConnectedAdapter);
   // const setConnectors = useStore(bitcoinStore, (state) => state.setConnectors);
 
+  const { config } = useTangledConfig();
+
   ///////////////////
   ///// Mutations ///
   ///////////////////
@@ -43,10 +46,12 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
       }
 
       const provider = getBitcoinProvider();
-      await provider.changeNetwork('testnet'); // BITCOIN TODO: make this dynamic
+      await provider.changeNetwork(config.bitcoinNetwork);
       const accounts = await connectToBitcoin();
 
       if (accounts.length > 0) {
+        // setting localStorage for handling autoconnect
+        localStorage.setItem('xdefiConnection', 'true');
         return { account: accounts[0], chainId: BITCOIN_CHAIN_CONFIG[provider.chainId], adapter: provider };
       }
 
@@ -63,6 +68,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
     mutationFn: async () => {
       if (!connectedAdapter) return;
 
+      localStorage.removeItem('xdefiConnection');
       // no disconnect method available
       setAddress('');
       setConnectedAdapter(undefined);
@@ -72,10 +78,13 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
   // auto-connect
   useEffect(() => {
     (async function autoConnect() {
-      try {
-        await connect('io.xdefi'); // BITCOIN TODO: figure out another way
-      } catch (error) {
-        console.error('[BITCOIN] Auto connect failed', error);
+      const isXdefiConnected = JSON.parse(localStorage.getItem('xdefiConnection') || 'null');
+      if (isXdefiConnected) {
+        try {
+          await connect('io.xdefi'); // BITCOIN TODO: figure out another way
+        } catch (error) {
+          console.error('[BITCOIN] Auto connect failed', error);
+        }
       }
     })();
   }, [connect]);
