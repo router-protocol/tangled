@@ -9,14 +9,16 @@ import {
 } from '../connectors/bitcoin/connectors.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { BitcoinStore, createBitcoinStore } from '../store/Bitcoin.js';
+import { BitcoinConnector } from '../types/bitcoin.js';
 import { ChainId } from '../types/index.js';
+import { Wallet } from '../types/wallet.js';
 
 export interface BitcoinContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
   disconnect: () => Promise<void>;
   store: BitcoinStore | null;
 
-  bitcoinProvider: object | null; // BITCOIN TODO: update the type
+  bitcoinProvider: BitcoinConnector | undefined;
 }
 
 export const BitcoinContext = createContext<BitcoinContextValues>({
@@ -24,7 +26,7 @@ export const BitcoinContext = createContext<BitcoinContextValues>({
   disconnect: async () => {},
   store: null,
 
-  bitcoinProvider: null,
+  bitcoinProvider: undefined,
 });
 
 /**
@@ -32,14 +34,17 @@ export const BitcoinContext = createContext<BitcoinContextValues>({
  * @param adapters - Supported adapters for the Bitcoin network.
  * @returns The Bitcoin provider context with the connect and disconnect functions.
  */
-export const BitcoinProvider = ({ children, adapters }: { children: React.ReactNode; adapters: any[] }) => {
+export const BitcoinProvider = ({
+  children,
+  adapters,
+}: {
+  children: React.ReactNode;
+  adapters: Wallet<'bitcoin'>[];
+}) => {
   const bitcoinStore = useRef(createBitcoinStore({ adapters })).current;
   const connectedAdapter = useStore(bitcoinStore, (state) => state.connectedAdapter);
-  //   const address = useStore(bitcoinStore, (state) => state.address);
-  //   const connectors = useStore(bitcoinStore, (state) => state.connectors);
   const setAddress = useStore(bitcoinStore, (state) => state.setAddress);
   const setConnectedAdapter = useStore(bitcoinStore, (state) => state.setConnectedAdapter);
-  // const setConnectors = useStore(bitcoinStore, (state) => state.setConnectors);
 
   const { config } = useTangledConfig();
 
@@ -69,7 +74,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
         };
       }
 
-      return { account: '', chainId: bitcoinProvider.chainId, adapter: bitcoinProvider };
+      return { account: '', chainId: bitcoinProvider.chainId as ChainId, adapter: bitcoinProvider };
     },
     onSuccess: (data) => {
       setAddress(data.account);
@@ -91,9 +96,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
 
   // NOTE: unconventional way to listen to `accountsChange` events - window.xfi.bitcoin event listeners don't work as expected
   useEffect(() => {
-    // @ts-expect-error - xfi doesn't exist on window
-    window.xfi.ethereum.on('accountsChanged', (account: object) => {
-      console.log(`evm_accountsChanged::${account}`);
+    window.xfi.ethereum.on('accountsChanged', () => {
       connect(xdefiWallet.id);
     });
   }, [connect]);
@@ -104,7 +107,7 @@ export const BitcoinProvider = ({ children, adapters }: { children: React.ReactN
       const isXdefiConnected = JSON.parse(localStorage.getItem('xdefiConnection') || 'null');
       if (isXdefiConnected) {
         try {
-          await connect(xdefiWallet.id); // BITCOIN TODO: figure out another way
+          await connect(xdefiWallet.id);
         } catch (error) {
           console.error('[BITCOIN] Auto connect failed', error);
         }

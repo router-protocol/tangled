@@ -60,11 +60,15 @@ export async function signBitcoinTx({
           },
         ],
       },
-      async (error: unknown, result: string) => {
+      async (error: unknown, result: string | string[]) => {
         if (error) {
           reject(error);
         }
-        resolve(result);
+        if (typeof result === 'string') {
+          resolve(result);
+        } else {
+          reject(new Error('[BITCOIN] Transfer request:: Expected a string result'));
+        }
       },
     );
   });

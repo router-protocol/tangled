@@ -1,21 +1,22 @@
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { BITCOIN_CHAIN_CONFIG } from '../connectors/bitcoin/connectors.js';
+import { BitcoinConnector } from '../types/bitcoin.js';
+import { Wallet } from '../types/wallet.js';
 
 interface BitcoinProps {
-  adapters: any[]; // BITCOIN TODO: update 'any' type
+  adapters: Wallet<'bitcoin'>[];
 }
 
 export interface BitcoinState {
   connectors: {
-    [key in string]: any; // BITCOIN TODO: update 'any' type
+    [key in string]: { account: string; chainId: string | undefined; adapter: Wallet<'bitcoin'> };
   };
-  connectedAdapter: any; // BITCOIN TODO: update 'any' type
+  connectedAdapter: BitcoinConnector | Wallet<'bitcoin'> | undefined;
   address: string | null;
 
   setAddress: (address: string) => void;
-  setConnectors: (connector: any) => void; // BITCOIN TODO: update 'any' type
-  setConnectedAdapter: (adapter: any) => void; // BITCOIN TODO: update 'any' type
+  setConnectors: (connector: BitcoinState['connectors']) => void;
+  setConnectedAdapter: (adapter: BitcoinConnector | undefined) => void;
 }
 
 export type BitcoinStore = ReturnType<typeof createBitcoinStore>;
@@ -36,7 +37,11 @@ export const createBitcoinStore = (props: BitcoinProps) => {
       ...DEFAULT_BITCOIN_STATE,
       connectors: props?.adapters.reduce(
         (acc, adapter) => {
-          acc[adapter.name] = { adapter, account: '', chainId: BITCOIN_CHAIN_CONFIG[adapter.chainId] };
+          acc[adapter.name] = {
+            adapter,
+            account: '',
+            chainId: undefined,
+          };
           return acc;
         },
         {} as BitcoinState['connectors'],

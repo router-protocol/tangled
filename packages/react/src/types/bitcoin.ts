@@ -1,3 +1,5 @@
+export type BitcoinConnector = typeof window.xfi.bitcoin;
+
 export type BitcoinBalanceResponse = {
   address: string;
   chain_stats: {

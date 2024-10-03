@@ -1,6 +1,8 @@
+import { BitcoinConnector } from '../../types/bitcoin.js';
+import { ChainId } from '../../types/index.js';
 import { Wallet } from '../../types/wallet.js';
 
-export const BITCOIN_CHAIN_CONFIG: Record<string, string> = {
+export const BITCOIN_CHAIN_CONFIG: Record<string, ChainId> = {
   'Bitcoin_bitcoin-testnet': 'bitcoin-testnet',
   'Bitcoin_bitcoin-mainnet': 'bitcoin',
 };
@@ -14,29 +16,27 @@ export const xdefiWallet: Wallet<'bitcoin'> = {
 };
 
 export const isXdefiWalletInstalled = () => {
-  // @ts-expect-error - by default xfi doesn't exist on window
-  return !!window?.xfi?.bitcoin; // BITCOIN TODO: fix 'xfi' type
+  return !!window.xfi.bitcoin;
 };
 
-export const getBitcoinProvider = () => {
-  if ('xfi' in window) {
-    // @ts-expect-error - by default xfi doesn't exist on window
-    const provider = window?.xfi?.bitcoin; // BITCOIN TODO: fix types
-    return provider;
+export const getBitcoinProvider = (): BitcoinConnector => {
+  if ('xfi' in window && window.xfi.bitcoin) {
+    return window.xfi.bitcoin;
   } else {
     console.error('[BITCOIN] provider not found');
+    throw new Error('[BITCOIN] provider not found');
   }
 };
 
 export const connectToBitcoin = (): Promise<string[]> => {
   const btcProvider = getBitcoinProvider();
   return new Promise((resolve, reject) => {
-    btcProvider.request({ method: 'request_accounts', params: [] }, (error: Error | null, accounts: string[]) => {
+    btcProvider.request({ method: 'request_accounts', params: [] }, (error: Error | null, accounts) => {
       if (error) {
         reject(error);
       }
 
-      resolve(accounts);
+      resolve(Array.isArray(accounts) ? accounts : [accounts]);
     });
   });
 };
