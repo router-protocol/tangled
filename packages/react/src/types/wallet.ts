@@ -69,7 +69,7 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
           : T extends 'ton'
             ? TonConnectUI
             : T extends 'bitcoin'
-              ? BitcoinConnector
+              ? BitcoinConnector | Wallet<'bitcoin'>
               : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {

@@ -206,14 +206,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _bitcoinAccounts[connector.adapter.name] = {
         address: address,
-        chainId: BITCOIN_CHAIN_CONFIG[config?.bitcoinProvider.chainId] as ChainId,
+        chainId: BITCOIN_CHAIN_CONFIG[config?.bitcoinProvider.chainId ?? ''] as ChainId,
         chainType: 'bitcoin',
         wallet: connector.adapter.id,
       };
 
       _bitcoinWallets[connector.adapter.name] = {
         address: address,
-        chainId: BITCOIN_CHAIN_CONFIG[config?.bitcoinProvider.chainId] as ChainId,
+        chainId: BITCOIN_CHAIN_CONFIG[config?.bitcoinProvider.chainId ?? ''] as ChainId,
         chainType: 'bitcoin',
         connector: connector.adapter,
       };

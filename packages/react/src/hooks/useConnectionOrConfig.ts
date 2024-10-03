@@ -22,6 +22,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
 
   return useMemo(() => {
     if (!alephZeroApi) return undefined;
+    if (!bitcoinProvider) return undefined;
 
     return {
       wagmiConfig,
