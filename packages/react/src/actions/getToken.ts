@@ -40,7 +40,13 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
-    const contract = config.tronWeb.contract(trc20Abi, token);
+    let contractAddress: string = token;
+    // = config.tronWeb.address.fromHex(token);
+    if (token.startsWith('0x')) {
+      contractAddress = config.tronWeb.address.fromHex(token);
+    }
+
+    const contract = config.tronWeb.contract(trc20Abi, contractAddress);
 
     let name = contract.name().call();
     let symbol = contract.symbol().call();
@@ -155,7 +161,13 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       return { balance, allowance };
     }
 
-    const contract = config.tronWeb.contract(trc20Abi, token);
+    let contractAddress: string = token;
+    // = config.tronWeb.address.fromHex(token);
+    if (token.startsWith('0x')) {
+      contractAddress = config.tronWeb.address.fromHex(token);
+    }
+
+    const contract = config.tronWeb.contract(trc20Abi, contractAddress);
     const balance = await contract.balanceOf(account).call();
     const allowance = spender ? await contract.allowance(account, spender).call() : BigInt(0);
     return { balance, allowance };
