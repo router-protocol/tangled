@@ -94,10 +94,18 @@ export const BitcoinProvider = ({
     },
   });
 
-  // NOTE: unconventional way to listen to `accountsChange` events - window.xfi.bitcoin event listeners don't work as expected
+  // NOTE: This is an unconventional way to listen for `accountsChange` events since window.xfi.bitcoin event listeners don't work as expected
   useEffect(() => {
-    window.xfi.ethereum.on('accountsChanged', () => {
-      connect(xdefiWallet.id);
+    window.xfi.ethereum.on('accountsChanged', (account: unknown) => {
+      // Checking if account is an array and has valid addresses
+      if (Array.isArray(account) && account.length > 0) {
+        const validAccount = account[0];
+        if (validAccount) {
+          connect(xdefiWallet.id);
+        }
+      } else {
+        localStorage.removeItem('xdefiConnection');
+      }
     });
   }, [connect]);
 
