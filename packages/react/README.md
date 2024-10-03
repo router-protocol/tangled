@@ -70,7 +70,7 @@ export default function App({ Component, pageProps }) {
 | Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
 | Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Bitcoin   | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
 | Casper    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 | Ton       | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
 | Algorand  | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
