@@ -52,7 +52,7 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
     suiConnectors.nightly,
   ];
 
-  connectors.bitcoin = [...(overrides.bitcoin ?? []), bitcoinConnectors.ctrlWallet];
+  connectors.bitcoin = [...(overrides.bitcoin ?? []), bitcoinConnectors.xdefiWallet];
 
   return connectors;
 };

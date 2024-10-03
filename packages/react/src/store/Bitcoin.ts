@@ -36,7 +36,6 @@ export const createBitcoinStore = (props: BitcoinProps) => {
       ...DEFAULT_BITCOIN_STATE,
       connectors: props?.adapters.reduce(
         (acc, adapter) => {
-          // BITCOIN TODO: update the adapter if needed
           acc[adapter.name] = { adapter, account: '', chainId: BITCOIN_CHAIN_CONFIG[adapter.chainId] };
           return acc;
         },

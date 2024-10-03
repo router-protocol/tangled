@@ -3,7 +3,7 @@ import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
-import { isCtrlWalletInstalled } from '../connectors/bitcoin/connectors.js';
+import { getBitcoinProvider, isXdefiWalletInstalled } from '../connectors/bitcoin/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
@@ -220,11 +220,10 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     const detected: Wallet<'bitcoin'>[] = Object.values(bitcoinConnectors).map((connector) => ({
       id: connector.adapter.id,
       name: connector.adapter.name,
-      // @ts-expect-error - by default xfi doesn't exist on window  // BITCOIN TODO: fix 'xfi' type
-      connector: window?.xfi?.bitcoin,
+      connector: getBitcoinProvider(),
       icon: connector.adapter.icon,
       type: 'bitcoin',
-      installed: isCtrlWalletInstalled(),
+      installed: isXdefiWalletInstalled(),
       url: connector.adapter.url,
     }));
 
