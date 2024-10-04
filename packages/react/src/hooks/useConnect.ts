@@ -31,7 +31,7 @@ export const useConnect = () => {
   const setRecentWallet = useWalletsStore((state) => state.setRecentWallet);
 
   const connectWallet = useCallback(
-    async (params: { walletId: string; chainType: ChainType }) => {
+    async (params: { walletId: string; chainType: ChainType; nearContractId?: string }) => {
       const walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
@@ -65,7 +65,7 @@ export const useConnect = () => {
           return { walletInstance: tonWalletInstance, name: tonWalletInstance.name, id: tonWalletInstance.id };
         }
       } else if (params.chainType === 'near') {
-        await connectNearWallet(walletInstance.id);
+        await connectNearWallet({ adapterId: walletInstance.id, contractId: params.nearContractId });
       } else {
         const connector = walletInstance.connector as DefaultConnector;
         await connector.connect();

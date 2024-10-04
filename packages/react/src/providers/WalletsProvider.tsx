@@ -4,7 +4,7 @@ import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { NEAR_NETWORK_CONFIG } from '../actions/near/readCalls.js';
 import { useAlephStore } from '../hooks/useAlephStore.js';
-import { useConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
+import { useNearContext } from '../hooks/useNearContext.js';
 import { useNearStore } from '../hooks/useNearStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
@@ -24,8 +24,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const tonConnectors = useTonStore((state) => state.connectors);
   const tonAddress = useTonStore((state) => state.address);
   const nearConnectors = useNearStore((state) => state.connectors);
-  const nearAddress = useNearStore((state) => state.address);
-  const config = useConnectionOrConfig();
+  const { nearSelector } = useNearContext();
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -198,7 +197,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     const _nearWallets: { [x: string]: ConnectedWallet<'near'> } = {};
 
     for (const [name, adapter] of Object.entries(nearConnectors)) {
-      const address = nearAddress ?? '';
+      const state = nearSelector.store.getState();
+      const address = state.accounts[0]?.accountId ?? '';
 
       if (address === '') {
         continue;
@@ -206,14 +206,14 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
       _nearAccounts[name] = {
         address: address,
-        chainId: NEAR_NETWORK_CONFIG[config?.nearSelector.options.network.networkId] as ChainId,
+        chainId: NEAR_NETWORK_CONFIG[nearSelector.options.network.networkId] as ChainId,
         chainType: 'near',
         wallet: name,
       };
 
       _nearWallets[name] = {
         address: address,
-        chainId: NEAR_NETWORK_CONFIG[config?.nearSelector.options.network.networkId] as ChainId,
+        chainId: NEAR_NETWORK_CONFIG[nearSelector.options.network.networkId] as ChainId,
         chainType: 'near',
         connector: adapter,
       };
@@ -223,7 +223,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       near: _nearWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors, nearAddress, config]);
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors, nearSelector]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {

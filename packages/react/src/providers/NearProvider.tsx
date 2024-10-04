@@ -20,7 +20,13 @@ import { NearStore, createNearStore } from '../store/Near.js';
 import { ChainId } from '../types/index.js';
 
 export interface NearContextValues {
-  connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
+  connect: ({
+    adapterId,
+    contractId,
+  }: {
+    adapterId: string;
+    contractId: string | undefined;
+  }) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
   disconnect: () => Promise<void>;
   store: NearStore | null;
 
@@ -148,36 +154,33 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   /////////////////
   const { mutateAsync: connect } = useMutation({
     mutationKey: ['near connect'],
-    mutationFn: async (adapterId: string) => {
+    mutationFn: async ({ adapterId, contractId }: { adapterId: string; contractId: string | undefined }) => {
       const adapter = wallets.find((wallet) => wallet.id === adapterId);
       if (!adapter) {
         throw new Error('Near adapter not found');
       }
-      let accounts: Account[];
-
-      if (adapter.type === 'bridge') {
-        accounts = await adapter.signIn({
-          contractId: ContractId[config.nearNetwork],
-          accounts: [],
-        });
-        return { account: accounts[0].accountId, chainId: undefined, adapter };
+      if (!contractId) {
+        throw new Error('Near contractId not found');
       }
+      localStorage.setItem('recent-used-near-contractid', JSON.stringify(contractId));
 
-      if (adapter.type === 'browser') {
-        accounts = await adapter.signIn({
-          contractId: ContractId[config.nearNetwork],
-          accounts: [],
-          successUrl: adapter.metadata.successUrl || `${window.location.origin}/wallets/mynearwallet`,
-          failureUrl: adapter.metadata.failureUrl,
-        });
-        return { account: accounts[0].accountId, chainId: undefined, adapter };
-      }
-
-      accounts = await adapter.signIn({
+      const signInParams = {
         contractId: ContractId[config.nearNetwork],
         accounts: [],
-      });
-      return { account: accounts[0].accountId, chainId: undefined, adapter };
+        successUrl:
+          adapter.type === 'browser'
+            ? adapter.metadata.successUrl || `${window.location.origin}/wallets/mynearwallet`
+            : undefined,
+        failureUrl: adapter.type === 'browser' ? adapter.metadata.failureUrl : undefined,
+      };
+
+      const accounts: Account[] = await adapter.signIn(signInParams);
+
+      return {
+        account: accounts[0].accountId,
+        chainId: undefined,
+        adapter,
+      };
     },
     onSuccess: (data) => {
       setAddress(data.account);
@@ -201,14 +204,20 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   // Autoconnect to recent wallet
   useEffect(() => {
     (async function autoConnect() {
-      if (wallets.length) {
-        const selectedWalletId = localStorage.getItem('near-wallet-selector:selectedWalletId');
-        const parsedSelectedWalletId: string | null = selectedWalletId ? JSON.parse(selectedWalletId) : null;
+      const nearContractId = localStorage.getItem('recent-used-near-contractid');
+      const selectedWalletId = localStorage.getItem('near-wallet-selector:selectedWalletId');
 
-        if (parsedSelectedWalletId) await connect(parsedSelectedWalletId);
+      if (nearContractId && wallets.length) {
+        if (selectedWalletId) {
+          try {
+            await connect({ adapterId: JSON.parse(selectedWalletId), contractId: JSON.parse(nearContractId) });
+          } catch (error) {
+            console.error('Connection error:', error);
+          }
+        }
       }
     })();
-  }, [connectedAdapter, connect, wallets.length]);
+  }, [connect, wallets.length]);
 
   const contextValues = useMemo<NearContextValues>(
     () => ({

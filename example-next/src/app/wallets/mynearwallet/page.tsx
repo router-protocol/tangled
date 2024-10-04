@@ -7,10 +7,17 @@ export default function NearPage() {
   const { connect, isLoading, error } = useConnect();
   const wallets = useWallets();
 
+  const getNearContractId = (chainType: unknown) => {
+    // TODO: add contractId for both 'testnet' & 'mainnet'
+    if (chainType === 'near') {
+      return 'usdt.tether-token.near'; // For testnet: 'routetoken.i-swap.testnet'
+    }
+  };
+
   useEffect(() => {
     if (wallets.near.length > 0) {
       connect(
-        { walletId: 'my-near-wallet', chainType: 'near' },
+        { walletId: 'my-near-wallet', chainType: 'near', nearContractId: getNearContractId('near') },
         {
           onSuccess: () => {
             window.location.href = '/';
