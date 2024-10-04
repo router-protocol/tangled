@@ -69,11 +69,6 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
     allWallets: 'SHOW',
   });
 
-  const ContractId = {
-    testnet: 'routetoken.i-swap.testnet',
-    mainnet: 'usdt.tether-token.near',
-  };
-
   const getWalletsWithSignMethods = async (state: WalletSelectorState) => {
     return await Promise.all(
       state.modules.map(async (wallet: ModuleState<Wallet>) => {
@@ -165,7 +160,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       localStorage.setItem('recent-used-near-contractid', JSON.stringify(contractId));
 
       const signInParams = {
-        contractId: ContractId[config.nearNetwork],
+        contractId,
         accounts: [],
         successUrl:
           adapter.type === 'browser'

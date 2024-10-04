@@ -4,7 +4,14 @@ import { Address as EVMAddress } from 'viem';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
-import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
+import {
+  ChainData,
+  ChainId,
+  ChainType,
+  ConnectionOrConfig,
+  GetTokenMetadataParams,
+  OtherChainData,
+} from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
@@ -100,7 +107,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
-    const res = await viewMethodOnNear(chain, token, 'ft_metadata');
+    const res = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_metadata');
 
     return {
       name: res.name,
@@ -215,10 +222,10 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'near') {
-    const balance = await viewMethodOnNear(chain, token, 'ft_balance_of', {
+    const balance = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_balance_of', {
       account_id: account,
     });
-    const allowance = await viewMethodOnNear(chain, token, 'storage_balance_of', {
+    const allowance = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'storage_balance_of', {
       account_id: account,
     });
 

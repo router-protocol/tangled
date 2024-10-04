@@ -223,7 +223,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       near: _nearWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors, nearSelector]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {

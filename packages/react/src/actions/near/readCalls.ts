@@ -1,6 +1,6 @@
 import { providers } from 'near-api-js';
 import { CHAIN_ID } from '../../constants/index.js';
-import { OtherChainData, OtherChainTypes } from '../../types/index.js';
+import { OtherChainData } from '../../types/index.js';
 
 export const THIRTY_TGAS = '30000000000000';
 export const NO_DEPOSIT = '0';
@@ -10,17 +10,12 @@ export const NEAR_NETWORK_CONFIG: Record<string, string> = {
   mainnet: CHAIN_ID.near,
 };
 
-export function getNearProvider(chain: OtherChainData<OtherChainTypes>) {
+export function getNearProvider(chain: OtherChainData<'near'>) {
   const url = chain.rpcUrls.default.http[0];
   return new providers.JsonRpcProvider({ url });
 }
 
-export async function viewMethodOnNear(
-  chain: OtherChainData<OtherChainTypes>,
-  token: string,
-  method: string,
-  args = {},
-) {
+export async function viewMethodOnNear(chain: OtherChainData<'near'>, token: string, method: string, args = {}) {
   const provider = getNearProvider(chain);
 
   try {

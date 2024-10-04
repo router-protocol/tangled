@@ -1,7 +1,7 @@
 import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
-import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
+import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
 import { getNearProvider } from './near/readCalls.js';
 
@@ -226,7 +226,7 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
 
     const receipt = await pollCallback(
       async () => {
-        const provider = await getNearProvider(chain);
+        const provider = await getNearProvider(chain as OtherChainData<'near'>);
         return await provider.txStatus(txHash, _overrides.accountAddress);
       },
       {
