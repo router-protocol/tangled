@@ -171,3 +171,9 @@ export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
  * The native SOL address.
  */
 export const SOL_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+// Lookup for near chain id
+export const NEAR_NETWORK_CONFIG: Record<string, string> = {
+  testnet: CHAIN_ID.nearTestnet,
+  mainnet: CHAIN_ID.near,
+};

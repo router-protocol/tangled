@@ -2,7 +2,7 @@ import { useSuiClientContext, useCurrentWallet as useSuiCurrentWallet } from '@m
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
-import { NEAR_NETWORK_CONFIG } from '../actions/near/readCalls.js';
+import { NEAR_NETWORK_CONFIG } from '../constants/index.js';
 import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useNearContext } from '../hooks/useNearContext.js';
 import { useNearStore } from '../hooks/useNearStore.js';

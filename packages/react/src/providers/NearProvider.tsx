@@ -12,7 +12,8 @@ import { setupNearMobileWallet } from '@near-wallet-selector/near-mobile-wallet'
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
 import { createWeb3Modal } from '@web3modal/wagmi';
-import { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { useLocalStorage } from 'usehooks-ts';
 import { useStore } from 'zustand';
 import { createNearConfig } from '../connectors/near/connector.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
@@ -59,6 +60,9 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   const [wallets, setWallets] = useState<ModuleState[]>([]);
 
   const { config } = useTangledConfig();
+
+  const [nearContractId, setNearContractId] = useLocalStorage<string | null>('recent-used-near-contractid', null);
+  const [selectedWalletId] = useLocalStorage<string | null>('near-wallet-selector:selectedWalletId', null);
 
   const nearWagmiConfig = createNearConfig(config.nearNetwork, config.projectId, config.projectName);
 
@@ -157,7 +161,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
       if (!contractId) {
         throw new Error('Near contractId not found');
       }
-      localStorage.setItem('recent-used-near-contractid', JSON.stringify(contractId));
+      setNearContractId(contractId);
 
       const signInParams = {
         contractId,
@@ -199,31 +203,32 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   // Autoconnect to recent wallet
   useEffect(() => {
     (async function autoConnect() {
-      const nearContractId = localStorage.getItem('recent-used-near-contractid');
-      const selectedWalletId = localStorage.getItem('near-wallet-selector:selectedWalletId');
-
       if (nearContractId && wallets.length) {
         if (selectedWalletId) {
           try {
-            await connect({ adapterId: JSON.parse(selectedWalletId), contractId: JSON.parse(nearContractId) });
+            await connect({
+              adapterId: selectedWalletId,
+              contractId: nearContractId,
+            });
           } catch (error) {
             console.error('Connection error:', error);
           }
         }
       }
     })();
-  }, [connect, wallets.length]);
+  }, [connect, wallets.length, nearContractId, selectedWalletId]);
 
-  const contextValues = useMemo<NearContextValues>(
-    () => ({
-      store: nearStore,
-      connect,
-      disconnect,
-      wallets,
-      nearSelector: selector!,
-    }),
-    [connect, disconnect, nearStore, selector, wallets],
+  return (
+    <NearContext.Provider
+      value={{
+        store: nearStore,
+        connect,
+        disconnect,
+        wallets,
+        nearSelector: selector!,
+      }}
+    >
+      {children}
+    </NearContext.Provider>
   );
-
-  return <NearContext.Provider value={contextValues}>{children}</NearContext.Provider>;
 };

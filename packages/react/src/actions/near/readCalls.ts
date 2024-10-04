@@ -1,14 +1,8 @@
 import { providers } from 'near-api-js';
-import { CHAIN_ID } from '../../constants/index.js';
 import { OtherChainData } from '../../types/index.js';
 
 export const THIRTY_TGAS = '30000000000000';
 export const NO_DEPOSIT = '0';
-
-export const NEAR_NETWORK_CONFIG: Record<string, string> = {
-  testnet: CHAIN_ID.nearTestnet,
-  mainnet: CHAIN_ID.near,
-};
 
 export function getNearProvider(chain: OtherChainData<'near'>) {
   const url = chain.rpcUrls.default.http[0];
