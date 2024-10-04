@@ -1,7 +1,7 @@
 import { TronChain } from '../types/index.js';
 
 export const tronMainnet: TronChain = {
-  id: 'tronMainnet',
+  id: '728126428',
   trxId: '0x2b6653dc',
   name: 'Tron',
   tronName: 'Mainnet',

@@ -1,5 +1,41 @@
 # @tangled3/react
 
+## 1.7.4
+
+### Patch Changes
+
+- make tron handlers hex compliant
+
+## 1.7.3
+
+### Patch Changes
+
+- chore: update tron chain ids
+
+## 1.7.2
+
+### Patch Changes
+
+- export hook types
+
+## 1.7.1
+
+### Patch Changes
+
+- fix poll callback
+
+## 1.7.0
+
+### Minor Changes
+
+- add sui and ton support
+
+## 1.6.11
+
+### Patch Changes
+
+- fix polling callback util
+
 ## 1.6.10
 
 ### Patch Changes

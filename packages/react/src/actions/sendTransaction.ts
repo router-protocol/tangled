@@ -21,7 +21,7 @@ export type SendTransactionParams<CData extends ChainData> = {
   };
 };
 
-type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
+export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
   ? {
       calldata: string;
     }
