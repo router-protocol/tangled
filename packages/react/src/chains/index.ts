@@ -1,4 +1,6 @@
 export * from './alephZero.js';
+export * from './casper.js';
+export * from './casper.testnet.js';
 export * from './evm.js';
 export * from './evm.testnet.js';
 export * from './solana.devnet.js';

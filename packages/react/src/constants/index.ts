@@ -6,6 +6,8 @@ import {
   binance,
   blast,
   boba,
+  casperMainnet,
+  casperTestnet,
   ethereum,
   linea,
   manta,
@@ -70,6 +72,8 @@ export const CHAIN_ID = {
   suiTestnet: 'suiTestnet',
 
   // casper
+  casper: 'casper',
+  casperTestnet: 'casper-test',
 
   alephZero: 'alephZero',
 
@@ -132,6 +136,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // ton
   [CHAIN_ID.tonMainnet]: tonMainnet,
   [CHAIN_ID.tonTestnet]: tonTestnet,
+
+  // casper
+  [CHAIN_ID.casper]: casperMainnet,
+  [CHAIN_ID.casperTestnet]: casperTestnet,
 
   // testnets
   // 5: goerli,
