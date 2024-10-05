@@ -17,7 +17,7 @@ export const casperMainnet: OtherChainData<'casper'> = {
   blockExplorers: {
     default: {
       name: 'Casper Explorer',
-      url: 'https://explorer.mainnet.casperlabs.io',
+      url: 'https://cspr.live',
     },
   },
 } as const;
