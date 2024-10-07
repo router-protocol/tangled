@@ -111,14 +111,14 @@ const tokens: TokenMetadata[] = [
     decimals: 6,
     name: 'Tron TRX',
     symbol: 'TRX',
-    chainId: 'tronMainnet',
+    chainId: '728126428',
   },
   {
     address: 'TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8',
     decimals: 6,
     name: 'Tron USDC',
     symbol: 'USDC',
-    chainId: 'tronMainnet',
+    chainId: '728126428',
   },
   {
     address: ETH_ADDRESS,
