@@ -3,11 +3,13 @@ import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
+import { getCasperWallet, isCasperWalletInstalled } from '../connectors/casper/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useAlephStore } from './useAlephStore.js';
+import { useCasperStore } from './useCasperStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -35,6 +37,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
+
+  const casperConnectors = useCasperStore((state) => state.connectors);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -180,6 +184,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return detected.concat(suggested);
   }, [configuredConnectors.sui, suiWallets]);
 
+  // ton
   const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
     const detected: Wallet<'ton'>[] = tonWallets.map((wallet) => ({
       id: wallet.appName,
@@ -211,6 +216,25 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return walletList;
   }, [tonWallets, tonAdapter, options]);
 
+  // casper
+  const extendedCasperWallets = useMemo<Wallet<'casper'>[]>(() => {
+    const detected: Wallet<'casper'>[] = Object.values(casperConnectors).map((connector) => ({
+      id: connector.adapter.id,
+      name: connector.adapter.name,
+      connector: getCasperWallet(),
+      icon: connector.adapter.icon,
+      type: 'casper',
+      installed: isCasperWalletInstalled(),
+      url: connector.adapter.url,
+    }));
+
+    if (options?.onlyInstalled) {
+      return detected.filter((wallet) => wallet.installed);
+    }
+
+    return detected;
+  }, [casperConnectors, options?.onlyInstalled]);
+
   return useMemo(
     () => ({
       evm: extendedEvmWallets,
@@ -219,7 +243,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       alephZero: extendedAlephWallets,
       ton: extendedTonWallets,
       bitcoin: [],
-      casper: [],
+      casper: extendedCasperWallets,
       cosmos: [],
       near: [],
       sui: extendedSuiWallets,
@@ -231,6 +255,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       extendedAlephWallets,
       extendedSuiWallets,
       extendedTonWallets,
+      extendedCasperWallets,
     ],
   );
 };

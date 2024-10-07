@@ -4,6 +4,7 @@ import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import { TonConnectUI } from '@tonconnect/ui-react';
 import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@tronweb3/tronwallet-abstract-adapter';
 import { Mutable } from '@wagmi/core/internal';
+import { CasperWallet } from 'casper-js-sdk';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainId, ChainType } from '../types/index.js';
 
@@ -67,7 +68,9 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
           ? WalletWithRequiredFeatures
           : T extends 'ton'
             ? TonConnectUI
-            : DefaultConnector;
+            : T extends 'casper'
+              ? CasperWallet
+              : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;
