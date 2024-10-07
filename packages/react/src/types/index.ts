@@ -100,7 +100,7 @@ export interface TangledConfig {
   chainConnectors?: Partial<ChainConnectors>;
 
   /** Manifest url for ton connect */
-  tonconnectManifestUrl?: string;
+  tonconnectManifestUrl: string;
   /** Telegram mini app url */
   twaReturnUrl?: `${string}://${string}`;
 
