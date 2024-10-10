@@ -20,7 +20,7 @@ export const isXdefiWalletInstalled = () => {
 };
 
 export const getBitcoinProvider = (): BitcoinConnector => {
-  if ('xfi' in window && window.xfi.bitcoin) {
+  if (typeof window !== 'undefined' && 'xfi' in window && window.xfi.bitcoin) {
     return window.xfi.bitcoin;
   } else {
     console.error('[BITCOIN] provider not found');

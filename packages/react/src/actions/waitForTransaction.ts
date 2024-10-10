@@ -215,8 +215,8 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
 
     const receipt = await pollCallback(
       async () => {
-        const network = chain.id === 'bitcoin' ? '' : 'testnet/';
-        const apiUrl = `https://mempool.space/${network}api/tx/${txHash}`;
+        const BASE_API_URL = 'https://mempool.space/' + chain.id === 'bitcoin' ? '' : 'testnet';
+        const apiUrl = `${BASE_API_URL}/api/tx/${txHash}`;
 
         try {
           const response = await fetch(apiUrl);

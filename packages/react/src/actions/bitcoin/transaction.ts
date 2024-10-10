@@ -1,12 +1,6 @@
 import { BitcoinGasFeeResponse } from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
-
-export function removeHexPrefix(hexString: string) {
-  if (hexString.startsWith('0x')) {
-    return hexString.slice(2);
-  }
-  return hexString;
-}
+import { removeHexPrefix } from '../../utils/index.js';
 
 export async function getBitcoinGasFee(chain: OtherChainData<OtherChainTypes>) {
   try {
