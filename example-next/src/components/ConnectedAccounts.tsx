@@ -2,6 +2,7 @@ import { ConnectedAccount, useAccounts, useChain, useConnect, useDisconnect, use
 
 export const ConnectedAccounts = () => {
   const accounts = useAccounts();
+  console.log('accounts', accounts);
   return (
     <div className='bg-neutral-900'>
       <h3 className='text-lg font-bold'>Connected Accounts:</h3>
@@ -52,7 +53,7 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
         {chain?.name ?? 'Unknown'} [{account.chainId}]
       </td>
       <td className='px-4 py-2'>{account.chainType}</td>
-      <td className='px-4 py-2'>{account.wallet}</td>
+      <td className='px-4 py-2'>{account.wallet}asds</td>
       <td className='px-4 py-2'>{wallet?.name}</td>
       <td className='px-4 py-2 flex gap-2'>
         <button

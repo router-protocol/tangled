@@ -209,5 +209,32 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     return receipt;
   }
 
+  if (chain.type === 'cosmos') {
+    const { txHash } = transactionParams as TransactionParams<'cosmos'>;
+
+    const receipt = await pollCallback(
+      async () => {
+        // Use Cosmos client's RPC or LCD to fetch the transaction details
+        const result = await config.cosmosClient.getTx(txHash);
+
+        if (!result || result.code !== 0) {
+          return undefined; // Transaction not found or failed, continue polling
+        }
+
+        return result;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+
+    return receipt;
+  }
+
   throw new Error('Chain not supported');
 }) as WatchTransactionFunction;

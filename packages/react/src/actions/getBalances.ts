@@ -101,5 +101,19 @@ export const getBalances = async (
     return balances;
   }
 
+  if (chain.type === 'cosmos') {
+    const balances: Record<string, bigint> = {};
+
+    // Use the client to fetch all balances for the account
+    const accountBalances = await config.cosmosClient.getAllBalances(account);
+
+    // Process each balance and store it in the balances object
+    accountBalances.forEach((balance) => {
+      balances[balance.denom] = BigInt(balance.amount);
+    });
+
+    return balances;
+  }
+
   throw new Error('Unsupported chain type');
 };

@@ -13,6 +13,7 @@ import {
   metis,
   mode,
   optimism,
+  osmo,
   polygon,
   polygonZkEvm,
   scroll,
@@ -52,6 +53,7 @@ export const CHAIN_ID = {
   zksync: '324',
 
   // cosmos
+  osmo: 'osmosis-1',
 
   // tron
   tronMainnet: '728126428',
@@ -111,6 +113,9 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.polygon_zkevm]: polygonZkEvm,
   [CHAIN_ID.scroll]: scroll,
   [CHAIN_ID.zksync]: zkSync,
+
+  //cosmos
+  [CHAIN_ID.osmo]: osmo,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,

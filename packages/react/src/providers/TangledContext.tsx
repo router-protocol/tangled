@@ -1,10 +1,15 @@
+import { wallets as keplr } from '@cosmos-kit/keplr';
+import { ChainProvider } from '@cosmos-kit/react';
+import { wallets as xdefi } from '@cosmos-kit/xdefi';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
+import { chains as CosmosChains, assets } from 'chain-registry';
 import { ReactNode, createContext, useState } from 'react';
 import { ChainData, ChainId, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
 import createChainConfigs from '../utils/createChainConfigs.js';
 import { createChainConnectors } from '../utils/createChainConnectors.js';
 import { AlephProvider } from './AlephProvider.js';
+import CosmosContextProvider from './CosmosProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
 import { SuiProvider } from './SuiProvider.js';
@@ -58,15 +63,37 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
           <SolanaProvider chain={chains.solana[0]}>
             <AlephProvider chain={chains.alephZero[0]}>
               <SuiProvider chains={chains.sui}>
-                {/* getting error if combined with TonProvider */}
-                <TonConnectUIProvider
-                  manifestUrl={tonconnectManifestUrl}
-                  actionsConfiguration={{ twaReturnUrl }}
+                <ChainProvider
+                  chains={CosmosChains}
+                  assetLists={assets}
+                  wallets={[...keplr, ...xdefi]}
+                  walletConnectOptions={{
+                    signClient: {
+                      projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
+                      relayUrl: 'wss://relay.walletconnect.org',
+                      metadata: {
+                        name: 'Router Intents',
+                        description: 'Router Intents dApp',
+                        url: 'https://poc-intents-ui.vercel.app',
+                        icons: [
+                          'https://raw.githubusercontent.com/cosmology-tech/cosmos-kit/main/packages/docs/public/favicon-96x96.png',
+                        ],
+                      },
+                    },
+                  }}
                 >
-                  <TonProvider chain={chains.ton[0]}>
-                    <WalletsProvider>{children}</WalletsProvider>
-                  </TonProvider>
-                </TonConnectUIProvider>
+                  <CosmosContextProvider>
+                    {/* getting error if combined with TonProvider */}
+                    <TonConnectUIProvider
+                      manifestUrl={tonconnectManifestUrl}
+                      actionsConfiguration={{ twaReturnUrl }}
+                    >
+                      <TonProvider chain={chains.ton[0]}>
+                        <WalletsProvider>{children}</WalletsProvider>
+                      </TonProvider>
+                    </TonConnectUIProvider>
+                  </CosmosContextProvider>
+                </ChainProvider>
               </SuiProvider>
             </AlephProvider>
           </SolanaProvider>

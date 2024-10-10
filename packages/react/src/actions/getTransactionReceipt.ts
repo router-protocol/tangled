@@ -110,5 +110,31 @@ export const getTransactionReceipt = (async ({
     });
   }
 
+  // cosmos chain (Stargate and CosmWasm clients)
+  if (chain.type === 'cosmos') {
+    const { txHash } = transactionParams as TransactionParams<'cosmos'>;
+
+    // Use StargateClient or CosmWasmClient depending on the chain
+    const cosmosClient = config.cosmosClient;
+
+    // Fetch transaction details using the `getTx` method
+    const result = await cosmosClient.getTx(txHash);
+
+    if (!result) {
+      throw new Error('Transaction not found');
+    }
+
+    // Process the transaction result and return the receipt
+    const transactionData = {
+      transactionHash: result.hash,
+      height: result.height,
+      gasUsed: result.gasUsed.toString(),
+      gasWanted: result.gasWanted.toString(),
+      rawLog: result.rawLog,
+    };
+
+    return transactionData;
+  }
+
   throw new Error('Chain type not supported');
 }) as GetTransactionReceiptFunction;

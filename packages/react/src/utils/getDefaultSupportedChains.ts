@@ -1,4 +1,5 @@
 import { alephZero } from '../chains/alephZero.js';
+import { osmo } from '../chains/cosmos.js';
 import * as evm from '../chains/evm.js';
 import { solana } from '../chains/solana.js';
 import { sui } from '../chains/sui.js';
@@ -43,6 +44,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.scroll,
       evm.zkSync,
     ] as EVMChain[];
+    supportedChains.cosmos = [osmo] as OtherChainData<'cosmos'>[];
     supportedChains.solana = [solana] as OtherChainData<'solana'>[];
     supportedChains.tron = [tronMainnet] as TronChain[];
     supportedChains.alephZero = [alephZero] as OtherChainData<'alephZero'>[];

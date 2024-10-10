@@ -4,6 +4,8 @@ const WalletList = () => {
   const wallets = useWallets();
   const { connect } = useConnect();
 
+  console.log('wallets example', wallets);
+
   return (
     <div className='max-h-[30rem] overflow-scroll bg-neutral-900'>
       <h2 className='text-xl font-bold sticky top-0 bg-black'>WALLETS</h2>

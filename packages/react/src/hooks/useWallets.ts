@@ -4,6 +4,7 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
+import { CosmosContext } from '../providers/CosmosProvider.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
@@ -28,6 +29,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
   const alephAdapter = useAlephStore((state) => state.connectedAdapter);
 
+  // const data = useManager;
+
   const suiWallets = useSuiWallets();
 
   const { connectors: configuredConnectors } = useTangledConfig();
@@ -35,6 +38,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
+  const { wallets: cosmosWallets } = useContext(CosmosContext);
+  console.log('walletsssssss', cosmosWallets);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -180,6 +185,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return detected.concat(suggested);
   }, [configuredConnectors.sui, suiWallets]);
 
+  //ton
   const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
     const detected: Wallet<'ton'>[] = tonWallets.map((wallet) => ({
       id: wallet.appName,
@@ -211,6 +217,29 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return walletList;
   }, [tonWallets, tonAdapter, options]);
 
+  //cosmos
+  const extendedCosmosWallets = useMemo<Wallet<'cosmos'>[]>(() => {
+    const detected: Wallet<'cosmos'>[] = cosmosWallets.map((wallet) => ({
+      id: wallet.walletInfo.name,
+      name: wallet.walletInfo.prettyName,
+      connector: {
+        ...wallet,
+        icon: wallet.walletInfo.logo,
+      },
+      icon: wallet.walletInfo.logo,
+      type: 'cosmos',
+      installed: true,
+    }));
+
+    const walletList = detected;
+
+    if (options?.onlyInstalled) {
+      return walletList.filter((wallet) => wallet.installed);
+    }
+
+    return walletList;
+  }, [options?.onlyInstalled, cosmosWallets]);
+
   return useMemo(
     () => ({
       evm: extendedEvmWallets,
@@ -220,7 +249,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       ton: extendedTonWallets,
       bitcoin: [],
       casper: [],
-      cosmos: [],
+      cosmos: extendedCosmosWallets,
       near: [],
       sui: extendedSuiWallets,
     }),
@@ -231,6 +260,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       extendedAlephWallets,
       extendedSuiWallets,
       extendedTonWallets,
+      extendedCosmosWallets,
     ],
   );
 };

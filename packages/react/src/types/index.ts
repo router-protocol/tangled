@@ -1,3 +1,4 @@
+import { StargateClient } from '@cosmjs/stargate';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
@@ -131,6 +132,7 @@ export type ConnectionOrConfig = {
   alephZeroApi: ApiPromise;
   suiClient: SuiClient;
   tonClient: TonClient;
+  cosmosClient: StargateClient;
 };
 
 export type GetTokenMetadataParams = {
