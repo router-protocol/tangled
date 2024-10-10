@@ -26,7 +26,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           },
 
           projectId: '41980758771052df3f01be0a46f172a5',
-
+          tonconnectManifestUrl: `${window.location.origin}/tonconnect-manifest.json`,
           bitcoinNetwork: 'mainnet',
         }}
       >
