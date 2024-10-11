@@ -1,4 +1,3 @@
-import { GasPrice, StdFee } from '@cosmjs/stargate';
 import { Transaction } from '@mysten/sui/transactions';
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
@@ -8,8 +7,6 @@ import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
-
-import { useChain } from '@cosmos-kit/react';
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -99,32 +96,6 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       txHash: tx.txid,
     };
   }
-
-  // if(chain.type === 'cosmos'){
-  //   const signerOptions: SignerOptions = {
-  //     signingStargate: (chain: Chain) => {
-  //       // return corresponding stargate options or undefined
-  //       return getSigningCosmosClientOptions();
-  //     },
-  //     signingCosmwasm: (chain: Chain) => {
-  //       // return corresponding cosmwasm options or undefined
-  //       switch (chain.chain_name) {
-  //         case "osmosis":
-  //           return {
-  //             gasPrice: GasPrice.fromString("0.0025uosmo"),
-  //           };
-  //         case "juno":
-  //           return {
-  //             gasPrice: GasPrice.fromString("0.0025ujuno"),
-  //           };
-  //       }
-  //     },
-  //     preferredSignType: (chain: Chain) => {
-  //       // `preferredSignType` determines which signer is preferred for `getOfflineSigner` method. By default `amino`. It might affect the `OfflineSigner` used in `signingStargateClient` and `signingCosmwasmClient`. But if only one signer is provided, `getOfflineSigner` will always return this signer, `preferredSignType` won't affect anything.
-  //       return 'amino';
-  //     }
-  //   };
-  // }
 
   if (chain.type === 'solana') {
     const { versionedTx } = args as TransactionArgs<'solana'>;
@@ -232,35 +203,27 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
   }
 
   if (chain.type === 'cosmos') {
-    // const client = await CosmWasmClient.connect("https://rpc-osmosis.blockapsis.com");
-    // if (!client) {
-    //   throw new Error('Unable to get signing client');
+    // const manager = config.cosmosWalletManager;
+    // const connectedWallet = manager.mainWallets.find((w) => w.isActive);
+    // const client = manager.getChainWallet(chain.id, '')
+    // const { calldata } = args as TransactionArgs<'cosmos'>;
+    // const gasPrice = GasPrice.fromString('0.0025uosmo');
+    // const gasAmount = Number(gasPrice.amount);
+    // const fee: StdFee = {
+    //   amount: [
+    //     {
+    //       denom: 'uosmo',
+    //       amount: (gasAmount * 200000).toString(),
+    //     },
+    //   ],
+    //   gas: '200000',
+    // };
+    // const clients = await client.getCosmWasmClients();
+    // const result = await clients.signAndBroadcast(from ?? '', calldata, fee, '');
+    // if (result.code !== 0) {
+    //   throw new Error(`Transaction failed with code ${result.code}`);
     // }
-
-    const { calldata } = args as TransactionArgs<'cosmos'>;
-    const { getSigningStargateClient } = useChain('osmosis');
-
-    const gasPrice = GasPrice.fromString('0.0025uosmo');
-    const gasAmount = Number(gasPrice.amount);
-
-    const fee: StdFee = {
-      amount: [
-        {
-          denom: 'uosmo',
-          amount: (gasAmount * 200000).toString(),
-        },
-      ],
-      gas: '200000',
-    };
-    const clients = await getSigningStargateClient();
-
-    const result = await clients.signAndBroadcast(from ?? '', calldata, fee, '');
-
-    if (result.code !== 0) {
-      throw new Error(`Transaction failed with code ${result.code}`);
-    }
-
-    return { txHash: result.transactionHash };
+    // return { txHash: result.transactionHash };
   }
 
   throw new Error('Chain not supported');

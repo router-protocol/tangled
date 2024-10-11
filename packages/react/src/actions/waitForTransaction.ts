@@ -215,7 +215,10 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     const receipt = await pollCallback(
       async () => {
         // Use Cosmos client's RPC or LCD to fetch the transaction details
-        const result = await config.cosmosClient.getTx(txHash);
+        const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+        const stargateClient = await cosmosClient.getStargateClient();
+
+        const result = await stargateClient.getTx(txHash);
 
         if (!result || result.code !== 0) {
           return undefined; // Transaction not found or failed, continue polling

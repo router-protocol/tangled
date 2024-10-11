@@ -1,9 +1,11 @@
+import { MainWalletBase } from '@cosmos-kit/core';
 import { wallets as keplr } from '@cosmos-kit/keplr';
-import { ChainProvider } from '@cosmos-kit/react';
+import { wallets as leap } from '@cosmos-kit/leap';
+import { ChainProvider } from '@cosmos-kit/react-lite';
 import { wallets as xdefi } from '@cosmos-kit/xdefi';
 import { TonConnectUIProvider } from '@tonconnect/ui-react';
-import { chains as CosmosChains, assets } from 'chain-registry';
-import { ReactNode, createContext, useState } from 'react';
+import { assets } from 'chain-registry';
+import { ReactNode, createContext, useMemo, useState } from 'react';
 import { ChainData, ChainId, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
 import createChainConfigs from '../utils/createChainConfigs.js';
@@ -50,6 +52,8 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
     return config.twaReturnUrl;
   });
 
+  const cosmoschains = useMemo(() => ['cosmoshub', 'osmosis', 'injective'], []);
+
   return (
     <TangledContext.Provider value={{ config, chains, connectors, chainsById }}>
       <EVMProvider
@@ -64,9 +68,10 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
             <AlephProvider chain={chains.alephZero[0]}>
               <SuiProvider chains={chains.sui}>
                 <ChainProvider
-                  chains={CosmosChains}
+                  chains={cosmoschains}
+                  // @ts-expect-error - need to fix types
                   assetLists={assets}
-                  wallets={[...keplr, ...xdefi]}
+                  wallets={[...keplr, ...xdefi, ...leap] as MainWalletBase[]}
                   walletConnectOptions={{
                     signClient: {
                       projectId: 'a8510432ebb71e6948cfd6cde54b70f7',

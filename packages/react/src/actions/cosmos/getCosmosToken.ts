@@ -29,12 +29,16 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   token: string;
   spender: string | undefined;
   config: ConnectionOrConfig;
-  chain: ChainData | undefined;
+  chain: ChainData;
 }) => {
   let balance = 0n;
   let allowance = 0n;
   try {
-    const tokenBalance = await config.cosmosClient.getBalance(account, token);
+    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+
+    const stargateClient = await cosmosClient.getStargateClient();
+    const tokenBalance = await stargateClient.getBalance(account, token);
+
     if (token.toLowerCase().startsWith('ibc') || token.toLowerCase().startsWith('factory')) {
       return {
         balance: BigInt(tokenBalance.amount),

@@ -1,133 +1,100 @@
-import { Logger, MainWalletBase, WalletManager } from '@cosmos-kit/core';
-import { wallets as keplrWallets } from '@cosmos-kit/keplr';
-import { useChain } from '@cosmos-kit/react';
-import { assets } from 'chain-registry';
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { ChainWalletBase, MainWalletBase } from '@cosmos-kit/core';
+import { walletContext } from '@cosmos-kit/react-lite';
+import { useMutation } from '@tanstack/react-query';
+import { createContext, useContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import { CosmosStore, createCosmosStore } from '../store/Cosmos.js';
 
 export interface CosmosContextValues {
-  walletClient: MainWalletBase | undefined;
   // account: string | undefined;
-  connect: (adapterId: string) => Promise<void>;
+  connect: (adapterId: string) => Promise<{
+    chainWallets: ChainWalletBase[];
+    mainWallet: MainWalletBase;
+  }>;
   disconnect: () => Promise<void>;
-  wallets: MainWalletBase[];
+  // wallets: MainWalletBase[];
   store: CosmosStore | null;
 }
 
 export const CosmosContext = createContext<CosmosContextValues>({
-  walletClient: undefined,
   // account: undefined,
-  connect: async () => {},
+  connect: async () => ({ chainWallets: [], mainWallet: {} as MainWalletBase }),
   disconnect: async () => {},
-  wallets: [],
   store: null,
 });
 
 const CosmosContextProvider = ({ children }: { children: React.ReactNode }) => {
   const cosmosStore = useRef(createCosmosStore()).current;
-  const connectedAdapter = useStore(cosmosStore, (state) => state.connectedAdapter);
-  const setConnectedAdapter = useStore(cosmosStore, (state) => state.setConnectedAdapter);
-  const setConnectors = useStore(cosmosStore, (state) => state.setConnectors);
-  const connectors = useStore(cosmosStore, (state) => state.connectors);
-  const setAddress = useStore(cosmosStore, (state) => state.setAddress);
-  const setClient = useStore(cosmosStore, (state) => state.setClient);
-  const reset = useStore(cosmosStore, (state) => state.reset);
-  const [cosmosWallets, setCosmosWallets] = useState<MainWalletBase[]>([]);
-  const walletManager = useMemo(() => {
-    return new WalletManager(
-      ['osmosis', 'cosmoshub', 'juno', 'stargaze'],
-      [keplrWallets[0]],
-      new Logger('NONE'),
-      false,
-      undefined,
-      undefined,
-      assets,
-    );
-  }, []);
 
-  const { walletRepo, getCosmWasmClient } = useChain('osmosis');
+  const connectedMainWallet = useStore(cosmosStore, (state) => state.connectedMainWallet);
+
+  const setConnectedMainWallet = useStore(cosmosStore, (state) => state.setConnectedMainWallet);
+  const setChainWallets = useStore(cosmosStore, (state) => state.setChainWallets);
+  const setWalletManager = useStore(cosmosStore, (state) => state.setWalletManager);
+
+  const reset = useStore(cosmosStore, (state) => state.reset);
+
+  const { walletManager } = useContext(walletContext);
 
   useEffect(() => {
-    (async () => {
-      const client = await walletRepo.getStargateClient();
-      setClient(client);
-      const tokenBalance = await client.getAllBalances('osmo1n9cm2m2tz993qs0gfmvrq5w3uxeuk66rkqpl2x');
-      console.log('[Token] balance', tokenBalance);
-      //https://lcd.osmosis.zone
-      // const cosmWasmClient = await SigningCosmWasmClient.connect('https://rpc.osmosis.zone/');
-      // const queryResult = await cosmWasmClient.queryContractSmart("osmo1h00p6dp77ax00p7pu6lx90f9t0upfekxv8p0cxr", { balance: { address: "osmo1n9cm2m2tz993qs0gfmvrq5w3uxeuk66rkqpl2x" } });
-      // const allowanceResponse = await cosmWasmClient.queryContractSmart("uosmo", {
-      //     allowance: {
-      //         owner: "osmo1n9cm2m2tz993qs0gfmvrq5w3uxeuk66rkqpl2x",
-      //         spender: ""
-      //     }
-      // });
-      // console.log("[Allowance] balance allowance", queryResult)
-    })();
-  }, []);
+    setWalletManager(walletManager);
+    console.log(walletManager);
 
-  // console.log("tokenBalance",tokenBalance)
+    // if chainWallets are already connected, set them
+    console.log('WALLET MANAGER', walletManager.walletRepos);
+  }, [walletManager, setWalletManager]);
 
-  const connect = useCallback(
-    async (adapterId: string) => {
-      let client;
-      const mainWallet = adapterId
-        ? walletManager.getMainWallet(adapterId)
-        : walletManager.mainWallets.find((w) => w.isActive);
+  const { mutateAsync: connect } = useMutation({
+    mutationKey: ['cosmos connect'],
+    mutationFn: async (adapterId: string) => {
+      const mainWallet = walletManager.mainWallets.find((wallet) => wallet.walletName === adapterId);
 
       if (!mainWallet) {
-        client = void 0;
+        throw new Error('Failed to connect to Cosmos wallet: wallet not found');
       }
 
-      client = mainWallet?.clientMutable?.data;
-      mainWallet?.client;
-      if (!client) return;
+      const client = mainWallet.clientMutable.data;
 
-      // const stargateClient = await mainWallet.;
-      try {
-        await client.enable?.(['osmosis-1', 'juno-1']);
-        const simpleAccount = await client.getSimpleAccount('osmosis-1');
-        setAddress(simpleAccount.address);
-        // setClient(client);
-        setConnectedAdapter(mainWallet);
-        setConnectors(adapterId, mainWallet);
-      } catch (error) {
-        console.error('Failed to connect to Cosmos wallet:', error);
+      if (!client) {
+        throw new Error('Failed to connect to Cosmos wallet: main wallet client not found');
       }
+
+      await client.enable?.(['osmosis-1', 'cosmoshub-4', 'injective-1']);
+
+      await mainWallet.connectAll(false);
+
+      const chainWallets = mainWallet.getChainWalletList(false);
+
+      return { chainWallets, mainWallet };
     },
-    [connectors, walletManager, setAddress, setConnectors],
-  );
+    onSuccess: (data) => {
+      console.log(data);
 
-  const disconnect = useCallback(async () => {
-    try {
-      connectedAdapter?.disconnect();
+      setConnectedMainWallet(data.mainWallet);
+      setChainWallets(data.chainWallets);
+    },
+  });
+
+  const { mutateAsync: disconnect } = useMutation({
+    mutationKey: ['cosmos disconnect'],
+    mutationFn: async () => {
+      connectedMainWallet?.disconnectAll();
       reset();
       console.log('Successfully disconnected from Cosmos wallet');
-    } catch (error) {
-      console.error('Failed to disconnect from Cosmos wallet:', error);
-    }
-  }, [connectors, setConnectedAdapter, setAddress, setConnectors]);
-
-  useEffect(() => {
-    setCosmosWallets(walletManager.mainWallets);
-  }, [walletManager]);
+    },
+  });
 
   return (
     <CosmosContext.Provider
       value={{
-        walletClient: connectors['keplr-extension'],
         store: cosmosStore,
         connect,
         disconnect,
-        wallets: cosmosWallets,
       }}
     >
       {children}
     </CosmosContext.Provider>
   );
 };
-
-export const useCosmosContext = () => useContext(CosmosContext);
 
 export default CosmosContextProvider;

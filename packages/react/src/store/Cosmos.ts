@@ -1,52 +1,62 @@
-import { StargateClient } from '@cosmjs/stargate';
-import { MainWalletBase } from '@cosmos-kit/core';
+import { ChainWalletBase, MainWalletBase, WalletManager } from '@cosmos-kit/core';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
 
 export interface CosmosState {
-  address: string | null; // The connected wallet's address
-  client: StargateClient | undefined;
-  connectors: {
-    [key: string]: MainWalletBase | undefined; // Stores wallet adapter by connector id
-  };
-  connectedAdapter: MainWalletBase | undefined; // The current connected wallet adapter
+  connectedMainWallet: MainWalletBase | undefined;
+  chainWallets: Record<string, ChainWalletBase>;
+  walletManager: WalletManager | undefined;
 
   // Actions
-  setAddress: (address: string | null) => void;
-  setClient: (client: StargateClient) => void;
-  setConnectors: (connector: string, walletClient: MainWalletBase | undefined) => void;
-  setConnectedAdapter: (adapter: MainWalletBase | undefined) => void;
-  reset: () => void; // To reset the store state (for example, after disconnect)
+  setConnectedMainWallet: (wallet: MainWalletBase | undefined) => void;
+  setChainWallets: (chainWallets: ChainWalletBase[]) => void;
+  setWalletManager: (adapter: WalletManager | undefined) => void;
+
+  getCosmosClient: () => {
+    walletManaer: WalletManager | undefined;
+    chainWallets: Record<string, ChainWalletBase>;
+  };
+  reset: () => void;
 }
 
 export type CosmosStore = ReturnType<typeof createCosmosStore>;
 
 export const createCosmosStore = () => {
   return createStore<CosmosState>()(
-    devtools((set) => ({
-      connectors: {},
-      connectedAdapter: undefined,
+    devtools((set, get) => ({
+      connectedMainWallet: undefined,
+      chainWallets: {},
+      walletManager: undefined,
       address: null,
-      client: undefined,
 
-      setClient: (client) => set(() => ({ client })),
-      // Sets the wallet address
-      setAddress: (address) => set(() => ({ address })),
+      getCosmosClient: () => ({
+        walletManaer: get().walletManager,
+        chainWallets: get().chainWallets,
+      }),
 
       // Updates the wallet client for a specific connector
-      setConnectors: (connector, walletClient) =>
-        set((state) => ({
-          connectors: { ...state.connectors, [connector]: walletClient },
-        })),
+      setConnectedMainWallet: (wallet) => set(() => ({ connectedMainWallet: wallet })),
+      setChainWallets: (chainWalletsArray) => {
+        const chainWallets = chainWalletsArray.reduce(
+          (acc, wallet) => {
+            const key = `${wallet.walletName}:${wallet.chainId}`;
+            acc[key] = wallet;
+            return acc;
+          },
+          {} as Record<string, ChainWalletBase>,
+        );
+
+        set(() => ({ chainWallets }));
+      },
 
       // Sets the current connected adapter
-      setConnectedAdapter: (adapter) => set(() => ({ connectedAdapter: adapter })),
+      setWalletManager: (walletManager) => set(() => ({ walletManager })),
 
       // Resets the store to its default state
       reset: () =>
         set(() => ({
           connectors: {},
-          connectedAdapter: undefined,
+          walletManager: undefined,
           address: null,
         })),
     })),

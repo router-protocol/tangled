@@ -4,11 +4,11 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
-import { CosmosContext } from '../providers/CosmosProvider.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useAlephStore } from './useAlephStore.js';
+import { useCosmosStore } from './useCosmosStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -38,8 +38,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
-  const { wallets: cosmosWallets } = useContext(CosmosContext);
-  console.log('walletsssssss', cosmosWallets);
+  const cosmosWalletManager = useCosmosStore((state) => state.walletManager);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -183,7 +182,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       ) ?? [];
 
     return detected.concat(suggested);
-  }, [configuredConnectors.sui, suiWallets]);
+  }, [configuredConnectors.sui, options?.onlyInstalled, suiWallets]);
 
   //ton
   const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
@@ -219,14 +218,15 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
   //cosmos
   const extendedCosmosWallets = useMemo<Wallet<'cosmos'>[]>(() => {
+    if (!cosmosWalletManager) return [];
+
+    const cosmosWallets = cosmosWalletManager.mainWallets;
+
     const detected: Wallet<'cosmos'>[] = cosmosWallets.map((wallet) => ({
       id: wallet.walletInfo.name,
       name: wallet.walletInfo.prettyName,
-      connector: {
-        ...wallet,
-        icon: wallet.walletInfo.logo,
-      },
-      icon: wallet.walletInfo.logo,
+      connector: wallet,
+      icon: wallet.walletInfo.logo?.toString() || '',
       type: 'cosmos',
       installed: true,
     }));
@@ -238,7 +238,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }
 
     return walletList;
-  }, [options?.onlyInstalled, cosmosWallets]);
+  }, [options?.onlyInstalled, cosmosWalletManager]);
 
   return useMemo(
     () => ({

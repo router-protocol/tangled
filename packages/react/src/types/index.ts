@@ -1,4 +1,4 @@
-import { StargateClient } from '@cosmjs/stargate';
+import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
@@ -132,7 +132,10 @@ export type ConnectionOrConfig = {
   alephZeroApi: ApiPromise;
   suiClient: SuiClient;
   tonClient: TonClient;
-  cosmosClient: StargateClient;
+  getCosmosClient: () => {
+    walletManaer: CosmosWalletManager | undefined;
+    chainWallets: Record<string, CosmosChainWalletBase>;
+  };
 };
 
 export type GetTokenMetadataParams = {

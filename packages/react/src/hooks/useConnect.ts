@@ -22,7 +22,7 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
-  const { mutate: connectSuiWallet } = useSuiConnectWallet();
+  const { mutateAsync: connectSuiWallet } = useSuiConnectWallet();
   const { connect: connectTonWallet } = useTonContext();
   const { connect: connectCosmosWallet } = useCosmosContext();
 
@@ -32,9 +32,16 @@ export const useConnect = () => {
 
   const connectWallet = useCallback(
     async (params: { walletId: string; chainType: ChainType }) => {
-      const walletInstance: Wallet | undefined = wallets[params.chainType].find(
+      let walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
+
+      // cosmos wallets have chain ids appended to the wallet id
+      // eg: 'keplr:cosmoshub-4'
+      if (params.chainType === 'cosmos') {
+        const walletId = params.walletId.split(':')[0];
+        walletInstance = wallets[params.chainType].find((wallet) => walletId === wallet.id);
+      }
 
       if (!walletInstance) {
         throw new Error('Wallet not found');
@@ -59,7 +66,7 @@ export const useConnect = () => {
       } else if (params.chainType === 'sui') {
         connectSuiWallet({ wallet: walletInstance.connector as WalletInstance<'sui'> });
       } else if (params.chainType === 'cosmos') {
-        connectCosmosWallet(walletInstance.id);
+        await connectCosmosWallet(walletInstance.id);
       } else if (params.chainType === 'ton') {
         const connectedTonWallet = await connectTonWallet(walletInstance.id);
         if (walletInstance.id === 'ton-connect') {
@@ -74,13 +81,14 @@ export const useConnect = () => {
       return { walletInstance, name: walletInstance.name, id: params.walletId };
     },
     [
-      connectAlephWallet,
-      connectEVM,
-      connectSolanaWallet,
-      connectSuiWallet,
-      connectTronWallet,
-      connectedWallets,
       wallets,
+      connectedWallets,
+      connectSolanaWallet,
+      connectTronWallet,
+      connectEVM,
+      connectAlephWallet,
+      connectSuiWallet,
+      connectCosmosWallet,
       connectTonWallet,
     ],
   );

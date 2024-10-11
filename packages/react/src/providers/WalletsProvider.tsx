@@ -23,8 +23,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const tonAddress = useTonStore((state) => state.address);
 
   // Cosmos store states
-  const cosmosConnectors = useCosmosStore((state) => state.connectors);
-  const cosmosAddress = useCosmosStore((state) => state.address);
+  const cosmosChainWallets = useCosmosStore((state) => state.chainWallets);
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -191,31 +190,32 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.ton, tonConnectors, tonAddress]);
 
-  console.log('asdasdasdas');
-
   // cosmos
   useEffect(() => {
     const _cosmosAccounts: { [x: string]: ConnectedAccount } = {};
     const _cosmosWallets: { [x: string]: ConnectedWallet<'cosmos'> } = {};
 
     // Iterate over the Cosmos connectors
-    for (const [name, adapter] of Object.entries(cosmosConnectors)) {
-      const address = cosmosAddress ?? '';
+    for (const [name, chainWallet] of Object.entries(cosmosChainWallets)) {
+      const address = chainWallet.address ?? '';
 
-      if (!address) continue;
+      if (!address) {
+        console.log('No address found for wallet', name);
+        continue;
+      }
 
       _cosmosAccounts[name] = {
         address: address,
-        chainId: 'osmosis-1',
+        chainId: chainWallet.chainId as ChainId,
         chainType: 'cosmos',
         wallet: name,
       };
 
       _cosmosWallets[name] = {
         address: address,
-        chainId: 'osmosis-1',
+        chainId: chainWallet.chainId as ChainId,
         chainType: 'cosmos',
-        connector: adapter,
+        connector: chainWallet.mainWallet,
       };
     }
 
@@ -223,7 +223,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       cosmos: _cosmosWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, cosmosConnectors, cosmosAddress]);
+  }, [setChainConnectedAccounts, setConnectedWallets, cosmosChainWallets]);
 
   // when currentWallet changes, update currentAccount
   useEffect(() => {
@@ -233,7 +233,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find(
-      (account) => account.wallet === currentWallet.id,
+      (account) => account.wallet.split(':')[0] === currentWallet.id,
     );
 
     if (currentAccount) {
@@ -243,21 +243,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       setCurrentWallet(undefined);
     }
   }, [currentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
-
-  // when connectedAccounts change, try connecting to recent wallet
-  useEffect(() => {
-    if (!recentWallet) return;
-
-    const connectedAccounts = connectedAccountsByChain[recentWallet.type];
-    if (!connectedAccounts) return;
-
-    const recentAccount = Object.values(connectedAccounts).find((account) => account.wallet === recentWallet.id);
-
-    if (recentAccount) {
-      setCurrentWallet(recentWallet);
-      setCurrentAccount(recentAccount);
-    }
-  }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
 
   //sui
   useEffect(() => {
@@ -290,6 +275,22 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     currentSuiWallet,
     currentSuiNetwork,
   ]);
+
+  // ALL CHANGES ABOVE THIS BLOCK
+  // when connectedAccounts change, try connecting to recent wallet
+  useEffect(() => {
+    if (!recentWallet) return;
+
+    const connectedAccounts = connectedAccountsByChain[recentWallet.type];
+    if (!connectedAccounts) return;
+
+    const recentAccount = Object.values(connectedAccounts).find((account) => account.wallet === recentWallet.id);
+
+    if (recentAccount) {
+      setCurrentWallet(recentWallet);
+      setCurrentAccount(recentAccount);
+    }
+  }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
 
   return <>{children}</>;
 };

@@ -1,4 +1,4 @@
-import { MainWalletBase } from '@cosmos-kit/core';
+import { MainWalletBase as CosmosMainWalletBase } from '@cosmos-kit/core';
 import { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
@@ -67,7 +67,7 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
         : T extends 'sui'
           ? WalletWithRequiredFeatures
           : T extends 'cosmos'
-            ? MainWalletBase // Example, use Keplr wallet for Cosmos
+            ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
             : T extends 'ton'
               ? TonConnectUI
               : DefaultConnector;

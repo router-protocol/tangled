@@ -18,7 +18,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
   const alephZeroApi = useAlephStore((state) => state.api);
   const suiClient = useSuiClient();
   const tonClient = useTonStore((state) => state.tonClient);
-  const cosmosClient = useCosmosStore((state) => state.client);
+  const getCosmosClient = useCosmosStore((state) => state.getCosmosClient);
 
   return useMemo(() => {
     if (!alephZeroApi) return undefined;
@@ -30,7 +30,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
       alephZeroApi: alephZeroApi,
       suiClient: suiClient,
       tonClient,
-      cosmosClient,
+      getCosmosClient,
     };
-  }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi, suiClient, tonClient, cosmosClient]);
+  }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi, suiClient, tonClient, getCosmosClient]);
 };

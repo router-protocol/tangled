@@ -27,11 +27,20 @@ export const useDisconnect = () => {
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
-      const walletInstance: Wallet | undefined = wallets[params.chainType].find(
+      let walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
 
+      // cosmos wallets have chain ids appended to the wallet id
+      // eg: 'keplr:cosmoshub-4'
+      if (params.chainType === 'cosmos') {
+        const walletId = params.walletId.split(':')[0];
+        walletInstance = wallets[params.chainType].find((wallet) => walletId === wallet.id);
+      }
+
       if (!walletInstance) {
+        console.log(wallets, params.walletId);
+
         throw new Error('Wallet not found');
       }
 
