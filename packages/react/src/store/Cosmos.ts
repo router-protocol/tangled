@@ -22,7 +22,7 @@ export interface CosmosState {
   getCosmosClient: () => {
     walletManaer: WalletManager | undefined;
     chainWallets: Record<string, ChainWalletBase>;
-    getChainRegistry: () => void;
+    getChainRegistry: () => Promise<CosmosChainRegistryClient>;
   };
   reset: () => void;
 }
@@ -41,10 +41,12 @@ export const createCosmosStore = (chains: ChainData[]) => {
       wallets: [],
 
       getCosmosClient: () => ({
-        walletManaer: get().walletManager,
-        chainWallets: get().chainWallets,
+        // walletManaer: get().walletManager,
+        // chainWallets: get().chainWallets,
+        walletManaer: undefined,
+        chainWallets: {},
         getChainRegistry: async () => {
-          if (get().chainRegistry) return get().chainRegistry;
+          if (get().chainRegistry) return get().chainRegistry!;
 
           const client = await getCosmosChainRegistryClient(chains.map((chain) => chain.id.toString()));
 

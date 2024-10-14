@@ -17,7 +17,7 @@ export type TangledConfigStore = ReturnType<typeof createTangledConfigStore>;
 
 export const createTangledConfigStore = (config: TangledConfig) => {
   return createStore<TangledConfigState>()(
-    devtools((set, get) => ({
+    devtools((_, get) => ({
       chains: createChainConfigs(config.chains, config.chainConfigs),
       chainsById: Object.values(get().chains).reduce(
         (acc, chain) => {
