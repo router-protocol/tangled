@@ -1,4 +1,5 @@
 import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-registry/client';
+import { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
 import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { type ApiPromise } from '@polkadot/api';
@@ -159,4 +160,6 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
         ? SuiTransactionBlockResponse
         : C extends 'ton'
           ? TonTransactionInfo
-          : unknown;
+          : C extends 'cosmos'
+            ? CosmosIndexedTx
+            : unknown;

@@ -126,16 +126,7 @@ export const getTransactionReceipt = (async ({
       throw new Error('Transaction not found');
     }
 
-    // Process the transaction result and return the receipt
-    const transactionData = {
-      transactionHash: result.hash,
-      height: result.height,
-      gasUsed: result.gasUsed.toString(),
-      gasWanted: result.gasWanted.toString(),
-      rawLog: result.rawLog,
-    };
-
-    return transactionData;
+    return result;
   }
 
   throw new Error('Chain type not supported');
