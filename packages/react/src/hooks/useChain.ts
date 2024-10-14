@@ -1,6 +1,5 @@
-import { useContext } from 'react';
-import { TangledContext } from '../providers/TangledContext.js';
 import { ChainData, ChainId } from '../types/index.js';
+import { useTangledConfig } from './useTangledConfig.js';
 
 /**
  * A hook that returns the chain data for a given chain ID.
@@ -8,7 +7,7 @@ import { ChainData, ChainId } from '../types/index.js';
  * @returns An array of `ChainData`
  */
 export const useChain = (chainId: ChainId | undefined): ChainData | undefined => {
-  const { chainsById } = useContext(TangledContext);
+  const chainsById = useTangledConfig((config) => config.chainsById);
 
   if (chainId && chainsById[chainId]) {
     return chainsById[chainId];
