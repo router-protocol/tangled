@@ -81,7 +81,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       viewWalletRepo: setViewWalletRepo,
       data: setData,
       state: (state) => {
-        console.log('WALLET MANAGER set state', state);
         setState(state);
       },
       message: setMsg,
@@ -96,7 +95,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
         w.setActions({
           data: setData,
           state: (state) => {
-            console.log('WALLET REPOS set state', w.walletName, w.state);
             setState(state);
           },
           message: setMsg,
@@ -108,12 +106,10 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       w.setActions({
         data: setData,
         state: (state) => {
-          console.log('MAIN WALLETS set state', w.walletName, w.state);
           setState(state);
         },
         message: setMsg,
         clientState: (state) => {
-          console.log('MAIN WALLETS set client state', w.walletName, state);
           setClientStates((prev) => ({ ...prev, [w.walletName]: state }));
         },
         clientMessage: setClientMsg,
@@ -131,11 +127,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   }, [render, walletManager]);
 
   useEffect(() => {
-    console.log(
-      'SET WALLETS',
-      walletManager.mainWallets.map((wallet) => [wallet.walletName, wallet.state]),
-    );
-
     setWallets([...walletManager.mainWallets] || []);
   }, [setWallets, walletManager.mainWallets, clientState]);
 
@@ -211,7 +202,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       return { chainWallets, mainWallet };
     },
     onSuccess: (data) => {
-      console.log(data);
       setConnectedMainWallet(data.mainWallet);
       setChainWallets(data.chainWallets);
     },
@@ -222,7 +212,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
     mutationFn: async () => {
       connectedMainWallet?.disconnectAll();
       reset();
-      console.log('Successfully disconnected from Cosmos wallet');
     },
   });
 
@@ -236,11 +225,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       return;
     }
 
-    console.log(
-      'Connecting to wallet on first render',
-      cosmosCurrentWallet,
-      walletManager.mainWallets.map((wallet) => wallet.walletName),
-    );
     connect({ adapterId: cosmosCurrentWallet });
 
     autoConnectRef.current = false;
