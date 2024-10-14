@@ -1,3 +1,4 @@
+import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
 import { Transaction } from '@mysten/sui/transactions';
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
@@ -45,7 +46,12 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
                 stateInit?: string;
               };
             }
-          : never;
+          : CType extends 'cosmos'
+            ? {
+                messages: readonly MsgExecuteContractEncodeObject[];
+                memo?: string;
+              }
+            : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
@@ -203,27 +209,18 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
   }
 
   if (chain.type === 'cosmos') {
-    // const manager = config.cosmosWalletManager;
-    // const connectedWallet = manager.mainWallets.find((w) => w.isActive);
-    // const client = manager.getChainWallet(chain.id, '')
-    // const { calldata } = args as TransactionArgs<'cosmos'>;
-    // const gasPrice = GasPrice.fromString('0.0025uosmo');
-    // const gasAmount = Number(gasPrice.amount);
-    // const fee: StdFee = {
-    //   amount: [
-    //     {
-    //       denom: 'uosmo',
-    //       amount: (gasAmount * 200000).toString(),
-    //     },
-    //   ],
-    //   gas: '200000',
-    // };
-    // const clients = await client.getCosmWasmClients();
-    // const result = await clients.signAndBroadcast(from ?? '', calldata, fee, '');
-    // if (result.code !== 0) {
-    //   throw new Error(`Transaction failed with code ${result.code}`);
-    // }
-    // return { txHash: result.transactionHash };
+    const chainWallet = config.getCosmosClient().chainWallets[chain.id];
+
+    const { messages, memo } = args as TransactionArgs<'cosmos'>;
+
+    const client = await chainWallet.getSigningCosmWasmClient();
+    const result = await client.signAndBroadcast(from, messages, 'auto', memo);
+
+    if (result.code !== 0) {
+      throw new Error(`Transaction failed with code ${result.code}`);
+    }
+
+    return { txHash: result.transactionHash };
   }
 
   throw new Error('Chain not supported');

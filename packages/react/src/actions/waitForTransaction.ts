@@ -212,12 +212,12 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
   if (chain.type === 'cosmos') {
     const { txHash } = transactionParams as TransactionParams<'cosmos'>;
 
+    // Use Cosmos client's RPC or LCD to fetch the transaction details
+    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+    const stargateClient = await cosmosClient.getStargateClient();
+
     const receipt = await pollCallback(
       async () => {
-        // Use Cosmos client's RPC or LCD to fetch the transaction details
-        const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
-        const stargateClient = await cosmosClient.getStargateClient();
-
         const result = await stargateClient.getTx(txHash);
 
         if (!result || result.code !== 0) {

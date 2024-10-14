@@ -24,7 +24,7 @@ export const CosmosContext = createContext<CosmosContextValues>({
 });
 
 const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode; chains: CosmsosChainType[] }) => {
-  const cosmosStore = useRef(createCosmosStore()).current;
+  const cosmosStore = useRef(createCosmosStore(chains)).current;
 
   const [, setViewWalletRepo] = useState<WalletRepo | undefined>();
   const [, setData] = useState<Data>();

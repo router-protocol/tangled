@@ -111,30 +111,32 @@ export const getTransactionReceipt = (async ({
   }
 
   // cosmos chain (Stargate and CosmWasm clients)
-  // if (chain.type === 'cosmos') {
-  //   const { txHash } = transactionParams as TransactionParams<'cosmos'>;
+  if (chain.type === 'cosmos') {
+    const { txHash } = transactionParams as TransactionParams<'cosmos'>;
 
-  //   // Use StargateClient or CosmWasmClient depending on the chain
-  //   const cosmosClient = config.cosmosClient;
+    // Use StargateClient or CosmWasmClient depending on the chain
+    const chainWallet = config.getCosmosClient().chainWallets[chain.id];
 
-  //   // Fetch transaction details using the `getTx` method
-  //   const result = await cosmosClient.getTx(txHash);
+    const cosmosClient = await chainWallet.getStargateClient();
 
-  //   if (!result) {
-  //     throw new Error('Transaction not found');
-  //   }
+    // Fetch transaction details using the `getTx` method
+    const result = await cosmosClient.getTx(txHash);
 
-  //   // Process the transaction result and return the receipt
-  //   const transactionData = {
-  //     transactionHash: result.hash,
-  //     height: result.height,
-  //     gasUsed: result.gasUsed.toString(),
-  //     gasWanted: result.gasWanted.toString(),
-  //     rawLog: result.rawLog,
-  //   };
+    if (!result) {
+      throw new Error('Transaction not found');
+    }
 
-  //   return transactionData;
-  // }
+    // Process the transaction result and return the receipt
+    const transactionData = {
+      transactionHash: result.hash,
+      height: result.height,
+      gasUsed: result.gasUsed.toString(),
+      gasWanted: result.gasWanted.toString(),
+      rawLog: result.rawLog,
+    };
+
+    return transactionData;
+  }
 
   throw new Error('Chain type not supported');
 }) as GetTransactionReceiptFunction;

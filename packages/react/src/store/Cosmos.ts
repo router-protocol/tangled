@@ -1,12 +1,16 @@
+import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-registry/client';
 import { ChainWalletBase, MainWalletBase, WalletManager } from '@cosmos-kit/core';
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
+import { getCosmosChainRegistryClient } from '../actions/cosmos/getCosmosChainRegistryClient.js';
+import { ChainData } from '../types/index.js';
 
 export interface CosmosState {
   connectedMainWallet: MainWalletBase | undefined;
   chainWallets: Record<string, ChainWalletBase>;
   walletManager: WalletManager | undefined;
 
+  chainRegistry: CosmosChainRegistryClient | undefined;
   wallets: MainWalletBase[];
 
   // Actions
@@ -18,13 +22,14 @@ export interface CosmosState {
   getCosmosClient: () => {
     walletManaer: WalletManager | undefined;
     chainWallets: Record<string, ChainWalletBase>;
+    getChainRegistry: () => void;
   };
   reset: () => void;
 }
 
 export type CosmosStore = ReturnType<typeof createCosmosStore>;
 
-export const createCosmosStore = () => {
+export const createCosmosStore = (chains: ChainData[]) => {
   return createStore<CosmosState>()(
     devtools((set, get) => ({
       connectedMainWallet: undefined,
@@ -32,11 +37,20 @@ export const createCosmosStore = () => {
       walletManager: undefined,
       address: null,
 
+      chainRegistry: undefined,
       wallets: [],
 
       getCosmosClient: () => ({
         walletManaer: get().walletManager,
         chainWallets: get().chainWallets,
+        getChainRegistry: async () => {
+          if (get().chainRegistry) return get().chainRegistry;
+
+          const client = await getCosmosChainRegistryClient(chains.map((chain) => chain.id.toString()));
+
+          set(() => ({ chainRegistry: client }));
+          return client;
+        },
       }),
 
       // Updates the wallet client for a specific connector

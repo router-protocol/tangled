@@ -1,3 +1,4 @@
+import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-registry/client';
 import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { type ApiPromise } from '@polkadot/api';
@@ -11,7 +12,6 @@ import { CHAIN_ID } from '../constants/index.js';
 import { AlephTransactionData } from './aleph.js';
 import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
-
 export const CHAIN_TYPES = [
   'evm',
   'tron',
@@ -139,6 +139,7 @@ export type ConnectionOrConfig = {
   getCosmosClient: () => {
     walletManaer: CosmosWalletManager | undefined;
     chainWallets: Record<string, CosmosChainWalletBase>;
+    getChainRegistry: () => Promise<CosmosChainRegistryClient>;
   };
 };
 

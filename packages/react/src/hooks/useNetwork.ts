@@ -2,10 +2,11 @@ import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useMutation } from '@tanstack/react-query';
 import { WalletSwitchChainError } from '@tronweb3/tronwallet-abstract-adapter';
 import { useCallback } from 'react';
-import { useSwitchChain } from 'wagmi';
+import { useSwitchChain as useEVMSwitchChain } from 'wagmi';
 import { ChainData, ChainId } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { useChains } from './useChains.js';
+import { useCosmosContext } from './useCosmosContext.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useWallet } from './useWallet.js';
 
@@ -14,8 +15,8 @@ export const useNetwork = () => {
   const currentWalletInstance = useWallet(currentAccount?.chainType, currentAccount?.wallet);
   const chains = useChains(currentAccount?.chainType);
   const { selectNetwork: selectSuiNetwork } = useSuiClientContext();
-
-  const { switchChainAsync } = useSwitchChain();
+  const { switchChainAsync } = useEVMSwitchChain();
+  const { connect: cosmosConnect } = useCosmosContext();
 
   const switchNetwork = useCallback(
     async (chainId: ChainId): Promise<ChainData | undefined> => {
@@ -23,10 +24,17 @@ export const useNetwork = () => {
       if (!connector) {
         throw new Error('No wallet connector found');
       }
+      if (!currentAccount) {
+        throw new Error('No current account found to switch network');
+      }
 
       const chain = chains.find((chain) => chain.id.toString() === chainId);
 
-      if (chain?.type === 'evm') {
+      if (!chain) {
+        throw new Error('Chain not found');
+      }
+
+      if (chain.type === 'evm') {
         const switchedChain = await switchChainAsync({
           chainId: Number(chainId),
           connector: connector as WalletInstance<'evm'>,
@@ -34,7 +42,7 @@ export const useNetwork = () => {
 
         return chains.find((chain) => chain.id === switchedChain.id);
       }
-      if (chain?.type === 'tron') {
+      if (chain.type === 'tron') {
         try {
           await (connector as WalletInstance<'tron'>).switchChain(chain.tronName);
         } catch (e) {
@@ -49,7 +57,7 @@ export const useNetwork = () => {
         return;
       }
 
-      if (chain?.type === 'sui') {
+      if (chain.type === 'sui') {
         try {
           selectSuiNetwork(chain.id);
 
@@ -59,11 +67,20 @@ export const useNetwork = () => {
           console.error(e);
           throw e;
         }
+      }
+
+      if (chain.type === 'cosmos') {
+        await cosmosConnect({
+          chainId: chain.id,
+          adapterId: currentAccount?.wallet,
+        });
 
         return;
       }
+
+      throw new Error('Chain type not supported');
     },
-    [chains, currentWalletInstance, switchChainAsync, selectSuiNetwork],
+    [currentWalletInstance, currentAccount, chains, switchChainAsync, selectSuiNetwork, cosmosConnect],
   );
 
   const { mutate, mutateAsync, isPending } = useMutation({

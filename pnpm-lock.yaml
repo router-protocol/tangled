@@ -205,9 +205,9 @@ importers:
 
   packages/react:
     dependencies:
-      '@chain-registry/types':
-        specifier: ^0.46.6
-        version: 0.46.6
+      '@chain-registry/client':
+        specifier: ^1.53.0
+        version: 1.53.0
       '@cosmjs/cosmwasm-stargate':
         specifier: ^0.32.4
         version: 0.32.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -277,9 +277,6 @@ importers:
       '@wagmi/core':
         specifier: ^2.11.0
         version: 2.11.0(@tanstack/query-core@5.44.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.13.8(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
-      chain-registry:
-        specifier: ^1.63.106
-        version: 1.63.106
       detect-browser:
         specifier: ^5.3.0
         version: 5.3.0
@@ -1234,8 +1231,8 @@ packages:
   '@bitget-wallet/web3-sdk@0.0.8':
     resolution: {integrity: sha512-WFk6URUxTCukKrU3YpTdWTCScrj6/wwd/0O7eSANeQl1KDbDs+yj/fAkN1Wy6ebI3NMcW6sqN9mrmfwz53dPMQ==}
 
-  '@chain-registry/client@1.50.0':
-    resolution: {integrity: sha512-LIlaK3gmtzEM5n8NNc1fVOOKH0SVHsMFsUz+R9CMhrWBQmZtZs6dDAcUKJ533V7xjJkctbNy9S+TL2S/4j5+VA==}
+  '@chain-registry/client@1.53.0':
+    resolution: {integrity: sha512-ONzt7Lt9Gjfa9C/a/KTUSldFwrTOUzZrE2MIMhzdjCtF7Asf2iX881hO4rs74hJpZiozFSg6Ulwr54BgIBS0pQ==}
 
   '@chain-registry/keplr@1.68.106':
     resolution: {integrity: sha512-ZV27C23Mj9gYQGzSPOsulMUdeX9KU1pIwquHm/dlxnvIqaq9WxSCZil0PgtB9XMVXTH+J8QiCpIojbzAtP7UrA==}
@@ -1252,14 +1249,14 @@ packages:
   '@chain-registry/types@0.46.15':
     resolution: {integrity: sha512-gzf+pkAbEZ7fKuTuwmrEAEcx1K/BNrKuCnB9s+WwSo9Ad/3s+GV5LOXcOOxjjHh9Mrs9kvnxKvzKjOwWu8gDJw==}
 
-  '@chain-registry/types@0.46.6':
-    resolution: {integrity: sha512-qJHxSG+UO/WOOcBwBMRw4sEK2a9t+MXMltHQeBqH34cRFccVsgwN7CSEdAnbpoREXTEy4hiWl1Qtc2WiMCs5Iw==}
-
   '@chain-registry/types@0.47.0':
     resolution: {integrity: sha512-249eFAMpW437AGMGXOFf1e+NNxOQwd/pdikGOWQTKRiv3G57y2VmIXETA61fDz5Q5OI7WJf9tL9SN/gXGOXn5g==}
 
-  '@chain-registry/utils@1.48.0':
-    resolution: {integrity: sha512-t6EIpdu4QJZs2sbjjcI0p9QeFGbLGlWhwYxm5sJkMh3b0DoKerSoxK0NGi5PaIsZ9BDk+CyD9rm7Aam1YD9gUw==}
+  '@chain-registry/types@0.50.0':
+    resolution: {integrity: sha512-77TY/i3lPPQRQGBl0PFrb8+k3rbjIb4LOSsmK49mlMSPUNeJ3Wcx3Donnm2XvdpQDH5aeCofWOPonZ2/3XoibQ==}
+
+  '@chain-registry/utils@1.51.0':
+    resolution: {integrity: sha512-A4ae/nF9/cr11JdTJV6o0wM5q3yUWklYGuMhvB3Eyh5CZoulYFMgorlGNMyqkI8DJddvP3kxlXtnTsAlZwjtgw==}
 
   '@changesets/apply-release-plan@7.0.4':
     resolution: {integrity: sha512-HLFwhKWayKinWAul0Vj+76jVx1Pc2v55MGPVjZ924Y/ROeSsBMFutv9heHmCUj48lJyRfOTJG5+ar+29FUky/A==}
@@ -4399,9 +4396,6 @@ packages:
 
   caniuse-lite@1.0.30001651:
     resolution: {integrity: sha512-9Cf+Xv1jJNe1xPZLGuUXLNkE1BoDkqRqYyFJ9TDYSqhduqA4hu4oR9HluGoWYQC/aj8WHjsGVV+bwkh0+tegRg==}
-
-  chain-registry@1.63.106:
-    resolution: {integrity: sha512-q4lP2eG8PN2t+5Q8WcS5mDCNZW3W9/1dYaB8whL8CC13IGNsIx9gety5d9N6TNBEOcLlZt4aOv1trLNnrSToNg==}
 
   chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -9778,10 +9772,10 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@chain-registry/client@1.50.0':
+  '@chain-registry/client@1.53.0':
     dependencies:
-      '@chain-registry/types': 0.47.0
-      '@chain-registry/utils': 1.48.0
+      '@chain-registry/types': 0.50.0
+      '@chain-registry/utils': 1.51.0
       bfs-path: 1.0.2
       cross-fetch: 3.1.8
     transitivePeerDependencies:
@@ -9812,13 +9806,13 @@ snapshots:
 
   '@chain-registry/types@0.46.15': {}
 
-  '@chain-registry/types@0.46.6': {}
-
   '@chain-registry/types@0.47.0': {}
 
-  '@chain-registry/utils@1.48.0':
+  '@chain-registry/types@0.50.0': {}
+
+  '@chain-registry/utils@1.51.0':
     dependencies:
-      '@chain-registry/types': 0.47.0
+      '@chain-registry/types': 0.50.0
       bignumber.js: 9.1.2
       sha.js: 2.4.11
 
@@ -10116,7 +10110,7 @@ snapshots:
 
   '@cosmos-kit/core@2.15.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
-      '@chain-registry/client': 1.50.0
+      '@chain-registry/client': 1.53.0
       '@chain-registry/keplr': 1.70.0
       '@chain-registry/types': 0.46.15
       '@cosmjs/amino': 0.32.4
@@ -15374,10 +15368,6 @@ snapshots:
   camelcase@6.3.0: {}
 
   caniuse-lite@1.0.30001651: {}
-
-  chain-registry@1.63.106:
-    dependencies:
-      '@chain-registry/types': 0.45.85
 
   chalk@2.4.2:
     dependencies:

@@ -32,7 +32,7 @@
     "Ankit Singh <ankit.singh.zm@gmail.com>"
   ],
   "dependencies": {
-    "@chain-registry/types": "^0.46.6",
+    "@chain-registry/client": "^1.53.0",
     "@cosmjs/cosmwasm-stargate": "^0.32.4",
     "@cosmjs/stargate": "^0.32.4",
     "@cosmos-kit/core": "^2.8.5",
@@ -56,7 +56,6 @@
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
     "@tronweb3/tronwallet-adapters": "^1.2.1",
     "@wagmi/core": "^2.11.0",
-    "chain-registry": "^1.63.106",
     "detect-browser": "^5.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
