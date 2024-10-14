@@ -33,7 +33,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
   const suiWallets = useSuiWallets();
 
-  const { connectors: configuredConnectors } = useTangledConfig();
+  const configuredConnectors = useTangledConfig((config) => config.connectors);
 
   const tronConnectors = useTronStore((state) => state.connectors);
 

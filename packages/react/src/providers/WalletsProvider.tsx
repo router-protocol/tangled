@@ -12,7 +12,7 @@ import { ChainId } from '../types/index.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
-  const { chains } = useTangledConfig();
+  const chains = useTangledConfig((config) => config.chains);
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
