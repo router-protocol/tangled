@@ -25,6 +25,8 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             },
           },
 
+          twaReturnUrl: `${window.location.origin}/` as `${string}://${string}`,
+          tonconnectManifestUrl: `${window.location.origin}/tonconnect-manifest.json`,
           projectId: '41980758771052df3f01be0a46f172a5',
         }}
       >
