@@ -58,10 +58,10 @@
     "@wagmi/core": "^2.11.0",
     "chain-registry": "^1.63.106",
     "detect-browser": "^5.3.0",
-    "immer": "^10.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tronweb": "6.0.0-beta.4",
+    "usehooks-ts": "^3.1.0",
     "viem": "^2.13.8",
     "wagmi": "^2.9.11",
     "zustand": "^4.5.2"

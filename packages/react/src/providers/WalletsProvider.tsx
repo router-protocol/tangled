@@ -225,25 +225,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [setChainConnectedAccounts, setConnectedWallets, cosmosChainWallets]);
 
-  // when currentWallet changes, update currentAccount
-  useEffect(() => {
-    if (!currentWallet) {
-      setCurrentAccount(undefined);
-      return;
-    }
-
-    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find(
-      (account) => account.wallet.split(':')[0] === currentWallet.id,
-    );
-
-    if (currentAccount) {
-      setCurrentAccount(currentAccount);
-    } else {
-      setCurrentAccount(undefined);
-      setCurrentWallet(undefined);
-    }
-  }, [currentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
-
   //sui
   useEffect(() => {
     const _suiAccounts: { [x: string]: ConnectedAccount } = {};
@@ -277,6 +258,32 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   ]);
 
   // ALL CHANGES ABOVE THIS BLOCK
+  // when currentWallet changes, update currentAccount
+  useEffect(() => {
+    if (!currentWallet) {
+      setCurrentAccount(undefined);
+      return;
+    }
+
+    const [walletId, walletChainId] = currentWallet.id.split(':');
+
+    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find((account) => {
+      if (account.chainType === 'cosmos') {
+        const [_accountWalletId, _accountChainId] = account.wallet.split(':');
+        return _accountWalletId === walletId && (walletChainId ? _accountChainId === walletChainId : true);
+      }
+
+      return account.wallet === walletId;
+    });
+
+    if (currentAccount) {
+      setCurrentAccount(currentAccount);
+    } else {
+      setCurrentAccount(undefined);
+      setCurrentWallet(undefined);
+    }
+  }, [currentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
+
   // when connectedAccounts change, try connecting to recent wallet
   useEffect(() => {
     if (!recentWallet) return;

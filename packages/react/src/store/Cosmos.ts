@@ -7,10 +7,13 @@ export interface CosmosState {
   chainWallets: Record<string, ChainWalletBase>;
   walletManager: WalletManager | undefined;
 
+  wallets: MainWalletBase[];
+
   // Actions
   setConnectedMainWallet: (wallet: MainWalletBase | undefined) => void;
   setChainWallets: (chainWallets: ChainWalletBase[]) => void;
   setWalletManager: (adapter: WalletManager | undefined) => void;
+  setWallets: (wallets: MainWalletBase[]) => void;
 
   getCosmosClient: () => {
     walletManaer: WalletManager | undefined;
@@ -28,6 +31,8 @@ export const createCosmosStore = () => {
       chainWallets: {},
       walletManager: undefined,
       address: null,
+
+      wallets: [],
 
       getCosmosClient: () => ({
         walletManaer: get().walletManager,
@@ -49,6 +54,7 @@ export const createCosmosStore = () => {
         set(() => ({ chainWallets }));
       },
 
+      setWallets: (wallets) => set(() => ({ wallets })),
       // Sets the current connected adapter
       setWalletManager: (walletManager) => set(() => ({ walletManager })),
 

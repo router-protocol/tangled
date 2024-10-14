@@ -13,7 +13,7 @@ import {
   metis,
   mode,
   optimism,
-  osmo,
+  osmosis,
   polygon,
   polygonZkEvm,
   scroll,
@@ -25,6 +25,7 @@ import {
   tronShasta,
   zkSync,
 } from '../chains/index.js';
+import { injective } from '../chains/injective.js';
 import { solanaDevnet } from '../chains/solana.devnet.js';
 import { solanaTestnet } from '../chains/solana.testnet.js';
 import { tonTestnet } from '../chains/ton.testnet.js';
@@ -53,7 +54,8 @@ export const CHAIN_ID = {
   zksync: '324',
 
   // cosmos
-  osmo: 'osmosis-1',
+  osmosis: 'osmosis',
+  injective: 'injective',
 
   // tron
   tronMainnet: '728126428',
@@ -115,7 +117,8 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.zksync]: zkSync,
 
   //cosmos
-  [CHAIN_ID.osmo]: osmo,
+  [CHAIN_ID.osmosis]: osmosis,
+  [CHAIN_ID.injective]: injective,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,

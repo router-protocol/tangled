@@ -1,4 +1,4 @@
-// import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
+import { State as CosmosWalletState } from '@cosmos-kit/core';
 import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
@@ -38,7 +38,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const tronConnectors = useTronStore((state) => state.connectors);
 
   const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
-  const cosmosWalletManager = useCosmosStore((state) => state.walletManager);
+  const cosmosWallets = useCosmosStore((state) => state.wallets);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -218,18 +218,22 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
   //cosmos
   const extendedCosmosWallets = useMemo<Wallet<'cosmos'>[]>(() => {
-    if (!cosmosWalletManager) return [];
+    if (!cosmosWallets.length) return [] as Wallet<'cosmos'>[];
 
-    const cosmosWallets = cosmosWalletManager.mainWallets;
-
-    const detected: Wallet<'cosmos'>[] = cosmosWallets.map((wallet) => ({
-      id: wallet.walletInfo.name,
-      name: wallet.walletInfo.prettyName,
-      connector: wallet,
-      icon: wallet.walletInfo.logo?.toString() || '',
-      type: 'cosmos',
-      installed: true,
-    }));
+    const detected: Wallet<'cosmos'>[] = cosmosWallets.map((wallet) => {
+      return {
+        id: wallet.walletInfo.name,
+        name: wallet.walletInfo.prettyName,
+        url: wallet.walletInfo.downloads?.[0].link,
+        connector: wallet,
+        icon: typeof wallet.walletInfo.logo === 'string' ? wallet.walletInfo.logo : wallet.walletInfo.logo?.major ?? '',
+        type: 'cosmos',
+        installed:
+          (wallet.clientMutable.state === CosmosWalletState.Done ||
+            wallet.clientMutable.state === CosmosWalletState.Init) &&
+          wallet.clientMutable.data !== undefined,
+      };
+    });
 
     const walletList = detected;
 
@@ -238,7 +242,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }
 
     return walletList;
-  }, [options?.onlyInstalled, cosmosWalletManager]);
+  }, [cosmosWallets, options?.onlyInstalled]);
 
   return useMemo(
     () => ({
