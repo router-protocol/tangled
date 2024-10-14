@@ -50,7 +50,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const chainNames = useMemo(() => chains.map((chain) => chain.id), [chains]);
   const cosmosChainIds = useMemo(() => chains.map((chain) => chain.cosmosChainId), [chains]);
 
-  const logger = useMemo(() => new Logger('DEBUG'), []);
+  const logger = useMemo(() => new Logger('ERROR'), []);
 
   const walletManager = useMemo(() => {
     const walletManager = new WalletManager(
