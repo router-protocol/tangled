@@ -1,6 +1,6 @@
 export declare global {
   interface Window {
-    xfi: {
+    xfi?: {
       bitcoin: {
         chainId: string;
 

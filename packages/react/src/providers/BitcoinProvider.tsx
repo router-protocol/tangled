@@ -64,7 +64,7 @@ export const BitcoinProvider = ({
       await bitcoinProvider?.changeNetwork(config.bitcoinNetwork);
       const accounts = await connectToBitcoin();
 
-      if (accounts.length > 0) {
+      if (bitcoinProvider && accounts.length > 0) {
         // setting localStorage for handling autoconnect
         localStorage.setItem('xdefiConnection', 'true');
         return {
@@ -74,7 +74,7 @@ export const BitcoinProvider = ({
         };
       }
 
-      return { account: '', chainId: bitcoinProvider.chainId as ChainId, adapter: bitcoinProvider };
+      return { account: '', chainId: bitcoinProvider?.chainId as ChainId, adapter: bitcoinProvider };
     },
     onSuccess: (data) => {
       setAddress(data.account);
@@ -96,7 +96,9 @@ export const BitcoinProvider = ({
 
   // NOTE: This is an unconventional way to listen for `accountsChange` events since window.xfi.bitcoin event listeners don't work as expected
   useEffect(() => {
-    window.xfi.ethereum.on('accountsChanged', (account: unknown) => {
+    if (typeof window === 'undefined') return;
+
+    window.xfi?.ethereum.on('accountsChanged', (account: unknown) => {
       // Checking if account is an array and has valid addresses
       if (Array.isArray(account) && account.length > 0) {
         const validAccount = account[0];

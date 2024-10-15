@@ -16,20 +16,26 @@ export const xdefiWallet: Wallet<'bitcoin'> = {
 };
 
 export const isXdefiWalletInstalled = () => {
-  return !!window.xfi.bitcoin;
+  if (typeof window !== 'undefined' && window.xfi?.bitcoin) {
+    return !!window.xfi.bitcoin;
+  }
+  return false;
 };
 
-export const getBitcoinProvider = (): BitcoinConnector => {
-  if (typeof window !== 'undefined' && 'xfi' in window && window.xfi.bitcoin) {
+// TODO: Update the config for multiple wallets similar to evm
+export const getBitcoinProvider = (): BitcoinConnector | undefined => {
+  if (typeof window !== 'undefined' && window.xfi?.bitcoin) {
     return window.xfi.bitcoin;
-  } else {
-    console.error('[BITCOIN] provider not found');
-    throw new Error('[BITCOIN] provider not found');
   }
 };
 
 export const connectToBitcoin = (): Promise<string[]> => {
   const btcProvider = getBitcoinProvider();
+
+  if (!btcProvider) {
+    throw new Error('[BITCOIN] provider not found');
+  }
+
   return new Promise((resolve, reject) => {
     btcProvider.request({ method: 'request_accounts', params: [] }, (error: Error | null, accounts) => {
       if (error) {

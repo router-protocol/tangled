@@ -58,9 +58,14 @@ export async function signBitcoinTx({
   memo: string;
   feeRate?: number;
 }): Promise<string> {
-  const fetchedFeeRate =
-    (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
-    (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+  let fetchedFeeRate: number | undefined;
+
+  if (!feeRate) {
+    fetchedFeeRate =
+      (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+      (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+    console.log('[BITCOIN] fetched feeRate = ', fetchedFeeRate);
+  }
 
   return new Promise((resolve, reject) => {
     config.bitcoinProvider.request(
@@ -68,7 +73,7 @@ export async function signBitcoinTx({
         method: 'transfer',
         params: [
           {
-            feeRate: feeRate ?? fetchedFeeRate,
+            feeRate: feeRate ? feeRate : fetchedFeeRate ?? 0, // Default to 0 if both are undefined
             from,
             recipient,
             amount: {
