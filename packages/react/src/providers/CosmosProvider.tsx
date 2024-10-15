@@ -137,8 +137,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   useEffect(() => {
     const repos = chains.map((chain) => walletManager.getWalletRepo(chain.chainName));
 
-    console.log('repos', repos);
-
     chainNames.forEach((chainName) => {
       const walletRepo = walletManager.getWalletRepo(chainName);
 
@@ -198,8 +196,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       await mainWallet.connectAll(false);
 
       const chainWallets = mainWallet.getChainWalletList(false);
-
-      console.log('chainWallets', chainWallets);
 
       return { chainWallets, mainWallet };
     },
