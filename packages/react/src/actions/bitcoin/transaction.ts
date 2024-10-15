@@ -64,7 +64,6 @@ export async function signBitcoinTx({
     fetchedFeeRate =
       (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
       (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
-    console.log('[BITCOIN] fetched feeRate = ', fetchedFeeRate);
   }
 
   return new Promise((resolve, reject) => {
