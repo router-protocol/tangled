@@ -80,6 +80,8 @@ export const createCosmosStore = (chains: ChainData[]) => {
           connectors: {},
           walletManager: undefined,
           address: null,
+          connectedMainWallet: undefined,
+          chainWallets: {},
         })),
     })),
   );
