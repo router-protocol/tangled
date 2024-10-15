@@ -135,7 +135,7 @@ export type ConnectionOrConfig = {
   alephZeroApi: ApiPromise;
   suiClient: SuiClient;
   tonClient: TonClient;
-  bitcoinProvider: BitcoinConnector;
+  bitcoinProvider: BitcoinConnector | object;
 };
 
 export type GetTokenMetadataParams = {

@@ -22,7 +22,6 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
 
   return useMemo(() => {
     if (!alephZeroApi) return undefined;
-    if (!bitcoinProvider) return undefined;
 
     return {
       wagmiConfig,
@@ -31,7 +30,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
       alephZeroApi: alephZeroApi,
       suiClient: suiClient,
       tonClient,
-      bitcoinProvider,
+      bitcoinProvider: bitcoinProvider ?? {},
     };
   }, [wagmiConfig, solanaConnection, tronWeb, alephZeroApi, suiClient, tonClient, bitcoinProvider]);
 };
