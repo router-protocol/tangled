@@ -72,7 +72,7 @@ export interface SuiChainType extends ChainDataGeneric {
 }
 export interface CosmsosChainType extends ChainDataGeneric {
   type: Extract<'cosmos', ChainType>;
-  cosmosChainId: string;
+  chainName: string;
 }
 
 // Exclude chains with custom types

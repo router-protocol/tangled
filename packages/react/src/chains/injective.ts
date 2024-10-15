@@ -1,10 +1,10 @@
 import { CosmsosChainType } from '../types/index.js';
 
 export const injective: CosmsosChainType = {
-  id: 'injective',
+  id: 'injective-1',
   name: 'Injective',
   type: 'cosmos',
-  cosmosChainId: 'injective-1',
+  chainName: 'injective',
   nativeCurrency: {
     name: 'Injective',
     symbol: 'INJ',

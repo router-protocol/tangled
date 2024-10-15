@@ -1,10 +1,10 @@
 import { CosmsosChainType } from '../types/index.js';
 
 export const self: CosmsosChainType = {
-  id: 'self',
+  id: 'self-1',
+  chainName: 'self',
   name: 'Self',
   type: 'cosmos',
-  cosmosChainId: 'self-1',
   nativeCurrency: {
     name: 'Self',
     symbol: 'SLF',

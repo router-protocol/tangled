@@ -58,10 +58,10 @@ export const CHAIN_ID = {
   routerEvm: '9600',
 
   // cosmos
-  osmosis: 'osmosis',
-  injective: 'injective',
-  self: 'self',
-  router: 'router-9600',
+  osmosis: 'osmosis-1',
+  injective: 'injective-1',
+  self: 'self-1',
+  routerchain: 'router_9600-1',
 
   // tron
   tronMainnet: '728126428',
@@ -127,7 +127,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.osmosis]: osmosis,
   [CHAIN_ID.injective]: injective,
   [CHAIN_ID.self]: self,
-  [CHAIN_ID.router]: router,
+  [CHAIN_ID.routerchain]: router,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,
