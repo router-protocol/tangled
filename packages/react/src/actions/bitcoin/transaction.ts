@@ -1,20 +1,43 @@
-import { BitcoinGasFeeResponse } from '../../types/bitcoin.js';
+import {
+  BitcoinBalanceResponse,
+  BlockstreamGasFeeResponse,
+  MempoolSpaceBitcoinGasFeeResponse,
+} from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
 import { removeHexPrefix } from '../../utils/index.js';
+import { BitcoinApiConfigResult, getBitcoinApiConfig } from './bitcoinApiConfig.js';
 
-export async function getBitcoinGasFee(chain: OtherChainData<OtherChainTypes>) {
+export async function getBitcoinGasFee(apiConfig: BitcoinApiConfigResult): Promise<number> {
   try {
-    const network = chain.id === 'bitcoin' ? '' : 'testnet/';
-    const feeData: BitcoinGasFeeResponse = await fetch(`https://mempool.space/${network}api/v1/fees/recommended`).then(
-      (res) => res.json(),
-    );
+    const endpoint = apiConfig.name === 'blockstream' ? '/api/fee-estimates' : '/api/v1/fees/recommended';
+    const apiUrl = `${apiConfig.baseUrl}${endpoint}`;
 
-    const fastestFeeRate = feeData.fastestFee;
-    const feeRateSatPerByte = Math.floor(fastestFeeRate);
-    return feeRateSatPerByte;
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch bitcoin gas fee from ${apiConfig.name}: ${response.status}`);
+    }
+
+    const rawData = await response.json();
+    let fastestFeeRate: number;
+
+    if (apiConfig.name === 'blockstream') {
+      const blockstreamData = rawData as BlockstreamGasFeeResponse;
+      fastestFeeRate = blockstreamData['1'];
+    } else if (apiConfig.name === 'mempool') {
+      const mempoolData = rawData as MempoolSpaceBitcoinGasFeeResponse;
+      fastestFeeRate = mempoolData.fastestFee;
+    } else {
+      throw new Error(`Unsupported API: ${apiConfig.name}`);
+    }
+
+    if (isNaN(fastestFeeRate) || fastestFeeRate <= 0) {
+      throw new Error(`Invalid fee rate received from ${apiConfig.name}`);
+    }
+
+    return Math.floor(fastestFeeRate);
   } catch (error) {
-    console.error('failed to fetch bitcoin gas - ', error);
-    throw new Error('Failed to fetch bitcoin gas fee');
+    console.error(`[BITCOIN] Failed to fetch bitcoin gas from ${apiConfig.name} - `, error);
+    throw error;
   }
 }
 
@@ -35,7 +58,9 @@ export async function signBitcoinTx({
   memo: string;
   feeRate?: number;
 }): Promise<string> {
-  const fetchedFeeRate = await getBitcoinGasFee(chain);
+  const fetchedFeeRate =
+    (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+    (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
 
   return new Promise((resolve, reject) => {
     config.bitcoinProvider.request(
@@ -67,3 +92,29 @@ export async function signBitcoinTx({
     );
   });
 }
+
+export const fetchBalance = async (apiConfig: BitcoinApiConfigResult, account: string): Promise<bigint> => {
+  try {
+    const apiUrl = `${apiConfig.baseUrl}/api/address/${account}`;
+
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch balance from ${apiConfig.name}: ${response.status}`);
+    }
+
+    const rawData = await response.json();
+    const totalBalanceSatoshis = calculateTotalBalance(rawData);
+
+    return BigInt(totalBalanceSatoshis);
+  } catch (error) {
+    console.error(`Failed to fetch bitcoin balance from ${apiConfig.name} - `, error);
+    throw error;
+  }
+};
+
+const calculateTotalBalance = (rawData: BitcoinBalanceResponse): number => {
+  const confirmedBalance = rawData.chain_stats.funded_txo_sum - rawData.chain_stats.spent_txo_sum;
+  const mempoolBalance = rawData.mempool_stats.funded_txo_sum - rawData.mempool_stats.spent_txo_sum;
+
+  return confirmedBalance + mempoolBalance;
+};

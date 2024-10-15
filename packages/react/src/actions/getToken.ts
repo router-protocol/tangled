@@ -4,10 +4,11 @@ import { Address as EVMAddress } from 'viem';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
-import { BitcoinBalanceResponse } from '../types/bitcoin.js';
 import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
+import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
+import { fetchBalance } from './bitcoin/transaction.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
 import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
@@ -212,16 +213,15 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'bitcoin') {
-    const network = chain.id === 'bitcoin' ? '' : 'testnet/';
-    const blockstreamUrl = `https://blockstream.info/${network}api/address/${account}`;
+    const balance =
+      (await fetchBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'), account)) ||
+      (await fetchBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool'), account));
 
-    const data: BitcoinBalanceResponse = await fetch(blockstreamUrl).then((res) => res.json());
+    if (balance === null) {
+      throw new Error('Failed to fetch bitcoin balance');
+    }
 
-    const confirmedBalance = data.chain_stats.funded_txo_sum - data.chain_stats.spent_txo_sum;
-    const mempoolBalance = data.mempool_stats.funded_txo_sum - data.mempool_stats.spent_txo_sum;
-    const totalBalanceSatoshis = confirmedBalance + mempoolBalance;
-
-    return { balance: BigInt(totalBalanceSatoshis), allowance: 0n };
+    return { balance, allowance: 0n };
   }
 
   throw new Error('Chain type not supported');

@@ -18,7 +18,7 @@ export type BitcoinBalanceResponse = {
   };
 };
 
-export type BitcoinGasFeeResponse = {
+export type MempoolSpaceBitcoinGasFeeResponse = {
   fastestFee: number;
   halfHourFee: number;
   hourFee: number;
@@ -26,14 +26,20 @@ export type BitcoinGasFeeResponse = {
   minimumFee: number;
 };
 
+export type BlockstreamGasFeeResponse = {
+  [blocks: string]: number;
+};
+
 export type BitcoinTransactionStatus = {
+  confirmed: boolean;
+  block_height: number | null;
+  block_hash: string | null;
+  block_time: number | null;
+};
+
+export type BitcoinTransactionData = {
   txid: string;
-  status: {
-    confirmed: boolean;
-    block_height: number | null;
-    block_hash: string | null;
-    block_time: number | null;
-  };
+  status: BitcoinTransactionStatus;
   fee: number;
   vin: Array<{
     txid: string;

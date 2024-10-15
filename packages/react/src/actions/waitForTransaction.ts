@@ -4,6 +4,7 @@ import { ReplacementReturnType } from 'viem';
 import { BitcoinTransactionStatus } from '../types/bitcoin.js';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
+import { BitcoinApiConfigResult, getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
 
 export type DefaultOverrides = {
   interval: number;
@@ -215,26 +216,37 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
 
     const receipt = await pollCallback(
       async () => {
-        const BASE_API_URL = 'https://mempool.space/' + chain.id === 'bitcoin' ? '' : 'testnet';
-        const apiUrl = `${BASE_API_URL}/api/tx/${txHash}`;
+        const fetchTransaction = async (
+          apiConfig: BitcoinApiConfigResult,
+        ): Promise<BitcoinTransactionStatus | undefined> => {
+          const apiUrl = `${apiConfig.baseUrl}/api/tx/${txHash}/status`;
 
-        try {
-          const response = await fetch(apiUrl);
-          if (!response.ok) {
-            console.error(`Failed to fetch transaction status: ${response.status}`);
+          try {
+            const response = await fetch(apiUrl);
+            if (!response.ok) {
+              console.error(`Failed to fetch transaction status from ${apiConfig.name}: ${response.status}`);
+              return undefined;
+            }
+
+            const rawData = await response.json();
+            const transactionStatus: BitcoinTransactionStatus = {
+              confirmed: rawData.confirmed,
+              block_height: rawData.block_height,
+              block_hash: rawData.block_hash,
+              block_time: rawData.block_time,
+            };
+
+            return transactionStatus.confirmed ? transactionStatus : undefined;
+          } catch (error) {
+            console.error(`Error fetching Bitcoin transaction status from ${apiConfig.name}: ${error}`);
             return undefined;
           }
+        };
 
-          const transactionData: BitcoinTransactionStatus = await response.json();
-
-          if (transactionData.status.confirmed) {
-            return transactionData;
-          } else {
-            return undefined;
-          }
-        } catch (error) {
-          throw new Error(`[BITCOIN] Error fetching Bitcoin transaction status: ${error}`);
-        }
+        const result =
+          (await fetchTransaction(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+          (await fetchTransaction(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+        return result;
       },
       {
         interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
