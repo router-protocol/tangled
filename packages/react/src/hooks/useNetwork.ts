@@ -6,7 +6,7 @@ import { useSwitchChain as useEVMSwitchChain } from 'wagmi';
 import { ChainData, ChainId } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { useChains } from './useChains.js';
-import { useCosmosContext } from './useCosmosContext.js';
+import { useConnect } from './useConnect.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useWallet } from './useWallet.js';
 
@@ -16,7 +16,7 @@ export const useNetwork = () => {
   const chains = useChains(currentAccount?.chainType);
   const { selectNetwork: selectSuiNetwork } = useSuiClientContext();
   const { switchChainAsync } = useEVMSwitchChain();
-  const { connect: cosmosConnect } = useCosmosContext();
+  const { connectAsync } = useConnect();
 
   const switchNetwork = useCallback(
     async (chainId: ChainId): Promise<ChainData | undefined> => {
@@ -70,17 +70,19 @@ export const useNetwork = () => {
       }
 
       if (chain.type === 'cosmos') {
-        await cosmosConnect({
-          chainId: chain.id,
-          adapterId: currentAccount?.wallet,
+        const newWalletId = `${currentAccount.wallet.split(':')[0]}:${chain.id}`;
+        const connectedWalletData = await connectAsync({
+          chainType: 'cosmos',
+          walletId: newWalletId,
         });
+        const connectedChainId = connectedWalletData.walletId.split(':')[1];
 
-        return;
+        return chains.find((chain) => chain.id === connectedChainId);
       }
 
       throw new Error('Chain type not supported');
     },
-    [currentWalletInstance, currentAccount, chains, switchChainAsync, selectSuiNetwork, cosmosConnect],
+    [currentWalletInstance?.connector, currentAccount, chains, switchChainAsync, selectSuiNetwork, connectAsync],
   );
 
   const { mutate, mutateAsync, isPending } = useMutation({

@@ -12,13 +12,15 @@ export interface CosmosContextValues {
   connect: (params: { adapterId: string; chainId?: string }) => Promise<{
     chainWallets: ChainWalletBase[];
     mainWallet: MainWalletBase;
+    walletId: string;
+    chainId: string | undefined;
   }>;
   disconnect: () => Promise<void>;
   store: CosmosStore | null;
 }
 
 export const CosmosContext = createContext<CosmosContextValues>({
-  connect: async () => ({ chainWallets: [], mainWallet: {} as MainWalletBase }),
+  connect: async () => ({ chainWallets: [], mainWallet: {} as MainWalletBase, walletId: '', chainId: '' }),
   disconnect: async () => {},
   store: null,
 });
@@ -174,7 +176,8 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const { mutateAsync: connect } = useMutation({
     mutationKey: ['cosmos connect'],
     mutationFn: async ({ adapterId, chainId }: { adapterId: string; chainId?: string }) => {
-      const mainWallet = walletManager.mainWallets.find((wallet) => wallet.walletName === adapterId);
+      const walletId = adapterId.split(':')[0];
+      const mainWallet = walletManager.mainWallets.find((wallet) => wallet.walletName === walletId);
 
       if (!mainWallet) {
         throw new Error('Failed to connect to Cosmos wallet: wallet not found');
@@ -197,7 +200,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
 
       const chainWallets = mainWallet.getChainWalletList(false);
 
-      return { chainWallets, mainWallet };
+      return { chainWallets, mainWallet, walletId, chainId };
     },
     onSuccess: (data) => {
       setConnectedMainWallet(data.mainWallet);
