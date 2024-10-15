@@ -9,7 +9,7 @@ import {
 } from '../connectors/bitcoin/connectors.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { BitcoinStore, createBitcoinStore } from '../store/Bitcoin.js';
-import { BitcoinConnector } from '../types/bitcoin.js';
+import { XfiBitcoinConnector } from '../types/bitcoin.js';
 import { ChainId } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 
@@ -18,7 +18,7 @@ export interface BitcoinContextValues {
   disconnect: () => Promise<void>;
   store: BitcoinStore | null;
 
-  bitcoinProvider: BitcoinConnector | undefined;
+  bitcoinProvider: XfiBitcoinConnector | undefined;
 }
 
 export const BitcoinContext = createContext<BitcoinContextValues>({

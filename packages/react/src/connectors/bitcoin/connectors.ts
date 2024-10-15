@@ -1,4 +1,4 @@
-import { BitcoinConnector } from '../../types/bitcoin.js';
+import { XfiBitcoinConnector } from '../../types/bitcoin.js';
 import { ChainId } from '../../types/index.js';
 import { Wallet } from '../../types/wallet.js';
 
@@ -23,7 +23,7 @@ export const isXdefiWalletInstalled = () => {
 };
 
 // TODO: Update the config for multiple wallets similar to evm
-export const getBitcoinProvider = (): BitcoinConnector | undefined => {
+export const getBitcoinProvider = (): XfiBitcoinConnector | undefined => {
   if (typeof window !== 'undefined' && window.xfi?.bitcoin) {
     return window.xfi.bitcoin;
   }

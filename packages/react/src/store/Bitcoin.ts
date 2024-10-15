@@ -1,6 +1,6 @@
 import { createStore } from 'zustand';
 import { devtools } from 'zustand/middleware';
-import { BitcoinConnector } from '../types/bitcoin.js';
+import { XfiBitcoinConnector } from '../types/bitcoin.js';
 import { Wallet } from '../types/wallet.js';
 
 interface BitcoinProps {
@@ -11,12 +11,12 @@ export interface BitcoinState {
   connectors: {
     [key in string]: { account: string; chainId: string | undefined; adapter: Wallet<'bitcoin'> };
   };
-  connectedAdapter: BitcoinConnector | Wallet<'bitcoin'> | undefined;
+  connectedAdapter: XfiBitcoinConnector | Wallet<'bitcoin'> | undefined;
   address: string | null;
 
   setAddress: (address: string) => void;
   setConnectors: (connector: BitcoinState['connectors']) => void;
-  setConnectedAdapter: (adapter: BitcoinConnector | undefined) => void;
+  setConnectedAdapter: (adapter: XfiBitcoinConnector | undefined) => void;
 }
 
 export type BitcoinStore = ReturnType<typeof createBitcoinStore>;

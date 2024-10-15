@@ -6,7 +6,7 @@ import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@
 import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainId, ChainType } from '../types/index.js';
-import { BitcoinConnector } from './bitcoin.js';
+import { XfiBitcoinConnector } from './bitcoin.js';
 
 export type ChainConnectors = {
   evm: CreateConnectorFn[];
@@ -69,7 +69,7 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
           : T extends 'ton'
             ? TonConnectUI
             : T extends 'bitcoin'
-              ? BitcoinConnector | Wallet<'bitcoin'>
+              ? XfiBitcoinConnector | Wallet<'bitcoin'>
               : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
