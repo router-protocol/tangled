@@ -7,6 +7,7 @@ import {
   blast,
   boba,
   ethereum,
+  injective,
   linea,
   manta,
   mantle,
@@ -17,19 +18,18 @@ import {
   polygon,
   polygonZkEvm,
   scroll,
+  self,
   solana,
+  solanaDevnet,
+  solanaTestnet,
   sui,
   suiTestnet,
   tonMainnet,
+  tonTestnet,
   tronMainnet,
   tronShasta,
   zkSync,
 } from '../chains/index.js';
-import { injective } from '../chains/injective.js';
-import { self } from '../chains/self.js';
-import { solanaDevnet } from '../chains/solana.devnet.js';
-import { solanaTestnet } from '../chains/solana.testnet.js';
-import { tonTestnet } from '../chains/ton.testnet.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export * from './abi/index.js';
