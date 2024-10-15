@@ -17,6 +17,8 @@ import {
   osmosis,
   polygon,
   polygonZkEvm,
+  router,
+  routerEvm,
   scroll,
   self,
   solana,
@@ -53,11 +55,13 @@ export const CHAIN_ID = {
   polygon_zkevm: '1101',
   scroll: '534352',
   zksync: '324',
+  routerEvm: '9600',
 
   // cosmos
   osmosis: 'osmosis',
   injective: 'injective',
   self: 'self',
+  router: 'router-9600',
 
   // tron
   tronMainnet: '728126428',
@@ -117,11 +121,13 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.polygon_zkevm]: polygonZkEvm,
   [CHAIN_ID.scroll]: scroll,
   [CHAIN_ID.zksync]: zkSync,
+  [CHAIN_ID.routerEvm]: routerEvm,
 
   //cosmos
   [CHAIN_ID.osmosis]: osmosis,
   [CHAIN_ID.injective]: injective,
   [CHAIN_ID.self]: self,
+  [CHAIN_ID.router]: router,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,
