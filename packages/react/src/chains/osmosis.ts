@@ -18,7 +18,7 @@ export const osmosis: CosmsosChainType = {
   blockExplorers: {
     default: {
       name: 'Cosmos Explorer',
-      url: 'https://celatone.osmosis.zone/',
+      url: 'https://celatone.osmosis.zone',
     },
   },
 } as const;

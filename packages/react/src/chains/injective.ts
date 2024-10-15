@@ -18,7 +18,7 @@ export const injective: CosmsosChainType = {
   blockExplorers: {
     default: {
       name: 'Injective Explorer',
-      url: 'https://explorer.injective.network/',
+      url: 'https://explorer.injective.network',
     },
   },
 } as const;

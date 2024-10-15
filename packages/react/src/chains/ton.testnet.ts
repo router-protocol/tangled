@@ -19,7 +19,7 @@ export const tonTestnet: ChainData = {
   blockExplorers: {
     default: {
       name: 'Tonscan',
-      url: 'https://testnet.tonscan.org/',
+      url: 'https://testnet.tonscan.org',
     },
   },
 } as const;

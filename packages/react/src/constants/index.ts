@@ -26,6 +26,7 @@ import {
   zkSync,
 } from '../chains/index.js';
 import { injective } from '../chains/injective.js';
+import { self } from '../chains/self.js';
 import { solanaDevnet } from '../chains/solana.devnet.js';
 import { solanaTestnet } from '../chains/solana.testnet.js';
 import { tonTestnet } from '../chains/ton.testnet.js';
@@ -56,6 +57,7 @@ export const CHAIN_ID = {
   // cosmos
   osmosis: 'osmosis',
   injective: 'injective',
+  self: 'self',
 
   // tron
   tronMainnet: '728126428',
@@ -119,6 +121,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   //cosmos
   [CHAIN_ID.osmosis]: osmosis,
   [CHAIN_ID.injective]: injective,
+  [CHAIN_ID.self]: self,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,
