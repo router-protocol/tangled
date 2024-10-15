@@ -118,28 +118,12 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       });
     });
 
-    const repos = chains.map((chain) => walletManager.getWalletRepo(chain.chainName));
-
     chainNames.forEach((chainName) => {
       const walletRepo = walletManager.getWalletRepo(chainName);
 
       walletRepo.activate();
 
       walletRepo.wallets.forEach((wallet) => {
-        if (wallet.isModeExtension) {
-          if (wallet.callbacks)
-            wallet.callbacks.beforeConnect = async () => {
-              try {
-                await wallet.client?.enable?.(chainIds);
-              } catch (e) {
-                for (const repo of repos) {
-                  await wallet.client?.addChain?.(repo.chainRecord);
-                }
-                await wallet.client?.enable?.(chainIds);
-              }
-            };
-        }
-
         if (wallet.isModeWalletConnect) {
           wallet.connectChains = async () => {
             await wallet?.client?.connect?.(chainIds);
@@ -151,8 +135,12 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       });
     });
     return walletManager;
-  }, [chainIds, chainNames, chains, logger]);
+  }, [chainIds, chainNames, logger]);
 
+  const chainRepos = useMemo(
+    () => chains.map((chain) => walletManager.getWalletRepo(chain.chainName)),
+    [chains, walletManager],
+  );
   useEffect(() => {
     walletManager.onMounted();
     return () => {
@@ -184,23 +172,30 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
 
       const client = mainWallet.clientMutable.data;
 
+      try {
+        console.debug('[COSMOS] Try Enabling wallet:', mainWallet.walletName);
+        let enableChainIds = chainIds;
+        // if (adapterId.includes('leap')) {
+        //   enableChainIds = chainIds.filter((chainId) => chainId !== 'router_9600-1');
+        // }
+        await mainWallet.client?.enable?.(enableChainIds);
+      } catch (e) {
+        for (const repo of chainRepos) {
+          console.debug('[COSMOS] Adding chain:', repo.chainRecord);
+          await mainWallet.client?.addChain?.(repo.chainRecord);
+        }
+        console.debug('[COSMOS] Enabling wallet:', mainWallet.walletName);
+        await mainWallet.client?.enable?.(chainIds);
+      }
+
       if (!client) {
         throw new Error('Failed to connect to Cosmos wallet: missing mutable client');
       }
 
-      console.debug('[COSMOS] Connecting to Cosmos wallet client.:', { walletId, chainId });
+      console.debug('[COSMOS] Connecting All', mainWallet, mainWallet.getChainWalletList(true));
+      await mainWallet.connectAll(false);
 
-      await client.enable?.(chainIds);
-
-      // enable param chainId
-      if (chainId) {
-        console.debug('[COSMOS] Connecting to Cosmos wallet client with chainId:', { walletId, chainId });
-        await client.enable?.([chainId]);
-      }
-
-      console.debug('[COSMOS] Connecting All', mainWallet);
-      await mainWallet.connectAll(true);
-
+      console.debug('[COSMOS] Connected to Cosmos wallet:');
       const chainWallets = mainWallet.getChainWalletList(true);
 
       console.debug(
