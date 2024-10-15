@@ -16,20 +16,23 @@ export interface TangledConfigState {
 export type TangledConfigStore = ReturnType<typeof createTangledConfigStore>;
 
 export const createTangledConfigStore = (config: TangledConfig) => {
+  const chains = createChainConfigs(config.chains, config.chainConfigs);
+  const chainsById = Object.values(chains).reduce(
+    (acc, chain) => {
+      chain.forEach((c) => {
+        const chainId = c.id as unknown as string;
+        acc[chainId] = c as ChainData;
+      });
+      return acc;
+    },
+    {} as Record<string, ChainData>,
+  );
+
   return createStore<TangledConfigState>()(
-    devtools((_, get) => ({
-      chains: createChainConfigs(config.chains, config.chainConfigs),
-      chainsById: Object.values(get().chains).reduce(
-        (acc, chain) => {
-          chain.forEach((c) => {
-            const chainId = c.id as unknown as string;
-            acc[chainId] = c as ChainData;
-          });
-          return acc;
-        },
-        {} as Record<string, ChainData>,
-      ),
-      connectors: createChainConnectors(config, get().chains),
+    devtools(() => ({
+      chains,
+      chainsById,
+      connectors: createChainConnectors(config, chains),
       tonconnectManifestUrl: config.tonconnectManifestUrl,
       twaReturnUrl: config.twaReturnUrl,
     })),
