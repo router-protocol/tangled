@@ -51,7 +51,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.scroll,
       evm.zkSync,
     ] as EVMChain[];
-    supportedChains.cosmos = [cosmos.osmosis, cosmos.injective] as CosmsosChainType[];
+    supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.self, cosmos.router] as CosmsosChainType[];
     supportedChains.solana = [solana] as OtherChainData<'solana'>[];
     supportedChains.tron = [tronMainnet] as TronChain[];
     supportedChains.alephZero = [alephZero] as OtherChainData<'alephZero'>[];
