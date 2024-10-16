@@ -106,13 +106,10 @@ export const getBalances = async (
     const balances: Record<string, bigint> = {};
 
     for (const token of tokens) {
-      balances[token.address] = await viewMethodOnNear(
-        chain as OtherChainData<'near'>,
-        token.address,
-        'ft_balance_of',
-        {
+      balances[token.address] = BigInt(
+        await viewMethodOnNear(chain as OtherChainData<'near'>, token.address, 'ft_balance_of', {
           account_id: account,
-        },
+        }),
       );
     }
 

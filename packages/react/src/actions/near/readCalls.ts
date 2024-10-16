@@ -20,11 +20,6 @@ export async function viewMethodOnNear(chain: OtherChainData<'near'>, token: str
       finality: 'optimistic',
     });
     res = JSON.parse(Buffer.from(res.result).toString());
-
-    if (typeof res === 'string') {
-      return BigInt(res);
-    }
-
     return res;
   } catch (error) {
     console.error('Error calling viewMethodOnNear:', error);
