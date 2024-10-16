@@ -1,5 +1,6 @@
 import {
   BitcoinBalanceResponse,
+  BitcoinTransactionStatus,
   BlockstreamGasFeeResponse,
   MempoolSpaceBitcoinGasFeeResponse,
 } from '../../types/bitcoin.js';
@@ -121,4 +122,32 @@ const calculateTotalBalance = (rawData: BitcoinBalanceResponse): number => {
   const mempoolBalance = rawData.mempool_stats.funded_txo_sum - rawData.mempool_stats.spent_txo_sum;
 
   return confirmedBalance + mempoolBalance;
+};
+
+export const fetchTransaction = async (
+  txHash: string,
+  apiConfig: BitcoinApiConfigResult,
+): Promise<BitcoinTransactionStatus | undefined> => {
+  const apiUrl = `${apiConfig.baseUrl}/api/tx/${txHash}/status`;
+
+  try {
+    const response = await fetch(apiUrl);
+    if (!response.ok) {
+      console.error(`Failed to fetch transaction status from ${apiConfig.name}: ${response.status}`);
+      return undefined;
+    }
+
+    const rawData = await response.json();
+    const transactionStatus: BitcoinTransactionStatus = {
+      confirmed: rawData.confirmed,
+      block_height: rawData.block_height,
+      block_hash: rawData.block_hash,
+      block_time: rawData.block_time,
+    };
+
+    return transactionStatus.confirmed ? transactionStatus : undefined;
+  } catch (error) {
+    console.error(`Error fetching Bitcoin transaction status from ${apiConfig.name}: ${error}`);
+    return undefined;
+  }
 };

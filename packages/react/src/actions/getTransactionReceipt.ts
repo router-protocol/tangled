@@ -1,5 +1,7 @@
 import { getTransactionReceipt as getEVMTransactionReceipt } from '@wagmi/core';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
+import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
+import { fetchTransaction } from './bitcoin/transaction.js';
 import { TransactionParams } from './waitForTransaction.js';
 
 export type GetTransactionReceiptOverrides<C extends ChainType = ChainType> = C extends 'solana'
@@ -108,6 +110,15 @@ export const getTransactionReceipt = (async ({
         showBalanceChanges: true,
       },
     });
+  }
+
+  if (chain.type === 'bitcoin') {
+    const { txHash } = transactionParams as TransactionParams<'bitcoin'>;
+
+    const result =
+      (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+      (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+    return result;
   }
 
   throw new Error('Chain type not supported');
