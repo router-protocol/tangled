@@ -5,8 +5,7 @@ export const THIRTY_TGAS = '30000000000000';
 export const NO_DEPOSIT = '0';
 
 export function getNearProvider(chain: OtherChainData<'near'>) {
-  const url = chain.rpcUrls.default.http[0];
-  return new providers.JsonRpcProvider({ url });
+  return new providers.JsonRpcProvider({ url: chain.rpcUrls.defualt.http[0] });
 }
 
 export async function viewMethodOnNear(chain: OtherChainData<'near'>, token: string, method: string, args = {}) {
@@ -21,6 +20,11 @@ export async function viewMethodOnNear(chain: OtherChainData<'near'>, token: str
       finality: 'optimistic',
     });
     res = JSON.parse(Buffer.from(res.result).toString());
+
+    if (typeof res === 'string') {
+      return BigInt(res);
+    }
+
     return res;
   } catch (error) {
     console.error('Error calling viewMethodOnNear:', error);
