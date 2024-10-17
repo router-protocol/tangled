@@ -5,6 +5,7 @@ import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { getBitcoinProvider, isXdefiWalletInstalled } from '../connectors/bitcoin/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
+import { NearContext } from '../providers/NearProvider.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
@@ -44,6 +45,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const cosmosWallets = useCosmosStore((state) => state.wallets);
 
   const bitcoinConnectors = useBitcoinStore((state) => state.connectors);
+
+  const { wallets: nearWallets } = useContext(NearContext);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
@@ -268,6 +271,25 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return detected;
   }, [bitcoinConnectors, options?.onlyInstalled]);
 
+  // near
+  const extendedNearWallets = useMemo<Wallet<'near'>[]>(() => {
+    const detected: Wallet<'near'>[] = nearWallets.map((wallet) => ({
+      id: wallet.id,
+      name: wallet.metadata.name,
+      connector: wallet,
+      icon: wallet.metadata.iconUrl,
+      type: 'near',
+      installed: wallet.metadata.available,
+      url: wallet.metadata.walletUrl || wallet.metadata.downloadUrl,
+    }));
+
+    if (options?.onlyInstalled) {
+      return detected.filter((wallet) => wallet.installed);
+    }
+
+    return detected;
+  }, [nearWallets, options?.onlyInstalled]);
+
   return useMemo(
     () => ({
       evm: extendedEvmWallets,
@@ -278,7 +300,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       bitcoin: extendedBitcoinWallets,
       casper: [],
       cosmos: extendedCosmosWallets,
-      near: [],
+      near: extendedNearWallets,
       sui: extendedSuiWallets,
     }),
     [
@@ -290,6 +312,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       extendedTonWallets,
       extendedCosmosWallets,
       extendedBitcoinWallets,
+      extendedNearWallets,
     ],
   );
 };

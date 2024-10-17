@@ -7,6 +7,7 @@ import { AlephProvider } from './AlephProvider.js';
 import { BitcoinProvider } from './BitcoinProvider.js';
 import CosmosContextProvider from './CosmosProvider.js';
 import EVMProvider from './EVMProvider.js';
+import { NearProvider } from './NearProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
 import { SuiProvider } from './SuiProvider.js';
 import { TonProvider } from './TonProvider.js';
@@ -48,7 +49,9 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
                   >
                     <TonProvider chain={chains.ton[0]}>
                       <BitcoinProvider adapters={connectors.bitcoin}>
-                        <WalletsProvider>{children}</WalletsProvider>
+                        <NearProvider>
+                          <WalletsProvider>{children}</WalletsProvider>
+                        </NearProvider>
                       </BitcoinProvider>
                     </TonProvider>
                   </TonConnectUIProvider>

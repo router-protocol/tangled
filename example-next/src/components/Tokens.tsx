@@ -155,6 +155,20 @@ const tokens: TokenMetadata[] = [
     symbol: 'USDT',
     chainId: '-239',
   },
+  {
+    address: ETH_ADDRESS,
+    decimals: 24,
+    name: 'NEAR',
+    symbol: 'NEAR',
+    chainId: '397',
+  },
+  {
+    address: 'usdt.tether-token.near',
+    decimals: 6,
+    name: 'Tether USD',
+    symbol: 'USDt',
+    chainId: '397',
+  },
 ];
 
 export default Tokens;

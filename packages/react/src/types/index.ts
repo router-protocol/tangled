@@ -2,10 +2,12 @@ import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-re
 import { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
 import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
+import { WalletSelector as NearWalletSelector } from '@near-wallet-selector/core';
 import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { TonClient } from '@ton/ton';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
+import { providers } from 'near-api-js';
 import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
@@ -111,6 +113,9 @@ export interface TangledConfig {
   tonconnectManifestUrl: string;
   /** Telegram mini app url */
   twaReturnUrl: `${string}://${string}`;
+
+  // Configure network environment of near-wallet-selector
+  nearNetwork: 'testnet' | 'mainnet';
 }
 
 type ChainRpcUrls = {
@@ -147,6 +152,7 @@ export type ConnectionOrConfig = {
     getChainRegistry: () => Promise<CosmosChainRegistryClient>;
   };
   bitcoinProvider: XfiBitcoinConnector;
+  nearSelector: NearWalletSelector;
 };
 
 export type GetTokenMetadataParams = {
@@ -167,4 +173,6 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
           ? TonTransactionInfo
           : C extends 'cosmos'
             ? CosmosIndexedTx
-            : unknown;
+            : C extends 'near'
+              ? providers.FinalExecutionOutcome
+              : unknown;

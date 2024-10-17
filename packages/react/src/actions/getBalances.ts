@@ -4,7 +4,8 @@ import { multicall } from '@wagmi/core';
 import { Address as EVMAddress, erc20Abi } from 'viem';
 import { trc20Abi } from '../constants/abi/trc20.js';
 import { tronMulticallAbi } from '../constants/abi/tronMulticall.js';
-import { ChainData, ConnectionOrConfig } from '../types/index.js';
+import { ChainData, ConnectionOrConfig, OtherChainData } from '../types/index.js';
+import { viewMethodOnNear } from './near/readCalls.js';
 
 export const getBalances = async (
   tokens: { address: string }[],
@@ -115,6 +116,20 @@ export const getBalances = async (
     accountBalances.forEach((balance) => {
       balances[balance.denom] = BigInt(balance.amount);
     });
+
+    return balances;
+  }
+
+  if (chain.type === 'near') {
+    const balances: Record<string, bigint> = {};
+
+    for (const token of tokens) {
+      balances[token.address] = BigInt(
+        await viewMethodOnNear(chain as OtherChainData<'near'>, token.address, 'ft_balance_of', {
+          account_id: account,
+        }),
+      );
+    }
 
     return balances;
   }

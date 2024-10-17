@@ -1,6 +1,7 @@
 import { alephZero } from '../chains/alephZero.js';
 import * as cosmos from '../chains/cosmos.js';
 import * as evm from '../chains/evm.js';
+import { near } from '../chains/near.js';
 import { solana } from '../chains/solana.js';
 import { sui } from '../chains/sui.js';
 import { tonMainnet } from '../chains/ton.js';
@@ -57,6 +58,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     supportedChains.alephZero = [alephZero] as OtherChainData<'alephZero'>[];
     supportedChains.sui = [sui] as SuiChainType[];
     supportedChains.ton = [tonMainnet] as OtherChainData<'ton'>[];
+    supportedChains.near = [near] as OtherChainData<'near'>[];
   }
 
   return supportedChains;
