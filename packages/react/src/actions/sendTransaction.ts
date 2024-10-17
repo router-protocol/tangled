@@ -1,3 +1,4 @@
+import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
 import { Transaction } from '@mysten/sui/transactions';
 import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
@@ -45,7 +46,12 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
                 stateInit?: string;
               };
             }
-          : never;
+          : CType extends 'cosmos'
+            ? {
+                messages: readonly MsgExecuteContractEncodeObject[];
+                memo?: string;
+              }
+            : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
@@ -200,6 +206,21 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const hashHex = buffer.toString('hex');
 
     return { txHash: hashHex };
+  }
+
+  if (chain.type === 'cosmos') {
+    const chainWallet = config.getCosmosClient().chainWallets[chain.id];
+
+    const { messages, memo } = args as TransactionArgs<'cosmos'>;
+
+    const client = await chainWallet.getSigningCosmWasmClient();
+    const result = await client.signAndBroadcast(from, messages, 'auto', memo);
+
+    if (result.code !== 0) {
+      throw new Error(`Transaction failed with code ${result.code}`);
+    }
+
+    return { txHash: result.transactionHash };
   }
 
   throw new Error('Chain not supported');

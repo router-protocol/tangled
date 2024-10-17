@@ -7,26 +7,31 @@ import {
   blast,
   boba,
   ethereum,
+  injective,
   linea,
   manta,
   mantle,
   metis,
   mode,
   optimism,
+  osmosis,
   polygon,
   polygonZkEvm,
+  router,
+  routerEvm,
   scroll,
+  self,
   solana,
+  solanaDevnet,
+  solanaTestnet,
   sui,
   suiTestnet,
   tonMainnet,
+  tonTestnet,
   tronMainnet,
   tronShasta,
   zkSync,
 } from '../chains/index.js';
-import { solanaDevnet } from '../chains/solana.devnet.js';
-import { solanaTestnet } from '../chains/solana.testnet.js';
-import { tonTestnet } from '../chains/ton.testnet.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export * from './abi/index.js';
@@ -50,8 +55,13 @@ export const CHAIN_ID = {
   polygon_zkevm: '1101',
   scroll: '534352',
   zksync: '324',
+  routerEvm: '9600',
 
   // cosmos
+  osmosis: 'osmosis-1',
+  injective: 'injective-1',
+  self: 'self-1',
+  routerchain: 'router_9600-1',
 
   // tron
   tronMainnet: '728126428',
@@ -111,6 +121,13 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.polygon_zkevm]: polygonZkEvm,
   [CHAIN_ID.scroll]: scroll,
   [CHAIN_ID.zksync]: zkSync,
+  [CHAIN_ID.routerEvm]: routerEvm,
+
+  //cosmos
+  [CHAIN_ID.osmosis]: osmosis,
+  [CHAIN_ID.injective]: injective,
+  [CHAIN_ID.self]: self,
+  [CHAIN_ID.routerchain]: router,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,

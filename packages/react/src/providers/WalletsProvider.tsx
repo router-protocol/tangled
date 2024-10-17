@@ -3,6 +3,7 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { useAlephStore } from '../hooks/useAlephStore.js';
+import { useCosmosStore } from '../hooks/useCosmosStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
 import { useTronStore } from '../hooks/useTronStore.js';
@@ -11,7 +12,7 @@ import { ChainId } from '../types/index.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
-  const { chains } = useTangledConfig();
+  const chains = useTangledConfig((config) => config.chains);
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
@@ -20,6 +21,9 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const alephAddress = useAlephStore((state) => state.address);
   const tonConnectors = useTonStore((state) => state.connectors);
   const tonAddress = useTonStore((state) => state.address);
+
+  // Cosmos store states
+  const cosmosChainWallets = useCosmosStore((state) => state.chainWallets);
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -186,39 +190,40 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.ton, tonConnectors, tonAddress]);
 
-  // when currentWallet changes, update currentAccount
+  // cosmos
   useEffect(() => {
-    if (!currentWallet) {
-      setCurrentAccount(undefined);
-      return;
+    const _cosmosAccounts: { [x: string]: ConnectedAccount } = {};
+    const _cosmosWallets: { [x: string]: ConnectedWallet<'cosmos'> } = {};
+
+    // Iterate over the Cosmos connectors
+    for (const [name, chainWallet] of Object.entries(cosmosChainWallets)) {
+      const address = chainWallet.address ?? '';
+
+      if (!address) {
+        console.log('No address found for wallet', name);
+        continue;
+      }
+
+      _cosmosAccounts[name] = {
+        address: address,
+        chainId: chainWallet.chainId as ChainId,
+        chainType: 'cosmos',
+        wallet: name,
+      };
+
+      _cosmosWallets[name] = {
+        address: address,
+        chainId: chainWallet.chainId as ChainId,
+        chainType: 'cosmos',
+        connector: chainWallet.mainWallet,
+      };
     }
 
-    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find(
-      (account) => account.wallet === currentWallet.id,
-    );
-
-    if (currentAccount) {
-      setCurrentAccount(currentAccount);
-    } else {
-      setCurrentAccount(undefined);
-      setCurrentWallet(undefined);
-    }
-  }, [currentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
-
-  // when connectedAccounts change, try connecting to recent wallet
-  useEffect(() => {
-    if (!recentWallet) return;
-
-    const connectedAccounts = connectedAccountsByChain[recentWallet.type];
-    if (!connectedAccounts) return;
-
-    const recentAccount = Object.values(connectedAccounts).find((account) => account.wallet === recentWallet.id);
-
-    if (recentAccount) {
-      setCurrentWallet(recentWallet);
-      setCurrentAccount(recentAccount);
-    }
-  }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
+    setChainConnectedAccounts({ cosmos: _cosmosAccounts });
+    setConnectedWallets({
+      cosmos: _cosmosWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, cosmosChainWallets]);
 
   //sui
   useEffect(() => {
@@ -251,6 +256,48 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     currentSuiWallet,
     currentSuiNetwork,
   ]);
+
+  // ALL CHANGES ABOVE THIS BLOCK
+  // when currentWallet changes, update currentAccount
+  useEffect(() => {
+    if (!currentWallet) {
+      setCurrentAccount(undefined);
+      return;
+    }
+
+    const [walletId, walletChainId] = currentWallet.id.split(':');
+
+    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find((account) => {
+      if (account.chainType === 'cosmos') {
+        const [_accountWalletId, _accountChainId] = account.wallet.split(':');
+        return _accountWalletId === walletId && (walletChainId ? _accountChainId === walletChainId : true);
+      }
+
+      return account.wallet === walletId;
+    });
+
+    if (currentAccount) {
+      setCurrentAccount(currentAccount);
+    } else {
+      setCurrentAccount(undefined);
+      setCurrentWallet(undefined);
+    }
+  }, [currentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
+
+  // when connectedAccounts change, try connecting to recent wallet
+  useEffect(() => {
+    if (!recentWallet) return;
+
+    const connectedAccounts = connectedAccountsByChain[recentWallet.type];
+    if (!connectedAccounts) return;
+
+    const recentAccount = Object.values(connectedAccounts).find((account) => account.wallet === recentWallet.id);
+
+    if (recentAccount) {
+      setCurrentWallet(recentWallet);
+      setCurrentAccount(recentAccount);
+    }
+  }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
 
   return <>{children}</>;
 };

@@ -5,7 +5,7 @@ const WalletList = () => {
   const { connect } = useConnect();
 
   return (
-    <div className='max-h-[30rem] overflow-scroll bg-neutral-900'>
+    <div className='max-h-[60rem] overflow-scroll bg-neutral-900'>
       <h2 className='text-xl font-bold sticky top-0 bg-black'>WALLETS</h2>
       <div className='space-y-8'>
         {CHAIN_TYPES.map((chainType) => (

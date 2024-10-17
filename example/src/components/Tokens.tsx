@@ -58,6 +58,13 @@ export const Token = (token: TokenMetadata) => {
 
 const tokens: TokenMetadata[] = [
   {
+    address: 'uosmo',
+    decimals: 6,
+    name: 'OSMO',
+    symbol: 'OSMO',
+    chainId: 'osmosis-1',
+  },
+  {
     address: ETH_ADDRESS,
     decimals: 18,
     name: 'Ether',
@@ -65,7 +72,7 @@ const tokens: TokenMetadata[] = [
     chainId: '1',
   },
   {
-    address: ETH_ADDRESS,
+    address: '',
     decimals: 18,
     name: 'Polygon MATIC',
     symbol: 'MATIC',
@@ -133,6 +140,20 @@ const tokens: TokenMetadata[] = [
     name: 'USDC',
     symbol: 'USDC',
     chainId: 'alephZero',
+  },
+  {
+    address: ETH_ADDRESS,
+    decimals: 9,
+    name: 'Toncoin',
+    symbol: 'TON',
+    chainId: '-239',
+  },
+  {
+    address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
+    decimals: 6,
+    name: 'Tether USD',
+    symbol: 'USDT',
+    chainId: '-239',
   },
 ];
 
