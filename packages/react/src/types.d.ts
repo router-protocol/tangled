@@ -4,6 +4,7 @@ export declare global {
   interface Window {
     xfi?: {
       bitcoin: XfiBitcoinConnector;
+      ethereum: any;
     };
   }
 }
