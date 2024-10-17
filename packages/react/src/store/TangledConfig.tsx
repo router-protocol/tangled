@@ -11,6 +11,7 @@ export interface TangledConfigState {
   connectors: ChainConnectors;
   tonconnectManifestUrl: string;
   twaReturnUrl: `${string}://${string}`;
+  config: TangledConfig;
 }
 
 export type TangledConfigStore = ReturnType<typeof createTangledConfigStore>;
@@ -35,6 +36,7 @@ export const createTangledConfigStore = (config: TangledConfig) => {
       connectors: createChainConnectors(config, chains),
       tonconnectManifestUrl: config.tonconnectManifestUrl,
       twaReturnUrl: config.twaReturnUrl,
+      config,
     })),
   );
 };

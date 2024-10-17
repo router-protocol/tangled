@@ -5,6 +5,7 @@ import { wallets as xdefi } from '@cosmos-kit/xdefi';
 import { useMutation } from '@tanstack/react-query';
 import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from 'zustand';
+import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { CosmosStore, createCosmosStore } from '../store/Cosmos.js';
 import { CosmsosChainType } from '../types/index.js';
 
@@ -26,6 +27,7 @@ export const CosmosContext = createContext<CosmosContextValues>({
 });
 
 const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode; chains: CosmsosChainType[] }) => {
+  const tangledConfig = useTangledConfig((state) => state.config);
   const cosmosStore = useRef(createCosmosStore(chains)).current;
 
   const [, setViewWalletRepo] = useState<WalletRepo | undefined>();
@@ -66,16 +68,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       'icns', // defaultNameService,
       {
         signClient: {
-          projectId: 'a8510432ebb71e6948cfd6cde54b70f7',
-          relayUrl: 'wss://relay.walletconnect.org',
-          metadata: {
-            name: 'Router Intents',
-            description: 'Router Intents dApp',
-            url: 'https://poc-intents-ui.vercel.app',
-            icons: [
-              'https://raw.githubusercontent.com/cosmology-tech/cosmos-kit/main/packages/docs/public/favicon-96x96.png',
-            ],
-          },
+          projectId: tangledConfig.projectId,
         },
       },
     );

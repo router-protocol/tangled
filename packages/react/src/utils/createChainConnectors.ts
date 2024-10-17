@@ -7,8 +7,6 @@ import * as tronConnectors from '../connectors/tron/connectors.js';
 import { CHAIN_TYPES, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
 
-// export type ChainConnectors = { [key in ChainType]: any };
-
 export const createChainConnectors = (config: TangledConfig, chains: SupportedChainsByType): ChainConnectors => {
   const overrides = config.chainConnectors ?? {};
 
