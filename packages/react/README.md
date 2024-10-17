@@ -60,18 +60,18 @@ export default function App({ Component, pageProps }) {
 :white_check_mark: - Supported
 :x: - Not Supported
 
-| Chain    | Wallet Connection      | Token Fetch        | Transaction Handlers   | Tx Watch               | Tx Receipt             |
-| -------- | ---------------------- | ------------------ | ---------------------- | ---------------------- | ---------------------- |
-| EVM      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Solana   | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Tron     | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Sui      | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
-| Cosmos   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Near     | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Bitcoin  | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Casper   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Ton      | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Algorand | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Chain    | Wallet Connection  | Token Fetch        | Transaction Handlers | Tx Watch           | Tx Receipt         |
+| -------- | ------------------ | ------------------ | -------------------- | ------------------ | ------------------ |
+| EVM      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Solana   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Tron     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Sui      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Cosmos   | :x:                | :x:                | :x:                  | :x:                | :x:                |
+| Near     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Bitcoin  | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Casper   | :x:                | :x:                | :x:                  | :x:                | :x:                |
+| Ton      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Algorand | :x:                | :x:                | :x:                  | :x:                | :x:                |
 
 #### Hooks
 

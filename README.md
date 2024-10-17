@@ -60,51 +60,40 @@ export default function App({ Component, pageProps }) {
 :white_check_mark: - Supported
 :x: - Not Supported
 
-| Chain    | Wallet Connection      | Token Fetch        | Transaction Handlers   | Tx Watch               | Tx Receipt             |
-| -------- | ---------------------- | ------------------ | ---------------------- | ---------------------- | ---------------------- |
-| EVM      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Solana   | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Tron     | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Sui      | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
-| Cosmos   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Near     | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Bitcoin  | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Casper   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Ton      | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Algorand | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Chain    | Wallet Connection  | Token Fetch        | Transaction Handlers | Tx Watch           | Tx Receipt         |
+| -------- | ------------------ | ------------------ | -------------------- | ------------------ | ------------------ |
+| EVM      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Solana   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Tron     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Sui      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Cosmos   | :x:                | :x:                | :x:                  | :x:                | :x:                |
+| Near     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Bitcoin  | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Casper   | :x:                | :x:                | :x:                  | :x:                | :x:                |
+| Ton      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
+| Algorand | :x:                | :x:                | :x:                  | :x:                | :x:                |
 
 #### Hooks
 
-- [ ] `useChainsConfig` - config for all chains
-- [ ] `useChains` - data for all chains
-- [ ] `useChain` - data for a specific chain
-- [ ] `useChainId` - current chain id
-- [ ] `useWallet` - current wallet
-- [ ] `useWallets` - all wallets
-- [ ] `useAccount` - current account
-- [ ] `useWallet` - current wallet
-- [ ] `useWatchTransaction` - watch a transaction, return receipt and callback fns
-- [ ] `useSendTransaction` - send a transaction, return receipt
-- [ ] `useTransactionReceipt` - get a transaction receipt
-- [ ] `useNitroTransactionReceipt` - get a transaction receipt from Nitro explorer
-- [ ] `useReadContract` - read a contract
-- [ ] `useSignMessage` - sign a message with current connected account
-- [ ] `useToken` - get token data like name, symbol, decimals
-- [ ] `useTokenAddressData` - get token data for an account to get balance, allowance and permit information
-- [ ] `useTokens` - get token list for one/multiple chains
-- [ ] `useTransactionHistory` - get transaction history for an account stored in local storage
-
-#### Components
-
-- [x] `Connect Button`
-- [ ] `Account Dialog`
-- [ ] `Network Button`
-- [ ] `Network Selector Dialog`
-- [ ] `Crosschain Transaction Receipt`
-- [ ] `Receipt Status`
-- [ ] `Transaction Status`
-- [ ] `Transaction Progress`
-
-#### Utilities
-
-- [ ] `SIWE and similar`
+- [-] `useAccounts` - get all accounts for a chain type or all chain types
+- [-] `useChain` - get chain data for a specific chain
+- [-] `useChains` - get all chain data
+- [-] `useConnect` - connect to a wallet
+- [-] `useConnectedWallets` - get all connected wallets
+- [-] `useConnections` - get all connections
+- [-] `useCurrentAccount` - get the current account
+- [-] `useCurrentWallet` - get the current wallet
+- [-] `useDisconnect` - disconnect from a wallet
+- [-] `useIsMobile` - check if the user is on a mobile device
+- [-] `useNetwork` - get the current network
+- [-] `useSendTransaction` - send a transaction
+- [-] `useTangledConfig` - get the Tangled config
+- [-] `useToken` - get token data
+- [-] `useTokenForAccount` - get token data for an account
+- [-] `useTransactionReceipt` - get a transaction receipt
+- [-] `useWaitForTransaction` - wait for a transaction
+- [-] `useWallet` - get the current wallet
+- [-] `useWallets` - get all wallets
+<!-- todo -->
+- [ ] `useSignMessage` - sign a message with the current connected account
+- [ ] `useReadContract` - read from a contract
