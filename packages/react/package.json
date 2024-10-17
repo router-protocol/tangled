@@ -32,6 +32,14 @@
     "Ankit Singh <ankit.singh.zm@gmail.com>"
   ],
   "dependencies": {
+    "@chain-registry/client": "^1.53.0",
+    "@cosmjs/cosmwasm-stargate": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "@cosmos-kit/core": "^2.8.5",
+    "@cosmos-kit/keplr": "^2.12.2",
+    "@cosmos-kit/leap": "^2.14.1",
+    "@cosmos-kit/react-lite": "^2.6.5",
+    "@cosmos-kit/xdefi": "^2.10.2",
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
     "@near-wallet-selector/core": "^8.9.13",
@@ -55,7 +63,6 @@
     "@wagmi/core": "^2.11.0",
     "@web3modal/wagmi": "^5.1.9",
     "detect-browser": "^5.3.0",
-    "immer": "^10.1.1",
     "near-api-js": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

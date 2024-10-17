@@ -214,6 +214,36 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     return receipt;
   }
 
+  if (chain.type === 'cosmos') {
+    const { txHash } = transactionParams as TransactionParams<'cosmos'>;
+
+    // Use Cosmos client's RPC or LCD to fetch the transaction details
+    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+    const stargateClient = await cosmosClient.getStargateClient();
+
+    const receipt = await pollCallback(
+      async () => {
+        const result = await stargateClient.getTx(txHash);
+
+        if (!result || result.code !== 0) {
+          return undefined; // Transaction not found or failed, continue polling
+        }
+
+        return result;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+
+    return receipt;
+  }
+
   if (chain.type === 'near') {
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'near'>;
     let { txHash } = transactionParams as TransactionParams<'near'>;

@@ -6,6 +6,7 @@ import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useCosmosContext } from './useCosmosContext.js';
 import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
@@ -23,15 +24,25 @@ export const useDisconnect = () => {
   const { disconnect: disconnectAlephWallet } = useAlephContext();
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
   const { disconnect: disconnectTonWallet } = useTonContext();
+  const { disconnect: disconnectCosmosWallet } = useCosmosContext();
   const { disconnect: disconnectNearWallet } = useNearContext();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
-      const walletInstance: Wallet | undefined = wallets[params.chainType].find(
+      let walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
 
+      // cosmos wallets have chain ids appended to the wallet id
+      // eg: 'keplr:cosmoshub-4'
+      if (params.chainType === 'cosmos') {
+        const walletId = params.walletId.split(':')[0];
+        walletInstance = wallets[params.chainType].find((wallet) => walletId === wallet.id);
+      }
+
       if (!walletInstance) {
+        console.log(wallets, params.walletId);
+
         throw new Error('Wallet not found');
       }
 
@@ -49,6 +60,8 @@ export const useDisconnect = () => {
         await disconnectAlephWallet();
       } else if (params.chainType === 'sui') {
         disconnectSuiWallet();
+      } else if (params.chainType === 'cosmos') {
+        disconnectCosmosWallet();
       } else if (params.chainType === 'ton') {
         await disconnectTonWallet();
       } else if (params.chainType === 'near') {
@@ -65,6 +78,7 @@ export const useDisconnect = () => {
       disconnectSuiWallet,
       disconnectTronWallet,
       disconnectTonWallet,
+      disconnectCosmosWallet,
       disconnectNearWallet,
       wallets,
     ],

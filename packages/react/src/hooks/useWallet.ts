@@ -17,5 +17,6 @@ export const useWallet = <C extends ChainType = ChainType>(
   if (!chainType || !walletId || !wallets[chainType]) {
     return undefined;
   }
-  return wallets[chainType].find((wallet) => wallet.id === walletId);
+  const _walletId = walletId.split(':')[0];
+  return wallets[chainType].find((wallet) => wallet.id === _walletId);
 };

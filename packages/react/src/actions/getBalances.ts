@@ -102,6 +102,24 @@ export const getBalances = async (
     return balances;
   }
 
+  if (chain.type === 'cosmos') {
+    const balances: Record<string, bigint> = {};
+
+    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+
+    const stargateClient = await cosmosClient.getStargateClient();
+
+    // Use the client to fetch all balances for the account
+    const accountBalances = await stargateClient.getAllBalances(account);
+
+    // Process each balance and store it in the balances object
+    accountBalances.forEach((balance) => {
+      balances[balance.denom] = BigInt(balance.amount);
+    });
+
+    return balances;
+  }
+
   if (chain.type === 'near') {
     const balances: Record<string, bigint> = {};
 
