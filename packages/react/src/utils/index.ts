@@ -90,3 +90,15 @@ export const pollCallback = async <T, TArgs extends any[]>(
 
   return result;
 };
+
+/**
+ * Removes the '0x' prefix from a hexadecimal string if present.
+ * @param hexString - The hexadecimal string to process
+ * @returns The hexadecimal string without the '0x' prefix
+ */
+export function removeHexPrefix(hexString: string) {
+  if (hexString.startsWith('0x')) {
+    return hexString.slice(2);
+  }
+  return hexString;
+}

@@ -8,7 +8,9 @@ import { createTonWalletInstance } from '../connectors/ton/connector.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
+import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
+import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -23,6 +25,8 @@ export const useConnect = () => {
   const { mutateAsync: connectSuiWallet } = useSuiConnectWallet();
   const { connect: connectTonWallet } = useTonContext();
   const { connect: connectCosmosWallet } = useCosmosContext();
+  const { connect: connectBitcoinWallet } = useBitcoinContext();
+  const { connect: connectNearWallet } = useNearContext();
 
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
@@ -32,6 +36,7 @@ export const useConnect = () => {
     async (params: {
       walletId: string;
       chainType: ChainType;
+      nearContractId?: string;
     }): Promise<{
       chainType: ChainType;
       name: string;
@@ -89,6 +94,10 @@ export const useConnect = () => {
             walletId: tonWalletInstance.id,
           };
         }
+      } else if (params.chainType === 'bitcoin') {
+        await connectBitcoinWallet(walletInstance.id);
+      } else if (params.chainType === 'near') {
+        await connectNearWallet({ adapterId: walletInstance.id, contractId: params.nearContractId });
       } else {
         const connector = walletInstance.connector as DefaultConnector;
         await connector.connect();
@@ -101,10 +110,12 @@ export const useConnect = () => {
       connectedWallets,
       connectSolanaWallet,
       connectTronWallet,
+      connectTonWallet,
+      connectBitcoinWallet,
       connectEVM,
       connectSuiWallet,
       connectCosmosWallet,
-      connectTonWallet,
+      connectNearWallet,
     ],
   );
 

@@ -29,7 +29,8 @@
   },
   "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
   "contributors": [
-    "Ankit Singh <ankit.singh.zm@gmail.com>"
+    "Ankit Singh <ankit.singh.zm@gmail.com>",
+    "Soumya Mukerjee <soumyamukherjee.work@gmail.com>"
   ],
   "dependencies": {
     "@chain-registry/client": "^1.53.0",
@@ -42,6 +43,11 @@
     "@cosmos-kit/xdefi": "^2.10.2",
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
+    "@near-wallet-selector/core": "^8.9.13",
+    "@near-wallet-selector/ethereum-wallets": "^8.9.13",
+    "@near-wallet-selector/my-near-wallet": "^8.9.13",
+    "@near-wallet-selector/near-mobile-wallet": "^8.9.13",
+    "@near-wallet-selector/wallet-connect": "^8.9.13",
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
     "@polkadot/api": "^12.3.1",
     "@polkadot/api-contract": "^12.3.1",
@@ -56,7 +62,9 @@
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.6",
     "@tronweb3/tronwallet-adapters": "^1.2.1",
     "@wagmi/core": "^2.11.0",
+    "@web3modal/wagmi": "^5.1.9",
     "detect-browser": "^5.3.0",
+    "near-api-js": "^5.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tronweb": "6.0.0-beta.4",

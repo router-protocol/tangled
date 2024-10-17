@@ -1,12 +1,17 @@
 import { getTransactionReceipt as getEVMTransactionReceipt } from '@wagmi/core';
-import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
+import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
+import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
+import { fetchTransaction } from './bitcoin/transaction.js';
+import { getNearProvider } from './near/readCalls.js';
 import { TransactionParams } from './waitForTransaction.js';
 
 export type GetTransactionReceiptOverrides<C extends ChainType = ChainType> = C extends 'solana'
   ? {
       maxSupportedTransactionVersion: number;
     }
-  : any;
+  : C extends 'near'
+    ? { accountAddress: string }
+    : any;
 
 export type GetTransactionReceiptParams<CData extends ChainData> = {
   transactionParams: TransactionParams<CData['type']>;
@@ -89,6 +94,22 @@ export const getTransactionReceipt = (async ({
     }
 
     return result;
+  }
+
+  if (chain.type === 'bitcoin') {
+    const { txHash } = transactionParams as TransactionParams<'bitcoin'>;
+
+    const result =
+      (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+      (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+    return result;
+  }
+
+  if (chain.type === 'near') {
+    const { txHash } = transactionParams as TransactionParams<'near'>;
+
+    const provider = await getNearProvider(chain as OtherChainData<'near'>);
+    return await provider.txStatus(txHash, overrides.accountAddress);
   }
 
   throw new Error('Chain type not supported');

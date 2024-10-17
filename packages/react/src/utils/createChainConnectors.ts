@@ -1,5 +1,6 @@
 import { WalletConnectAdapter as TronWalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
 import { coinbaseWallet, walletConnect } from 'wagmi/connectors';
+import * as bitcoinConnectors from '../connectors/bitcoin/connectors.js';
 import * as cosmosConnectors from '../connectors/cosmos/connector.js';
 import * as solConnectors from '../connectors/solana/connectors.js';
 import * as suiConnectors from '../connectors/sui/connectors.js';
@@ -51,6 +52,8 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
   ];
 
   connectors.cosmos = [...(overrides.cosmos ?? []), cosmosConnectors.cosmosWallet];
+
+  connectors.bitcoin = [...(overrides.bitcoin ?? []), bitcoinConnectors.xdefiWallet];
 
   return connectors;
 };

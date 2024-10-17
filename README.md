@@ -67,10 +67,10 @@ export default function App({ Component, pageProps }) {
 | Tron     | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
 | Sui      | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
 | Cosmos   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Near     | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Bitcoin  | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Near     | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
+| Bitcoin  | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
 | Casper   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Ton      | :white_check_mark:     | :x:                | :x:                    | :x:                    | :x:                    |
+| Ton      | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
 | Algorand | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 
 #### Hooks

@@ -3,6 +3,8 @@ import {
   avalanche,
   base,
   binance,
+  bitcoin,
+  bitcoinTestnet,
   blast,
   boba,
   ethereum,
@@ -12,6 +14,8 @@ import {
   mantle,
   metis,
   mode,
+  near,
+  nearTestnet,
   optimism,
   osmosis,
   polygon,
@@ -68,6 +72,8 @@ export const CHAIN_ID = {
   // tronNile: 'tron-nile',
 
   // near
+  near: '397',
+  nearTestnet: '398',
 
   // solana
   solana: 'solana',
@@ -83,6 +89,10 @@ export const CHAIN_ID = {
   // ton
   tonMainnet: '-239',
   tonTestnet: '-3',
+
+  // bitcoin
+  bitcoin: 'bitcoin',
+  bitcoinTestnet: 'bitcoin-testnet',
 
   // testnets
   // goerli: '5',
@@ -131,6 +141,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.tronShasta]: tronShasta,
   // [CHAIN_ID.tronNile]: tronNile,
 
+  // near
+  [CHAIN_ID.near]: near,
+  [CHAIN_ID.nearTestnet]: nearTestnet,
+
   // solana
   [CHAIN_ID.solana]: solana,
   [CHAIN_ID.solanaTestnet]: solanaTestnet,
@@ -143,6 +157,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // ton
   [CHAIN_ID.tonMainnet]: tonMainnet,
   [CHAIN_ID.tonTestnet]: tonTestnet,
+
+  // bitcoin
+  [CHAIN_ID.bitcoin]: bitcoin,
+  [CHAIN_ID.bitcoinTestnet]: bitcoinTestnet,
 
   // testnets
   // 5: goerli,
@@ -173,3 +191,9 @@ export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
  * The native SOL address.
  */
 export const SOL_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+// Lookup for near chain id
+export const NEAR_NETWORK_CONFIG: Record<string, string> = {
+  testnet: CHAIN_ID.nearTestnet,
+  mainnet: CHAIN_ID.near,
+};
