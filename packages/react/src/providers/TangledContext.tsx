@@ -3,7 +3,6 @@ import { ReactNode, createContext, useRef } from 'react';
 import { StoreApi, useStore } from 'zustand';
 import { TangledConfigState, createTangledConfigStore } from '../store/TangledConfig.js';
 import { TangledConfig } from '../types/index.js';
-import { AlephProvider } from './AlephProvider.js';
 import CosmosContextProvider from './CosmosProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
@@ -37,21 +36,19 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
           chain={chains.tron[0]}
         >
           <SolanaProvider chain={chains.solana[0]}>
-            <AlephProvider chain={chains.alephZero[0]}>
-              <SuiProvider chains={chains.sui}>
-                <CosmosContextProvider chains={chains.cosmos}>
-                  {/* getting error if combined with TonProvider */}
-                  <TonConnectUIProvider
-                    manifestUrl={tonconnectManifestUrl}
-                    actionsConfiguration={{ twaReturnUrl }}
-                  >
-                    <TonProvider chain={chains.ton[0]}>
-                      <WalletsProvider>{children}</WalletsProvider>
-                    </TonProvider>
-                  </TonConnectUIProvider>
-                </CosmosContextProvider>
-              </SuiProvider>
-            </AlephProvider>
+            <SuiProvider chains={chains.sui}>
+              <CosmosContextProvider chains={chains.cosmos}>
+                {/* getting error if combined with TonProvider */}
+                <TonConnectUIProvider
+                  manifestUrl={tonconnectManifestUrl}
+                  actionsConfiguration={{ twaReturnUrl }}
+                >
+                  <TonProvider chain={chains.ton[0]}>
+                    <WalletsProvider>{children}</WalletsProvider>
+                  </TonProvider>
+                </TonConnectUIProvider>
+              </CosmosContextProvider>
+            </SuiProvider>
           </SolanaProvider>
         </TronProvider>
       </EVMProvider>

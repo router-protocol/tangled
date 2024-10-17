@@ -5,7 +5,6 @@ import { useCallback } from 'react';
 import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
-import { useAlephContext } from './useAlephContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
@@ -20,7 +19,6 @@ export const useDisconnect = () => {
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
-  const { disconnect: disconnectAlephWallet } = useAlephContext();
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
   const { disconnect: disconnectTonWallet } = useTonContext();
   const { disconnect: disconnectCosmosWallet } = useCosmosContext();
@@ -54,8 +52,6 @@ export const useDisconnect = () => {
         await disconnectTronWallet();
       } else if (params.chainType === 'evm') {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
-      } else if (params.chainType === 'alephZero') {
-        await disconnectAlephWallet();
       } else if (params.chainType === 'sui') {
         disconnectSuiWallet();
       } else if (params.chainType === 'cosmos') {
@@ -68,7 +64,6 @@ export const useDisconnect = () => {
       }
     },
     [
-      disconnectAlephWallet,
       disconnectEVM,
       disconnectSolanaWallet,
       disconnectSuiWallet,

@@ -2,7 +2,6 @@ import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-re
 import { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
 import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
-import { type ApiPromise } from '@polkadot/api';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { TonClient } from '@ton/ton';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
@@ -10,21 +9,9 @@ import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
-import { AlephTransactionData } from './aleph.js';
 import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
-export const CHAIN_TYPES = [
-  'evm',
-  'tron',
-  'near',
-  'cosmos',
-  'solana',
-  'sui',
-  'casper',
-  'alephZero',
-  'bitcoin',
-  'ton',
-] as const;
+export const CHAIN_TYPES = ['evm', 'tron', 'near', 'cosmos', 'solana', 'sui', 'casper', 'bitcoin', 'ton'] as const;
 
 export type ChainType = (typeof CHAIN_TYPES)[number];
 
@@ -134,7 +121,6 @@ export type ConnectionOrConfig = {
   wagmiConfig: WagmiConfig;
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
-  alephZeroApi: ApiPromise;
   suiClient: SuiClient;
   tonClient: TonClient;
   getCosmosClient: () => {
@@ -154,12 +140,10 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
   ? EVMTxReceipt
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo
-    : C extends 'alephZero'
-      ? AlephTransactionData
-      : C extends 'sui'
-        ? SuiTransactionBlockResponse
-        : C extends 'ton'
-          ? TonTransactionInfo
-          : C extends 'cosmos'
-            ? CosmosIndexedTx
-            : unknown;
+    : C extends 'sui'
+      ? SuiTransactionBlockResponse
+      : C extends 'ton'
+        ? TonTransactionInfo
+        : C extends 'cosmos'
+          ? CosmosIndexedTx
+          : unknown;
