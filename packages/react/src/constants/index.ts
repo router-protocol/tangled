@@ -1,34 +1,42 @@
 import {
-  alephZero,
   arbitrum,
   avalanche,
   base,
   binance,
+  bitcoin,
+  bitcoinTestnet,
   blast,
   boba,
   casperMainnet,
   casperTestnet,
   ethereum,
+  injective,
   linea,
   manta,
   mantle,
   metis,
   mode,
+  near,
+  nearTestnet,
   optimism,
+  osmosis,
   polygon,
   polygonZkEvm,
+  router,
+  routerEvm,
   scroll,
+  self,
   solana,
+  solanaDevnet,
+  solanaTestnet,
   sui,
   suiTestnet,
   tonMainnet,
+  tonTestnet,
   tronMainnet,
   tronShasta,
   zkSync,
 } from '../chains/index.js';
-import { solanaDevnet } from '../chains/solana.devnet.js';
-import { solanaTestnet } from '../chains/solana.testnet.js';
-import { tonTestnet } from '../chains/ton.testnet.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
 
 export * from './abi/index.js';
@@ -52,8 +60,13 @@ export const CHAIN_ID = {
   polygon_zkevm: '1101',
   scroll: '534352',
   zksync: '324',
+  routerEvm: '9600',
 
   // cosmos
+  osmosis: 'osmosis-1',
+  injective: 'injective-1',
+  self: 'self-1',
+  routerchain: 'router_9600-1',
 
   // tron
   tronMainnet: '728126428',
@@ -61,6 +74,8 @@ export const CHAIN_ID = {
   // tronNile: 'tron-nile',
 
   // near
+  near: '397',
+  nearTestnet: '398',
 
   // solana
   solana: 'solana',
@@ -75,11 +90,13 @@ export const CHAIN_ID = {
   casper: 'casper',
   casperTestnet: 'casper-test',
 
-  alephZero: 'alephZero',
-
   // ton
   tonMainnet: '-239',
   tonTestnet: '-3',
+
+  // bitcoin
+  bitcoin: 'bitcoin',
+  bitcoinTestnet: 'bitcoin-testnet',
 
   // testnets
   // goerli: '5',
@@ -115,14 +132,22 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.polygon_zkevm]: polygonZkEvm,
   [CHAIN_ID.scroll]: scroll,
   [CHAIN_ID.zksync]: zkSync,
+  [CHAIN_ID.routerEvm]: routerEvm,
+
+  //cosmos
+  [CHAIN_ID.osmosis]: osmosis,
+  [CHAIN_ID.injective]: injective,
+  [CHAIN_ID.self]: self,
+  [CHAIN_ID.routerchain]: router,
 
   // tron
   [CHAIN_ID.tronMainnet]: tronMainnet,
   [CHAIN_ID.tronShasta]: tronShasta,
   // [CHAIN_ID.tronNile]: tronNile,
 
-  // aleph
-  [CHAIN_ID.alephZero]: alephZero,
+  // near
+  [CHAIN_ID.near]: near,
+  [CHAIN_ID.nearTestnet]: nearTestnet,
 
   // solana
   [CHAIN_ID.solana]: solana,
@@ -136,6 +161,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // ton
   [CHAIN_ID.tonMainnet]: tonMainnet,
   [CHAIN_ID.tonTestnet]: tonTestnet,
+
+  // bitcoin
+  [CHAIN_ID.bitcoin]: bitcoin,
+  [CHAIN_ID.bitcoinTestnet]: bitcoinTestnet,
 
   // casper
   [CHAIN_ID.casper]: casperMainnet,
@@ -157,7 +186,6 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   solana: 'Solana',
   sui: 'Sui',
   casper: 'Casper',
-  alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
   ton: 'Ton',
 } as const;
@@ -171,3 +199,9 @@ export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
  * The native SOL address.
  */
 export const SOL_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
+
+// Lookup for near chain id
+export const NEAR_NETWORK_CONFIG: Record<string, string> = {
+  testnet: CHAIN_ID.nearTestnet,
+  mainnet: CHAIN_ID.near,
+};

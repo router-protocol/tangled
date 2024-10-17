@@ -1,28 +1,20 @@
+import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-registry/client';
+import { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
+import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
-import { type ApiPromise } from '@polkadot/api';
+import { WalletSelector as NearWalletSelector } from '@near-wallet-selector/core';
 import { Connection as SolanaConnection } from '@solana/web3.js';
 import { TonClient } from '@ton/ton';
 import { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
+import { providers } from 'near-api-js';
 import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
-import { AlephTransactionData } from './aleph.js';
+import { XfiBitcoinConnector } from './bitcoin.js';
 import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
-
-export const CHAIN_TYPES = [
-  'evm',
-  'tron',
-  'near',
-  'cosmos',
-  'solana',
-  'sui',
-  'casper',
-  'alephZero',
-  'bitcoin',
-  'ton',
-] as const;
+export const CHAIN_TYPES = ['evm', 'tron', 'near', 'cosmos', 'solana', 'sui', 'casper', 'bitcoin', 'ton'] as const;
 
 export type ChainType = (typeof CHAIN_TYPES)[number];
 
@@ -68,15 +60,19 @@ export interface SuiChainType extends ChainDataGeneric {
   type: Extract<'sui', ChainType>;
   suiNetwork: 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 }
+export interface CosmsosChainType extends ChainDataGeneric {
+  type: Extract<'cosmos', ChainType>;
+  chainName: string;
+}
 
 // Exclude chains with custom types
-export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron' | 'sui'>;
+export type OtherChainTypes = Exclude<ChainType, 'evm' | 'tron' | 'sui' | 'cosmos'>;
 export type OtherChainData<T extends ChainType = OtherChainTypes> = ChainDataGeneric & {
   type: T;
 };
 
 // Chain data discriminated union for all supported chains
-export type ChainData = EVMChain | TronChain | SuiChainType | OtherChainData;
+export type ChainData = EVMChain | TronChain | SuiChainType | CosmsosChainType | OtherChainData;
 
 export type SupportedChainsByType = {
   [K in ChainData as K['type']]: K[];
@@ -95,12 +91,18 @@ export interface TangledConfig {
   /** Walletconnect project ID */
   projectId: string;
 
+  /** Bitcoin network configuration */
+  bitcoinNetwork: 'mainnet' | 'testnet';
+
   chainConnectors?: Partial<ChainConnectors>;
 
   /** Manifest url for ton connect */
-  tonconnectManifestUrl?: string;
+  tonconnectManifestUrl: string;
   /** Telegram mini app url */
-  twaReturnUrl?: `${string}://${string}`;
+  twaReturnUrl: `${string}://${string}`;
+
+  // Configure network environment of near-wallet-selector
+  nearNetwork: 'testnet' | 'mainnet';
 }
 
 type ChainRpcUrls = {
@@ -128,9 +130,15 @@ export type ConnectionOrConfig = {
   wagmiConfig: WagmiConfig;
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
-  alephZeroApi: ApiPromise;
   suiClient: SuiClient;
   tonClient: TonClient;
+  getCosmosClient: () => {
+    walletManaer: CosmosWalletManager | undefined;
+    chainWallets: Record<string, CosmosChainWalletBase>;
+    getChainRegistry: () => Promise<CosmosChainRegistryClient>;
+  };
+  bitcoinProvider: XfiBitcoinConnector;
+  nearSelector: NearWalletSelector;
 };
 
 export type GetTokenMetadataParams = {
@@ -143,10 +151,12 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
   ? EVMTxReceipt
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo
-    : C extends 'alephZero'
-      ? AlephTransactionData
-      : C extends 'sui'
-        ? SuiTransactionBlockResponse
-        : C extends 'ton'
-          ? TonTransactionInfo
-          : unknown;
+    : C extends 'sui'
+      ? SuiTransactionBlockResponse
+      : C extends 'ton'
+        ? TonTransactionInfo
+        : C extends 'cosmos'
+          ? CosmosIndexedTx
+          : C extends 'near'
+            ? providers.FinalExecutionOutcome
+            : unknown;

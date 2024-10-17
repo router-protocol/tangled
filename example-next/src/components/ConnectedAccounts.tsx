@@ -2,6 +2,7 @@ import { ConnectedAccount, useAccounts, useChain, useConnect, useDisconnect, use
 
 export const ConnectedAccounts = () => {
   const accounts = useAccounts();
+
   return (
     <div className='bg-neutral-900'>
       <h3 className='text-lg font-bold'>Connected Accounts:</h3>

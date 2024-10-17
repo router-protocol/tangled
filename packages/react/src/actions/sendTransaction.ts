@@ -1,5 +1,5 @@
+import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
 import { Transaction } from '@mysten/sui/transactions';
-import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/ton';
 import { CHAIN } from '@tonconnect/ui-react';
@@ -7,6 +7,8 @@ import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
+import { signBitcoinTx } from './bitcoin/transaction.js';
+import { NO_DEPOSIT, THIRTY_TGAS } from './near/readCalls.js';
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -28,32 +30,54 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
     ? {
         versionedTx: SolanaVersionedTransaction;
       }
-    : CType extends 'alephZero'
+    : CType extends 'sui'
       ? {
-          submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
+          tx: Transaction;
         }
-      : CType extends 'sui'
+      : CType extends 'ton'
         ? {
-            tx: Transaction;
+            tonArgs: {
+              validUntil: number; // transaction deadline in unix epoch seconds.
+              network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
+              payload?: string;
+              stateInit?: string;
+            };
           }
-        : CType extends 'ton'
+        : CType extends 'cosmos'
           ? {
-              tonArgs: {
-                validUntil: number; // transaction deadline in unix epoch seconds.
-                network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
-                payload?: string;
-                stateInit?: string;
-              };
+              messages: readonly MsgExecuteContractEncodeObject[];
+              memo?: string;
             }
-          : never;
+          : CType extends 'near'
+            ? {
+                nearArgs: {
+                  transactionType:
+                    | 'CreateAccount'
+                    | 'DeployContract'
+                    | 'FunctionCall'
+                    | 'Transfer'
+                    | 'Stake'
+                    | 'AddKey'
+                    | 'DeleteKey'
+                    | 'DeleteAccount';
+                  signerId?: string;
+                  methodName?: string;
+                  args?: object;
+                  gas?: string;
+                  deposit?: string;
+                };
+              }
+            : CType extends 'cosmos'
+              ? {
+                  messages: readonly MsgExecuteContractEncodeObject[];
+                  memo?: string;
+                }
+              : CType extends 'bitcoin'
+                ? { memo: string; feeRate?: number }
+                : never;
 
-type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
-  ? {
-      txHash: string;
-      block: string;
-      txIndex: number;
-    }
-  : { txHash: string };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type SendTransactionReturnType<C extends ChainType> = { txHash: string };
 
 export type SendTransactionToChainFunction = <CData extends ChainData>(
   params: SendTransactionParams<CData>,
@@ -114,44 +138,6 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     return { txHash: txSignature };
   }
 
-  if (chain.type === 'alephZero') {
-    let txnHash: string | undefined = undefined;
-    let block: string | undefined = undefined;
-    let extrinsicId: number | undefined = undefined;
-
-    const walletConnector = config.connector as WalletInstance<'alephZero'>;
-
-    // send transaction to Aleph chain
-    const { submittableExtrinsic } = args as TransactionArgs<'alephZero'>;
-    await submittableExtrinsic.signAndSend(
-      from,
-      { signer: walletConnector.signer as Signer },
-      ({ events, status, txHash, txIndex }) => {
-        events.forEach(({ event }) => {
-          const { method } = event;
-
-          if (method === 'ExtrinsicSuccess' && status.type === 'InBlock') {
-            txnHash = txHash.toString();
-            block = status.asFinalized.toHex();
-            extrinsicId = txIndex;
-          } else if (method === 'ExtrinsicFailed') {
-            throw new Error(`Transaction failed: ${method}`);
-          }
-        });
-      },
-    );
-
-    if (txnHash === undefined || block === undefined || extrinsicId === undefined) {
-      throw 'Trasaction failed';
-    }
-
-    return {
-      txHash: txnHash,
-      block: block,
-      txIndex: extrinsicId,
-    };
-  }
-
   if (chain.type === 'sui') {
     const { tx } = args as TransactionArgs<'sui'>;
     const walletConnector = config.connector as WalletInstance<'sui'>;
@@ -200,6 +186,60 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const hashHex = buffer.toString('hex');
 
     return { txHash: hashHex };
+  }
+
+  if (chain.type === 'cosmos') {
+    const chainWallet = config.getCosmosClient().chainWallets[chain.id];
+
+    const { messages, memo } = args as TransactionArgs<'cosmos'>;
+
+    const client = await chainWallet.getSigningCosmWasmClient();
+    const result = await client.signAndBroadcast(from, messages, 'auto', memo);
+
+    if (result.code !== 0) {
+      throw new Error(`Transaction failed with code ${result.code}`);
+    }
+
+    return { txHash: result.transactionHash };
+  }
+
+  if (chain.type === 'bitcoin') {
+    const { memo, feeRate } = args as TransactionArgs<'bitcoin'>;
+    // send transaction to BITCOIN chain
+    const txHash = await signBitcoinTx({
+      config,
+      chain,
+      from,
+      recipient: to,
+      amount: Number(value),
+      memo,
+      feeRate,
+    });
+
+    return { txHash };
+  }
+
+  if (chain.type === 'near') {
+    const { nearArgs } = args as TransactionArgs<'near'>;
+
+    // sendTransaction to NEAR chain
+    const tx = await config.connector.signAndSendTransaction({
+      receiverId: to,
+      signerId: nearArgs.signerId,
+      actions: [
+        {
+          type: nearArgs.transactionType,
+          params: {
+            methodName: nearArgs.methodName,
+            args: nearArgs.args,
+            gas: nearArgs.gas ?? THIRTY_TGAS,
+            deposit: nearArgs.transactionType === 'Transfer' ? value : nearArgs.deposit ?? NO_DEPOSIT,
+          },
+        },
+      ],
+    });
+
+    return { txHash: tx.transaction.hash };
   }
 
   throw new Error('Chain not supported');

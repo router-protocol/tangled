@@ -1,7 +1,12 @@
 import { CasperWallet } from 'casper-js-sdk';
+import { XfiBitcoinConnector } from './types/bitcoin.ts';
 
 export declare global {
   interface Window {
-    CasperWalletProvider: () => CasperWallet;
+    xfi?: {
+      bitcoin: XfiBitcoinConnector;
+      ethereum: any;
+      CasperWalletProvider: () => CasperWallet;
+    };
   }
 }

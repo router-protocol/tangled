@@ -58,6 +58,13 @@ export const Token = (token: TokenMetadata) => {
 
 const tokens: TokenMetadata[] = [
   {
+    address: 'uosmo',
+    decimals: 6,
+    name: 'OSMO',
+    symbol: 'OSMO',
+    chainId: 'osmosis-1',
+  },
+  {
     address: ETH_ADDRESS,
     decimals: 18,
     name: 'Ether',
@@ -65,7 +72,7 @@ const tokens: TokenMetadata[] = [
     chainId: '1',
   },
   {
-    address: ETH_ADDRESS,
+    address: '',
     decimals: 18,
     name: 'Polygon MATIC',
     symbol: 'MATIC',
@@ -111,28 +118,28 @@ const tokens: TokenMetadata[] = [
     decimals: 6,
     name: 'Tron TRX',
     symbol: 'TRX',
-    chainId: 'tronMainnet',
+    chainId: '728126428',
   },
   {
     address: 'TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8',
     decimals: 6,
     name: 'Tron USDC',
     symbol: 'USDC',
-    chainId: 'tronMainnet',
+    chainId: '728126428',
   },
   {
     address: ETH_ADDRESS,
-    decimals: 12,
-    name: 'Aleph Zero AZERO',
-    symbol: 'AZERO',
-    chainId: 'alephZero',
+    decimals: 9,
+    name: 'Toncoin',
+    symbol: 'TON',
+    chainId: '-239',
   },
   {
-    address: '5FYFojNCJVFR2bBNKfAePZCa72ZcVX5yeTv8K9bzeUo8D83Z',
+    address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
     decimals: 6,
-    name: 'USDC',
-    symbol: 'USDC',
-    chainId: 'alephZero',
+    name: 'Tether USD',
+    symbol: 'USDT',
+    chainId: '-239',
   },
 ];
 

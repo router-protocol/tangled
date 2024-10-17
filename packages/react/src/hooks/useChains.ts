@@ -1,6 +1,6 @@
-import { useContext, useMemo } from 'react';
-import { TangledContext } from '../providers/TangledContext.js';
+import { useMemo } from 'react';
 import { ChainData, ChainType } from '../types/index.js';
+import { useTangledConfig } from './useTangledConfig.js';
 
 /**
  * A hook that returns an array of supported chains.
@@ -9,7 +9,7 @@ import { ChainData, ChainType } from '../types/index.js';
  * @returns An array of `ChainData`
  */
 export const useChains = <T extends ChainType>(type?: T): ChainData[] => {
-  const { chains } = useContext(TangledContext);
+  const chains = useTangledConfig((config) => config.chains);
 
   return useMemo(() => {
     if (type) {

@@ -1,5 +1,4 @@
 export * from './useAccounts.js';
-export * from './useAlephStore.js';
 export * from './useChain.js';
 export * from './useChains.js';
 export * from './useConnect.js';

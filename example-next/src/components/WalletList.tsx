@@ -4,8 +4,15 @@ const WalletList = () => {
   const wallets = useWallets();
   const { connect } = useConnect();
 
+  const getNearContractId = (chainType: unknown) => {
+    // TODO: add contractId for both 'testnet' & 'mainnet'
+    if (chainType === 'near') {
+      return 'usdt.tether-token.near'; // For testnet: 'routetoken.i-swap.testnet'
+    }
+  };
+
   return (
-    <div className='max-h-[30rem] overflow-scroll bg-neutral-900'>
+    <div className='max-h-[60rem] overflow-scroll bg-neutral-900'>
       <h2 className='text-xl font-bold sticky top-0 bg-black'>WALLETS</h2>
       <div className='space-y-8'>
         {CHAIN_TYPES.map((chainType) => (
@@ -41,7 +48,9 @@ const WalletList = () => {
                     <td className='px-4 py-2'>
                       {wallet.installed ? (
                         <button
-                          onClick={() => connect({ walletId: wallet.id, chainType })}
+                          onClick={() =>
+                            connect({ walletId: wallet.id, chainType, nearContractId: getNearContractId(chainType) })
+                          }
                           className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'
                         >
                           connect

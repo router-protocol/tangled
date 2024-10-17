@@ -51,9 +51,8 @@ export default function App({ Component, pageProps }) {
 3. Tron
 4. Cosmos
 5. Near
-6. AlephZero
-7. Sui
-8. Bitcoin
+6. Sui
+7. Bitcoin
 
 ### Support Table
 
@@ -61,19 +60,18 @@ export default function App({ Component, pageProps }) {
 :white_check_mark: - Supported
 :x: - Not Supported
 
-| Chain     | Wallet Connection      | Token Fetch        | Transaction Handlers   | Tx Watch               | Tx Receipt             |
-| --------- | ---------------------- | ------------------ | ---------------------- | ---------------------- | ---------------------- |
-| EVM       | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Solana    | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| Tron      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
-| AlephZero | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
-| Sui       | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
-| Cosmos    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Near      | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Bitcoin   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Casper    | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
-| Ton       | :white_check_mark:     | :x:                | :x:                    | :x:                    | :x:                    |
-| Algorand  | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Chain    | Wallet Connection      | Token Fetch        | Transaction Handlers   | Tx Watch               | Tx Receipt             |
+| -------- | ---------------------- | ------------------ | ---------------------- | ---------------------- | ---------------------- |
+| EVM      | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
+| Solana   | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
+| Tron     | :white_check_mark:     | :white_check_mark: | :small_orange_diamond: | :small_orange_diamond: | :small_orange_diamond: |
+| Sui      | :small_orange_diamond: | :x:                | :x:                    | :x:                    | :x:                    |
+| Cosmos   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Near     | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
+| Bitcoin  | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
+| Casper   | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
+| Ton      | :white_check_mark:     | :white_check_mark: | :white_check_mark:     | :white_check_mark:     | :white_check_mark:     |
+| Algorand | :x:                    | :x:                | :x:                    | :x:                    | :x:                    |
 
 #### Hooks
 

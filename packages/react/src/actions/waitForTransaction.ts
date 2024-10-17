@@ -1,8 +1,11 @@
 import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
-import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
+import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
+import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
+import { fetchTransaction as fetchBitcoinTransaction } from './bitcoin/transaction.js';
+import { getNearProvider } from './near/readCalls.js';
 
 export type DefaultOverrides = {
   interval: number;
@@ -25,18 +28,18 @@ export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
             accountAddress: string;
             lt: string;
           }
-        : any);
+        : C extends 'near'
+          ? {
+              accountAddress: string;
+            }
+          : any);
 
 export type DefaultTransactionParams = {
   txHash: string;
 };
 
-export type TransactionParams<C extends ChainType> = C extends 'alephZero'
-  ? {
-      blockHash: string;
-      extrinsicIndex: number;
-    }
-  : DefaultTransactionParams;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type TransactionParams<C extends ChainType> = DefaultTransactionParams;
 
 export type WatchTransactionParams<CData extends ChainData> = {
   transactionParams: TransactionParams<CData['type']>;
@@ -115,54 +118,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     return receipt;
   }
 
-  if (chain.type === 'alephZero') {
-    const { blockHash, extrinsicIndex } = transactionParams as TransactionParams<'alephZero'>;
-    const alephZero = config.alephZeroApi;
-
-    const receipt = await pollCallback(
-      async () => {
-        const signedBlock = await alephZero.rpc.chain.getBlock(blockHash);
-
-        // Get the specific extrinsic
-        const extrinsic = signedBlock.block.extrinsics[extrinsicIndex];
-
-        if (!extrinsic) {
-          throw new Error('Extrinsic not found');
-        }
-
-        // Get the events for this block
-        const apiAt = await alephZero.at(blockHash);
-        const allRecords = (await apiAt.query.system.events()).toPrimitive() as any[];
-
-        const extrinsicEvents = allRecords.filter(
-          (event) => event.phase.applyExtrinsic && event.phase.applyExtrinsic === extrinsicIndex,
-        );
-
-        const transactionData = {
-          blockHash,
-          extrinsicIndex,
-          extrinsic: extrinsic,
-          extrinsicHash: extrinsic.hash.toHuman(),
-          method: extrinsic.method.toHuman(),
-          args: extrinsic.args.map((arg) => arg.toHuman()),
-          events: extrinsicEvents,
-        };
-
-        return transactionData;
-      },
-      {
-        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-
-    if (!receipt) {
-      throw new Error('Transaction not found');
-    }
-
-    return receipt;
-  }
-
   if (chain.type === 'sui') {
     const { txHash } = transactionParams as TransactionParams<'sui'>;
 
@@ -206,6 +161,90 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     if (!receipt) {
       throw new Error('Transaction not found');
     }
+    return receipt;
+  }
+
+  if (chain.type === 'cosmos') {
+    const { txHash } = transactionParams as TransactionParams<'cosmos'>;
+
+    // Use Cosmos client's RPC or LCD to fetch the transaction details
+    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+    const stargateClient = await cosmosClient.getStargateClient();
+
+    const receipt = await pollCallback(
+      async () => {
+        const result = await stargateClient.getTx(txHash);
+
+        if (!result || result.code !== 0) {
+          return undefined; // Transaction not found or failed, continue polling
+        }
+
+        return result;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+
+    return receipt;
+  }
+
+  if (chain.type === 'bitcoin') {
+    const { txHash } = transactionParams as TransactionParams<'bitcoin'>;
+
+    const receipt = await pollCallback(
+      async () => {
+        const result =
+          (await fetchBitcoinTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+          (await fetchBitcoinTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+        return result;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+    return receipt;
+  }
+
+  if (chain.type === 'near') {
+    const _overrides = (overrides || {}) as WatchTransactionOverrides<'near'>;
+    let { txHash } = transactionParams as TransactionParams<'near'>;
+
+    const params = new URLSearchParams(window.location.search);
+    const transactionHashes = params.get('transactionHashes');
+    if (transactionHashes) {
+      txHash = transactionHashes;
+    }
+
+    const receipt = await pollCallback(
+      async () => {
+        const provider = await getNearProvider(chain as OtherChainData<'near'>);
+        const txDetails = await provider.txStatus(txHash, _overrides.accountAddress);
+        if (txDetails.final_execution_status === 'FINAL') {
+          return txDetails;
+        }
+        return undefined;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+
     return receipt;
   }
 

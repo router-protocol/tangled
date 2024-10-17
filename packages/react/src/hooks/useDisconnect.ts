@@ -5,7 +5,9 @@ import { useCallback } from 'react';
 import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
-import { useAlephContext } from './useAlephContext.js';
+import { useBitcoinContext } from './useBitcoinContext.js';
+import { useCosmosContext } from './useCosmosContext.js';
+import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -19,17 +21,28 @@ export const useDisconnect = () => {
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
-  const { disconnect: disconnectAlephWallet } = useAlephContext();
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
   const { disconnect: disconnectTonWallet } = useTonContext();
+  const { disconnect: disconnectCosmosWallet } = useCosmosContext();
+  const { disconnect: disconnectBitcoinWallet } = useBitcoinContext();
+  const { disconnect: disconnectNearWallet } = useNearContext();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
-      const walletInstance: Wallet | undefined = wallets[params.chainType].find(
+      let walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
 
+      // cosmos wallets have chain ids appended to the wallet id
+      // eg: 'keplr:cosmoshub-4'
+      if (params.chainType === 'cosmos') {
+        const walletId = params.walletId.split(':')[0];
+        walletInstance = wallets[params.chainType].find((wallet) => walletId === wallet.id);
+      }
+
       if (!walletInstance) {
+        console.log(wallets, params.walletId);
+
         throw new Error('Wallet not found');
       }
 
@@ -43,24 +56,30 @@ export const useDisconnect = () => {
         await disconnectTronWallet();
       } else if (params.chainType === 'evm') {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
-      } else if (params.chainType === 'alephZero') {
-        await disconnectAlephWallet();
       } else if (params.chainType === 'sui') {
         disconnectSuiWallet();
+      } else if (params.chainType === 'cosmos') {
+        disconnectCosmosWallet();
       } else if (params.chainType === 'ton') {
         await disconnectTonWallet();
+      } else if (params.chainType === 'bitcoin') {
+        await disconnectBitcoinWallet();
+      } else if (params.chainType === 'near') {
+        await disconnectNearWallet();
       } else {
         const connector = walletInstance.connector as DefaultConnector;
         await connector.disconnect();
       }
     },
     [
-      disconnectAlephWallet,
       disconnectEVM,
       disconnectSolanaWallet,
       disconnectSuiWallet,
       disconnectTronWallet,
       disconnectTonWallet,
+      disconnectCosmosWallet,
+      disconnectBitcoinWallet,
+      disconnectNearWallet,
       wallets,
     ],
   );
