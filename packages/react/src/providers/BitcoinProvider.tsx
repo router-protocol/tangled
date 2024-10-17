@@ -46,7 +46,7 @@ export const BitcoinProvider = ({
   const setAddress = useStore(bitcoinStore, (state) => state.setAddress);
   const setConnectedAdapter = useStore(bitcoinStore, (state) => state.setConnectedAdapter);
 
-  const { config } = useTangledConfig();
+  const config = useTangledConfig((state) => state.config);
 
   const bitcoinProvider = useRef(getBitcoinProvider()).current;
 
