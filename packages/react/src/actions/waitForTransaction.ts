@@ -257,7 +257,11 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     const receipt = await pollCallback(
       async () => {
         const provider = await getNearProvider(chain as OtherChainData<'near'>);
-        return await provider.txStatus(txHash, _overrides.accountAddress);
+        const txDetails = await provider.txStatus(txHash, _overrides.accountAddress);
+        if (txDetails.final_execution_status === 'FINAL') {
+          return txDetails;
+        }
+        return undefined;
       },
       {
         interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,

@@ -5,7 +5,7 @@ export const THIRTY_TGAS = '30000000000000';
 export const NO_DEPOSIT = '0';
 
 export function getNearProvider(chain: OtherChainData<'near'>) {
-  return new providers.JsonRpcProvider({ url: chain.rpcUrls.defualt.http[0] });
+  return new providers.JsonRpcProvider({ url: chain.rpcUrls.default.http[0] });
 }
 
 export async function viewMethodOnNear(chain: OtherChainData<'near'>, token: string, method: string, args = {}) {
