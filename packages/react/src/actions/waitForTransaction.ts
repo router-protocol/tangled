@@ -31,6 +31,7 @@ export type DefaultTransactionParams = {
   txHash: string;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type TransactionParams<C extends ChainType> = DefaultTransactionParams;
 
 export type WatchTransactionParams<CData extends ChainData> = {

@@ -48,11 +48,12 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
             }
           : never;
 
-type SendTransactionReturnType = { txHash: string };
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type SendTransactionReturnType<C extends ChainType> = { txHash: string };
 
 export type SendTransactionToChainFunction = <CData extends ChainData>(
   params: SendTransactionParams<CData>,
-) => Promise<SendTransactionReturnType>;
+) => Promise<SendTransactionReturnType<CData['type']>>;
 
 /**
  * Send transaction. Does not wait for the transaction to be mined.
