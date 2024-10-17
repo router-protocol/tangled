@@ -59,7 +59,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   const [selector, setSelector] = useState<WalletSelector | null>(null);
   const [wallets, setWallets] = useState<ModuleState[]>([]);
 
-  const { config } = useTangledConfig();
+  const config = useTangledConfig((state) => state.config);
 
   const [nearContractId, setNearContractId] = useLocalStorage<string | null>('recent-used-near-contractid', null);
   const [selectedWalletId] = useLocalStorage<string | null>('near-wallet-selector:selectedWalletId', null);
