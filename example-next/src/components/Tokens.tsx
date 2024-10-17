@@ -62,7 +62,7 @@ const tokens: TokenMetadata[] = [
     decimals: 6,
     name: 'OSMO',
     symbol: 'OSMO',
-    chainId: 'osmosis',
+    chainId: 'osmosis-1',
   },
   {
     address: ETH_ADDRESS,
