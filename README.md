@@ -66,7 +66,7 @@ export default function App({ Component, pageProps }) {
 | Solana   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Tron     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Sui      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
-| Cosmos   | :x:                | :x:                | :x:                  | :x:                | :x:                |
+| Cosmos   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Near     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Bitcoin  | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Casper   | :x:                | :x:                | :x:                  | :x:                | :x:                |
