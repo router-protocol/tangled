@@ -1,5 +1,4 @@
 import {
-  alephZero,
   arbitrum,
   avalanche,
   base,
@@ -87,8 +86,6 @@ export const CHAIN_ID = {
 
   // casper
 
-  alephZero: 'alephZero',
-
   // ton
   tonMainnet: '-239',
   tonTestnet: '-3',
@@ -144,9 +141,6 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.tronShasta]: tronShasta,
   // [CHAIN_ID.tronNile]: tronNile,
 
-  // aleph
-  [CHAIN_ID.alephZero]: alephZero,
-
   // near
   [CHAIN_ID.near]: near,
   [CHAIN_ID.nearTestnet]: nearTestnet,
@@ -184,7 +178,6 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   solana: 'Solana',
   sui: 'Sui',
   casper: 'Casper',
-  alephZero: 'Aleph Zero',
   bitcoin: 'Bitcoin',
   ton: 'Ton',
 } as const;

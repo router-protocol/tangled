@@ -4,7 +4,6 @@ import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { BITCOIN_CHAIN_CONFIG } from '../connectors/bitcoin/connectors.js';
 import { NEAR_NETWORK_CONFIG } from '../constants/index.js';
-import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useBitcoinStore } from '../hooks/useBitcoinStore.js';
 import { useConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
 import { useCosmosStore } from '../hooks/useCosmosStore.js';
@@ -22,9 +21,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
-  const alephConnectors = useAlephStore((state) => state.connectors);
-  const alephAccounts = useAlephStore((state) => state.connectedAdapter);
-  const alephAddress = useAlephStore((state) => state.address);
   const tonConnectors = useTonStore((state) => state.connectors);
   const tonAddress = useTonStore((state) => state.address);
 
@@ -137,38 +133,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       tron: _tronWallets,
     });
   }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
-
-  useEffect(() => {
-    const _alephAccounts: { [x: string]: ConnectedAccount } = {};
-    const _alephWallets: { [x: string]: ConnectedWallet<'alephZero'> } = {};
-
-    for (const [name, adapter] of Object.entries(alephConnectors)) {
-      const address = alephAddress ?? '';
-
-      if (address === '') {
-        continue;
-      }
-
-      _alephAccounts[name] = {
-        address: address,
-        chainId: undefined,
-        chainType: 'alephZero',
-        wallet: name,
-      };
-
-      _alephWallets[name] = {
-        address: address,
-        chainId: undefined,
-        chainType: 'alephZero',
-        connector: adapter,
-      };
-    }
-
-    setChainConnectedAccounts({ alephZero: _alephAccounts });
-    setConnectedWallets({
-      alephZero: _alephWallets,
-    });
-  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors, alephAddress]);
 
   // ton
   useEffect(() => {

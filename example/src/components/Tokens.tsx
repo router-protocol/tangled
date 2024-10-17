@@ -129,20 +129,6 @@ const tokens: TokenMetadata[] = [
   },
   {
     address: ETH_ADDRESS,
-    decimals: 12,
-    name: 'Aleph Zero AZERO',
-    symbol: 'AZERO',
-    chainId: 'alephZero',
-  },
-  {
-    address: '5FYFojNCJVFR2bBNKfAePZCa72ZcVX5yeTv8K9bzeUo8D83Z',
-    decimals: 6,
-    name: 'USDC',
-    symbol: 'USDC',
-    chainId: 'alephZero',
-  },
-  {
-    address: ETH_ADDRESS,
     decimals: 9,
     name: 'Toncoin',
     symbol: 'TON',

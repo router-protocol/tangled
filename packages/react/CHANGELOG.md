@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.8.0
+
+### Minor Changes
+
+- added cosmos support
+
 ## 1.7.4
 
 ### Patch Changes

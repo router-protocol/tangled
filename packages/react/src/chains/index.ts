@@ -1,4 +1,3 @@
-export * from './alephZero.js';
 export * from './bitcoin.js';
 export * from './bitcoin.testnet.js';
 export * from './cosmos.js';

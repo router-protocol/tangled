@@ -64,44 +64,6 @@ export const getTransactionReceipt = (async ({
     return result;
   }
 
-  if (chain.type === 'alephZero') {
-    const { blockHash, extrinsicIndex } = transactionParams as TransactionParams<'alephZero'>;
-    const alephZero = config.alephZeroApi;
-
-    const signedBlock = await alephZero.rpc.chain.getBlock(blockHash);
-
-    // Get the specific extrinsic
-    const extrinsic = signedBlock.block.extrinsics[extrinsicIndex];
-
-    if (!extrinsic) {
-      throw new Error('Extrinsic not found');
-    }
-
-    // Get the events for this block
-    const apiAt = await alephZero.at(blockHash);
-    const allRecords = (await apiAt.query.system.events()).toPrimitive() as any[];
-
-    const extrinsicEvents = allRecords.filter(
-      (event) => event.phase.applyExtrinsic && event.phase.applyExtrinsic === extrinsicIndex,
-    );
-
-    const transactionData = {
-      blockHash,
-      extrinsicIndex,
-      extrinsic: extrinsic,
-      extrinsicHash: extrinsic.hash.toHuman(),
-      method: extrinsic.method.toHuman(),
-      args: extrinsic.args.map((arg) => arg.toHuman()),
-      events: extrinsicEvents,
-    };
-
-    if (!transactionData) {
-      throw new Error('Transaction not found');
-    }
-
-    return transactionData;
-  }
-
   if (chain.type === 'sui') {
     const { txHash } = transactionParams as TransactionParams<'sui'>;
 

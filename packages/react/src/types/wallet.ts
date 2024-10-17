@@ -1,7 +1,6 @@
 import { MainWalletBase as CosmosMainWalletBase } from '@cosmos-kit/core';
 import { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
 import { Wallet as NearWallet } from '@near-wallet-selector/core';
-import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import { TonConnectUI } from '@tonconnect/ui-react';
 import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@tronweb3/tronwallet-abstract-adapter';
@@ -24,8 +23,7 @@ export type ChainConnectors = {
   sui: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   casper: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  alephZero: any[];
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -66,19 +64,17 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
     ? SolanaAdapter
     : T extends 'tron'
       ? TronAdapter
-      : T extends 'alephZero'
-        ? NightlyConnectAdapter
-        : T extends 'sui'
-          ? WalletWithRequiredFeatures
-          : T extends 'cosmos'
-            ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
-            : T extends 'ton'
-              ? TonConnectUI
-              : T extends 'bitcoin'
-                ? XfiBitcoinConnector | Wallet<'bitcoin'>
-                : T extends 'near'
-                  ? NearWallet & SignMessageMethod
-                  : DefaultConnector;
+      : T extends 'sui'
+        ? WalletWithRequiredFeatures
+        : T extends 'cosmos'
+          ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
+          : T extends 'ton'
+            ? TonConnectUI
+            : T extends 'bitcoin'
+              ? XfiBitcoinConnector | Wallet<'bitcoin'>
+              : T extends 'near'
+                ? NearWallet & SignMessageMethod
+                : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;

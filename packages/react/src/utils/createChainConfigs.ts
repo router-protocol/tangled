@@ -8,7 +8,6 @@ const createChainConfigs = (
   testnet?: boolean,
 ): SupportedChainsByType => {
   let supportedChains: SupportedChainsByType = {
-    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
@@ -37,7 +36,6 @@ const overrideChainConfig = (
   overrides: Partial<Record<Chain, ChainConfig>> | undefined,
 ) => {
   const supportedChains: SupportedChainsByType = {
-    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
