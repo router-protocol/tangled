@@ -1,4 +1,3 @@
-export * from './alephZero.js';
 export * from './cosmos.js';
 export * from './evm.js';
 export * from './evm.testnet.js';

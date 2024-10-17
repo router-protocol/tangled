@@ -1,4 +1,3 @@
-import { alephZero } from '../chains/alephZero.js';
 import * as cosmos from '../chains/cosmos.js';
 import * as evm from '../chains/evm.js';
 import { solana } from '../chains/solana.js';
@@ -16,7 +15,6 @@ import {
 
 const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => {
   const supportedChains: SupportedChainsByType = {
-    alephZero: [],
     bitcoin: [],
     casper: [],
     cosmos: [],
@@ -54,7 +52,6 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.self, cosmos.router] as CosmsosChainType[];
     supportedChains.solana = [solana] as OtherChainData<'solana'>[];
     supportedChains.tron = [tronMainnet] as TronChain[];
-    supportedChains.alephZero = [alephZero] as OtherChainData<'alephZero'>[];
     supportedChains.sui = [sui] as SuiChainType[];
     supportedChains.ton = [tonMainnet] as OtherChainData<'ton'>[];
   }

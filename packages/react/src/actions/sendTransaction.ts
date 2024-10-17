@@ -1,6 +1,5 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
 import { Transaction } from '@mysten/sui/transactions';
-import { Signer, SubmittableExtrinsic } from '@polkadot/api/types';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/ton';
 import { CHAIN } from '@tonconnect/ui-react';
@@ -29,41 +28,31 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
     ? {
         versionedTx: SolanaVersionedTransaction;
       }
-    : CType extends 'alephZero'
+    : CType extends 'sui'
       ? {
-          submittableExtrinsic: SubmittableExtrinsic<'promise' | 'rxjs'>;
+          tx: Transaction;
         }
-      : CType extends 'sui'
+      : CType extends 'ton'
         ? {
-            tx: Transaction;
+            tonArgs: {
+              validUntil: number; // transaction deadline in unix epoch seconds.
+              network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
+              payload?: string;
+              stateInit?: string;
+            };
           }
-        : CType extends 'ton'
+        : CType extends 'cosmos'
           ? {
-              tonArgs: {
-                validUntil: number; // transaction deadline in unix epoch seconds.
-                network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
-                payload?: string;
-                stateInit?: string;
-              };
+              messages: readonly MsgExecuteContractEncodeObject[];
+              memo?: string;
             }
-          : CType extends 'cosmos'
-            ? {
-                messages: readonly MsgExecuteContractEncodeObject[];
-                memo?: string;
-              }
-            : never;
+          : never;
 
-type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
-  ? {
-      txHash: string;
-      block: string;
-      txIndex: number;
-    }
-  : { txHash: string };
+type SendTransactionReturnType = { txHash: string };
 
 export type SendTransactionToChainFunction = <CData extends ChainData>(
   params: SendTransactionParams<CData>,
-) => Promise<SendTransactionReturnType<CData['type']>>;
+) => Promise<SendTransactionReturnType>;
 
 /**
  * Send transaction. Does not wait for the transaction to be mined.
@@ -118,44 +107,6 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const txSignature = await walletConnector.sendTransaction(versionedTx, config.solanaConnection);
 
     return { txHash: txSignature };
-  }
-
-  if (chain.type === 'alephZero') {
-    let txnHash: string | undefined = undefined;
-    let block: string | undefined = undefined;
-    let extrinsicId: number | undefined = undefined;
-
-    const walletConnector = config.connector as WalletInstance<'alephZero'>;
-
-    // send transaction to Aleph chain
-    const { submittableExtrinsic } = args as TransactionArgs<'alephZero'>;
-    await submittableExtrinsic.signAndSend(
-      from,
-      { signer: walletConnector.signer as Signer },
-      ({ events, status, txHash, txIndex }) => {
-        events.forEach(({ event }) => {
-          const { method } = event;
-
-          if (method === 'ExtrinsicSuccess' && status.type === 'InBlock') {
-            txnHash = txHash.toString();
-            block = status.asFinalized.toHex();
-            extrinsicId = txIndex;
-          } else if (method === 'ExtrinsicFailed') {
-            throw new Error(`Transaction failed: ${method}`);
-          }
-        });
-      },
-    );
-
-    if (txnHash === undefined || block === undefined || extrinsicId === undefined) {
-      throw 'Trasaction failed';
-    }
-
-    return {
-      txHash: txnHash,
-      block: block,
-      txIndex: extrinsicId,
-    };
   }
 
   if (chain.type === 'sui') {

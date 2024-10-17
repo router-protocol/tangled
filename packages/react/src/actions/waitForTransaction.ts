@@ -31,12 +31,7 @@ export type DefaultTransactionParams = {
   txHash: string;
 };
 
-export type TransactionParams<C extends ChainType> = C extends 'alephZero'
-  ? {
-      blockHash: string;
-      extrinsicIndex: number;
-    }
-  : DefaultTransactionParams;
+export type TransactionParams<C extends ChainType> = DefaultTransactionParams;
 
 export type WatchTransactionParams<CData extends ChainData> = {
   transactionParams: TransactionParams<CData['type']>;
@@ -112,54 +107,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     if (!receipt) {
       throw new Error('Transaction not found');
     }
-    return receipt;
-  }
-
-  if (chain.type === 'alephZero') {
-    const { blockHash, extrinsicIndex } = transactionParams as TransactionParams<'alephZero'>;
-    const alephZero = config.alephZeroApi;
-
-    const receipt = await pollCallback(
-      async () => {
-        const signedBlock = await alephZero.rpc.chain.getBlock(blockHash);
-
-        // Get the specific extrinsic
-        const extrinsic = signedBlock.block.extrinsics[extrinsicIndex];
-
-        if (!extrinsic) {
-          throw new Error('Extrinsic not found');
-        }
-
-        // Get the events for this block
-        const apiAt = await alephZero.at(blockHash);
-        const allRecords = (await apiAt.query.system.events()).toPrimitive() as any[];
-
-        const extrinsicEvents = allRecords.filter(
-          (event) => event.phase.applyExtrinsic && event.phase.applyExtrinsic === extrinsicIndex,
-        );
-
-        const transactionData = {
-          blockHash,
-          extrinsicIndex,
-          extrinsic: extrinsic,
-          extrinsicHash: extrinsic.hash.toHuman(),
-          method: extrinsic.method.toHuman(),
-          args: extrinsic.args.map((arg) => arg.toHuman()),
-          events: extrinsicEvents,
-        };
-
-        return transactionData;
-      },
-      {
-        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-
-    if (!receipt) {
-      throw new Error('Transaction not found');
-    }
-
     return receipt;
   }
 

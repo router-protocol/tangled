@@ -6,7 +6,6 @@ import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
 import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
-import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
@@ -79,17 +78,6 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     } else {
       throw new Error('Token metadata not found');
     }
-  }
-
-  if (chain.type === 'alephZero') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
-    }
-    const res = await getAlephZeroTokenMetadata({ api: config.alephZeroApi, token });
-    return {
-      ...res,
-      chainId: chain.id,
-    };
   }
 
   if (chain.type === 'ton') {
@@ -203,15 +191,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       });
 
     return { balance, associatedTokenAccountAddress, isAtaDeployed, allowance: delegatedAmount };
-  }
-
-  if (chain.type === 'alephZero') {
-    return getAlephZeroTokenBalanceAndAllowance({
-      api: config.alephZeroApi,
-      account,
-      token,
-      spender,
-    });
   }
 
   if (chain.type === 'ton') {

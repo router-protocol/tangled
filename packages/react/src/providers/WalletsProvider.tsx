@@ -2,7 +2,6 @@ import { useSuiClientContext, useCurrentWallet as useSuiCurrentWallet } from '@m
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
-import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useCosmosStore } from '../hooks/useCosmosStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
@@ -16,9 +15,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
-  const alephConnectors = useAlephStore((state) => state.connectors);
-  const alephAccounts = useAlephStore((state) => state.connectedAdapter);
-  const alephAddress = useAlephStore((state) => state.address);
   const tonConnectors = useTonStore((state) => state.connectors);
   const tonAddress = useTonStore((state) => state.address);
 
@@ -125,38 +121,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
-  useEffect(() => {
-    const _alephAccounts: { [x: string]: ConnectedAccount } = {};
-    const _alephWallets: { [x: string]: ConnectedWallet<'alephZero'> } = {};
-
-    for (const [name, adapter] of Object.entries(alephConnectors)) {
-      const address = alephAddress ?? '';
-
-      if (address === '') {
-        continue;
-      }
-
-      _alephAccounts[name] = {
-        address: address,
-        chainId: undefined,
-        chainType: 'alephZero',
-        wallet: name,
-      };
-
-      _alephWallets[name] = {
-        address: address,
-        chainId: undefined,
-        chainType: 'alephZero',
-        connector: adapter,
-      };
-    }
-
-    setChainConnectedAccounts({ alephZero: _alephAccounts });
-    setConnectedWallets({
-      alephZero: _alephWallets,
-    });
-  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.alephZero, alephConnectors, alephAddress]);
-
   // ton
   useEffect(() => {
     const _tonAccounts: { [x: string]: ConnectedAccount } = {};
@@ -188,7 +152,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     setConnectedWallets({
       ton: _tonWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.ton, tonConnectors, tonAddress]);
+  }, [setChainConnectedAccounts, setConnectedWallets, chains.ton, tonConnectors, tonAddress]);
 
   // cosmos
   useEffect(() => {

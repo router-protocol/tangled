@@ -7,7 +7,6 @@ import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
-import { useAlephStore } from './useAlephStore.js';
 import { useCosmosStore } from './useCosmosStore.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
@@ -26,8 +25,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const evmConnectors = useEVMConnectors();
 
   const { wallets: solanaWallets } = useSolanaWallet();
-
-  const alephAdapter = useAlephStore((state) => state.connectedAdapter);
 
   // const data = useManager;
 
@@ -138,27 +135,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return detected.concat(suggested);
   }, [configuredConnectors.tron, options?.onlyInstalled, tronConnectors]);
 
-  const extendedAlephWallets = useMemo<Wallet<'alephZero'>[]>(() => {
-    const walletList = alephAdapter?.walletsList;
-
-    const registryWallets: Wallet<'alephZero'>[] =
-      alephAdapter?.walletsFromRegistry.map((wallet) => ({
-        id: wallet.slug.toLowerCase(),
-        name: wallet.name,
-        connector: alephAdapter,
-        icon: wallet.image.default,
-        type: 'alephZero',
-        installed: walletList?.find((w) => w.slug == wallet.slug)?.detected,
-        url: wallet.homepage,
-      })) ?? [];
-
-    if (options?.onlyInstalled) {
-      return registryWallets.filter((wallet) => wallet.installed);
-    }
-
-    return registryWallets;
-  }, [alephAdapter, options?.onlyInstalled]);
-
   //sui
   const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
     const detected: Wallet<'sui'>[] =
@@ -249,7 +225,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       evm: extendedEvmWallets,
       solana: extendedSolanaWallets,
       tron: extendedTronWallets,
-      alephZero: extendedAlephWallets,
       ton: extendedTonWallets,
       bitcoin: [],
       casper: [],
@@ -261,7 +236,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       extendedEvmWallets,
       extendedSolanaWallets,
       extendedTronWallets,
-      extendedAlephWallets,
       extendedSuiWallets,
       extendedTonWallets,
       extendedCosmosWallets,
