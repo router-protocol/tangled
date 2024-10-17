@@ -6,7 +6,7 @@ export declare global {
     xfi?: {
       bitcoin: XfiBitcoinConnector;
       ethereum: any;
-      CasperWalletProvider: () => CasperWallet;
     };
+    CasperWalletProvider: () => CasperWallet;
   }
 }
