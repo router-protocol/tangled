@@ -6,6 +6,7 @@ import { useDisconnect as useEVMDisconnect } from 'wagmi';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
 import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
@@ -25,6 +26,7 @@ export const useDisconnect = () => {
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
   const { disconnect: disconnectTonWallet } = useTonContext();
   const { disconnect: disconnectCosmosWallet } = useCosmosContext();
+  const { disconnect: disconnectBitcoinWallet } = useBitcoinContext();
   const { disconnect: disconnectNearWallet } = useNearContext();
 
   const disconnectWallet = useCallback(
@@ -64,6 +66,8 @@ export const useDisconnect = () => {
         disconnectCosmosWallet();
       } else if (params.chainType === 'ton') {
         await disconnectTonWallet();
+      } else if (params.chainType === 'bitcoin') {
+        await disconnectBitcoinWallet();
       } else if (params.chainType === 'near') {
         await disconnectNearWallet();
       } else {
@@ -79,6 +83,7 @@ export const useDisconnect = () => {
       disconnectTronWallet,
       disconnectTonWallet,
       disconnectCosmosWallet,
+      disconnectBitcoinWallet,
       disconnectNearWallet,
       wallets,
     ],

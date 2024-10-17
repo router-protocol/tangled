@@ -13,6 +13,7 @@ import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
 import { AlephTransactionData } from './aleph.js';
+import { XfiBitcoinConnector } from './bitcoin.js';
 import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
 export const CHAIN_TYPES = [
@@ -103,6 +104,9 @@ export interface TangledConfig {
   /** Walletconnect project ID */
   projectId: string;
 
+  /** Bitcoin network configuration */
+  bitcoinNetwork: 'mainnet' | 'testnet';
+
   chainConnectors?: Partial<ChainConnectors>;
 
   /** Manifest url for ton connect */
@@ -147,6 +151,7 @@ export type ConnectionOrConfig = {
     chainWallets: Record<string, CosmosChainWalletBase>;
     getChainRegistry: () => Promise<CosmosChainRegistryClient>;
   };
+  bitcoinProvider: XfiBitcoinConnector;
   nearSelector: NearWalletSelector;
 };
 

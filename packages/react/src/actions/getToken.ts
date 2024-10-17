@@ -14,6 +14,8 @@ import {
 } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
+import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
+import { fetchBalance as fetchBitcoinBalance } from './bitcoin/transaction.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
@@ -255,6 +257,18 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       config,
       chain,
     });
+  }
+
+  if (chain.type === 'bitcoin') {
+    const balance =
+      (await fetchBitcoinBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'), account)) ||
+      (await fetchBitcoinBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool'), account));
+
+    if (balance === null) {
+      throw new Error('Failed to fetch bitcoin balance');
+    }
+
+    return { balance, allowance: 0n };
   }
 
   if (chain.type === 'near') {
