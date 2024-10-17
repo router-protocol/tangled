@@ -29,7 +29,8 @@
   },
   "author": "Jayesh Bhole <jayeshbhole123@gmail.com>",
   "contributors": [
-    "Ankit Singh <ankit.singh.zm@gmail.com>"
+    "Ankit Singh <ankit.singh.zm@gmail.com>",
+    "Soumya Mukerjee <soumyamukherjee.work@gmail.com>"
   ],
   "dependencies": {
     "@chain-registry/client": "^1.53.0",

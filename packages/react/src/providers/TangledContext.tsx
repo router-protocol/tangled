@@ -4,6 +4,7 @@ import { StoreApi, useStore } from 'zustand';
 import { TangledConfigState, createTangledConfigStore } from '../store/TangledConfig.js';
 import { TangledConfig } from '../types/index.js';
 import { AlephProvider } from './AlephProvider.js';
+import { BitcoinProvider } from './BitcoinProvider.js';
 import CosmosContextProvider from './CosmosProvider.js';
 import EVMProvider from './EVMProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
@@ -46,7 +47,9 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
                     actionsConfiguration={{ twaReturnUrl }}
                   >
                     <TonProvider chain={chains.ton[0]}>
-                      <WalletsProvider>{children}</WalletsProvider>
+                      <BitcoinProvider adapters={connectors.bitcoin}>
+                        <WalletsProvider>{children}</WalletsProvider>
+                      </BitcoinProvider>
                     </TonProvider>
                   </TonConnectUIProvider>
                 </CosmosContextProvider>

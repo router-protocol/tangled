@@ -9,6 +9,7 @@ import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
+import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
@@ -25,6 +26,7 @@ export const useConnect = () => {
   const { mutateAsync: connectSuiWallet } = useSuiConnectWallet();
   const { connect: connectTonWallet } = useTonContext();
   const { connect: connectCosmosWallet } = useCosmosContext();
+  const { connect: connectBitcoinWallet } = useBitcoinContext();
 
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
@@ -93,6 +95,8 @@ export const useConnect = () => {
             walletId: tonWalletInstance.id,
           };
         }
+      } else if (params.chainType === 'bitcoin') {
+        await connectBitcoinWallet(walletInstance.id);
       } else {
         const connector = walletInstance.connector as DefaultConnector;
         await connector.connect();
@@ -105,11 +109,12 @@ export const useConnect = () => {
       connectedWallets,
       connectSolanaWallet,
       connectTronWallet,
+      connectTonWallet,
+      connectBitcoinWallet,
       connectEVM,
       connectAlephWallet,
       connectSuiWallet,
       connectCosmosWallet,
-      connectTonWallet,
     ],
   );
 

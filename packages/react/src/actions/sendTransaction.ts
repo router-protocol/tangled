@@ -8,6 +8,7 @@ import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
+import { signBitcoinTx } from './bitcoin/transaction.js';
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -51,7 +52,9 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
                 messages: readonly MsgExecuteContractEncodeObject[];
                 memo?: string;
               }
-            : never;
+            : CType extends 'bitcoin'
+              ? { memo: string; feeRate?: number }
+              : never;
 
 type SendTransactionReturnType<C extends ChainType> = C extends 'alephZero'
   ? {
@@ -221,6 +224,22 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     }
 
     return { txHash: result.transactionHash };
+  }
+
+  if (chain.type === 'bitcoin') {
+    const { memo, feeRate } = args as TransactionArgs<'bitcoin'>;
+    // send transaction to BITCOIN chain
+    const txHash = await signBitcoinTx({
+      config,
+      chain,
+      from,
+      recipient: to,
+      amount: Number(value),
+      memo,
+      feeRate,
+    });
+
+    return { txHash };
   }
 
   throw new Error('Chain not supported');

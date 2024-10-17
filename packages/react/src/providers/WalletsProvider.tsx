@@ -2,7 +2,10 @@ import { useSuiClientContext, useCurrentWallet as useSuiCurrentWallet } from '@m
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
+import { BITCOIN_CHAIN_CONFIG } from '../connectors/bitcoin/connectors.js';
 import { useAlephStore } from '../hooks/useAlephStore.js';
+import { useBitcoinStore } from '../hooks/useBitcoinStore.js';
+import { useConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
 import { useCosmosStore } from '../hooks/useCosmosStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
@@ -24,6 +27,10 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   // Cosmos store states
   const cosmosChainWallets = useCosmosStore((state) => state.chainWallets);
+
+  const bitcoinConnectors = useBitcoinStore((state) => state.connectors);
+  const bitcoinAddress = useBitcoinStore((state) => state.address);
+  const config = useConnectionOrConfig();
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -256,6 +263,39 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     currentSuiWallet,
     currentSuiNetwork,
   ]);
+
+  // bitcoin
+  useEffect(() => {
+    const _bitcoinAccounts: { [x: string]: ConnectedAccount } = {};
+    const _bitcoinWallets: { [x: string]: ConnectedWallet<'bitcoin'> } = {};
+
+    for (const connector of Object.values(bitcoinConnectors)) {
+      const address = bitcoinAddress ?? '';
+
+      if (address === '') {
+        continue;
+      }
+
+      _bitcoinAccounts[connector.adapter.name] = {
+        address: address,
+        chainId: BITCOIN_CHAIN_CONFIG[config?.bitcoinProvider.chainId ?? ''] as ChainId,
+        chainType: 'bitcoin',
+        wallet: connector.adapter.id,
+      };
+
+      _bitcoinWallets[connector.adapter.name] = {
+        address: address,
+        chainId: BITCOIN_CHAIN_CONFIG[config?.bitcoinProvider.chainId ?? ''] as ChainId,
+        chainType: 'bitcoin',
+        connector: connector.adapter,
+      };
+    }
+
+    setChainConnectedAccounts({ bitcoin: _bitcoinAccounts });
+    setConnectedWallets({
+      bitcoin: _bitcoinWallets,
+    });
+  }, [bitcoinAddress, bitcoinConnectors, setChainConnectedAccounts, setConnectedWallets, config]);
 
   // ALL CHANGES ABOVE THIS BLOCK
   // when currentWallet changes, update currentAccount

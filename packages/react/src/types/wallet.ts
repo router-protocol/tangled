@@ -7,6 +7,7 @@ import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@
 import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainId, ChainType } from '../types/index.js';
+import { XfiBitcoinConnector } from './bitcoin.js';
 
 export type ChainConnectors = {
   evm: CreateConnectorFn[];
@@ -70,7 +71,9 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
             ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
             : T extends 'ton'
               ? TonConnectUI
-              : DefaultConnector;
+              : T extends 'bitcoin'
+                ? XfiBitcoinConnector | Wallet<'bitcoin'>
+                : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;
