@@ -8,7 +8,7 @@ import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataPara
 import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
-import { fetchBalance } from './bitcoin/transaction.js';
+import { fetchBalance as fetchBitcoinBalance } from './bitcoin/transaction.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
@@ -237,8 +237,8 @@ export const getTokenBalanceAndAllowance = (async (params) => {
 
   if (chain.type === 'bitcoin') {
     const balance =
-      (await fetchBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'), account)) ||
-      (await fetchBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool'), account));
+      (await fetchBitcoinBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'), account)) ||
+      (await fetchBitcoinBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool'), account));
 
     if (balance === null) {
       throw new Error('Failed to fetch bitcoin balance');

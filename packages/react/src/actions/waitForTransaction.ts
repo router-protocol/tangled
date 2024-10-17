@@ -4,7 +4,7 @@ import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
 import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
-import { fetchTransaction } from './bitcoin/transaction.js';
+import { fetchTransaction as fetchBitcoinTransaction } from './bitcoin/transaction.js';
 
 export type DefaultOverrides = {
   interval: number;
@@ -247,8 +247,8 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     const receipt = await pollCallback(
       async () => {
         const result =
-          (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
-          (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+          (await fetchBitcoinTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
+          (await fetchBitcoinTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
         return result;
       },
       {
