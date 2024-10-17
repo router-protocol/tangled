@@ -33,6 +33,14 @@
     "Soumya Mukerjee <soumyamukherjee.work@gmail.com>"
   ],
   "dependencies": {
+    "@chain-registry/client": "^1.53.0",
+    "@cosmjs/cosmwasm-stargate": "^0.32.4",
+    "@cosmjs/stargate": "^0.32.4",
+    "@cosmos-kit/core": "^2.8.5",
+    "@cosmos-kit/keplr": "^2.12.2",
+    "@cosmos-kit/leap": "^2.14.1",
+    "@cosmos-kit/react-lite": "^2.6.5",
+    "@cosmos-kit/xdefi": "^2.10.2",
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
     "@nightlylabs/wallet-selector-polkadot": "^0.2.6",
@@ -50,10 +58,10 @@
     "@tronweb3/tronwallet-adapters": "^1.2.1",
     "@wagmi/core": "^2.11.0",
     "detect-browser": "^5.3.0",
-    "immer": "^10.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "tronweb": "6.0.0-beta.4",
+    "usehooks-ts": "^3.1.0",
     "viem": "^2.13.8",
     "wagmi": "^2.9.11",
     "zustand": "^4.5.2"

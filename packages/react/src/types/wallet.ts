@@ -1,3 +1,4 @@
+import { MainWalletBase as CosmosMainWalletBase } from '@cosmos-kit/core';
 import { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
 import { NightlyConnectAdapter } from '@nightlylabs/wallet-selector-polkadot';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
@@ -66,11 +67,13 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
         ? NightlyConnectAdapter
         : T extends 'sui'
           ? WalletWithRequiredFeatures
-          : T extends 'ton'
-            ? TonConnectUI
-            : T extends 'bitcoin'
-              ? XfiBitcoinConnector | Wallet<'bitcoin'>
-              : DefaultConnector;
+          : T extends 'cosmos'
+            ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
+            : T extends 'ton'
+              ? TonConnectUI
+              : T extends 'bitcoin'
+                ? XfiBitcoinConnector | Wallet<'bitcoin'>
+                : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;

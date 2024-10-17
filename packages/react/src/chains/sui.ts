@@ -19,7 +19,7 @@ export const sui: SuiChainType = {
   blockExplorers: {
     default: {
       name: 'Suiscan',
-      url: 'https://suiscan.xyz/',
+      url: 'https://suiscan.xyz',
     },
   },
 } as const;

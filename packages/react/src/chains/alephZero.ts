@@ -18,7 +18,7 @@ export const alephZero: OtherChainData<'alephZero'> = {
   blockExplorers: {
     default: {
       name: 'Subscan',
-      url: 'https://alephzero.subscan.io/',
+      url: 'https://alephzero.subscan.io',
     },
   },
 } as const;

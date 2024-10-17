@@ -6,6 +6,7 @@ import { BITCOIN_CHAIN_CONFIG } from '../connectors/bitcoin/connectors.js';
 import { useAlephStore } from '../hooks/useAlephStore.js';
 import { useBitcoinStore } from '../hooks/useBitcoinStore.js';
 import { useConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
+import { useCosmosStore } from '../hooks/useCosmosStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { useTonStore } from '../hooks/useTonStore.js';
 import { useTronStore } from '../hooks/useTronStore.js';
@@ -14,7 +15,7 @@ import { ChainId } from '../types/index.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
 const WalletsProvider = ({ children }: { children: ReactNode }) => {
-  const { chains } = useTangledConfig();
+  const chains = useTangledConfig((config) => config.chains);
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
@@ -23,6 +24,10 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const alephAddress = useAlephStore((state) => state.address);
   const tonConnectors = useTonStore((state) => state.connectors);
   const tonAddress = useTonStore((state) => state.address);
+
+  // Cosmos store states
+  const cosmosChainWallets = useCosmosStore((state) => state.chainWallets);
+
   const bitcoinConnectors = useBitcoinStore((state) => state.connectors);
   const bitcoinAddress = useBitcoinStore((state) => state.address);
   const config = useConnectionOrConfig();
@@ -192,6 +197,73 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [setChainConnectedAccounts, setConnectedWallets, alephAccounts, chains.ton, tonConnectors, tonAddress]);
 
+  // cosmos
+  useEffect(() => {
+    const _cosmosAccounts: { [x: string]: ConnectedAccount } = {};
+    const _cosmosWallets: { [x: string]: ConnectedWallet<'cosmos'> } = {};
+
+    // Iterate over the Cosmos connectors
+    for (const [name, chainWallet] of Object.entries(cosmosChainWallets)) {
+      const address = chainWallet.address ?? '';
+
+      if (!address) {
+        console.log('No address found for wallet', name);
+        continue;
+      }
+
+      _cosmosAccounts[name] = {
+        address: address,
+        chainId: chainWallet.chainId as ChainId,
+        chainType: 'cosmos',
+        wallet: name,
+      };
+
+      _cosmosWallets[name] = {
+        address: address,
+        chainId: chainWallet.chainId as ChainId,
+        chainType: 'cosmos',
+        connector: chainWallet.mainWallet,
+      };
+    }
+
+    setChainConnectedAccounts({ cosmos: _cosmosAccounts });
+    setConnectedWallets({
+      cosmos: _cosmosWallets,
+    });
+  }, [setChainConnectedAccounts, setConnectedWallets, cosmosChainWallets]);
+
+  //sui
+  useEffect(() => {
+    const _suiAccounts: { [x: string]: ConnectedAccount } = {};
+    const _suiWallets: { [x: string]: ConnectedWallet<'sui'> } = {};
+
+    if (suiWalletStatus === 'connected') {
+      _suiAccounts[currentSuiWallet.name] = {
+        address: currentSuiWallet.accounts[0].address,
+        chainId: currentSuiNetwork as ChainId,
+        chainType: 'sui',
+        wallet: currentSuiWallet.name,
+      };
+
+      _suiWallets[currentSuiWallet.name] = {
+        address: currentSuiWallet.accounts[0].address,
+        chainId: currentSuiNetwork as ChainId,
+        chainType: 'sui',
+        connector: currentSuiWallet,
+      };
+    }
+
+    setChainConnectedAccounts({ sui: _suiAccounts });
+    setConnectedWallets({ sui: _suiWallets });
+  }, [
+    setChainConnectedAccounts,
+    setConnectedWallets,
+    chains.sui,
+    suiWalletStatus,
+    currentSuiWallet,
+    currentSuiNetwork,
+  ]);
+
   // bitcoin
   useEffect(() => {
     const _bitcoinAccounts: { [x: string]: ConnectedAccount } = {};
@@ -225,6 +297,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [bitcoinAddress, bitcoinConnectors, setChainConnectedAccounts, setConnectedWallets, config]);
 
+  // ALL CHANGES ABOVE THIS BLOCK
   // when currentWallet changes, update currentAccount
   useEffect(() => {
     if (!currentWallet) {
@@ -232,9 +305,16 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find(
-      (account) => account.wallet === currentWallet.id,
-    );
+    const [walletId, walletChainId] = currentWallet.id.split(':');
+
+    const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find((account) => {
+      if (account.chainType === 'cosmos') {
+        const [_accountWalletId, _accountChainId] = account.wallet.split(':');
+        return _accountWalletId === walletId && (walletChainId ? _accountChainId === walletChainId : true);
+      }
+
+      return account.wallet === walletId;
+    });
 
     if (currentAccount) {
       setCurrentAccount(currentAccount);
@@ -258,38 +338,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       setCurrentAccount(recentAccount);
     }
   }, [recentWallet, setCurrentAccount, setCurrentWallet, connectedAccountsByChain]);
-
-  //sui
-  useEffect(() => {
-    const _suiAccounts: { [x: string]: ConnectedAccount } = {};
-    const _suiWallets: { [x: string]: ConnectedWallet<'sui'> } = {};
-
-    if (suiWalletStatus === 'connected') {
-      _suiAccounts[currentSuiWallet.name] = {
-        address: currentSuiWallet.accounts[0].address,
-        chainId: currentSuiNetwork as ChainId,
-        chainType: 'sui',
-        wallet: currentSuiWallet.name,
-      };
-
-      _suiWallets[currentSuiWallet.name] = {
-        address: currentSuiWallet.accounts[0].address,
-        chainId: currentSuiNetwork as ChainId,
-        chainType: 'sui',
-        connector: currentSuiWallet,
-      };
-    }
-
-    setChainConnectedAccounts({ sui: _suiAccounts });
-    setConnectedWallets({ sui: _suiWallets });
-  }, [
-    setChainConnectedAccounts,
-    setConnectedWallets,
-    chains.sui,
-    suiWalletStatus,
-    currentSuiWallet,
-    currentSuiNetwork,
-  ]);
 
   return <>{children}</>;
 };

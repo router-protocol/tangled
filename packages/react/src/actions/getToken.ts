@@ -9,6 +9,7 @@ import { areTokensEqual } from '../utils/index.js';
 import { getAlephZeroTokenBalanceAndAllowance, getAlephZeroTokenMetadata } from './alephZero/getAlephZeroToken.js';
 import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
 import { fetchBalance } from './bitcoin/transaction.js';
+import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
 import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
@@ -21,6 +22,7 @@ import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTo
  * @returns Token metadata {@link TokenMetadata}
  */
 export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadataParams): Promise<TokenMetadata> => {
+  // console.log('[Token] configs', { token, chain, config });
   // evm chain
   if (chain?.type === 'evm') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
@@ -103,6 +105,17 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     };
   }
 
+  if (chain.type === 'cosmos') {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
+    const res = await getCosmosTokenMetadata({ token, chainId: chain.id, getCosmosClient: config.getCosmosClient });
+
+    return {
+      ...res,
+      chainId: chain.id,
+    };
+  }
   throw new Error('Chain type not supported');
 };
 
@@ -209,6 +222,16 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       token,
       spender,
       config,
+    });
+  }
+
+  if (chain.type === 'cosmos') {
+    return getCosmosTokenBalanceAndAllowance({
+      account,
+      token,
+      spender,
+      config,
+      chain,
     });
   }
 

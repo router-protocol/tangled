@@ -10,6 +10,7 @@ import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useAlephContext } from './useAlephContext.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
+import { useCosmosContext } from './useCosmosContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -22,8 +23,9 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { connect: connectAlephWallet } = useAlephContext();
-  const { mutate: connectSuiWallet } = useSuiConnectWallet();
+  const { mutateAsync: connectSuiWallet } = useSuiConnectWallet();
   const { connect: connectTonWallet } = useTonContext();
+  const { connect: connectCosmosWallet } = useCosmosContext();
   const { connect: connectBitcoinWallet } = useBitcoinContext();
 
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
@@ -31,10 +33,26 @@ export const useConnect = () => {
   const setRecentWallet = useWalletsStore((state) => state.setRecentWallet);
 
   const connectWallet = useCallback(
-    async (params: { walletId: string; chainType: ChainType }) => {
-      const walletInstance: Wallet | undefined = wallets[params.chainType].find(
+    async (params: {
+      walletId: string;
+      chainType: ChainType;
+    }): Promise<{
+      chainType: ChainType;
+      name: string;
+      walletId: string;
+    }> => {
+      let walletInstance: Wallet | undefined = wallets[params.chainType].find(
         (wallet) => wallet.id === params.walletId,
       );
+      let chainId: string | undefined;
+
+      // cosmos wallets have chain ids appended to the wallet id
+      // eg: 'keplr:cosmoshub-4'
+      if (params.chainType === 'cosmos') {
+        const [walletId, _chainId] = params.walletId.split(':');
+        chainId = _chainId;
+        walletInstance = wallets[params.chainType].find((wallet) => walletId === wallet.id);
+      }
 
       if (!walletInstance) {
         throw new Error('Wallet not found');
@@ -45,7 +63,9 @@ export const useConnect = () => {
       }
 
       if (connectedWallets[params.chainType][walletInstance.id]) {
-        return { walletInstance, name: walletInstance.name, id: params.walletId };
+        console.error('Wallet already connected');
+
+        return { name: walletInstance.name, walletId: params.walletId, chainType: params.chainType };
       }
 
       if (params.chainType === 'solana') {
@@ -58,11 +78,22 @@ export const useConnect = () => {
         await connectAlephWallet(walletInstance.name);
       } else if (params.chainType === 'sui') {
         connectSuiWallet({ wallet: walletInstance.connector as WalletInstance<'sui'> });
+      } else if (params.chainType === 'cosmos') {
+        await connectCosmosWallet({ adapterId: walletInstance.id, chainId });
+
+        // if chainId is provided, set chainId for cosmos wallets
+        if (chainId) params.walletId = `${walletInstance.id}:${chainId}`;
       } else if (params.chainType === 'ton') {
         const connectedTonWallet = await connectTonWallet(walletInstance.id);
         if (walletInstance.id === 'ton-connect') {
           const tonWalletInstance = createTonWalletInstance(connectedTonWallet, walletInstance);
-          return { walletInstance: tonWalletInstance, name: tonWalletInstance.name, id: tonWalletInstance.id };
+
+          // set the wallet instance to the created ton wallet instance
+          return {
+            chainType: 'ton',
+            name: tonWalletInstance.name,
+            walletId: tonWalletInstance.id,
+          };
         }
       } else if (params.chainType === 'bitcoin') {
         await connectBitcoinWallet(walletInstance.id);
@@ -71,18 +102,19 @@ export const useConnect = () => {
         await connector.connect();
       }
 
-      return { walletInstance, name: walletInstance.name, id: params.walletId };
+      return { chainType: params.chainType, name: walletInstance.name, walletId: params.walletId };
     },
     [
-      connectAlephWallet,
-      connectEVM,
+      wallets,
+      connectedWallets,
       connectSolanaWallet,
-      connectSuiWallet,
       connectTronWallet,
       connectTonWallet,
       connectBitcoinWallet,
-      connectedWallets,
-      wallets,
+      connectEVM,
+      connectAlephWallet,
+      connectSuiWallet,
+      connectCosmosWallet,
     ],
   );
 
@@ -92,14 +124,14 @@ export const useConnect = () => {
     onError: (error) => {
       console.error(error);
     },
-    onSuccess: ({ walletInstance }) => {
+    onSuccess: ({ chainType, walletId }) => {
       setCurrentWallet({
-        id: walletInstance.id,
-        type: walletInstance.type,
+        id: walletId,
+        type: chainType,
       });
       setRecentWallet({
-        id: walletInstance.id,
-        type: walletInstance.type,
+        id: walletId,
+        type: chainType,
       });
     },
   });
