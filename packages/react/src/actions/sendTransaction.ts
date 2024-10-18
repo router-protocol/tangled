@@ -8,7 +8,7 @@ import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
-import { signBitcoinTx } from './bitcoin/transaction.js';
+import { signBitcoinTransaction } from './bitcoin/transaction.js';
 import { NO_DEPOSIT, THIRTY_TGAS } from './near/readCalls.js';
 
 export type SendTransactionParams<CData extends ChainData> = {
@@ -202,7 +202,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
   if (chain.type === 'bitcoin') {
     const { memo, feeRate } = args as TransactionArgs<'bitcoin'>;
     // send transaction to BITCOIN chain
-    const txHash = await signBitcoinTx({
+    const txHash = await signBitcoinTransaction({
       config,
       chain,
       from,
