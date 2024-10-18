@@ -83,3 +83,14 @@ export type BitcoinTransactionData = {
     value: number;
   }>;
 };
+
+export type BitcoinTransferRequest = {
+  feeRate: number;
+  from: string;
+  recipient: string;
+  amount: {
+    amount: number;
+    decimals: number;
+  };
+  memo: string;
+};

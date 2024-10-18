@@ -1,8 +1,10 @@
 import {
   BitcoinBalanceResponse,
   BitcoinTransactionStatus,
+  BitcoinTransferRequest,
   BlockstreamGasFeeResponse,
   MempoolSpaceBitcoinGasFeeResponse,
+  XfiBitcoinConnector,
 } from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
 import { removeHexPrefix } from '../../utils/index.js';
@@ -42,7 +44,102 @@ export async function getBitcoinGasFee(apiConfig: BitcoinApiConfigResult): Promi
   }
 }
 
-export async function signBitcoinTx({
+/**
+ * Determines the fee rate to use for the transaction.
+ * First tries using the provided fee rate, then falls back to Blockstream API,
+ * then Mempool API, and finally defaults to 0.
+ *
+ * @param {string} chainId - The ID of the chain (bitcoin or testnet)
+ * @param {number} [providedFeeRate] - Optional user-provided fee rate
+ * @returns {Promise<number>} The determined fee rate
+ */
+async function determineFeeRate(chainId: string, providedFeeRate?: number): Promise<number> {
+  if (providedFeeRate !== undefined) {
+    return providedFeeRate;
+  }
+
+  const isTestnet = chainId !== 'bitcoin';
+
+  // Trying Blockstream first, then fall back to Mempool
+  const blockstreamFee = await getBitcoinGasFee(getBitcoinApiConfig(isTestnet, 'blockstream'));
+  if (blockstreamFee) {
+    return blockstreamFee;
+  }
+
+  const mempoolFee = await getBitcoinGasFee(getBitcoinApiConfig(isTestnet, 'mempool'));
+  if (mempoolFee) {
+    return mempoolFee;
+  }
+
+  return 0;
+}
+
+/**
+ * Creates and executes a transfer request using the Bitcoin provider.
+ *
+ * @param {any} bitcoinProvider - The Bitcoin provider instance
+ * @param {Object} params - The parameters for the transfer
+ * @param {string} params.from - Sender's address
+ * @param {string} params.recipient - Recipient's address
+ * @param {number} params.amount - Transaction amount
+ * @param {string} params.memo - Transaction memo
+ * @param {number} params.feeRate - Fee rate to use
+ * @returns {Promise<string>} A promise that resolves to the transaction hash
+ * @throws {BitcoinTransactionError} If the transfer request fails or returns invalid result
+ */
+function executeTransferRequest(
+  bitcoinProvider: XfiBitcoinConnector,
+  { from, recipient, amount, memo, feeRate }: Omit<BitcoinTransferRequest, 'amount'> & { amount: number },
+): Promise<string> {
+  const transferRequest: BitcoinTransferRequest = {
+    feeRate,
+    from,
+    recipient,
+    amount: {
+      amount,
+      decimals: 8,
+    },
+    memo: `hex::${removeHexPrefix(memo)}`,
+  };
+
+  return new Promise((resolve, reject) => {
+    bitcoinProvider.request(
+      {
+        method: 'transfer',
+        params: [transferRequest],
+      },
+      (error: unknown, result: string | string[]) => {
+        if (error) {
+          reject(new Error('Transfer request failed', error));
+          return;
+        }
+
+        if (typeof result !== 'string') {
+          reject(new Error('Expected a string result'));
+          return;
+        }
+
+        resolve(result);
+      },
+    );
+  });
+}
+
+/**
+ * Signs a Bitcoin transaction with the provided parameters.
+ *
+ * @param {BitcoinTransferParams} params - The parameters for the transaction
+ * @param {ConnectionOrConfig} params.config - Connection configuration
+ * @param {OtherChainData<OtherChainTypes>} params.chain - Chain information
+ * @param {string} params.from - Sender's address
+ * @param {string} params.recipient - Recipient's address
+ * @param {number} params.amount - Transaction amount
+ * @param {string} params.memo - Transaction memo
+ * @param {number} [params.feeRate] - Optional fee rate override
+ * @returns {Promise<string>} The signed transaction hash
+ * @throws {BitcoinTransactionError} If the transaction signing fails
+ */
+export async function signBitcoinTransaction({
   config,
   chain,
   from,
@@ -59,43 +156,18 @@ export async function signBitcoinTx({
   memo: string;
   feeRate?: number;
 }): Promise<string> {
-  let fetchedFeeRate: number | undefined;
-
-  if (!feeRate) {
-    fetchedFeeRate =
-      (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
-      (await getBitcoinGasFee(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+  try {
+    const actualFeeRate = await determineFeeRate(chain.id, feeRate);
+    return await executeTransferRequest(config.bitcoinProvider, {
+      from,
+      recipient,
+      amount,
+      memo,
+      feeRate: actualFeeRate,
+    });
+  } catch (error) {
+    throw new Error('[BITCOIN] Transfer request:: Expected a string result');
   }
-
-  return new Promise((resolve, reject) => {
-    config.bitcoinProvider.request(
-      {
-        method: 'transfer',
-        params: [
-          {
-            feeRate: feeRate ? feeRate : fetchedFeeRate ?? 0, // Default to 0 if both are undefined
-            from,
-            recipient,
-            amount: {
-              amount,
-              decimals: 8,
-            },
-            memo: `hex::${removeHexPrefix(memo)}`,
-          },
-        ],
-      },
-      async (error: unknown, result: string | string[]) => {
-        if (error) {
-          reject(error);
-        }
-        if (typeof result === 'string') {
-          resolve(result);
-        } else {
-          reject(new Error('[BITCOIN] Transfer request:: Expected a string result'));
-        }
-      },
-    );
-  });
 }
 
 export const fetchBalance = async (apiConfig: BitcoinApiConfigResult, account: string): Promise<bigint> => {
