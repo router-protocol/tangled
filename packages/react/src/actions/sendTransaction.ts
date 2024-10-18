@@ -46,7 +46,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
           }
         : CType extends 'cosmos'
           ? {
-              messages: readonly Array<MsgExecuteContractEncodeObject | MsgTransferEncodeObject>;
+              messages: Array<MsgExecuteContractEncodeObject | MsgTransferEncodeObject>;
               memo?: string;
             }
           : CType extends 'near'

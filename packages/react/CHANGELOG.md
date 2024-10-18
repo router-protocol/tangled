@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.1
+
+### Patch Changes
+
+- fix near deps
+
 ## 1.9.0
 
 ### Minor Changes
