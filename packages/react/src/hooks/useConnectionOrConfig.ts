@@ -2,6 +2,7 @@ import { useSuiClient } from '@mysten/dapp-kit';
 import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
 import { useMemo } from 'react';
 import { useConfig as useWagmiConfig } from 'wagmi';
+import { FallbackBitcoinProvider } from '../connectors/bitcoin/connectors.js';
 import { ConnectionOrConfig } from '../types/index.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosStore } from './useCosmosStore.js';
@@ -23,8 +24,6 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
   const { nearSelector } = useNearContext();
 
   return useMemo(() => {
-    if (!bitcoinProvider) return undefined;
-
     return {
       wagmiConfig,
       solanaConnection,
@@ -32,7 +31,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
       suiClient: suiClient,
       tonClient,
       getCosmosClient,
-      bitcoinProvider,
+      bitcoinProvider: bitcoinProvider ?? new FallbackBitcoinProvider(),
       nearSelector,
     };
   }, [wagmiConfig, solanaConnection, tronWeb, suiClient, tonClient, getCosmosClient, bitcoinProvider, nearSelector]);

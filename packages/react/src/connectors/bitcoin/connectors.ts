@@ -46,3 +46,27 @@ export const connectToBitcoin = (): Promise<string[]> => {
     });
   });
 };
+
+export class FallbackBitcoinProvider implements XfiBitcoinConnector {
+  chainId: string = '';
+
+  constructor(message: string = 'Bitcoin extension is not installed') {
+    this.notInstalledError = new Error(message);
+  }
+
+  private notInstalledError: Error;
+
+  async changeNetwork(): Promise<void> {
+    throw this.notInstalledError;
+  }
+
+  request(
+    options: {
+      method: 'request_accounts' | 'transfer';
+      params: unknown[];
+    },
+    callback: (error: Error | null, result: string | string[]) => void,
+  ): void {
+    callback(this.notInstalledError, []);
+  }
+}
