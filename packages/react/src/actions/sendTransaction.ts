@@ -1,4 +1,5 @@
 import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
+import { MsgTransferEncodeObject } from '@cosmjs/stargate';
 import { Transaction } from '@mysten/sui/transactions';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/ton';
@@ -45,7 +46,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
           }
         : CType extends 'cosmos'
           ? {
-              messages: readonly MsgExecuteContractEncodeObject[];
+              messages: readonly Array<MsgExecuteContractEncodeObject | MsgTransferEncodeObject>;
               memo?: string;
             }
           : CType extends 'near'
@@ -67,14 +68,9 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
                   deposit?: string;
                 };
               }
-            : CType extends 'cosmos'
-              ? {
-                  messages: readonly MsgExecuteContractEncodeObject[];
-                  memo?: string;
-                }
-              : CType extends 'bitcoin'
-                ? { memo: string; feeRate?: number }
-                : never;
+            : CType extends 'bitcoin'
+              ? { memo: string; feeRate?: number }
+              : never;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 type SendTransactionReturnType<C extends ChainType> = { txHash: string };

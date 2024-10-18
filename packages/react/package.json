@@ -43,6 +43,7 @@
     "@cosmos-kit/xdefi": "^2.10.2",
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
+    "@near-js/providers": "latest",
     "@near-wallet-selector/core": "^8.9.13",
     "@near-wallet-selector/ethereum-wallets": "^8.9.13",
     "@near-wallet-selector/my-near-wallet": "^8.9.13",
