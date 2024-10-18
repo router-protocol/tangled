@@ -11,7 +11,6 @@ import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNearMobileWallet } from '@near-wallet-selector/near-mobile-wallet';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
-import { createWeb3Modal } from '@web3modal/wagmi';
 import { createContext, useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { useStore } from 'zustand';
@@ -66,12 +65,12 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
   const nearWagmiConfig = createNearConfig(config.nearNetwork, config.projectId, config.projectName);
 
-  const web3Modal = createWeb3Modal({
-    wagmiConfig: nearWagmiConfig,
-    projectId: config.projectId,
-    enableOnramp: false,
-    allWallets: 'SHOW',
-  });
+  // const web3Modal = createWeb3Modal({
+  //   wagmiConfig: nearWagmiConfig,
+  //   projectId: config.projectId,
+  //   enableOnramp: false,
+  //   allWallets: 'SHOW',
+  // });
 
   const getWalletsWithSignMethods = async (state: WalletSelectorState) => {
     return await Promise.all(
@@ -101,7 +100,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
             icons: [''],
           },
         }),
-        setupEthereumWallets({ wagmiConfig: nearWagmiConfig, web3Modal }),
+        setupEthereumWallets({ wagmiConfig: nearWagmiConfig }),
       ],
     });
 
