@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.9.4",
+  "version": "1.9.5",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -35,6 +35,7 @@
   "dependencies": {
     "@chain-registry/client": "^1.53.0",
     "@cosmjs/cosmwasm-stargate": "^0.32.4",
+    "@cosmjs/proto-signing": "^0.32.4",
     "@cosmjs/stargate": "^0.32.4",
     "@cosmos-kit/core": "^2.15.0",
     "@cosmos-kit/keplr": "^2.12.2",
@@ -48,6 +49,7 @@
     "@near-wallet-selector/my-near-wallet": "^8.9.13",
     "@near-wallet-selector/near-mobile-wallet": "^8.9.13",
     "@near-wallet-selector/wallet-connect": "^8.9.13",
+    "@routerprotocol/chain-api": "^1.2.3",
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/spl-token": "^0.4.8",
     "@solana/wallet-adapter-base": "^0.9.23",

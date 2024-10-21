@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.5
+
+### Patch Changes
+
+- fix cosmos gas prices
+
 ## 1.9.4
 
 ### Patch Changes

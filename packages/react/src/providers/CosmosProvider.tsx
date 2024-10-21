@@ -1,3 +1,5 @@
+import { SigningCosmWasmClientOptions } from '@cosmjs/cosmwasm-stargate';
+import { GasPrice } from '@cosmjs/stargate';
 import {
   ChainWalletBase,
   Data,
@@ -17,6 +19,7 @@ import { useStore } from 'zustand';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { CosmosStore, createCosmosStore } from '../store/Cosmos.js';
 import { CosmsosChainType } from '../types/index.js';
+import { RemoveReadonly } from '../types/utils.js';
 
 export interface CosmosContextValues {
   connect: (params: { adapterId: string; chainId?: string }) => Promise<{
@@ -67,8 +70,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const logger = useMemo(() => new Logger('ERROR'), []);
 
   const walletManager = useMemo(() => {
-    console.log(chainRegistry?.chains);
-
     const _walletManager = new WalletManager(
       chainRegistry?.chains ? chainRegistry.chains : chainNames,
       [keplr[0], xdefi[0], leap[0]] as MainWalletBase[],
@@ -82,6 +83,36 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
         signClient: {
           projectId: tangledConfig.projectId,
         },
+      },
+      {
+        // signer options
+        signingCosmwasm: (chain) => {
+          const chainName = typeof chain === 'string' ? chain : chain.chain_name;
+
+          const config: RemoveReadonly<SigningCosmWasmClientOptions> = {};
+          const feeTokens = chainRegistry?.chains.find((c) => c.chain_name === chainName)?.fees?.fee_tokens;
+          if (feeTokens) {
+            config.gasPrice = GasPrice.fromString(
+              feeTokens[0].fixed_min_gas_price?.toString() + feeTokens[0].denom.toString(),
+            );
+          }
+
+          return config;
+        },
+      },
+      {
+        // endpoints
+        isLazy: false,
+        endpoints: chains.reduce(
+          (acc, chain) => {
+            acc[chain.chainName] = {
+              isLazy: false,
+              rpc: chain.rpcUrls.default.http as string[],
+            };
+            return acc;
+          },
+          {} as Record<string, Endpoints>,
+        ),
       },
     );
     _walletManager.setActions({
@@ -121,18 +152,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
         },
         clientMessage: setClientMsg,
       });
-      w.addEnpoints(
-        chains.reduce(
-          (acc, chain) => {
-            acc[chain.chainName] = {
-              isLazy: false,
-              rpc: chain.rpcUrls.default.http as string[],
-            };
-            return acc;
-          },
-          {} as Record<string, Endpoints>,
-        ),
-      );
     });
 
     chains.forEach((chain) => {
