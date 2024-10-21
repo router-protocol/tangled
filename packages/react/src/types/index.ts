@@ -1,6 +1,4 @@
-import { type ChainRegistryClient as CosmosChainRegistryClient } from '@chain-registry/client';
 import { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
-import { ChainWalletBase as CosmosChainWalletBase, WalletManager as CosmosWalletManager } from '@cosmos-kit/core';
 import { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import { WalletSelector as NearWalletSelector } from '@near-wallet-selector/core';
 import { Connection as SolanaConnection } from '@solana/web3.js';
@@ -11,6 +9,7 @@ import { Types as TronWebTypes, type TronWeb } from 'tronweb';
 import { Chain as ViemChain } from 'viem';
 import { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
+import { GetCosmosClient } from '../store/Cosmos.js';
 import { XfiBitcoinConnector } from './bitcoin.js';
 import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
@@ -44,6 +43,7 @@ export interface ChainDataGeneric {
   contracts?: {
     [key: string]: string;
   };
+  extra?: Record<string, any>;
 }
 
 export interface EVMChain extends ViemChain {
@@ -63,6 +63,7 @@ export interface SuiChainType extends ChainDataGeneric {
 export interface CosmsosChainType extends ChainDataGeneric {
   type: Extract<'cosmos', ChainType>;
   chainName: string;
+  evmId?: string;
 }
 
 // Exclude chains with custom types
@@ -132,11 +133,7 @@ export type ConnectionOrConfig = {
   tronWeb: TronWeb;
   suiClient: SuiClient;
   tonClient: TonClient;
-  getCosmosClient: () => {
-    walletManaer: CosmosWalletManager | undefined;
-    chainWallets: Record<string, CosmosChainWalletBase>;
-    getChainRegistry: () => Promise<CosmosChainRegistryClient>;
-  };
+  getCosmosClient: GetCosmosClient;
   bitcoinProvider: XfiBitcoinConnector;
   nearSelector: NearWalletSelector;
 };

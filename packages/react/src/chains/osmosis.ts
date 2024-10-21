@@ -12,7 +12,7 @@ export const osmosis: CosmsosChainType = {
   },
   rpcUrls: {
     default: {
-      http: [''],
+      http: ['https://rpc.osmosis.zone'],
     },
   },
   blockExplorers: {

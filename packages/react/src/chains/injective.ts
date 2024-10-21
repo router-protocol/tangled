@@ -12,7 +12,7 @@ export const injective: CosmsosChainType = {
   },
   rpcUrls: {
     default: {
-      http: [''],
+      http: ['https://sentry.tm.injective.network:443'],
     },
   },
   blockExplorers: {

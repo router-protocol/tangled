@@ -4,6 +4,7 @@ export const router: CosmsosChainType = {
   id: 'router_9600-1',
   chainName: 'routerchain',
   name: 'Router Chain',
+  evmId: '9600',
   type: 'cosmos',
   nativeCurrency: {
     name: 'Route',
@@ -20,5 +21,8 @@ export const router: CosmsosChainType = {
       name: 'Router Explorer',
       url: 'https://routerscan.io',
     },
+  },
+  extra: {
+    environment: 'mainnet',
   },
 } as const;

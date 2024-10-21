@@ -1,4 +1,13 @@
-import { ChainWalletBase, Data, Logger, MainWalletBase, State, WalletManager, WalletRepo } from '@cosmos-kit/core';
+import {
+  ChainWalletBase,
+  Data,
+  Endpoints,
+  Logger,
+  MainWalletBase,
+  State,
+  WalletManager,
+  WalletRepo,
+} from '@cosmos-kit/core';
 import { wallets as keplr } from '@cosmos-kit/keplr';
 import { wallets as leap } from '@cosmos-kit/leap';
 import { wallets as xdefi } from '@cosmos-kit/xdefi';
@@ -41,11 +50,12 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const [render, forceRender] = useState<number>(0);
 
   const connectedMainWallet = useStore(cosmosStore, (state) => state.connectedMainWallet);
-
+  const chainRegistry = useStore(cosmosStore, (state) => state.chainRegistry);
   const setConnectedMainWallet = useStore(cosmosStore, (state) => state.setConnectedMainWallet);
   const setChainWallets = useStore(cosmosStore, (state) => state.setChainWallets);
   const setWalletManager = useStore(cosmosStore, (state) => state.setWalletManager);
   const setWallets = useStore(cosmosStore, (state) => state.setWallets);
+  const getChainRegistry = useStore(cosmosStore, (state) => state.getChainRegistry);
 
   const reset = useStore(cosmosStore, (state) => state.reset);
 
@@ -57,9 +67,11 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const logger = useMemo(() => new Logger('ERROR'), []);
 
   const walletManager = useMemo(() => {
-    const walletManager = new WalletManager(
-      chainNames,
-      [...keplr, ...xdefi, ...leap] as MainWalletBase[],
+    console.log(chainRegistry?.chains);
+
+    const _walletManager = new WalletManager(
+      chainRegistry?.chains ? chainRegistry.chains : chainNames,
+      [keplr[0], xdefi[0], leap[0]] as MainWalletBase[],
       logger,
       false,
       true,
@@ -72,7 +84,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
         },
       },
     );
-    walletManager.setActions({
+    _walletManager.setActions({
       viewWalletRepo: setViewWalletRepo,
       data: setData,
       state: (state) => {
@@ -81,7 +93,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       message: setMsg,
     });
 
-    walletManager.walletRepos.forEach((wr) => {
+    _walletManager.walletRepos.forEach((wr) => {
       wr.setActions({
         viewWalletRepo: setViewWalletRepo,
         render: forceRender,
@@ -97,7 +109,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       });
     });
 
-    walletManager.mainWallets.forEach((w) => {
+    _walletManager.mainWallets.forEach((w) => {
       w.setActions({
         data: setData,
         state: (state) => {
@@ -109,10 +121,22 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
         },
         clientMessage: setClientMsg,
       });
+      w.addEnpoints(
+        chains.reduce(
+          (acc, chain) => {
+            acc[chain.chainName] = {
+              isLazy: false,
+              rpc: chain.rpcUrls.default.http as string[],
+            };
+            return acc;
+          },
+          {} as Record<string, Endpoints>,
+        ),
+      );
     });
 
-    chainNames.forEach((chainName) => {
-      const walletRepo = walletManager.getWalletRepo(chainName);
+    chains.forEach((chain) => {
+      const walletRepo = _walletManager.getWalletRepo(chain.chainName);
 
       walletRepo.activate();
 
@@ -120,15 +144,15 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
         if (wallet.isModeWalletConnect) {
           wallet.connectChains = async () => {
             await wallet?.client?.connect?.(chainIds);
-            for (const name of chainNames.filter((name) => name !== chainName)) {
+            for (const name of chainNames.filter((name) => name !== chain.chainName)) {
               await wallet.mainWallet.getChainWallet(name)?.update({ connect: false });
             }
           };
         }
       });
     });
-    return walletManager;
-  }, [chainIds, chainNames, logger]);
+    return _walletManager;
+  }, [chainIds, chainNames, chainRegistry, chains, logger, tangledConfig.projectId]);
 
   const chainRepos = useMemo(
     () => chains.map((chain) => walletManager.getWalletRepo(chain.chainName)),
@@ -150,8 +174,9 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
    * This is necessary to enable the wallet to connect to the Cosmos chains
    */
   useEffect(() => {
+    getChainRegistry();
     setWalletManager(walletManager);
-  }, [walletManager, setWalletManager]);
+  }, [walletManager, setWalletManager, getChainRegistry]);
 
   const { mutateAsync: connect } = useMutation({
     mutationKey: ['cosmos connect'],
@@ -170,6 +195,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       } catch (e) {
         for (const repo of chainRepos) {
           await mainWallet.client?.addChain?.(repo.chainRecord);
+          mainWallet.addEnpoints();
         }
         await mainWallet.client?.enable?.(chainIds);
       }
@@ -181,10 +207,13 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       await mainWallet.connectAll(false);
 
       const chainWallets = mainWallet.getChainWalletList(true);
-
+      // @ts-expect-error: walletManager is not defined in the window object
+      window.walletManager = walletManager;
       return { chainWallets, mainWallet, walletId, chainId };
     },
     onSuccess: (data) => {
+      console.log(data);
+
       setConnectedMainWallet(data.mainWallet);
       setChainWallets(data.chainWallets);
     },

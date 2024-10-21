@@ -1,5 +1,3 @@
-import { MsgExecuteContractEncodeObject } from '@cosmjs/cosmwasm-stargate';
-import { MsgTransferEncodeObject } from '@cosmjs/stargate';
 import { Transaction } from '@mysten/sui/transactions';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/ton';
@@ -46,8 +44,12 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
           }
         : CType extends 'cosmos'
           ? {
-              messages: Array<MsgExecuteContractEncodeObject | MsgTransferEncodeObject>;
+              messages: Array<{
+                readonly typeUrl: string;
+                readonly value: any;
+              }>;
               memo?: string;
+              routerChainArgs: any;
             }
           : CType extends 'near'
             ? {

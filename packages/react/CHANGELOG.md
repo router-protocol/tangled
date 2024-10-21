@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.2
+
+### Patch Changes
+
+- fix cosmos integrations
+
 ## 1.9.1
 
 ### Patch Changes
