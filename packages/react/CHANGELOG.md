@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.4
+
+### Patch Changes
+
+- add fee params to cosmos tx overrides
+
 ## 1.9.3
 
 ### Patch Changes

@@ -197,7 +197,9 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
     const cosmWasmClient = await chainWallet.getSigningCosmWasmClient();
 
-    const result = await cosmWasmClient.signAndBroadcast(from, messages, 'auto', memo);
+    const fee = overrides.gasFee || 'auto';
+
+    const result = await cosmWasmClient.signAndBroadcast(from, messages, fee, memo);
 
     if (result.code !== 0) {
       throw new Error(`Transaction failed with code ${result.code}`);
