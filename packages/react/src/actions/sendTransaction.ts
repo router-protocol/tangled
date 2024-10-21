@@ -187,12 +187,17 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
   }
 
   if (chain.type === 'cosmos') {
-    const chainWallet = config.getCosmosClient().chainWallets[chain.id];
+    const chainWallet = config.getCosmosClient().getChainWallet(chain.id);
+
+    if (!chainWallet) {
+      throw new Error('Chain wallet not found for cosmos chain');
+    }
 
     const { messages, memo } = args as TransactionArgs<'cosmos'>;
 
-    const client = await chainWallet.getSigningCosmWasmClient();
-    const result = await client.signAndBroadcast(from, messages, 'auto', memo);
+    const cosmWasmClient = await chainWallet.getSigningCosmWasmClient();
+
+    const result = await cosmWasmClient.signAndBroadcast(from, messages, 'auto', memo);
 
     if (result.code !== 0) {
       throw new Error(`Transaction failed with code ${result.code}`);

@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.3
+
+### Patch Changes
+
+- fix cosmos chain wallet values
+
 ## 1.9.2
 
 ### Patch Changes
