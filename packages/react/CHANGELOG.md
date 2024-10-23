@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.7
+
+### Patch Changes
+
+- fix tron store initial value
+
 ## 1.9.6
 
 ### Patch Changes

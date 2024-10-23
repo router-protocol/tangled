@@ -8,13 +8,13 @@ import { ChainId, TronChain } from '../types/index.js';
 export interface TronContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
   disconnect: () => Promise<void>;
-  store: TronStore | null;
+  store: TronStore;
 }
 
 export const TronContext = createContext<TronContextValues>({
   connect: async () => ({ account: '', chainId: undefined }),
   disconnect: async () => {},
-  store: null,
+  store: {} as TronStore,
 });
 
 /**
