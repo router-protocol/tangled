@@ -28,21 +28,10 @@ export interface TronState {
 export type TronStore = ReturnType<typeof createTronStore>;
 
 export const createTronStore = (props: TronProps) => {
-  const DEFAULT_TRON_STATE: TronState = {
-    connectors: {},
-    connectedAdapter: undefined,
+  return createStore<TronState>((set) => ({
     address: null,
     tronweb: getTronWeb(props.chain),
 
-    setAddress: () => {},
-    setConnector: () => {},
-    setConnectors: () => {},
-    setConnectedAdapter: () => {},
-    setTronweb: () => {},
-  };
-
-  return createStore<TronState>((set) => ({
-    ...DEFAULT_TRON_STATE,
     connectors: props?.adapters.reduce(
       (acc, adapter) => {
         acc[adapter.name] = { adapter, account: adapter.address, network: undefined, readyState: adapter.state };
