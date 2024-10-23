@@ -5,6 +5,6 @@ import { TronState } from '../store/Tron.js';
 
 export function useTronStore<T>(selector: (state: TronState) => T): T {
   const { store } = useContext(TronContext);
-  if (!store) throw new Error('Missing BearContext.Provider in the tree');
+  if (!store) throw new Error('Missing Tron Store Provider in the tree');
   return useStore(store, selector);
 }

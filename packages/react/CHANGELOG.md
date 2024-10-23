@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.6
+
+### Patch Changes
+
+- fix tron store error
+
 ## 1.9.5
 
 ### Patch Changes
