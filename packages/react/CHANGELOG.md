@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.9
+
+### Patch Changes
+
+- chore: remove console log
+
 ## 1.9.8
 
 ### Patch Changes

@@ -231,8 +231,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       return { chainWallets, mainWallet, walletId, chainId };
     },
     onSuccess: (data) => {
-      console.log(data);
-
       setConnectedMainWallet(data.mainWallet);
       setChainWallets(data.chainWallets);
     },
