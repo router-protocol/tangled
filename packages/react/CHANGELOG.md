@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.10
+
+### Patch Changes
+
+- fix cosmos connections
+
 ## 1.9.9
 
 ### Patch Changes
