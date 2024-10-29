@@ -55,7 +55,7 @@ export const getCosmosTokenBalanceAndAllowance = async ({
     // Getting initial token balance
     const tokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
 
-    // For native/factory tokens
+    //  For native/factory tokens
     if (isNativeOrFactoryToken(token)) {
       return {
         balance: BigInt(tokenBalance.amount),
