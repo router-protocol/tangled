@@ -1,7 +1,7 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { maxInt256 } from 'viem';
 import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
-import { areTokensEqual } from '../../utils/index.js';
+import { areTokensEqual, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
 
 export const getCosmosTokenMetadata = async ({
   token,
@@ -38,48 +38,50 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   account,
   token,
   spender,
-  config,
   chain,
 }: {
   account: string;
   token: string;
   spender: string | undefined;
-  config: ConnectionOrConfig;
   chain: ChainData;
-}) => {
-  let balance = 0n;
-  let allowance = 0n;
+}): Promise<{
+  balance: bigint;
+  allowance: bigint;
+}> => {
   try {
-    const stclient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
+    const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
+    const formattedToken = formatTokenAddress(token);
 
-    const tokenBalance = await stclient.getBalance(account, token);
+    // Getting initial token balance
+    const tokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
 
-    if (token.toLowerCase().startsWith('ibc') || token.toLowerCase().startsWith('factory')) {
+    // For native/factory tokens
+    if (isNativeOrFactoryToken(token)) {
       return {
         balance: BigInt(tokenBalance.amount),
         allowance: maxInt256,
       };
     }
 
-    const balanceQuery = stclient.getBalance(account, token);
-    const allowanceQuery = stclient.queryContractSmart(token, {
-      allowance: {
-        owner: account,
-        spender: spender,
-      },
-    });
+    // Querying both balance and allowance
+    const [balanceResult, allowanceResult] = await Promise.all([
+      cosmwasmClient.queryContractSmart(token, {
+        balance: { address: account },
+      }),
+      cosmwasmClient.queryContractSmart(token, {
+        allowance: {
+          owner: account,
+          spender: spender,
+        },
+      }),
+    ]);
 
-    const [balanceResult, allowanceResult] = await Promise.all([balanceQuery, allowanceQuery]);
-
-    balance = BigInt(balanceResult.amount);
-    allowance = BigInt(allowanceResult.allowance.amount);
+    return {
+      balance: BigInt(balanceResult.amount),
+      allowance: BigInt(allowanceResult.allowance.amount),
+    };
   } catch (error) {
     console.error('Failed to fetch allowance:', error);
     throw error;
   }
-
-  return {
-    balance,
-    allowance,
-  };
 };

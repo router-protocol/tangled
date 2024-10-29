@@ -102,3 +102,26 @@ export function removeHexPrefix(hexString: string) {
   }
   return hexString;
 }
+
+/**
+ * Formats a cosmos token address based on its prefix
+ * @param token - The token address to format
+ * @returns Formatted token address
+ */
+export function formatTokenAddress(token: string): string {
+  if (!token.toLowerCase().startsWith('ibc')) return token;
+
+  const prefix = token.substring(0, 3);
+  const remainder = token.substring(3).toUpperCase();
+  return `${prefix}${remainder}`;
+}
+
+/**
+ * Checks if a cosmos token is a native or factory token
+ * @param token - The token address to check
+ * @returns Boolean indicating if token is native/factory
+ */
+export function isNativeOrFactoryToken(token: string): boolean {
+  const lowerToken = token.toLowerCase();
+  return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory');
+}

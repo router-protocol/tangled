@@ -233,7 +233,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       account,
       token,
       spender,
-      config,
       chain,
     });
   }
