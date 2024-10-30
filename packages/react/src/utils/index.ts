@@ -1,4 +1,5 @@
 import { detect } from 'detect-browser';
+import { SLF_TOKEN } from '../constants/index.js';
 
 /**
  * This is a workaround for the issue with BigInt serialization in JSON.stringify
@@ -123,5 +124,5 @@ export function formatTokenAddress(token: string): string {
  */
 export function isNativeOrFactoryToken(token: string): boolean {
   const lowerToken = token.toLowerCase();
-  return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory');
+  return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory') || lowerToken === SLF_TOKEN;
 }
