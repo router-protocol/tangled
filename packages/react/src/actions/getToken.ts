@@ -105,7 +105,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
-    const res = await getCosmosTokenMetadata({ token, chainId: chain.id, getCosmosClient: config.getCosmosClient });
+    const res = await getCosmosTokenMetadata({ token, chain, getCosmosClient: config.getCosmosClient });
 
     return {
       ...res,
@@ -233,7 +233,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       account,
       token,
       spender,
-      config,
       chain,
     });
   }

@@ -1,20 +1,22 @@
-import { ChainData, ChainId, ConnectionOrConfig } from '../../types/index.js';
-import { areTokensEqual } from '../../utils/index.js';
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
+import { maxInt256 } from 'viem';
+import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
+import { areTokensEqual, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
 
 export const getCosmosTokenMetadata = async ({
   token,
-  chainId,
+  chain,
   getCosmosClient,
 }: {
   token: string;
-  chainId: ChainId;
+  chain: CosmsosChainType;
   getCosmosClient: ConnectionOrConfig['getCosmosClient'];
 }) => {
   const registryClient = await getCosmosClient().getChainRegistry();
 
   console.log('registryClient', registryClient);
 
-  const assetList = registryClient.getChainAssetList(chainId).assets;
+  const assetList = registryClient.getChainAssetList(chain.chainName).assets;
 
   console.log('assetlist', assetList);
 
@@ -36,55 +38,50 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   account,
   token,
   spender,
-  config,
   chain,
 }: {
   account: string;
   token: string;
   spender: string | undefined;
-  config: ConnectionOrConfig;
   chain: ChainData;
-}) => {
-  let balance = 0n;
-  let allowance = 0n;
+}): Promise<{
+  balance: bigint;
+  allowance: bigint;
+}> => {
   try {
-    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
+    const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
+    const formattedToken = formatTokenAddress(token);
 
-    const stargateClient = await cosmosClient.getStargateClient();
-    const tokenBalance = await stargateClient.getBalance(account, token);
+    // Getting initial token balance
+    const tokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
 
-    if (token.toLowerCase().startsWith('ibc') || token.toLowerCase().startsWith('factory')) {
+    //  For native/factory tokens
+    if (isNativeOrFactoryToken(token)) {
       return {
         balance: BigInt(tokenBalance.amount),
-        allowance: 10000n,
+        allowance: maxInt256,
       };
     }
 
-    const client = await cosmosClient.getCosmWasmClient();
+    // Querying both balance and allowance
+    const [balanceResult, allowanceResult] = await Promise.all([
+      cosmwasmClient.queryContractSmart(token, {
+        balance: { address: account },
+      }),
+      cosmwasmClient.queryContractSmart(token, {
+        allowance: {
+          owner: account,
+          spender: spender,
+        },
+      }),
+    ]);
 
-    const balanceQuery = client.queryContractSmart(token, {
-      balance: {
-        address: account,
-      },
-    });
-    const allowanceQuery = client.queryContractSmart(token, {
-      allowance: {
-        owner: account,
-        spender: spender,
-      },
-    });
-
-    const [balanceResult, allowanceResult] = await Promise.all([balanceQuery, allowanceQuery]);
-
-    balance = BigInt(balanceResult.balance.amount);
-    allowance = BigInt(allowanceResult.allowance.amount);
+    return {
+      balance: BigInt(balanceResult.amount),
+      allowance: BigInt(allowanceResult.allowance.amount),
+    };
   } catch (error) {
     console.error('Failed to fetch allowance:', error);
     throw error;
   }
-
-  return {
-    balance,
-    allowance,
-  };
 };

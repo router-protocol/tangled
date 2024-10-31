@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.9.11-cosmos-beta
+
+### Patch Changes
+
+- fix cosmos balance queries
+
 ## 1.9.10
 
 ### Patch Changes
