@@ -8,7 +8,7 @@ import {
 import { ChainData, CosmsosChainType } from '../types/index.js';
 
 export type GetCosmosClient = () => {
-  walletManaer: WalletManager | undefined;
+  walletManager: WalletManager | undefined;
   chainWallets: Record<string, ChainWalletBase>;
   getChainRegistry: () => Promise<CosmosChainRegistryClient>;
   getChainWallet: (chainId: string) => ChainWalletBase | undefined;
@@ -65,7 +65,7 @@ export const createCosmosStore = (chains: ChainData[]) => {
       },
 
       getCosmosClient: () => ({
-        walletManaer: get().walletManager,
+        walletManager: get().walletManager,
         chainWallets: get().chainWallets,
         getChainRegistry: get().getChainRegistry,
         getChainWallet: get().getChainWallet,
