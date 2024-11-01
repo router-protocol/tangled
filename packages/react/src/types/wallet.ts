@@ -28,6 +28,8 @@ export type ChainConnectors = {
   bitcoin: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   ton: any[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  router: any[];
 };
 
 export type WalletBase<C extends ChainType = ChainType> = {
