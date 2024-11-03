@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.12.0-routerchain-beta-0.1
+
+### Minor Changes
+
+- update cosmos integrations
+
 ## 1.10.0-routerchain-beta-0.1
 
 ### Minor Changes
