@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.10.0-routerchain-beta-0.1
+
+### Minor Changes
+
+- feat router chain integration
+
 ## 1.9.5
 
 ### Patch Changes
