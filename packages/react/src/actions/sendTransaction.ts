@@ -131,7 +131,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
         pfUrl: `${chain.extra.pathfinder}/v2/router-pubkey`,
       });
 
-      return txResponse.tx_response.txhash;
+      return { txHash: txResponse.tx_response.txhash };
     }
 
     const { calldata } = args as TransactionArgs<'evm'>;
@@ -256,25 +256,19 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
           msg: executeMsg,
           funds: funds,
         });
-        const cosmosClient = config.getCosmosClient();
-        const wallet = cosmosClient.getChainWallet('router_9600-1');
         const network = getNetworkInfo(chain.extra.environment as RouterChainNetwork);
 
-        if (wallet?.walletName === 'keplr-extension') {
-          const txResponse = await sendEthTxnToRouterChainKeplrPf({
-            networkEnv: chain.extra.environment,
-            txMsg: executeContractMsg,
-            nodeUrl: network.lcdEndpoint,
-            ethereumAddress: from,
-            // @ts-expect-error: keplr is not defined in the global scope
-            injectedSigner: window.keplr,
-            pfUrl: `${chain.extra.pathfinder}/v2/router-pubkey`,
-          });
+        const txResponse = await sendEthTxnToRouterChainKeplrPf({
+          networkEnv: chain.extra.environment,
+          txMsg: executeContractMsg,
+          nodeUrl: network.lcdEndpoint,
+          ethereumAddress: from,
+          // @ts-expect-error: keplr is not defined in the global scope
+          injectedSigner: window.keplr,
+          pfUrl: `${chain.extra.pathfinder}/v2/router-pubkey`,
+        });
 
-          return { txHash: txResponse.tx_response.txhash };
-        } else {
-          throw new Error('Unsupported Wallet, please connect with a suitable wallet');
-        }
+        return { txHash: txResponse.tx_response.txhash };
       } else {
         throw new Error('Unsupported Wallet, please connect with Keplr wallet');
       }
