@@ -12,11 +12,7 @@ export const getCosmosTokenMetadata = async ({
 }) => {
   const registryClient = await getCosmosClient().getChainRegistry();
 
-  console.log('registryClient', registryClient);
-
   const assetList = registryClient.getChainAssetList(chainId).assets;
-
-  console.log('assetlist', assetList);
 
   const asset = assetList.find((asset) => areTokensEqual(asset.base, token));
 

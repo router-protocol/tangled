@@ -1,12 +1,10 @@
 import {
   ChainId,
-  router,
   useChain,
   useChains,
   useCurrentAccount,
   useCurrentWallet,
   useNetwork,
-  useSendTransaction,
   useWallet,
 } from '@tangled3/react';
 import { useEffect, useState } from 'react';
@@ -15,34 +13,10 @@ import Tokens from './Tokens';
 import WalletList from './WalletList';
 
 function Example() {
-  const { mutateAsync } = useSendTransaction();
-  const click = () => {
-    mutateAsync({
-      args: {
-        routerChainArgs: {
-          transfer_route_cross_chain: {
-            dest_chain_id: '137',
-            recipient: '0x0b90994F83D2Fde68f83C418141B42550dE2Cb4c',
-          },
-        },
-      },
-      chain: router,
-      from: 'router1733dyrfrhj8w7x7t3warslqmt9vfczmmvuqcc5',
-      to: 'router17p9rzwnnfxcjp32un9ug7yhhzgtkhvl9jfksztgw5uh69wac2pgsmpev85',
-      value: 4835500000000000000n,
-    });
-  };
   return (
     <div className='space-y-8'>
       <h1 className='text-2xl font-bold'>Tangled Example</h1>
       <h2 className='text-xl font-bold'>ACCOUNTS</h2>
-
-      <button
-        className='bg-lime-500 hover:bg-lime-600 text-white px-4 py-2 rounded'
-        onClick={click}
-      >
-        Cosmos Routerchain tx
-      </button>
 
       <div className='sticky top-0 bg-black py-8'>
         <CurrentAccountAndWallet />

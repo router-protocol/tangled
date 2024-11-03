@@ -83,7 +83,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
               : never;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type SendTransactionReturnType<C extends ChainType> = { txHash: string };
+export type SendTransactionReturnType<C extends ChainType> = { txHash: string };
 
 export type SendTransactionToChainFunction = <CData extends ChainData>(
   params: SendTransactionParams<CData>,
@@ -275,9 +275,9 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
         } else {
           throw new Error('Unsupported Wallet, please connect with a suitable wallet');
         }
+      } else {
+        throw new Error('Unsupported Wallet, please connect with Keplr wallet');
       }
-    } else {
-      throw new Error('Unsupported Wallet, please connect with Keplr wallet');
     }
 
     const { messages, memo } = args as TransactionArgs<'cosmos'>;
