@@ -214,7 +214,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       } catch (e) {
         for (const repo of chainRepos) {
           await mainWallet.client?.addChain?.(repo.chainRecord);
-          mainWallet.addEnpoints();
         }
         await mainWallet.client?.enable?.(chainIds);
       }
@@ -231,8 +230,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       return { chainWallets, mainWallet, walletId, chainId };
     },
     onSuccess: (data) => {
-      console.log(data);
-
       setConnectedMainWallet(data.mainWallet);
       setChainWallets(data.chainWallets);
     },

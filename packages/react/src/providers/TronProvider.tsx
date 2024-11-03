@@ -2,6 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Adapter, AdapterState } from '@tronweb3/tronwallet-abstract-adapter';
 import { createContext, useCallback, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
+import { tronMainnet } from '../chains/tron.js';
 import { TronStore, createTronStore } from '../store/Tron.js';
 import { ChainId, TronChain } from '../types/index.js';
 
@@ -14,7 +15,7 @@ export interface TronContextValues {
 export const TronContext = createContext<TronContextValues>({
   connect: async () => ({ account: '', chainId: undefined }),
   disconnect: async () => {},
-  store: null,
+  store: createTronStore({ adapters: [], chain: tronMainnet }),
 });
 
 /**

@@ -6,6 +6,42 @@
 
 - feat router chain integration
 
+## 1.9.11-cosmos-beta
+
+### Patch Changes
+
+- fix cosmos balance queries
+
+## 1.9.10
+
+### Patch Changes
+
+- fix cosmos connections
+
+## 1.9.9
+
+### Patch Changes
+
+- chore: remove console log
+
+## 1.9.8
+
+### Patch Changes
+
+- fix tron store initial value
+
+## 1.9.7
+
+### Patch Changes
+
+- fix tron store initial value
+
+## 1.9.6
+
+### Patch Changes
+
+- fix tron store error
+
 ## 1.9.5
 
 ### Patch Changes
