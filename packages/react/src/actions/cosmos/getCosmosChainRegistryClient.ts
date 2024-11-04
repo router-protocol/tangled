@@ -6,7 +6,6 @@ export const getCosmosChainRegistryClient = async (chains: string[]) => {
   });
 
   await client.fetchUrls();
-  console.log('[REGISTRY]', client);
 
   return client;
 };

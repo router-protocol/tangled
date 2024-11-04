@@ -44,40 +44,69 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   balance: bigint;
   allowance: bigint;
 }> => {
-  try {
-    const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
-    const formattedToken = formatTokenAddress(token);
+  if (chain.id === 'router_9600-1') {
+    const { getNetworkInfo, ChainGrpcWasmApi, ChainGrpcBankApi, getRouterSignerAddress, toUtf8 } = await import(
+      '@routerprotocol/router-chain-sdk-ts'
+    );
 
-    // Getting initial token balance
-    const tokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
+    const network = getNetworkInfo(chain.extra?.environment);
+    if (token === 'route') {
+      const bankClient = new ChainGrpcBankApi(network.grpcEndpoint);
+      const routeBalance = await bankClient.fetchBalance({
+        accountAddress: getRouterSignerAddress(account),
+        denom: 'route',
+      });
 
-    //  For native/factory tokens
-    if (isNativeOrFactoryToken(token)) {
       return {
-        balance: BigInt(tokenBalance.amount),
+        balance: BigInt(routeBalance.amount),
+        allowance: maxInt256,
+      };
+    } else {
+      const wasmClient = new ChainGrpcWasmApi(network.grpcEndpoint);
+      const balance = await wasmClient.fetchSmartContractState(
+        token,
+        toUtf8(
+          JSON.stringify({
+            balance: { address: getRouterSignerAddress(account) },
+          }),
+        ),
+      );
+
+      return {
+        balance: BigInt(balance.data.balance),
         allowance: maxInt256,
       };
     }
-
-    // Querying both balance and allowance
-    const [balanceResult, allowanceResult] = await Promise.all([
-      cosmwasmClient.queryContractSmart(token, {
-        balance: { address: account },
-      }),
-      cosmwasmClient.queryContractSmart(token, {
-        allowance: {
-          owner: account,
-          spender: spender,
-        },
-      }),
-    ]);
-
-    return {
-      balance: BigInt(balanceResult.amount),
-      allowance: BigInt(allowanceResult.allowance.amount),
-    };
-  } catch (error) {
-    console.error('Failed to fetch allowance:', error);
-    throw error;
   }
+  const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
+  const formattedToken = formatTokenAddress(token);
+
+  // Getting initial token balance
+  const tokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
+
+  //  For native/factory tokens
+  if (isNativeOrFactoryToken(token)) {
+    return {
+      balance: BigInt(tokenBalance.amount),
+      allowance: maxInt256,
+    };
+  }
+
+  // Querying both balance and allowance
+  const [balanceResult, allowanceResult] = await Promise.all([
+    cosmwasmClient.queryContractSmart(token, {
+      balance: { address: account },
+    }),
+    cosmwasmClient.queryContractSmart(token, {
+      allowance: {
+        owner: account,
+        spender: spender,
+      },
+    }),
+  ]);
+
+  return {
+    balance: BigInt(balanceResult.amount),
+    allowance: BigInt(allowanceResult.allowance.amount),
+  };
 };

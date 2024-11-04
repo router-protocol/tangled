@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.12.0-routerchain-beta-0.2
+
+### Patch Changes
+
+- fix routerchain balance fetch
+
 ## 1.12.0-routerchain-beta-0.1
 
 ### Minor Changes
