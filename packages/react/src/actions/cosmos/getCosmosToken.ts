@@ -52,8 +52,14 @@ export const getCosmosTokenBalanceAndAllowance = async ({
     const network = getNetworkInfo(chain.extra?.environment);
     if (token === 'route') {
       const bankClient = new ChainGrpcBankApi(network.grpcEndpoint);
+
+      const accountAddress = getRouterSignerAddress(account);
+      if (!accountAddress) {
+        throw new Error(`Invalid address to convert to Router: ${account}`);
+      }
+
       const routeBalance = await bankClient.fetchBalance({
-        accountAddress: getRouterSignerAddress(account),
+        accountAddress,
         denom: 'route',
       });
 
@@ -63,11 +69,17 @@ export const getCosmosTokenBalanceAndAllowance = async ({
       };
     } else {
       const wasmClient = new ChainGrpcWasmApi(network.grpcEndpoint);
+
+      const address = getRouterSignerAddress(account);
+      if (!address) {
+        throw new Error(`Invalid address to convert to Router: ${account}`);
+      }
+
       const balance = await wasmClient.fetchSmartContractState(
         token,
         toUtf8(
           JSON.stringify({
-            balance: { address: getRouterSignerAddress(account) },
+            balance: { address },
           }),
         ),
       );
