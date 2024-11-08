@@ -1,5 +1,6 @@
 import { detect } from 'detect-browser';
 import { SLF_TOKEN } from '../constants/index.js';
+import { CachedData } from '../types/bitcoin.js';
 
 /**
  * This is a workaround for the issue with BigInt serialization in JSON.stringify
@@ -126,3 +127,12 @@ export function isNativeOrFactoryToken(token: string): boolean {
   const lowerToken = token.toLowerCase();
   return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory') || lowerToken === SLF_TOKEN;
 }
+
+export const getFromLocalStorage = <T>(key: string): CachedData<T> | null => {
+  const value = localStorage.getItem(key);
+  return value ? JSON.parse(value) : null;
+};
+
+export const setInLocalStorage = <T>(key: string, value: CachedData<T>): void => {
+  localStorage.setItem(key, JSON.stringify(value));
+};

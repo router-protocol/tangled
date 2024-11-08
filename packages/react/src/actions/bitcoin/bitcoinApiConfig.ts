@@ -1,3 +1,5 @@
+import { ApiConfig } from '../../types/bitcoin.js';
+
 export interface BitcoinApiConfig {
   mainnet: string;
   testnet: string;
@@ -29,3 +31,18 @@ export function getBitcoinApiConfig(isTestnet: boolean, apiName: string = 'block
     name: config.name,
   };
 }
+
+export const APIs: ApiConfig[] = [
+  {
+    name: 'btcscan',
+    url: (address: string) => `https://btcscan.org/api/address/${address}`,
+  },
+  {
+    name: 'blockchain.info',
+    url: (address: string) => `https://api.blockchain.info/haskoin-store/btc/address/${address}/balance`,
+  },
+  {
+    name: 'blockcypher',
+    url: (address: string) => `https://api.blockcypher.com/v1/btc/main/addrs/${address}/balance`,
+  },
+];
