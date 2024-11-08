@@ -16,7 +16,7 @@ export type SendTransactionParams<CData extends ChainData> = {
   from: string;
   value: bigint;
   args: TransactionArgs<CData['type']>;
-  overrides: any;
+  overrides?: any;
   config: ConnectionOrConfig & {
     connector: WalletInstance<CData['type']>;
   };
@@ -98,9 +98,9 @@ export type SendTransactionToChainFunction = <CData extends ChainData>(
  * @param args - Additional arguments
  * @param config - {@link ConnectionOrConfig}
  */
-export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides }) => {
+export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides = {} }) => {
   if (chain.type === 'evm') {
-    if (overrides.walletType === 'evm') {
+    if (overrides?.walletType === 'evm') {
       const { sendEthTxnToRouterChainPf, getNetworkInfo, MsgExecuteCwContract, getRouterSignerAddress } = await import(
         '@routerprotocol/router-chain-sdk-ts'
       );
@@ -237,7 +237,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     }
 
     if (chain.id === 'router_9600-1') {
-      if (overrides.walletType === 'keplr') {
+      if (overrides?.walletType === 'keplr') {
         if (!chain.extra) {
           throw new Error('Environment data not found for Router Chain');
         }
@@ -278,7 +278,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
     const cosmWasmClient = await chainWallet.getSigningCosmWasmClient();
 
-    const fee = overrides.gasFee || 'auto';
+    const fee = overrides?.gasFee || 'auto';
 
     const result = await cosmWasmClient.signAndBroadcast(from, messages, fee, memo);
 
