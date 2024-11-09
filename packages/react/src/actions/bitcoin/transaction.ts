@@ -9,8 +9,7 @@ import {
 } from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
 import { removeHexPrefix } from '../../utils/index.js';
-import { tryAPI } from './balance.js';
-import { APIs } from './bitcoinApiConfig.js';
+import { APIs, tryAPI } from './bitcoinApiConfig.js';
 
 export async function getBitcoinGasFee(): Promise<number> {
   try {
@@ -70,7 +69,7 @@ function executeTransferRequest(
     recipient,
     amount: {
       amount,
-      decimals: 8,
+      decimals: 8, // BTC decimals
     },
     memo: `hex::${removeHexPrefix(memo)}`,
   };
