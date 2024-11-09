@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.12.0
+
+### Minor Changes
+
+- stable routerchain release
+
 ## 1.12.0-routerchain-beta-0.2
 
 ### Patch Changes
