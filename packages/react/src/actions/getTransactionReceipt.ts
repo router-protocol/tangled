@@ -1,7 +1,7 @@
 import { getTransactionReceipt as getEVMTransactionReceipt } from '@wagmi/core';
 import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
-import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
-import { fetchTransaction } from './bitcoin/transaction.js';
+
+import { getTransactionStatus as getBitcoinTransactionStatus } from './bitcoin/transaction.js';
 import { getNearProvider } from './near/readCalls.js';
 import { TransactionParams } from './waitForTransaction.js';
 
@@ -99,9 +99,7 @@ export const getTransactionReceipt = (async ({
   if (chain.type === 'bitcoin') {
     const { txHash } = transactionParams as TransactionParams<'bitcoin'>;
 
-    const result =
-      (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
-      (await fetchTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+    const result = getBitcoinTransactionStatus(txHash);
     return result;
   }
 

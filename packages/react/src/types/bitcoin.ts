@@ -95,7 +95,7 @@ export type BitcoinTransferRequest = {
   memo: string;
 };
 
-export interface BtcScanResponse {
+export interface BtcScanBalanceResponse {
   address: string;
   chain_stats: {
     funded_txo_count: number;
@@ -113,7 +113,7 @@ export interface BtcScanResponse {
   };
 }
 
-export interface BlockchainInfoResponse {
+export interface BlockchainInfoBalanceResponse {
   address: string;
   confirmed: number;
   unconfirmed: number;
@@ -122,7 +122,7 @@ export interface BlockchainInfoResponse {
   received: number;
 }
 
-export interface BlockcypherResponse {
+export interface BlockcypherBalanceResponse {
   address: string;
   total_received: number;
   total_sent: number;
@@ -134,26 +134,129 @@ export interface BlockcypherResponse {
   final_n_tx: number;
 }
 
-export type ApiResponse =
+export type BalanceApiResponse =
   | {
       source: 'btcscan';
-      data: BtcScanResponse;
+      data: BtcScanBalanceResponse;
     }
   | {
       source: 'blockchain.info';
-      data: BlockchainInfoResponse;
+      data: BlockchainInfoBalanceResponse;
     }
   | {
       source: 'blockcypher';
-      data: BlockcypherResponse;
+      data: BlockcypherBalanceResponse;
     };
 
-export type CachedData<T> = {
+export type TransactionApiResponse =
+  | {
+      source: 'btcscan';
+      data: BtcScanTransactionResponse;
+    }
+  | {
+      source: 'blockchain.info';
+      data: BlockchainInfoTransactionResponse;
+    }
+  | {
+      source: 'blockcypher';
+      data: BlockcypherTransactionResponse;
+    };
+
+export type ApiResponse<T> = {
+  source: ApiConfig['name'];
   data: T;
+};
+
+export type CachedBalanceData = {
+  data: BalanceApiResponse;
   timestamp: number;
 };
 
 export interface ApiConfig {
   name: 'btcscan' | 'blockchain.info' | 'blockcypher';
-  url: (address: string) => string;
+  url: {
+    balance: (address: string) => string;
+    transaction: (txHash: string) => string;
+  };
 }
+
+export type BtcScanTransactionResponse = {
+  confirmed: boolean;
+  block_height: number;
+  block_hash: string;
+  block_time: number;
+};
+
+export type BlockcypherTransactionResponse = {
+  block_hash: string;
+  block_height: number;
+  block_index: number;
+  hash: string;
+  addresses: string[];
+  total: number;
+  fees: number;
+  size: number;
+  vsize: number;
+  preference: string;
+  relayed_by: string;
+  confirmed: string;
+  received: string;
+  ver: number;
+  double_spend: boolean;
+  vin_sz: number;
+  vout_sz: number;
+  data_protocol: string;
+  confirmations: number;
+  confidence: number;
+  inputs: Array<{
+    prev_hash: string;
+    output_index: number;
+    output_value: number;
+    sequence: number;
+    addresses: string[];
+    script_type: string;
+    age: number;
+    witness: string[];
+  }>;
+  outputs: Array<{
+    value: number;
+    script: string;
+    addresses: string[] | null;
+    script_type: string;
+    data_hex?: string;
+  }>;
+};
+
+export type BlockchainInfoTransactionResponse = {
+  txid: string;
+  size: number;
+  version: number;
+  locktime: number;
+  fee: number;
+  inputs: Array<{
+    coinbase: boolean;
+    txid: string;
+    output: number;
+    sigscript: string;
+    sequence: number;
+    pkscript: string;
+    value: number;
+    address: string;
+    witness: string[];
+  }>;
+  outputs: Array<{
+    address: string | null;
+    pkscript: string;
+    value: number;
+    spent: boolean;
+    spender: string | null;
+  }>;
+  block: {
+    height: number;
+    position: number;
+  };
+  deleted: boolean;
+  time: number;
+  rbf: boolean;
+  weight: number;
+};
