@@ -3,7 +3,6 @@ import {
   BitcoinTransferRequest,
   BlockchainInfoTransactionResponse,
   BlockcypherTransactionResponse,
-  BlockstreamGasFeeResponse,
   BtcScanTransactionResponse,
   MempoolSpaceBitcoinGasFeeResponse,
   XfiBitcoinConnector,
@@ -11,38 +10,17 @@ import {
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
 import { removeHexPrefix } from '../../utils/index.js';
 import { tryAPI } from './balance.js';
-import { APIs, BitcoinApiConfigResult, getBitcoinApiConfig } from './bitcoinApiConfig.js';
+import { APIs } from './bitcoinApiConfig.js';
 
-export async function getBitcoinGasFee(apiConfig: BitcoinApiConfigResult): Promise<number> {
+export async function getBitcoinGasFee(): Promise<number> {
   try {
-    const endpoint = apiConfig.name === 'blockstream' ? '/api/fee-estimates' : '/api/v1/fees/recommended';
-    const apiUrl = `${apiConfig.baseUrl}${endpoint}`;
-
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch bitcoin gas fee from ${apiConfig.name}: ${response.status}`);
-    }
-
-    const rawData = await response.json();
-    let fastestFeeRate: number;
-
-    if (apiConfig.name === 'blockstream') {
-      const blockstreamData = rawData as BlockstreamGasFeeResponse;
-      fastestFeeRate = blockstreamData['1'];
-    } else if (apiConfig.name === 'mempool') {
-      const mempoolData = rawData as MempoolSpaceBitcoinGasFeeResponse;
-      fastestFeeRate = mempoolData.fastestFee;
-    } else {
-      throw new Error(`Unsupported API: ${apiConfig.name}`);
-    }
-
-    if (isNaN(fastestFeeRate) || fastestFeeRate <= 0) {
-      throw new Error(`Invalid fee rate received from ${apiConfig.name}`);
-    }
-
+    const feeData: MempoolSpaceBitcoinGasFeeResponse = await (
+      await fetch('https://mempool.space/api/v1/fees/recommended')
+    ).json();
+    const fastestFeeRate = feeData.fastestFee;
     return Math.floor(fastestFeeRate);
   } catch (error) {
-    console.error(`[BITCOIN] Failed to fetch bitcoin gas from ${apiConfig.name} - `, error);
+    console.error(`[BITCOIN] Failed to fetch bitcoin gas from mempool.space - `, error);
     throw error;
   }
 }
@@ -61,17 +39,9 @@ async function determineFeeRate(chainId: string, providedFeeRate?: number): Prom
     return providedFeeRate;
   }
 
-  const isTestnet = chainId !== 'bitcoin';
-
-  // Trying Blockstream first, then fall back to Mempool
-  const blockstreamFee = await getBitcoinGasFee(getBitcoinApiConfig(isTestnet, 'blockstream'));
-  if (blockstreamFee) {
-    return blockstreamFee;
-  }
-
-  const mempoolFee = await getBitcoinGasFee(getBitcoinApiConfig(isTestnet, 'mempool'));
-  if (mempoolFee) {
-    return mempoolFee;
+  const gasFees = await getBitcoinGasFee();
+  if (gasFees) {
+    return gasFees;
   }
 
   return 0;
