@@ -1,4 +1,5 @@
 import { Transaction } from '@mysten/sui/transactions';
+import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { Cell } from '@ton/ton';
 import { CHAIN } from '@tonconnect/ui-react';
@@ -15,7 +16,7 @@ export type SendTransactionParams<CData extends ChainData> = {
   from: string;
   value: bigint;
   args: TransactionArgs<CData['type']>;
-  overrides: any;
+  overrides?: any;
   config: ConnectionOrConfig & {
     connector: WalletInstance<CData['type']>;
   };
@@ -24,6 +25,10 @@ export type SendTransactionParams<CData extends ChainData> = {
 export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
   ? {
       calldata: string;
+      routerChainArgs?: {
+        executeMsg: object;
+        funds: Array<{ denom: string; amount: string }>;
+      };
     }
   : CType extends 'solana'
     ? {
@@ -49,7 +54,10 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
                 readonly value: any;
               }>;
               memo?: string;
-              routerChainArgs: any;
+              routerChainArgs?: {
+                executeMsg: object;
+                funds: Array<{ denom: string; amount: string }>;
+              };
             }
           : CType extends 'near'
             ? {
@@ -75,7 +83,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
               : never;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-type SendTransactionReturnType<C extends ChainType> = { txHash: string };
+export type SendTransactionReturnType<C extends ChainType> = { txHash: string };
 
 export type SendTransactionToChainFunction = <CData extends ChainData>(
   params: SendTransactionParams<CData>,
@@ -90,9 +98,44 @@ export type SendTransactionToChainFunction = <CData extends ChainData>(
  * @param args - Additional arguments
  * @param config - {@link ConnectionOrConfig}
  */
-export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides }) => {
+export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides = {} }) => {
   if (chain.type === 'evm') {
+    if (overrides?.walletType === 'evm') {
+      const { sendEthTxnToRouterChainPf, getNetworkInfo, MsgExecuteCwContract, getRouterSignerAddress } = await import(
+        '@routerprotocol/router-chain-sdk-ts'
+      );
+
+      if (!chain.extra) {
+        throw new Error('Environment data not found for Router Chain');
+      }
+
+      const network = getNetworkInfo(chain.extra.environment as RouterChainNetwork);
+
+      const { routerChainArgs } = args as TransactionArgs<'evm'>;
+
+      const { executeMsg, funds } = routerChainArgs!;
+
+      const executeContractMsg = MsgExecuteCwContract.fromJSON({
+        sender: getRouterSignerAddress(from),
+        contractAddress: to,
+        msg: executeMsg,
+        funds,
+      });
+
+      const txResponse = await sendEthTxnToRouterChainPf({
+        networkEnv: chain.extra.environment,
+        txMsg: executeContractMsg,
+        nodeUrl: network.lcdEndpoint,
+        ethereumAddress: from,
+        injectedSigner: window.ethereum,
+        pfUrl: `${chain.extra.pathfinder}/v2/router-pubkey`,
+      });
+
+      return { txHash: txResponse.tx_response.txhash };
+    }
+
     const { calldata } = args as TransactionArgs<'evm'>;
+
     // send transaction to EVM chain
     const txHash = await sendEVMTransaction(config.wagmiConfig, {
       account: from as EVMAddress,
@@ -193,11 +236,49 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       throw new Error('Chain wallet not found for cosmos chain');
     }
 
+    if (chain.id === 'router_9600-1') {
+      if (overrides?.walletType === 'keplr') {
+        if (!chain.extra) {
+          throw new Error('Environment data not found for Router Chain');
+        }
+
+        const { MsgExecuteCwContract, sendEthTxnToRouterChainKeplrPf, getNetworkInfo } = await import(
+          '@routerprotocol/router-chain-sdk-ts'
+        );
+
+        const { routerChainArgs } = args as TransactionArgs<'cosmos'>;
+
+        const { executeMsg, funds } = routerChainArgs!;
+
+        const executeContractMsg = MsgExecuteCwContract.fromJSON({
+          sender: from,
+          contractAddress: to,
+          msg: executeMsg,
+          funds: funds,
+        });
+        const network = getNetworkInfo(chain.extra.environment as RouterChainNetwork);
+
+        const txResponse = await sendEthTxnToRouterChainKeplrPf({
+          networkEnv: chain.extra.environment,
+          txMsg: executeContractMsg,
+          nodeUrl: network.lcdEndpoint,
+          ethereumAddress: from,
+          // @ts-expect-error: keplr is not defined in the global scope
+          injectedSigner: window.keplr,
+          pfUrl: `${chain.extra.pathfinder}/v2/router-pubkey`,
+        });
+
+        return { txHash: txResponse.tx_response.txhash };
+      } else {
+        throw new Error('Unsupported Wallet, please connect with Keplr wallet');
+      }
+    }
+
     const { messages, memo } = args as TransactionArgs<'cosmos'>;
 
     const cosmWasmClient = await chainWallet.getSigningCosmWasmClient();
 
-    const fee = overrides.gasFee || 'auto';
+    const fee = overrides?.gasFee || 'auto';
 
     const result = await cosmWasmClient.signAndBroadcast(from, messages, fee, memo);
 

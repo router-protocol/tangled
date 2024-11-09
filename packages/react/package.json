@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.9.11-cosmos-beta",
+  "version": "1.12.0-routerchain-beta-0.2",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -49,7 +49,7 @@
     "@near-wallet-selector/my-near-wallet": "^8.9.13",
     "@near-wallet-selector/near-mobile-wallet": "^8.9.13",
     "@near-wallet-selector/wallet-connect": "^8.9.13",
-    "@routerprotocol/chain-api": "^1.2.3",
+    "@routerprotocol/router-chain-sdk-ts": "0.8.70-beta-0.2",
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/spl-token": "^0.4.8",
     "@solana/wallet-adapter-base": "^0.9.23",

@@ -1,5 +1,23 @@
 # @tangled3/react
 
+## 1.12.0-routerchain-beta-0.2
+
+### Patch Changes
+
+- fix routerchain balance fetch
+
+## 1.12.0-routerchain-beta-0.1
+
+### Minor Changes
+
+- update cosmos integrations
+
+## 1.10.0-routerchain-beta-0.1
+
+### Minor Changes
+
+- feat router chain integration
+
 ## 1.9.11-cosmos-beta
 
 ### Patch Changes

@@ -24,5 +24,6 @@ export const router: CosmsosChainType = {
   },
   extra: {
     environment: 'mainnet',
+    pathfinder: 'https://api-beta.pathfinder.routerprotocol.com/api',
   },
 } as const;
