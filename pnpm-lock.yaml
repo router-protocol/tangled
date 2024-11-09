@@ -254,8 +254,8 @@ importers:
         specifier: ^8.9.13
         version: 8.9.13(@near-js/providers@1.0.1)(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(near-api-js@5.0.1)(react@18.3.1)(utf-8-validate@5.0.10)
       '@routerprotocol/router-chain-sdk-ts':
-        specifier: ^0.8.70-beta-0.2
-        version: 0.8.70(@babel/core@7.24.7)(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(utf-8-validate@5.0.10)
+        specifier: 0.8.70-beta-0.2
+        version: 0.8.70-beta-0.2(@babel/core@7.24.7)(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(utf-8-validate@5.0.10)
       '@safe-global/safe-apps-sdk':
         specifier: ^9.0.0
         version: 9.0.0(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
@@ -3316,8 +3316,8 @@ packages:
   '@routerprotocol/chain-api@1.2.3':
     resolution: {integrity: sha512-Tk872EHB9r9agsXarx0r+TAnyg9fFP59VFOaV5qgJIDil++u3EoAlKB4vjiB34789vXKWcKFEevYAeG+GumbOQ==}
 
-  '@routerprotocol/router-chain-sdk-ts@0.8.70':
-    resolution: {integrity: sha512-H6ROf5PC2XaoztvEeDUK3OGQSlT51hMenhJqYaD7pf5B1ApfkOsh6y24u6iuJt+X0Tyozxs0xdOOSdnuAn+TvA==}
+  '@routerprotocol/router-chain-sdk-ts@0.8.70-beta-0.2':
+    resolution: {integrity: sha512-7mR8jU1BKnbAK+g7BWCg4gZLvj2zLTTa1ChHNLKFP9jlmsTdue5+D8SnjOPwmMVKxdj5YuBMJ2iD3q6f/Xy2Jg==}
     engines: {node: '>=10'}
 
   '@rushstack/eslint-patch@1.10.3':
@@ -14270,15 +14270,13 @@ snapshots:
     transitivePeerDependencies:
       - '@parcel/core'
 
-  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)':
+  '@parcel/cache@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))':
     dependencies:
       '@parcel/core': 2.12.0(@swc/helpers@0.5.11)
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/logger': 2.12.0
       '@parcel/utils': 2.12.0
       lmdb: 2.8.5
-    transitivePeerDependencies:
-      - '@swc/helpers'
 
   '@parcel/codeframe@2.12.0':
     dependencies:
@@ -14338,7 +14336,7 @@ snapshots:
   '@parcel/core@2.12.0(@swc/helpers@0.5.11)':
     dependencies:
       '@mischnic/json-sourcemap': 0.1.1
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
       '@parcel/diagnostic': 2.12.0
       '@parcel/events': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
@@ -14753,7 +14751,7 @@ snapshots:
 
   '@parcel/types@2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)':
     dependencies:
-      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
+      '@parcel/cache': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))
       '@parcel/diagnostic': 2.12.0
       '@parcel/fs': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
       '@parcel/package-manager': 2.12.0(@parcel/core@2.12.0(@swc/helpers@0.5.11))(@swc/helpers@0.5.11)
@@ -15523,7 +15521,7 @@ snapshots:
       '@improbable-eng/grpc-web': 0.13.0(google-protobuf@3.21.4)
       google-protobuf: 3.21.4
 
-  '@routerprotocol/router-chain-sdk-ts@0.8.70(@babel/core@7.24.7)(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(utf-8-validate@5.0.10)':
+  '@routerprotocol/router-chain-sdk-ts@0.8.70-beta-0.2(@babel/core@7.24.7)(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(utf-8-validate@5.0.10)':
     dependencies:
       '@alch/alchemy-web3': 1.4.7(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@apollo/client': 3.11.8(@types/react@18.3.3)(graphql@16.9.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
