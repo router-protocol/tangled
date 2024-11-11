@@ -14,6 +14,7 @@ import {
 } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
 import { getFormattedBalance as getBitcoinBalance } from './bitcoin/balance.js';
+import { getTransactionStatus } from './bitcoin/transaction.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
@@ -117,6 +118,14 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
     const res = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_metadata');
+
+    const balance = await getBitcoinBalance('bc1qf4pp2ck09ux4p8h5swr5akftfpkqcdv8ultvr0');
+    console.log('[BITCOIN] bitcoin balance fetched = ', { balance });
+
+    const transactionStatus = await getTransactionStatus(
+      '9673c1f75117e074bbfbfb5463a350b416c3589d5708c9104b4b968d2d628ae9',
+    );
+    console.log('[BITCOIN] bitcoin transaction status fetched = ', { transactionStatus });
 
     return {
       name: res.name,

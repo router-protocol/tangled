@@ -9,7 +9,7 @@ import {
 } from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
 import { removeHexPrefix } from '../../utils/index.js';
-import { APIs, tryAPI } from './bitcoinApiConfig.js';
+import { APIs, CACHE_EXPIRATION_TIME, tryAPI } from './bitcoinApiConfig.js';
 
 export async function getBitcoinGasFee(): Promise<number> {
   try {
@@ -150,11 +150,16 @@ export async function signBitcoinTransaction({
  * @throws {Error} If all APIs fail to fetch the transaction status.
  */
 export const getTransactionStatus = async (txHash: string): Promise<BitcoinTransactionStatus> => {
-  for (const api of APIs) {
-    try {
-      switch (api.name) {
-        case 'btcscan': {
-          const response = await tryAPI<BtcScanTransactionResponse>(api.name, api.url.transaction(txHash));
+  const lastUsedApiData = localStorage.getItem('lastUsedApi-bitcoin');
+  if (lastUsedApiData) {
+    const { apiName, timestamp } = JSON.parse(lastUsedApiData);
+
+    if (timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
+      try {
+        const api = APIs.find((api) => api.name === apiName);
+        if (api) {
+          const apiUrl = api.url.transaction(txHash);
+          const response = await tryAPI<BtcScanTransactionResponse>(apiName, apiUrl);
           return {
             confirmed: response.data.confirmed,
             block_height: response.data.block_height,
@@ -162,29 +167,64 @@ export const getTransactionStatus = async (txHash: string): Promise<BitcoinTrans
             block_time: response.data.block_time,
           };
         }
-        case 'blockchain.info': {
-          const response = await tryAPI<BlockchainInfoTransactionResponse>(api.name, api.url.transaction(txHash));
-          return {
-            confirmed: response.data.block?.height !== undefined,
-            block_height: response.data.block?.height ?? 0,
-            block_hash: 'unknown',
-            block_time: response.data.time * 1000,
+      } catch (error) {
+        console.warn(`Last used API ${apiName} failed, trying all APIs...`);
+      }
+    }
+  }
+
+  let lastError: Error | null = null;
+  for (const api of APIs) {
+    const apiUrl = api.url.transaction(txHash);
+    try {
+      let response: BitcoinTransactionStatus;
+      switch (api.name) {
+        case 'btcscan': {
+          const apiResponse = await tryAPI<BtcScanTransactionResponse>(api.name, apiUrl);
+          response = {
+            confirmed: apiResponse.data.confirmed,
+            block_height: apiResponse.data.block_height,
+            block_hash: apiResponse.data.block_hash,
+            block_time: apiResponse.data.block_time,
           };
+          break;
+        }
+        case 'blockchain.info': {
+          const apiResponse = await tryAPI<BlockchainInfoTransactionResponse>(api.name, apiUrl);
+          response = {
+            confirmed: apiResponse.data.block?.height !== undefined,
+            block_height: apiResponse.data.block?.height ?? 0,
+            block_hash: 'unknown',
+            block_time: apiResponse.data.time * 1000,
+          };
+          break;
         }
         case 'blockcypher': {
-          const response = await tryAPI<BlockcypherTransactionResponse>(api.name, api.url.transaction(txHash));
-          return {
-            confirmed: response.data.confirmations > 0,
-            block_height: response.data.block_height,
-            block_hash: response.data.block_hash,
-            block_time: new Date(response.data.received).getTime(),
+          const apiResponse = await tryAPI<BlockcypherTransactionResponse>(api.name, apiUrl);
+          response = {
+            confirmed: apiResponse.data.confirmations > 0,
+            block_height: apiResponse.data.block_height,
+            block_hash: apiResponse.data.block_hash,
+            block_time: new Date(apiResponse.data.received).getTime(),
           };
+          break;
         }
       }
+
+      localStorage.setItem(
+        'lastUsedApi-bitcoin',
+        JSON.stringify({
+          apiName: api.name,
+          timestamp: Date.now(),
+        }),
+      );
+
+      return response;
     } catch (error) {
+      lastError = error as Error;
       continue;
     }
   }
 
-  throw new Error(`All APIs failed to fetch transaction status for ${txHash}`);
+  throw new Error(`All APIs failed to fetch transaction status for ${txHash}. Last error: ${lastError?.message}`);
 };
