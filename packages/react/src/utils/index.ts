@@ -126,12 +126,3 @@ export function isNativeOrFactoryToken(token: string): boolean {
   const lowerToken = token.toLowerCase();
   return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory') || lowerToken === SLF_TOKEN;
 }
-
-export const getFromLocalStorage = <T>(key: string): T | null => {
-  const value = localStorage.getItem(key);
-  return value ? JSON.parse(value) : null;
-};
-
-export const setInLocalStorage = <T>(key: string, value: T): void => {
-  localStorage.setItem(key, JSON.stringify(value));
-};

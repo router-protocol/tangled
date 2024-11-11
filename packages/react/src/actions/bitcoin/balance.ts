@@ -3,45 +3,76 @@ import {
   BlockchainInfoBalanceResponse,
   BlockcypherBalanceResponse,
   BtcScanBalanceResponse,
-  CachedBalanceData,
 } from '../../types/bitcoin.js';
-import { getFromLocalStorage, setInLocalStorage } from '../../utils/index.js';
 import { APIs, CACHE_EXPIRATION_TIME, tryAPI } from './bitcoinApiConfig.js';
 
 export const getBalance = async (address: string): Promise<BalanceApiResponse> => {
-  const cachedBalance = getFromLocalStorage<CachedBalanceData>(`balance-${address}`);
-  if (cachedBalance && cachedBalance.timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
-    return cachedBalance.data;
+  const lastUsedApiData = localStorage.getItem('lastUsedApi-bitcoin');
+  if (lastUsedApiData) {
+    const { apiName, apiUrl, timestamp } = JSON.parse(lastUsedApiData);
+
+    if (timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
+      try {
+        let response: BalanceApiResponse;
+        switch (apiName) {
+          case 'btcscan': {
+            const apiResponse = await tryAPI<BtcScanBalanceResponse>(apiName, apiUrl);
+            response = { source: 'btcscan', data: apiResponse.data };
+            break;
+          }
+          case 'blockchain.info': {
+            const apiResponse = await tryAPI<BlockchainInfoBalanceResponse>(apiName, apiUrl);
+            response = { source: 'blockchain.info', data: apiResponse.data };
+            break;
+          }
+          case 'blockcypher': {
+            const apiResponse = await tryAPI<BlockcypherBalanceResponse>(apiName, apiUrl);
+            response = { source: 'blockcypher', data: apiResponse.data };
+            break;
+          }
+          default: {
+            throw new Error(`Unknown API: ${apiName}`);
+          }
+        }
+        return response;
+      } catch (error) {
+        console.warn(`Last used API ${apiName} failed, trying all APIs...`);
+      }
+    }
   }
 
   let lastError: Error | null = null;
   for (const api of APIs) {
+    const apiUrl = api.url.balance(address);
     try {
       let response: BalanceApiResponse;
       switch (api.name) {
         case 'btcscan': {
-          const apiResponse = await tryAPI<BtcScanBalanceResponse>(api.name, api.url.balance(address));
+          const apiResponse = await tryAPI<BtcScanBalanceResponse>(api.name, apiUrl);
           response = { source: 'btcscan', data: apiResponse.data };
           break;
         }
         case 'blockchain.info': {
-          const apiResponse = await tryAPI<BlockchainInfoBalanceResponse>(api.name, api.url.balance(address));
+          const apiResponse = await tryAPI<BlockchainInfoBalanceResponse>(api.name, apiUrl);
           response = { source: 'blockchain.info', data: apiResponse.data };
           break;
         }
         case 'blockcypher': {
-          const apiResponse = await tryAPI<BlockcypherBalanceResponse>(api.name, api.url.balance(address));
+          const apiResponse = await tryAPI<BlockcypherBalanceResponse>(api.name, apiUrl);
           response = { source: 'blockcypher', data: apiResponse.data };
           break;
         }
       }
 
-      const cacheData: CachedBalanceData = {
-        data: response,
-        timestamp: Date.now(),
-      };
+      localStorage.setItem(
+        'lastUsedApi-bitcoin',
+        JSON.stringify({
+          apiName: api.name,
+          apiUrl,
+          timestamp: Date.now(),
+        }),
+      );
 
-      setInLocalStorage(`balance-${address}`, cacheData);
       return response;
     } catch (error) {
       lastError = error as Error;
