@@ -9,32 +9,36 @@ import { APIs, CACHE_EXPIRATION_TIME, tryAPI } from './bitcoinApiConfig.js';
 export const getBalance = async (address: string): Promise<BalanceApiResponse> => {
   const lastUsedApiData = localStorage.getItem('lastUsedApi-bitcoin');
   if (lastUsedApiData) {
-    const { apiName, apiUrl, timestamp } = JSON.parse(lastUsedApiData);
+    const { apiName, timestamp } = JSON.parse(lastUsedApiData);
 
     if (timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
       try {
-        let response: BalanceApiResponse;
-        switch (apiName) {
-          case 'btcscan': {
-            const apiResponse = await tryAPI<BtcScanBalanceResponse>(apiName, apiUrl);
-            response = { source: 'btcscan', data: apiResponse.data };
-            break;
+        const api = APIs.find((api) => api.name === apiName);
+        if (api) {
+          const apiUrl = api.url.balance(address);
+          let response: BalanceApiResponse;
+          switch (apiName) {
+            case 'btcscan': {
+              const apiResponse = await tryAPI<BtcScanBalanceResponse>(apiName, apiUrl);
+              response = { source: 'btcscan', data: apiResponse.data };
+              break;
+            }
+            case 'blockchain.info': {
+              const apiResponse = await tryAPI<BlockchainInfoBalanceResponse>(apiName, apiUrl);
+              response = { source: 'blockchain.info', data: apiResponse.data };
+              break;
+            }
+            case 'blockcypher': {
+              const apiResponse = await tryAPI<BlockcypherBalanceResponse>(apiName, apiUrl);
+              response = { source: 'blockcypher', data: apiResponse.data };
+              break;
+            }
+            default: {
+              throw new Error(`Unknown API: ${apiName}`);
+            }
           }
-          case 'blockchain.info': {
-            const apiResponse = await tryAPI<BlockchainInfoBalanceResponse>(apiName, apiUrl);
-            response = { source: 'blockchain.info', data: apiResponse.data };
-            break;
-          }
-          case 'blockcypher': {
-            const apiResponse = await tryAPI<BlockcypherBalanceResponse>(apiName, apiUrl);
-            response = { source: 'blockcypher', data: apiResponse.data };
-            break;
-          }
-          default: {
-            throw new Error(`Unknown API: ${apiName}`);
-          }
+          return response;
         }
-        return response;
       } catch (error) {
         console.warn(`Last used API ${apiName} failed, trying all APIs...`);
       }
@@ -68,7 +72,6 @@ export const getBalance = async (address: string): Promise<BalanceApiResponse> =
         'lastUsedApi-bitcoin',
         JSON.stringify({
           apiName: api.name,
-          apiUrl,
           timestamp: Date.now(),
         }),
       );

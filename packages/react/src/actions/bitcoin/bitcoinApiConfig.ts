@@ -5,7 +5,7 @@ export const APIs: ApiConfig[] = [
     name: 'btcscan',
     url: {
       balance: (address: string) => `https://btcscan.org/api/address/${address}`,
-      transaction: (txHash: string) => `https://btcscan.org/api//tx/${txHash}/status`,
+      transaction: (txHash: string) => `https://btcscan.org/api/tx/${txHash}/status`,
     },
   },
   {
