@@ -99,7 +99,7 @@ export const getTransactionReceipt = (async ({
   if (chain.type === 'bitcoin') {
     const { txHash } = transactionParams as TransactionParams<'bitcoin'>;
 
-    const result = getBitcoinTransactionStatus(txHash);
+    const result = await getBitcoinTransactionStatus(txHash);
     return result;
   }
 
