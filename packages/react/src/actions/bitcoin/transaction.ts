@@ -159,13 +159,44 @@ export const getTransactionStatus = async (txHash: string): Promise<BitcoinTrans
         const api = APIs[apiName];
         if (api) {
           const apiUrl = api.url.transaction(txHash);
-          const response = await tryAPI<BtcScanTransactionResponse>(apiName, apiUrl);
-          return {
-            confirmed: response.data.confirmed,
-            block_height: response.data.block_height,
-            block_hash: response.data.block_hash,
-            block_time: response.data.block_time,
-          };
+          let response: BitcoinTransactionStatus;
+
+          switch (apiName) {
+            case 'btcscan': {
+              const apiResponse = await tryAPI<BtcScanTransactionResponse>(apiName, apiUrl);
+              response = {
+                confirmed: apiResponse.data.confirmed,
+                block_height: apiResponse.data.block_height,
+                block_hash: apiResponse.data.block_hash,
+                block_time: apiResponse.data.block_time,
+              };
+              break;
+            }
+            case 'blockchain.info': {
+              const apiResponse = await tryAPI<BlockchainInfoTransactionResponse>(apiName, apiUrl);
+              response = {
+                confirmed: apiResponse.data.block?.height !== undefined,
+                block_height: apiResponse.data.block?.height ?? null,
+                block_hash: null, // blockchain.info doesn't provide block hash
+                block_time: apiResponse.data.time * 1000,
+              };
+              break;
+            }
+            case 'blockcypher': {
+              const apiResponse = await tryAPI<BlockcypherTransactionResponse>(apiName, apiUrl);
+              response = {
+                confirmed: apiResponse.data.confirmations > 0,
+                block_height: apiResponse.data.block_height,
+                block_hash: apiResponse.data.block_hash,
+                block_time: new Date(apiResponse.data.received).getTime(),
+              };
+              break;
+            }
+            default: {
+              throw new Error(`Unknown API: ${apiName}`);
+            }
+          }
+          return response;
         }
       } catch (error) {
         console.warn(`Last used API ${apiName} failed, trying all APIs...`);
