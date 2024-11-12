@@ -4,7 +4,8 @@ import {
   BlockcypherBalanceResponse,
   BtcScanBalanceResponse,
 } from '../../types/bitcoin.js';
-import { APIs, CACHE_EXPIRATION_TIME, tryAPI } from './bitcoinApiConfig.js';
+import { tryAPI } from '../../utils/index.js';
+import { APIs, CACHE_EXPIRATION_TIME } from './bitcoinApiConfig.js';
 
 export const getBalance = async (address: string): Promise<BalanceApiResponse> => {
   const lastUsedApiData = localStorage.getItem('lastUsedApi-bitcoin');
@@ -13,7 +14,7 @@ export const getBalance = async (address: string): Promise<BalanceApiResponse> =
 
     if (timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
       try {
-        const api = APIs.find((api) => api.name === apiName);
+        const api = APIs[apiName];
         if (api) {
           const apiUrl = api.url.balance(address);
           let response: BalanceApiResponse;
@@ -46,7 +47,7 @@ export const getBalance = async (address: string): Promise<BalanceApiResponse> =
   }
 
   let lastError: Error | null = null;
-  for (const api of APIs) {
+  for (const api of Object.values(APIs)) {
     const apiUrl = api.url.balance(address);
     try {
       let response: BalanceApiResponse;

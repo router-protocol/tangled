@@ -8,8 +8,8 @@ import {
   XfiBitcoinConnector,
 } from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
-import { removeHexPrefix } from '../../utils/index.js';
-import { APIs, CACHE_EXPIRATION_TIME, tryAPI } from './bitcoinApiConfig.js';
+import { removeHexPrefix, tryAPI } from '../../utils/index.js';
+import { APIs, CACHE_EXPIRATION_TIME } from './bitcoinApiConfig.js';
 
 export async function getBitcoinGasFee(): Promise<number> {
   try {
@@ -156,7 +156,7 @@ export const getTransactionStatus = async (txHash: string): Promise<BitcoinTrans
 
     if (timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
       try {
-        const api = APIs.find((api) => api.name === apiName);
+        const api = APIs[apiName];
         if (api) {
           const apiUrl = api.url.transaction(txHash);
           const response = await tryAPI<BtcScanTransactionResponse>(apiName, apiUrl);
@@ -174,7 +174,7 @@ export const getTransactionStatus = async (txHash: string): Promise<BitcoinTrans
   }
 
   let lastError: Error | null = null;
-  for (const api of APIs) {
+  for (const api of Object.values(APIs)) {
     const apiUrl = api.url.transaction(txHash);
     try {
       let response: BitcoinTransactionStatus;

@@ -1,5 +1,7 @@
 import { detect } from 'detect-browser';
+import { FetchError, MAX_RETRIES, REQUEST_TIMEOUT, RETRY_DELAY } from '../actions/bitcoin/bitcoinApiConfig.js';
 import { SLF_TOKEN } from '../constants/index.js';
+import { ApiConfig as BitcoinApiConfig, ApiResponse as BitcoinApiResponse } from '../types/bitcoin.js';
 
 /**
  * This is a workaround for the issue with BigInt serialization in JSON.stringify
@@ -126,3 +128,84 @@ export function isNativeOrFactoryToken(token: string): boolean {
   const lowerToken = token.toLowerCase();
   return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory') || lowerToken === SLF_TOKEN;
 }
+
+/**
+ * Fetches data from a given URL using the specified API name.
+ * @param name - The name of the Bitcoin API.
+ * @param url - The URL to fetch data from.
+ * @returns A promise that resolves to a BitcoinApiResponse containing the fetched data.
+ */
+export const tryAPI = async <T>(name: BitcoinApiConfig['name'], url: string): Promise<BitcoinApiResponse<T>> => {
+  try {
+    const data = await fetchWithRetry<T>(url);
+    return { source: name, data };
+  } catch (error) {
+    console.warn(`Failed to fetch from ${name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    throw error;
+  }
+};
+
+/**
+ * Fetches data from a URL with retry logic.
+ * Retries the request if it fails due to server errors, with exponential delay.
+ * @param url - The URL to fetch data from.
+ * @param attempt - The current attempt number (default is 0).
+ * @param retryDelay - The delay between retries (default is RETRY_DELAY).
+ * @param maxRetries - The maximum number of retry attempts (default is MAX_RETRIES).
+ * @param requestTimeout - The timeout for the request (default is REQUEST_TIMEOUT).
+ * @returns A promise that resolves to the fetched data.
+ */
+const fetchWithRetry = async <T>(
+  url: string,
+  attempt: number = 0,
+  retryDelay: number = RETRY_DELAY,
+  maxRetries: number = MAX_RETRIES,
+  requestTimeout: number = REQUEST_TIMEOUT,
+): Promise<T> => {
+  try {
+    const response = await fetchWithTimeout(url, requestTimeout);
+
+    if (!response.ok) {
+      // Avoiding retries on client errors except rate limits
+      if (response.status !== 429 && response.status < 500) {
+        throw new FetchError(`HTTP error! status: ${response.status}`, response.status, response.statusText);
+      }
+      throw new FetchError(`HTTP error! status: ${response.status}`);
+    }
+
+    return await response.json();
+  } catch (error) {
+    if (attempt >= maxRetries) throw error;
+
+    // If server error, retry
+    if (error instanceof FetchError && error.status && error.status < 500 && error.status !== 429) {
+      throw error;
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, retryDelay * Math.pow(2, attempt)));
+    return fetchWithRetry<T>(url, attempt + 1, retryDelay, maxRetries, requestTimeout);
+  }
+};
+
+/**
+ * Fetches a resource from a URL with a specified timeout.
+ * If the request takes longer than the timeout, it will be aborted.
+ * @param url - The URL to fetch data from.
+ * @param timeout - The timeout duration in milliseconds.
+ * @returns A promise that resolves to the Response object.
+ */
+const fetchWithTimeout = async (url: string, timeout: number): Promise<Response> => {
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await fetch(url, {
+      signal: controller.signal,
+    });
+    clearTimeout(id);
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    throw error;
+  }
+};
