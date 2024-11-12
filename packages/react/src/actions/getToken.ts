@@ -112,6 +112,12 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     };
   }
 
+  if (chain.type === 'bitcoin') {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
+  }
+
   if (chain.type === 'near') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
