@@ -3,49 +3,28 @@ import { Chain, ChainConfig, ChainData, ChainId, SupportedChainsByType } from '.
 import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
-  chains: SupportedChainsByType | undefined,
+  chains: Partial<SupportedChainsByType> | undefined,
   overrides?: Partial<Record<Chain, ChainConfig>>,
 ): SupportedChainsByType => {
-  let supportedChains: SupportedChainsByType = {
-    bitcoin: [],
-    cosmos: [],
-    evm: [],
-    near: [],
-    solana: [],
-    sui: [],
-  };
-
-  const defaultChains = getDefaultSupportedChains();
-
-  if (chains) {
-    supportedChains = overrideChainConfig(chains, overrides);
-  } else {
-    // Override with custom configs
-    supportedChains = overrideChainConfig(defaultChains, overrides);
-  }
-
-  return supportedChains;
+  return overrideChainConfig(chains ?? {}, overrides);
 };
 
 const overrideChainConfig = (
-  chainsByType: SupportedChainsByType,
+  chainsByType: Partial<SupportedChainsByType>,
   overrides: Partial<Record<Chain, ChainConfig>> | undefined,
 ) => {
-  const supportedChains: SupportedChainsByType = {
-    bitcoin: [],
-    cosmos: [],
-    evm: [],
-    near: [],
-    solana: [],
-    sui: [],
-  };
+  const supportedChains = getDefaultSupportedChains();
 
   for (const chains of Object.values(chainsByType)) {
     for (const chain of chains) {
+      if (supportedChains[chain.type].some((c) => c.id === chain.id)) {
+        continue;
+      }
+      // todo: simplify... this is a bit redundant
       const chainId = chain.id.toString() as ChainId;
       const chainData = {
-        ...CHAIN_DATA[chainId],
-        ...overrides?.[CHAIN_NAME[chainId]],
+        ...(CHAIN_DATA[chainId] ?? chain),
+        ...overrides?.[CHAIN_NAME[chainId] ?? chain.name],
       } as ChainData;
 
       // @ts-expect-error - resolves to never

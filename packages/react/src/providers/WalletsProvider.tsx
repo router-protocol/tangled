@@ -150,6 +150,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
         address: currentSuiWallet.accounts[0].address,
         chainId: currentSuiNetwork as ChainId,
         chainType: 'sui',
+        // @ts-expect-error: currentSuiWallet is not a WalletInstance
         connector: currentSuiWallet,
       };
     }

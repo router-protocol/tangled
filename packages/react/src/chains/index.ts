@@ -6,6 +6,7 @@ export * from './evm.testnet.js';
 export * from './injective.js';
 export * from './near.js';
 export * from './near.testnet.js';
+export * from './noble.js';
 export * from './osmosis.js';
 export * from './router-cosmos.js';
 export * from './self.js';

@@ -5,7 +5,7 @@ import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { getBitcoinProvider, isXdefiWalletInstalled } from '../connectors/bitcoin/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
-import { NearContext } from '../providers/contexts.js';
+import { NearContext } from '../providers/NearProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useBitcoinStore } from './useBitcoinStore.js';
@@ -108,6 +108,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
   //sui
   const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
+    //@ts-expect-error suiWallets is not typed
     const detected: Wallet<'sui'>[] =
       suiWallets.map((wallet) => ({
         id: wallet.name,

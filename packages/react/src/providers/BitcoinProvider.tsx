@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import { useEffect, useRef } from 'react';
+import { createContext, useEffect, useRef } from 'react';
 import { useStore } from 'zustand';
 import {
   BITCOIN_CHAIN_CONFIG,
@@ -12,7 +12,6 @@ import { BitcoinStore, createBitcoinStore } from '../store/Bitcoin.js';
 import { XfiBitcoinConnector } from '../types/bitcoin.js';
 import { ChainId } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
-import { BitcoinContext } from './contexts.js';
 
 export interface BitcoinContextValues {
   connect: (adapterId: string) => Promise<{ account: string | null; chainId: ChainId | undefined }>;
@@ -21,6 +20,14 @@ export interface BitcoinContextValues {
 
   bitcoinProvider: XfiBitcoinConnector | undefined;
 }
+
+export const BitcoinContext = createContext<BitcoinContextValues>({
+  connect: async () => ({ account: '', chainId: undefined }),
+  disconnect: async () => {},
+  store: null,
+
+  bitcoinProvider: undefined,
+});
 
 /**
  * @notice This provider is used to connect to the Bitcoin network.

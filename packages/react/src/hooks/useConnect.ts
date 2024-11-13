@@ -69,6 +69,7 @@ export const useConnect = () => {
       } else if (params.chainType === 'evm') {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'sui') {
+        // @ts-expect-error: connector is not a WalletInstance
         connectSuiWallet({ wallet: walletInstance.connector as WalletInstance<'sui'> });
       } else if (params.chainType === 'cosmos') {
         await connectCosmosWallet({ adapterId: walletInstance.id, chainId });

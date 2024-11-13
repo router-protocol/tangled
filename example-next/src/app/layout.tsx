@@ -3,10 +3,7 @@ import '@/styles/globals.css';
 import { GeistSans } from 'geist/font/sans';
 import { type Metadata } from 'next';
 
-import dynamic from 'next/dynamic';
-const Providers = dynamic(() => import('../components/Providers'), {
-  ssr: false,
-});
+import { Providers } from '../components/Providers';
 
 export const metadata: Metadata = {
   title: 'Tangled3 Next Example',
