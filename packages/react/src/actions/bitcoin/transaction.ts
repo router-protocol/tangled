@@ -1,45 +1,25 @@
 import {
-  BitcoinBalanceResponse,
   BitcoinTransactionStatus,
   BitcoinTransferRequest,
-  BlockstreamGasFeeResponse,
+  BlockchainInfoTransactionResponse,
+  BlockcypherTransactionResponse,
+  BtcScanTransactionResponse,
   MempoolSpaceBitcoinGasFeeResponse,
   XfiBitcoinConnector,
 } from '../../types/bitcoin.js';
 import { ConnectionOrConfig, OtherChainData, OtherChainTypes } from '../../types/index.js';
-import { removeHexPrefix } from '../../utils/index.js';
-import { BitcoinApiConfigResult, getBitcoinApiConfig } from './bitcoinApiConfig.js';
+import { removeHexPrefix, tryAPI } from '../../utils/index.js';
+import { APIs, CACHE_EXPIRATION_TIME } from './bitcoinApiConfig.js';
 
-export async function getBitcoinGasFee(apiConfig: BitcoinApiConfigResult): Promise<number> {
+export async function getBitcoinGasFee(): Promise<number> {
   try {
-    const endpoint = apiConfig.name === 'blockstream' ? '/api/fee-estimates' : '/api/v1/fees/recommended';
-    const apiUrl = `${apiConfig.baseUrl}${endpoint}`;
-
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch bitcoin gas fee from ${apiConfig.name}: ${response.status}`);
-    }
-
-    const rawData = await response.json();
-    let fastestFeeRate: number;
-
-    if (apiConfig.name === 'blockstream') {
-      const blockstreamData = rawData as BlockstreamGasFeeResponse;
-      fastestFeeRate = blockstreamData['1'];
-    } else if (apiConfig.name === 'mempool') {
-      const mempoolData = rawData as MempoolSpaceBitcoinGasFeeResponse;
-      fastestFeeRate = mempoolData.fastestFee;
-    } else {
-      throw new Error(`Unsupported API: ${apiConfig.name}`);
-    }
-
-    if (isNaN(fastestFeeRate) || fastestFeeRate <= 0) {
-      throw new Error(`Invalid fee rate received from ${apiConfig.name}`);
-    }
-
+    const feeData: MempoolSpaceBitcoinGasFeeResponse = await (
+      await fetch('https://mempool.space/api/v1/fees/recommended')
+    ).json();
+    const fastestFeeRate = feeData.fastestFee;
     return Math.floor(fastestFeeRate);
   } catch (error) {
-    console.error(`[BITCOIN] Failed to fetch bitcoin gas from ${apiConfig.name} - `, error);
+    console.error(`[BITCOIN] Failed to fetch bitcoin gas from mempool.space - `, error);
     throw error;
   }
 }
@@ -58,17 +38,9 @@ async function determineFeeRate(chainId: string, providedFeeRate?: number): Prom
     return providedFeeRate;
   }
 
-  const isTestnet = chainId !== 'bitcoin';
-
-  // Trying Blockstream first, then fall back to Mempool
-  const blockstreamFee = await getBitcoinGasFee(getBitcoinApiConfig(isTestnet, 'blockstream'));
-  if (blockstreamFee) {
-    return blockstreamFee;
-  }
-
-  const mempoolFee = await getBitcoinGasFee(getBitcoinApiConfig(isTestnet, 'mempool'));
-  if (mempoolFee) {
-    return mempoolFee;
+  const gasFees = await getBitcoinGasFee();
+  if (gasFees) {
+    return gasFees;
   }
 
   return 0;
@@ -97,7 +69,7 @@ function executeTransferRequest(
     recipient,
     amount: {
       amount,
-      decimals: 8,
+      decimals: 8, // BTC decimals
     },
     memo: `hex::${removeHexPrefix(memo)}`,
   };
@@ -170,56 +142,120 @@ export async function signBitcoinTransaction({
   }
 }
 
-export const fetchBalance = async (apiConfig: BitcoinApiConfigResult, account: string): Promise<bigint> => {
-  try {
-    const apiUrl = `${apiConfig.baseUrl}/api/address/${account}`;
+/**
+ * Fetches the transaction status for a given transaction hash.
+ *
+ * @param {string} txHash - The transaction hash to fetch the status for.
+ * @returns {Promise<BitcoinTransactionStatus>} A promise that resolves to the transaction status.
+ * @throws {Error} If all APIs fail to fetch the transaction status.
+ */
+export const getTransactionStatus = async (txHash: string): Promise<BitcoinTransactionStatus> => {
+  const lastUsedApiData = localStorage.getItem('lastUsedApi-bitcoin');
+  if (lastUsedApiData) {
+    const { apiName, timestamp } = JSON.parse(lastUsedApiData);
 
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch balance from ${apiConfig.name}: ${response.status}`);
+    if (timestamp + CACHE_EXPIRATION_TIME > Date.now()) {
+      try {
+        const api = APIs[apiName];
+        if (api) {
+          const apiUrl = api.url.transaction(txHash);
+          let response: BitcoinTransactionStatus;
+
+          switch (apiName) {
+            case 'btcscan': {
+              const apiResponse = await tryAPI<BtcScanTransactionResponse>(apiName, apiUrl);
+              response = {
+                confirmed: apiResponse.data.confirmed,
+                block_height: apiResponse.data.block_height,
+                block_hash: apiResponse.data.block_hash,
+                block_time: apiResponse.data.block_time,
+              };
+              break;
+            }
+            case 'blockchain.info': {
+              const apiResponse = await tryAPI<BlockchainInfoTransactionResponse>(apiName, apiUrl);
+              response = {
+                confirmed: apiResponse.data.block?.height !== undefined,
+                block_height: apiResponse.data.block?.height ?? null,
+                block_hash: null, // blockchain.info doesn't provide block hash
+                block_time: apiResponse.data.time * 1000,
+              };
+              break;
+            }
+            case 'blockcypher': {
+              const apiResponse = await tryAPI<BlockcypherTransactionResponse>(apiName, apiUrl);
+              response = {
+                confirmed: apiResponse.data.confirmations > 0,
+                block_height: apiResponse.data.block_height,
+                block_hash: apiResponse.data.block_hash,
+                block_time: new Date(apiResponse.data.received).getTime(),
+              };
+              break;
+            }
+            default: {
+              throw new Error(`Unknown API: ${apiName}`);
+            }
+          }
+          return response;
+        }
+      } catch (error) {
+        console.warn(`Last used API ${apiName} failed, trying all APIs...`);
+      }
     }
-
-    const rawData = await response.json();
-    const totalBalanceSatoshis = calculateTotalBalance(rawData);
-
-    return BigInt(totalBalanceSatoshis);
-  } catch (error) {
-    console.error(`Failed to fetch bitcoin balance from ${apiConfig.name} - `, error);
-    throw error;
   }
-};
 
-const calculateTotalBalance = (rawData: BitcoinBalanceResponse): number => {
-  const confirmedBalance = rawData.chain_stats.funded_txo_sum - rawData.chain_stats.spent_txo_sum;
-  const mempoolBalance = rawData.mempool_stats.funded_txo_sum - rawData.mempool_stats.spent_txo_sum;
+  let lastError: Error | null = null;
+  for (const api of Object.values(APIs)) {
+    const apiUrl = api.url.transaction(txHash);
+    try {
+      let response: BitcoinTransactionStatus;
+      switch (api.name) {
+        case 'btcscan': {
+          const apiResponse = await tryAPI<BtcScanTransactionResponse>(api.name, apiUrl);
+          response = {
+            confirmed: apiResponse.data.confirmed,
+            block_height: apiResponse.data.block_height,
+            block_hash: apiResponse.data.block_hash,
+            block_time: apiResponse.data.block_time,
+          };
+          break;
+        }
+        case 'blockchain.info': {
+          const apiResponse = await tryAPI<BlockchainInfoTransactionResponse>(api.name, apiUrl);
+          response = {
+            confirmed: apiResponse.data.block?.height !== undefined,
+            block_height: apiResponse.data.block?.height ?? 0,
+            block_hash: 'unknown',
+            block_time: apiResponse.data.time * 1000,
+          };
+          break;
+        }
+        case 'blockcypher': {
+          const apiResponse = await tryAPI<BlockcypherTransactionResponse>(api.name, apiUrl);
+          response = {
+            confirmed: apiResponse.data.confirmations > 0,
+            block_height: apiResponse.data.block_height,
+            block_hash: apiResponse.data.block_hash,
+            block_time: new Date(apiResponse.data.received).getTime(),
+          };
+          break;
+        }
+      }
 
-  return confirmedBalance + mempoolBalance;
-};
+      localStorage.setItem(
+        'lastUsedApi-bitcoin',
+        JSON.stringify({
+          apiName: api.name,
+          timestamp: Date.now(),
+        }),
+      );
 
-export const fetchTransaction = async (
-  txHash: string,
-  apiConfig: BitcoinApiConfigResult,
-): Promise<BitcoinTransactionStatus | undefined> => {
-  const apiUrl = `${apiConfig.baseUrl}/api/tx/${txHash}/status`;
-
-  try {
-    const response = await fetch(apiUrl);
-    if (!response.ok) {
-      console.error(`Failed to fetch transaction status from ${apiConfig.name}: ${response.status}`);
-      return undefined;
+      return response;
+    } catch (error) {
+      lastError = error as Error;
+      continue;
     }
-
-    const rawData = await response.json();
-    const transactionStatus: BitcoinTransactionStatus = {
-      confirmed: rawData.confirmed,
-      block_height: rawData.block_height,
-      block_hash: rawData.block_hash,
-      block_time: rawData.block_time,
-    };
-
-    return transactionStatus.confirmed ? transactionStatus : undefined;
-  } catch (error) {
-    console.error(`Error fetching Bitcoin transaction status from ${apiConfig.name}: ${error}`);
-    return undefined;
   }
+
+  throw new Error(`All APIs failed to fetch transaction status for ${txHash}. Last error: ${lastError?.message}`);
 };

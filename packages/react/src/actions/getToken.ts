@@ -13,8 +13,7 @@ import {
   OtherChainData,
 } from '../types/index.js';
 import { areTokensEqual } from '../utils/index.js';
-import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
-import { fetchBalance as fetchBitcoinBalance } from './bitcoin/transaction.js';
+import { getFormattedBalance as getBitcoinBalance } from './bitcoin/balance.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
@@ -111,6 +110,12 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
       ...res,
       chainId: chain.id,
     };
+  }
+
+  if (chain.type === 'bitcoin') {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
   }
 
   if (chain.type === 'near') {
@@ -238,13 +243,7 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'bitcoin') {
-    const balance =
-      (await fetchBitcoinBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'), account)) ||
-      (await fetchBitcoinBalance(getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool'), account));
-
-    if (balance === null) {
-      throw new Error('Failed to fetch bitcoin balance');
-    }
+    const balance = await getBitcoinBalance(account);
 
     return { balance, allowance: 0n };
   }

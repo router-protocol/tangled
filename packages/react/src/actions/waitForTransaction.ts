@@ -3,8 +3,7 @@ import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
-import { getBitcoinApiConfig } from './bitcoin/bitcoinApiConfig.js';
-import { fetchTransaction as fetchBitcoinTransaction } from './bitcoin/transaction.js';
+import { getTransactionStatus as getBitcoinTransactionStatus } from './bitcoin/transaction.js';
 import { getNearProvider } from './near/readCalls.js';
 
 export type DefaultOverrides = {
@@ -199,9 +198,7 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
 
     const receipt = await pollCallback(
       async () => {
-        const result =
-          (await fetchBitcoinTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'blockstream'))) ||
-          (await fetchBitcoinTransaction(txHash, getBitcoinApiConfig(chain.id !== 'bitcoin', 'mempool')));
+        const result = getBitcoinTransactionStatus(txHash);
         return result;
       },
       {

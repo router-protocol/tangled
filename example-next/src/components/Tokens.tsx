@@ -143,6 +143,13 @@ const tokens: TokenMetadata[] = [
   },
   {
     address: ETH_ADDRESS,
+    decimals: 8,
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    chainId: 'bitcoin',
+  },
+  {
+    address: ETH_ADDRESS,
     decimals: 24,
     name: 'NEAR',
     symbol: 'NEAR',
