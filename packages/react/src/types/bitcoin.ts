@@ -12,7 +12,7 @@ export type XfiBitcoinConnector = {
               feeRate: number;
               from: string;
               recipient: string;
-              amount: { amount: number; decimals: number };
+              amount: { amount: string; decimals: number };
               memo: string;
             },
           ];
@@ -41,7 +41,7 @@ export type BitcoinTransferRequest = {
   from: string;
   recipient: string;
   amount: {
-    amount: number;
+    amount: string;
     decimals: number;
   };
   memo: string;
