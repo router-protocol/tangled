@@ -4,15 +4,12 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
-import { createTonWalletInstance } from '../connectors/ton/connector.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
 import { useNearContext } from './useNearContext.js';
-import { useTonContext } from './useTonContext.js';
-import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
 export const useConnect = () => {
@@ -21,9 +18,7 @@ export const useConnect = () => {
   });
   const { connectAsync: connectEVM } = useWagmiConnect();
   const { connect: connectSolanaWallet } = useSolanaWallet();
-  const { connect: connectTronWallet } = useTronContext();
   const { mutateAsync: connectSuiWallet } = useSuiConnectWallet();
-  const { connect: connectTonWallet } = useTonContext();
   const { connect: connectCosmosWallet } = useCosmosContext();
   const { connect: connectBitcoinWallet } = useBitcoinContext();
   const { connect: connectNearWallet } = useNearContext();
@@ -71,8 +66,6 @@ export const useConnect = () => {
 
       if (params.chainType === 'solana') {
         await connectSolanaWallet({ walletName: walletInstance.name as WalletName });
-      } else if (params.chainType === 'tron') {
-        await connectTronWallet(walletInstance.id);
       } else if (params.chainType === 'evm') {
         await connectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'sui') {
@@ -82,18 +75,6 @@ export const useConnect = () => {
 
         // if chainId is provided, set chainId for cosmos wallets
         if (chainId) params.walletId = `${walletInstance.id}:${chainId}`;
-      } else if (params.chainType === 'ton') {
-        const connectedTonWallet = await connectTonWallet(walletInstance.id);
-        if (walletInstance.id === 'ton-connect') {
-          const tonWalletInstance = createTonWalletInstance(connectedTonWallet, walletInstance);
-
-          // set the wallet instance to the created ton wallet instance
-          return {
-            chainType: 'ton',
-            name: tonWalletInstance.name,
-            walletId: tonWalletInstance.id,
-          };
-        }
       } else if (params.chainType === 'bitcoin') {
         await connectBitcoinWallet(walletInstance.id);
       } else if (params.chainType === 'near') {
@@ -109,8 +90,6 @@ export const useConnect = () => {
       wallets,
       connectedWallets,
       connectSolanaWallet,
-      connectTronWallet,
-      connectTonWallet,
       connectBitcoinWallet,
       connectEVM,
       connectSuiWallet,

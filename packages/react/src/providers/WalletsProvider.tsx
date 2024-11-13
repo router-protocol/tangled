@@ -10,8 +10,6 @@ import { useCosmosStore } from '../hooks/useCosmosStore.js';
 import { useNearContext } from '../hooks/useNearContext.js';
 import { useNearStore } from '../hooks/useNearStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
-import { useTonStore } from '../hooks/useTonStore.js';
-import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainId } from '../types/index.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
@@ -20,9 +18,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const chains = useTangledConfig((config) => config.chains);
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
-  const tronConnectors = useTronStore((state) => state.connectors);
-  const tonConnectors = useTonStore((state) => state.connectors);
-  const tonAddress = useTonStore((state) => state.address);
 
   // Cosmos store states
   const cosmosChainWallets = useCosmosStore((state) => state.chainWallets);
@@ -102,70 +97,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       solana: _solanaWallets,
     });
   }, [setChainConnectedAccounts, setConnectedWallets, solanaWallets, solConnectedWallet, chains.solana]);
-
-  // tron
-  useEffect(() => {
-    const _tronAccounts: { [x: string]: ConnectedAccount } = {};
-    const _tronWallets: { [x: string]: ConnectedWallet<'tron'> } = {};
-
-    for (const connector of Object.values(tronConnectors)) {
-      if (connector.readyState === 'NotFound' || connector.readyState === 'Loading' || !connector.account) {
-        continue;
-      }
-
-      _tronAccounts[connector.adapter.name] = {
-        address: connector.account,
-        chainId: connector.network as ChainId,
-        chainType: 'tron',
-        wallet: connector.adapter.name,
-      };
-
-      _tronWallets[connector.adapter.name] = {
-        address: connector.account,
-        chainId: connector.network as ChainId,
-        chainType: 'tron',
-        connector: connector.adapter,
-      };
-    }
-
-    setChainConnectedAccounts({ tron: _tronAccounts });
-    setConnectedWallets({
-      tron: _tronWallets,
-    });
-  }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
-
-  // ton
-  useEffect(() => {
-    const _tonAccounts: { [x: string]: ConnectedAccount } = {};
-    const _tonWallets: { [x: string]: ConnectedWallet<'ton'> } = {};
-
-    for (const [name, adapter] of Object.entries(tonConnectors)) {
-      const address = tonAddress ?? '';
-
-      if (address === '') {
-        continue;
-      }
-
-      _tonAccounts[name] = {
-        address: address,
-        chainId: adapter.wallet?.account.chain,
-        chainType: 'ton',
-        wallet: name,
-      };
-
-      _tonWallets[name] = {
-        address: address,
-        chainId: adapter.wallet?.account.chain,
-        chainType: 'ton',
-        connector: adapter,
-      };
-    }
-
-    setChainConnectedAccounts({ ton: _tonAccounts });
-    setConnectedWallets({
-      ton: _tonWallets,
-    });
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.ton, tonConnectors, tonAddress]);
 
   // cosmos
   useEffect(() => {

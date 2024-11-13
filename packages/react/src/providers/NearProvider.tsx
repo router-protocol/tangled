@@ -11,13 +11,14 @@ import { setupMyNearWallet } from '@near-wallet-selector/my-near-wallet';
 import { setupNearMobileWallet } from '@near-wallet-selector/near-mobile-wallet';
 import { setupWalletConnect } from '@near-wallet-selector/wallet-connect';
 import { useMutation } from '@tanstack/react-query';
-import { createContext, useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocalStorage } from 'usehooks-ts';
 import { useStore } from 'zustand';
 import { createNearConfig } from '../connectors/near/connector.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { NearStore, createNearStore } from '../store/Near.js';
 import { ChainId } from '../types/index.js';
+import { NearContext } from './contexts.js';
 
 export interface NearContextValues {
   connect: ({
@@ -33,15 +34,6 @@ export interface NearContextValues {
   wallets: ModuleState[];
   nearSelector: WalletSelector;
 }
-
-export const NearContext = createContext<NearContextValues>({
-  connect: async () => ({ account: '', chainId: undefined }),
-  disconnect: async () => {},
-  store: null,
-
-  wallets: [],
-  nearSelector: {},
-});
 
 /**
  * @notice This provider is used to connect to the Near network.
@@ -63,7 +55,7 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
   const [nearContractId, setNearContractId] = useLocalStorage<string | null>('recent-used-near-contractid', null);
   const [selectedWalletId] = useLocalStorage<string | null>('near-wallet-selector:selectedWalletId', null);
 
-  const nearWagmiConfig = createNearConfig(config.nearNetwork, config.projectId, config.projectName);
+  const nearWagmiConfig = createNearConfig(config.nearNetwork ?? 'mainnet', config.projectName, config.projectId);
 
   // const web3Modal = createWeb3Modal({
   //   wagmiConfig: nearWagmiConfig,

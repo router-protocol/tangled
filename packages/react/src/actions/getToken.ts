@@ -1,7 +1,6 @@
 import { ParsedAccountData, PublicKey } from '@solana/web3.js';
 import { getBalance } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
-import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
 import {
@@ -18,7 +17,6 @@ import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cos
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
-import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
 
 /**
  * Get token metadata
@@ -45,27 +43,6 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     return { name, symbol, decimals, address: token, chainId: chain.id.toString() as ChainId };
   }
 
-  if (chain.type === 'tron') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
-    }
-    let contractAddress: string = token;
-    // = config.tronWeb.address.fromHex(token);
-    if (token.startsWith('0x')) {
-      contractAddress = config.tronWeb.address.fromHex(token);
-    }
-
-    const contract = config.tronWeb.contract(trc20Abi, contractAddress);
-
-    let name = contract.name().call();
-    let symbol = contract.symbol().call();
-    let decimals = contract.decimals().call();
-
-    [name, symbol, decimals] = await Promise.all([name, symbol, decimals]);
-
-    return { name, symbol, decimals: Number(decimals), address: token, chainId: chain.id };
-  }
-
   if (chain.type === 'solana') {
     if (areTokensEqual(token, SOL_ADDRESS)) {
       return { ...chain.nativeCurrency, address: SOL_ADDRESS, chainId: chain.id };
@@ -87,17 +64,6 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     } else {
       throw new Error('Token metadata not found');
     }
-  }
-
-  if (chain.type === 'ton') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
-    }
-    const res = await getTonTokenMetadata({ token, chainId: chain.id });
-    return {
-      ...res,
-      chainId: chain.id,
-    };
   }
 
   if (chain.type === 'cosmos') {
@@ -185,25 +151,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     return await getEVMTokenBalanceAndAllowance(token, account, spender, Number(chain.id), config.wagmiConfig);
   }
 
-  if (chain.type === 'tron') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
-      const balance = BigInt(await config.tronWeb.trx.getBalance(account));
-      const allowance = BigInt(0);
-      return { balance, allowance };
-    }
-
-    let contractAddress: string = token;
-    // = config.tronWeb.address.fromHex(token);
-    if (token.startsWith('0x')) {
-      contractAddress = config.tronWeb.address.fromHex(token);
-    }
-
-    const contract = config.tronWeb.contract(trc20Abi, contractAddress);
-    const balance = await contract.balanceOf(account).call();
-    const allowance = spender ? await contract.allowance(account, spender).call() : BigInt(0);
-    return { balance, allowance };
-  }
-
   if (chain.type === 'solana') {
     const pbKey = new PublicKey(token);
 
@@ -222,15 +169,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       });
 
     return { balance, associatedTokenAccountAddress, isAtaDeployed, allowance: delegatedAmount };
-  }
-
-  if (chain.type === 'ton') {
-    return getTonTokenBalanceAndAllowance({
-      account,
-      token,
-      spender,
-      config,
-    });
   }
 
   if (chain.type === 'cosmos') {

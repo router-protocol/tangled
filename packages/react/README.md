@@ -48,11 +48,10 @@ export default function App({ Component, pageProps }) {
 
 1. EVM
 2. Solana
-3. Tron
-4. Cosmos
-5. Near
-6. Sui
-7. Bitcoin
+3. Cosmos
+4. Near
+5. Sui
+6. Bitcoin
 
 ### Support Table
 
@@ -64,13 +63,10 @@ export default function App({ Component, pageProps }) {
 | -------- | ------------------ | ------------------ | -------------------- | ------------------ | ------------------ |
 | EVM      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Solana   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
-| Tron     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Sui      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Cosmos   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Near     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Bitcoin  | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
-| Casper   | :x:                | :x:                | :x:                  | :x:                | :x:                |
-| Ton      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Algorand | :x:                | :x:                | :x:                  | :x:                | :x:                |
 
 #### Hooks

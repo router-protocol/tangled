@@ -8,8 +8,6 @@ import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
 import { useNearContext } from './useNearContext.js';
-import { useTonContext } from './useTonContext.js';
-import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
 export interface DisconnectParams {
@@ -20,9 +18,7 @@ export const useDisconnect = () => {
   const wallets = useWallets();
   const { disconnectAsync: disconnectEVM } = useEVMDisconnect();
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
-  const { disconnect: disconnectTronWallet } = useTronContext();
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
-  const { disconnect: disconnectTonWallet } = useTonContext();
   const { disconnect: disconnectCosmosWallet } = useCosmosContext();
   const { disconnect: disconnectBitcoinWallet } = useBitcoinContext();
   const { disconnect: disconnectNearWallet } = useNearContext();
@@ -52,16 +48,12 @@ export const useDisconnect = () => {
 
       if (params.chainType === 'solana') {
         await disconnectSolanaWallet();
-      } else if (params.chainType === 'tron') {
-        await disconnectTronWallet();
       } else if (params.chainType === 'evm') {
         await disconnectEVM({ connector: walletInstance.connector as WalletInstance<'evm'> });
       } else if (params.chainType === 'sui') {
         disconnectSuiWallet();
       } else if (params.chainType === 'cosmos') {
         disconnectCosmosWallet();
-      } else if (params.chainType === 'ton') {
-        await disconnectTonWallet();
       } else if (params.chainType === 'bitcoin') {
         await disconnectBitcoinWallet();
       } else if (params.chainType === 'near') {
@@ -75,8 +67,6 @@ export const useDisconnect = () => {
       disconnectEVM,
       disconnectSolanaWallet,
       disconnectSuiWallet,
-      disconnectTronWallet,
-      disconnectTonWallet,
       disconnectCosmosWallet,
       disconnectBitcoinWallet,
       disconnectNearWallet,

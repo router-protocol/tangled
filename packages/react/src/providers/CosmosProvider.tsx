@@ -14,12 +14,13 @@ import { wallets as keplr } from '@cosmos-kit/keplr';
 import { wallets as leap } from '@cosmos-kit/leap';
 import { wallets as xdefi } from '@cosmos-kit/xdefi';
 import { useMutation } from '@tanstack/react-query';
-import { createContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { CosmosStore, createCosmosStore } from '../store/Cosmos.js';
 import { CosmsosChainType } from '../types/index.js';
 import { RemoveReadonly } from '../types/utils.js';
+import { CosmosContext } from './contexts.js';
 
 export interface CosmosContextValues {
   connect: (params: { adapterId: string; chainId?: string }) => Promise<{
@@ -31,12 +32,6 @@ export interface CosmosContextValues {
   disconnect: () => Promise<void>;
   store: CosmosStore | null;
 }
-
-export const CosmosContext = createContext<CosmosContextValues>({
-  connect: async () => ({ chainWallets: [], mainWallet: {} as MainWalletBase, walletId: '', chainId: '' }),
-  disconnect: async () => {},
-  store: null,
-});
 
 const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode; chains: CosmsosChainType[] }) => {
   const tangledConfig = useTangledConfig((state) => state.config);
@@ -79,11 +74,13 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       [], // allowedIframeParentOrigins,
       [], // assetLists,
       'icns', // defaultNameService,
-      {
-        signClient: {
-          projectId: tangledConfig.projectId,
-        },
-      },
+      tangledConfig.projectId
+        ? {
+            signClient: {
+              projectId: tangledConfig.projectId,
+            },
+          }
+        : undefined,
       {
         // signer options
         signingCosmwasm: (chain) => {
@@ -185,7 +182,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   }, [render, walletManager]);
 
   useEffect(() => {
-    setWallets([...walletManager.mainWallets] || []);
+    setWallets([...walletManager.mainWallets]);
   }, [setWallets, walletManager.mainWallets, clientState]);
 
   /**

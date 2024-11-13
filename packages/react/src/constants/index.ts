@@ -29,10 +29,6 @@ import {
   solanaTestnet,
   sui,
   suiTestnet,
-  tonMainnet,
-  tonTestnet,
-  tronMainnet,
-  tronShasta,
   zkSync,
 } from '../chains/index.js';
 import { Chain, ChainData, ChainId, ChainType } from '../types/index.js';
@@ -66,11 +62,6 @@ export const CHAIN_ID = {
   self: 'self-1',
   routerchain: 'router_9600-1',
 
-  // tron
-  tronMainnet: '728126428',
-  tronShasta: '2494104990',
-  // tronNile: 'tron-nile',
-
   // near
   near: '397',
   nearTestnet: '398',
@@ -83,12 +74,6 @@ export const CHAIN_ID = {
   // sui
   sui: 'sui',
   suiTestnet: 'suiTestnet',
-
-  // casper
-
-  // ton
-  tonMainnet: '-239',
-  tonTestnet: '-3',
 
   // bitcoin
   bitcoin: 'bitcoin',
@@ -136,11 +121,6 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.self]: self,
   [CHAIN_ID.routerchain]: router,
 
-  // tron
-  [CHAIN_ID.tronMainnet]: tronMainnet,
-  [CHAIN_ID.tronShasta]: tronShasta,
-  // [CHAIN_ID.tronNile]: tronNile,
-
   // near
   [CHAIN_ID.near]: near,
   [CHAIN_ID.nearTestnet]: nearTestnet,
@@ -153,10 +133,6 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   //sui
   [CHAIN_ID.sui]: sui,
   [CHAIN_ID.suiTestnet]: suiTestnet,
-
-  // ton
-  [CHAIN_ID.tonMainnet]: tonMainnet,
-  [CHAIN_ID.tonTestnet]: tonTestnet,
 
   // bitcoin
   [CHAIN_ID.bitcoin]: bitcoin,
@@ -173,13 +149,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
   evm: 'Ethereum',
   cosmos: 'Cosmos',
-  tron: 'Tron',
   near: 'Near',
   solana: 'Solana',
   sui: 'Sui',
-  casper: 'Casper',
   bitcoin: 'Bitcoin',
-  ton: 'Ton',
 } as const;
 
 /**

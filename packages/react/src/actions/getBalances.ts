@@ -2,8 +2,6 @@ import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PublicKey } from '@solana/web3.js';
 import { multicall } from '@wagmi/core';
 import { Address as EVMAddress, erc20Abi } from 'viem';
-import { trc20Abi } from '../constants/abi/trc20.js';
-import { tronMulticallAbi } from '../constants/abi/tronMulticall.js';
 import { ChainData, ConnectionOrConfig, OtherChainData } from '../types/index.js';
 import { viewMethodOnNear } from './near/readCalls.js';
 
@@ -39,26 +37,6 @@ export const getBalances = async (
       ),
     );
     return balances;
-  }
-
-  if (chain.type === 'tron') {
-    if (!chain.contracts?.multicall) {
-      throw new Error('Multicall contract not found');
-    }
-    const contract = config.tronWeb.contract(tronMulticallAbi, chain.contracts.multicall);
-    const calls = [];
-
-    for (const token of tokens) {
-      calls.push({
-        address: token.address as EVMAddress,
-        functionName: 'balanceOf',
-        abi: trc20Abi,
-        args: [account],
-      });
-    }
-
-    const balancesCall = contract.multicall(calls).call();
-    return balancesCall;
   }
 
   if (chain.type === 'solana') {

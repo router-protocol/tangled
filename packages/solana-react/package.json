@@ -1,6 +1,6 @@
 {
   "name": "@tangled3/solana-react",
-  "private": false,
+  "private": true,
   "version": "1.1.2",
   "license": "MIT",
   "type": "module",

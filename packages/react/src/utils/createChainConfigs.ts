@@ -5,21 +5,17 @@ import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 const createChainConfigs = (
   chains: SupportedChainsByType | undefined,
   overrides?: Partial<Record<Chain, ChainConfig>>,
-  testnet?: boolean,
 ): SupportedChainsByType => {
   let supportedChains: SupportedChainsByType = {
     bitcoin: [],
-    casper: [],
     cosmos: [],
     evm: [],
     near: [],
     solana: [],
     sui: [],
-    tron: [],
-    ton: [],
   };
 
-  const defaultChains = getDefaultSupportedChains(testnet);
+  const defaultChains = getDefaultSupportedChains();
 
   if (chains) {
     supportedChains = overrideChainConfig(chains, overrides);
@@ -37,14 +33,11 @@ const overrideChainConfig = (
 ) => {
   const supportedChains: SupportedChainsByType = {
     bitcoin: [],
-    casper: [],
     cosmos: [],
     evm: [],
     near: [],
     solana: [],
     sui: [],
-    tron: [],
-    ton: [],
   };
 
   for (const chains of Object.values(chainsByType)) {

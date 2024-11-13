@@ -47,11 +47,6 @@ export const getTransactionReceipt = (async ({
     return receipt;
   }
 
-  if (chain.type === 'tron') {
-    const { txHash } = transactionParams as TransactionParams<'tron'>;
-    return await config.tronWeb.trx.getTransactionInfo(txHash);
-  }
-
   if (chain.type === 'solana') {
     const { txHash } = transactionParams as TransactionParams<'solana'>;
     const result = config.solanaConnection.getTransaction(txHash, {

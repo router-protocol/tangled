@@ -1,6 +1,5 @@
 import { useSuiClientContext } from '@mysten/dapp-kit';
 import { useMutation } from '@tanstack/react-query';
-import { WalletSwitchChainError } from '@tronweb3/tronwallet-abstract-adapter';
 import { useCallback } from 'react';
 import { useSwitchChain as useEVMSwitchChain } from 'wagmi';
 import { ChainData, ChainId } from '../types/index.js';
@@ -41,20 +40,6 @@ export const useNetwork = () => {
         });
 
         return chains.find((chain) => chain.id === switchedChain.id);
-      }
-      if (chain.type === 'tron') {
-        try {
-          await (connector as WalletInstance<'tron'>).switchChain(chain.tronName);
-        } catch (e) {
-          if (e === WalletSwitchChainError) {
-            console.error('Switch chain is not supported');
-          } else {
-            console.error(e);
-            throw e;
-          }
-        }
-
-        return;
       }
 
       if (chain.type === 'sui') {

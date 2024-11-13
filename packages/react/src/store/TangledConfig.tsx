@@ -9,8 +9,6 @@ export interface TangledConfigState {
   chains: SupportedChainsByType;
   chainsById: Record<string, ChainData>;
   connectors: ChainConnectors;
-  tonconnectManifestUrl: string;
-  twaReturnUrl: `${string}://${string}`;
   config: TangledConfig;
 }
 
@@ -33,9 +31,7 @@ export const createTangledConfigStore = (config: TangledConfig) => {
     devtools(() => ({
       chains,
       chainsById,
-      connectors: createChainConnectors(config, chains),
-      tonconnectManifestUrl: config.tonconnectManifestUrl,
-      twaReturnUrl: config.twaReturnUrl,
+      connectors: createChainConnectors(config),
       config,
     })),
   );

@@ -1,10 +1,10 @@
-import { createConfig, http, injected } from '@wagmi/core';
+import { createConfig, CreateConnectorFn, http, injected } from '@wagmi/core';
 import { type Chain } from '@wagmi/core/chains';
 import { walletConnect } from 'wagmi/connectors';
 import { near } from '../../chains/near.js';
 import { nearTestnet } from '../../chains/near.testnet.js';
 
-export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectId: string, projectName: string) => {
+export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectName: string, projectId?: string) => {
   const selectedChain = networkType === 'mainnet' ? near : nearTestnet;
 
   const chainConfig: Chain = {
@@ -19,12 +19,10 @@ export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectId: 
     blockExplorers: selectedChain.blockExplorers,
   };
 
-  return createConfig({
-    chains: [chainConfig],
-    transports: {
-      [chainConfig.id]: http(),
-    },
-    connectors: [
+  const connectors: CreateConnectorFn[] | undefined = [injected({ shimDisconnect: true })];
+
+  if (projectId) {
+    connectors.push(
       walletConnect({
         projectId,
         metadata: {
@@ -35,7 +33,14 @@ export const createNearConfig = (networkType: 'mainnet' | 'testnet', projectId: 
         },
         showQrModal: false,
       }),
-      injected({ shimDisconnect: true }),
-    ],
+    );
+  }
+
+  return createConfig({
+    chains: [chainConfig],
+    transports: {
+      [chainConfig.id]: http(),
+    },
+    connectors,
   });
 };

@@ -2,8 +2,6 @@ import { MainWalletBase as CosmosMainWalletBase } from '@cosmos-kit/core';
 import { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
 import { Wallet as NearWallet } from '@near-wallet-selector/core';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
-import { TonConnectUI } from '@tonconnect/ui-react';
-import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@tronweb3/tronwallet-abstract-adapter';
 import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainId, ChainType } from '../types/index.js';
@@ -13,7 +11,6 @@ import { SignMessageMethod } from '@near-wallet-selector/core/src/lib/wallet/ind
 
 export type ChainConnectors = {
   evm: CreateConnectorFn[];
-  tron: TronAdapter[];
   solana: Wallet<'solana'>[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   near: any[];
@@ -21,13 +18,10 @@ export type ChainConnectors = {
   cosmos: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   sui: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  casper: any[];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   bitcoin: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ton: any[];
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   router: any[];
 };
@@ -64,19 +58,15 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
   ? Mutable<EVMConnector>
   : T extends 'solana'
     ? SolanaAdapter
-    : T extends 'tron'
-      ? TronAdapter
-      : T extends 'sui'
-        ? WalletWithRequiredFeatures
-        : T extends 'cosmos'
-          ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
-          : T extends 'ton'
-            ? TonConnectUI
-            : T extends 'bitcoin'
-              ? XfiBitcoinConnector | Wallet<'bitcoin'>
-              : T extends 'near'
-                ? NearWallet & SignMessageMethod
-                : DefaultConnector;
+    : T extends 'sui'
+      ? WalletWithRequiredFeatures
+      : T extends 'cosmos'
+        ? CosmosMainWalletBase // Example, use Keplr wallet for Cosmos
+        : T extends 'bitcoin'
+          ? XfiBitcoinConnector | Wallet<'bitcoin'>
+          : T extends 'near'
+            ? NearWallet & SignMessageMethod
+            : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;
@@ -110,11 +100,4 @@ export type WalletsByChain = {
  */
 export type ConnectedAccountsByChain = {
   [key in ChainType]: { [walletId in string]: ConnectedAccount };
-};
-
-export type TronAdapterData = {
-  adapter: TronAdapter;
-  readyState: TronAdapterReadyState;
-  account: string | null;
-  network: string | undefined;
 };

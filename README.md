@@ -64,13 +64,10 @@ export default function App({ Component, pageProps }) {
 | -------- | ------------------ | ------------------ | -------------------- | ------------------ | ------------------ |
 | EVM      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Solana   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
-| Tron     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Sui      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Cosmos   | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Near     | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Bitcoin  | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
-| Casper   | :x:                | :x:                | :x:                  | :x:                | :x:                |
-| Ton      | :white_check_mark: | :white_check_mark: | :white_check_mark:   | :white_check_mark: | :white_check_mark: |
 | Algorand | :x:                | :x:                | :x:                  | :x:                | :x:                |
 
 #### Hooks

@@ -1,4 +1,3 @@
-import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
@@ -22,16 +21,11 @@ export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
       ? {
           maxSupportedTransactionVersion: number;
         }
-      : C extends 'ton'
+      : C extends 'near'
         ? {
             accountAddress: string;
-            lt: string;
           }
-        : C extends 'near'
-          ? {
-              accountAddress: string;
-            }
-          : any);
+        : any);
 
 export type DefaultTransactionParams = {
   txHash: string;
@@ -74,26 +68,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     return receipt;
   }
 
-  if (chain.type === 'tron') {
-    const txInfo = await pollCallback(
-      async () => {
-        const { txHash } = transactionParams as TransactionParams<'tron'>;
-        const tx = await config.tronWeb.trx.getConfirmedTransaction(txHash);
-
-        // If transaction is not found, return undefined. This will trigger the next poll
-        if (!tx) return undefined;
-
-        return await config.tronWeb.trx.getTransactionInfo(txHash);
-      },
-      {
-        interval: overrides?.retryDelay || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-    if (!txInfo) throw new Error('Transaction not found');
-    return txInfo;
-  }
-
   if (chain.type === 'solana') {
     const { txHash } = transactionParams as TransactionParams<'solana'>;
     const _overrides = (overrides || {}) as WatchTransactionOverrides<'solana'>;
@@ -130,26 +104,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
             showBalanceChanges: true,
           },
         });
-      },
-      {
-        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-
-    if (!receipt) {
-      throw new Error('Transaction not found');
-    }
-    return receipt;
-  }
-
-  if (chain.type === 'ton') {
-    const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;
-    const { txHash } = transactionParams as TransactionParams<'ton'>;
-
-    const receipt = await pollCallback(
-      async () => {
-        return await config.tonClient.getTransaction(Address.parse(_overrides.accountAddress), _overrides.lt, txHash);
       },
       {
         interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,

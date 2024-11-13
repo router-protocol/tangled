@@ -113,34 +113,6 @@ const tokens: TokenMetadata[] = [
     symbol: 'USDT',
     chainId: 'solana',
   },
-  {
-    address: ETH_ADDRESS,
-    decimals: 6,
-    name: 'Tron TRX',
-    symbol: 'TRX',
-    chainId: '728126428',
-  },
-  {
-    address: 'TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8',
-    decimals: 6,
-    name: 'Tron USDC',
-    symbol: 'USDC',
-    chainId: '728126428',
-  },
-  {
-    address: ETH_ADDRESS,
-    decimals: 9,
-    name: 'Toncoin',
-    symbol: 'TON',
-    chainId: '-239',
-  },
-  {
-    address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
-    decimals: 6,
-    name: 'Tether USD',
-    symbol: 'USDT',
-    chainId: '-239',
-  },
 ];
 
 export default Tokens;

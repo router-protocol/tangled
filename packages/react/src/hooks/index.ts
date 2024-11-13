@@ -16,7 +16,6 @@ export * from './useToken.js';
 export * from './useTokenForAccount.js';
 export * from './useTokenHandlers.js';
 export * from './useTransactionReceipt.js';
-export * from './useTronStore.js';
 export * from './useWaitForTransaction.js';
 export * from './useWallet.js';
 export * from './useWallets.js';
