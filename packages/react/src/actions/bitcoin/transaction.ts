@@ -68,7 +68,7 @@ function executeTransferRequest(
     from,
     recipient,
     amount: {
-      amount,
+      amount: amount.toString(),
       decimals: 8, // BTC decimals
     },
     memo: `hex::${removeHexPrefix(memo)}`,
