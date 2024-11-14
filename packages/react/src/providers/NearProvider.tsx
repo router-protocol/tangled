@@ -86,11 +86,13 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
 
   // Initializing the near wallet selector
   const init = useCallback(async () => {
-    const _selector: WalletSelector = await setupWalletSelector({
-      network: config.nearNetwork,
-      modules: [
-        setupMyNearWallet(),
-        setupNearMobileWallet(),
+    const modules = [
+      setupMyNearWallet(),
+      setupNearMobileWallet(),
+      setupEthereumWallets({ wagmiConfig: nearWagmiConfig }),
+    ];
+    if (config.projectId) {
+      modules.push(
         setupWalletConnect({
           projectId: config.projectId,
           metadata: {
@@ -100,8 +102,11 @@ export const NearProvider = ({ children }: { children: React.ReactNode }) => {
             icons: [''],
           },
         }),
-        setupEthereumWallets({ wagmiConfig: nearWagmiConfig }),
-      ],
+      );
+    }
+    const _selector: WalletSelector = await setupWalletSelector({
+      network: config.nearNetwork ?? 'mainnet',
+      modules,
     });
 
     setSelector(_selector);

@@ -6,7 +6,7 @@ export * from './constants/index.js';
 // hooks
 export * from './hooks/index.js';
 // providers
-export * from './providers/TangledContext.js';
+export * from './providers/index.js';
 // store
 export * from './store/index.js';
 // types

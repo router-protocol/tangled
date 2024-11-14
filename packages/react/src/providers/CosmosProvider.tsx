@@ -38,7 +38,13 @@ export const CosmosContext = createContext<CosmosContextValues>({
   store: null,
 });
 
-const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode; chains: CosmsosChainType[] }) => {
+export const CosmosContextProvider = ({
+  children,
+  chains,
+}: {
+  children: React.ReactNode;
+  chains: CosmsosChainType[];
+}) => {
   const tangledConfig = useTangledConfig((state) => state.config);
   const cosmosStore = useRef(createCosmosStore(chains)).current;
 
@@ -70,7 +76,6 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const logger = useMemo(() => new Logger('ERROR'), []);
 
   const walletManager = useMemo(() => {
-    console.log('cosmos chains', chains);
     const _walletManager = new WalletManager(
       chainRegistry?.chains ? chainRegistry.chains : chainNames,
       [keplr[0], xdefi[0], leap[0]] as MainWalletBase[],
@@ -277,5 +282,3 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
     </CosmosContext.Provider>
   );
 };
-
-export default CosmosContextProvider;

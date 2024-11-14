@@ -3,7 +3,7 @@ import { Transport, http } from 'viem';
 import { CreateConnectorFn, WagmiProvider, createConfig } from 'wagmi';
 import { ChainData, EVMChain } from '../types/index.js';
 
-const EVMProvider = ({
+export const EVMProvider = ({
   children,
   ...props
 }: {
@@ -32,5 +32,3 @@ const EVMProvider = ({
 
   return <WagmiProvider config={wagmiConfig}>{children}</WagmiProvider>;
 };
-
-export default EVMProvider;

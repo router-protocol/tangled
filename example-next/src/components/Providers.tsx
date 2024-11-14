@@ -31,30 +31,32 @@ const queryClient = new QueryClient();
 
 export const Providers = ({ children }: { children: ReactNode }) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TangledContextProvider
-        config={{
-          projectName: 'Tangled Example',
-          chains: {
-            cosmos: [dydx],
-          },
-          chainConfigs: {
-            solana: {
-              ...solana,
-              rpcUrls: {
-                default: {
-                  http: [process.env.NEXT_PUBLIC_SOLANA_API ?? 'https://api.mainnet-beta.solana.com'],
+    <>
+      <QueryClientProvider client={queryClient}>
+        <TangledContextProvider
+          config={{
+            projectName: 'Tangled Example',
+            chains: {
+              cosmos: [dydx],
+            },
+            chainConfigs: {
+              solana: {
+                ...solana,
+                rpcUrls: {
+                  default: {
+                    http: ['https://api.mainnet-beta.solana.com'],
+                  },
                 },
               },
             },
-          },
 
-          projectId: '41980758771052df3f01be0a46f172a5',
-        }}
-      >
-        {children}
-      </TangledContextProvider>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+            projectId: '41980758771052df3f01be0a46f172a5',
+          }}
+        >
+          {children}
+        </TangledContextProvider>
+      </QueryClientProvider>
+      <ReactQueryDevtools client={queryClient} />
+    </>
   );
 };

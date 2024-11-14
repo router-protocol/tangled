@@ -1,14 +1,15 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactNode, createContext, useRef } from 'react';
 import { StoreApi, useStore } from 'zustand';
 import { TangledConfigState, createTangledConfigStore } from '../store/TangledConfig.js';
 import { TangledConfig } from '../types/index.js';
 import { BitcoinProvider } from './BitcoinProvider.js';
-import CosmosContextProvider from './CosmosProvider.js';
-import EVMProvider from './EVMProvider.js';
+import { CosmosContextProvider } from './CosmosProvider.js';
+import { EVMProvider } from './EVMProvider.js';
 import { NearProvider } from './NearProvider.js';
 import { SolanaProvider } from './SolanaProvider.js';
 import { SuiProvider } from './SuiProvider.js';
-import WalletsProvider from './WalletsProvider.js';
+import { WalletsProvider } from './WalletsProvider.js';
 
 export const TangledContext = createContext<{
   configStore: StoreApi<TangledConfigState>;
@@ -18,6 +19,7 @@ export const TangledContext = createContext<{
 
 export const TangledContextProvider = ({ children, config }: { children: ReactNode; config: TangledConfig }) => {
   const configStore = useRef(createTangledConfigStore(config)).current;
+  const queryClient = new QueryClient();
 
   const chains = useStore(configStore, (state) => state.chains);
   const connectors = useStore(configStore, (state) => state.connectors);
@@ -28,17 +30,19 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
         chains={chains.evm}
         connectors={connectors.evm}
       >
-        <SolanaProvider chain={chains.solana[0]}>
-          <SuiProvider chains={chains.sui}>
+        <QueryClientProvider client={queryClient}>
+          <SolanaProvider chain={chains.solana[0]}>
             <CosmosContextProvider chains={chains.cosmos}>
-              <BitcoinProvider adapters={connectors.bitcoin}>
-                <NearProvider>
-                  <WalletsProvider>{children}</WalletsProvider>
-                </NearProvider>
-              </BitcoinProvider>
+              <SuiProvider chains={chains.sui}>
+                <BitcoinProvider adapters={connectors.bitcoin}>
+                  <NearProvider>
+                    <WalletsProvider>{children}</WalletsProvider>
+                  </NearProvider>
+                </BitcoinProvider>
+              </SuiProvider>
             </CosmosContextProvider>
-          </SuiProvider>
-        </SolanaProvider>
+          </SolanaProvider>
+        </QueryClientProvider>
       </EVMProvider>
     </TangledContext.Provider>
   );

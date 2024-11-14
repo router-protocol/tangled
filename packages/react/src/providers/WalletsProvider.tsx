@@ -14,7 +14,7 @@ import { useWalletsStore } from '../store/Wallet.js';
 import { ChainId } from '../types/index.js';
 import { ConnectedAccount, ConnectedWallet } from '../types/wallet.js';
 
-const WalletsProvider = ({ children }: { children: ReactNode }) => {
+export const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const chains = useTangledConfig((config) => config.chains);
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
@@ -278,5 +278,3 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   return <>{children}</>;
 };
-
-export default WalletsProvider;
