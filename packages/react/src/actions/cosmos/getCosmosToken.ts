@@ -44,52 +44,6 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   balance: bigint;
   allowance: bigint;
 }> => {
-  if (chain.id === 'router_9600-1') {
-    const { getNetworkInfo, ChainGrpcWasmApi, ChainGrpcBankApi, getRouterSignerAddress, toUtf8 } = await import(
-      '@routerprotocol/router-chain-sdk-ts'
-    );
-
-    const network = getNetworkInfo(chain.extra?.environment);
-    if (token === 'route') {
-      const bankClient = new ChainGrpcBankApi(network.grpcEndpoint);
-
-      const accountAddress = getRouterSignerAddress(account);
-      if (!accountAddress) {
-        throw new Error(`Invalid address to convert to Router: ${account}`);
-      }
-
-      const routeBalance = await bankClient.fetchBalance({
-        accountAddress,
-        denom: 'route',
-      });
-
-      return {
-        balance: BigInt(routeBalance.amount),
-        allowance: maxInt256,
-      };
-    } else {
-      const wasmClient = new ChainGrpcWasmApi(network.grpcEndpoint);
-
-      const address = getRouterSignerAddress(account);
-      if (!address) {
-        throw new Error(`Invalid address to convert to Router: ${account}`);
-      }
-
-      const balance = await wasmClient.fetchSmartContractState(
-        token,
-        toUtf8(
-          JSON.stringify({
-            balance: { address },
-          }),
-        ),
-      );
-
-      return {
-        balance: BigInt(balance.data.balance),
-        allowance: maxInt256,
-      };
-    }
-  }
   const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
   const formattedToken = formatTokenAddress(token);
 

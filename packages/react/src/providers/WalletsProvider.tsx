@@ -1,5 +1,5 @@
 import { useSuiClientContext, useCurrentWallet as useSuiCurrentWallet } from '@mysten/dapp-kit';
-import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
+import { useWallet as useSolanaWallet } from '@noble-assets/tangled-solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { BITCOIN_CHAIN_CONFIG } from '../connectors/bitcoin/connectors.js';

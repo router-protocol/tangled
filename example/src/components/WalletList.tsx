@@ -1,4 +1,4 @@
-import { CHAIN_TYPES, useConnect, useWallets } from '@tangled3/react';
+import { CHAIN_TYPES, useConnect, useWallets } from '@noble-assets/tangled-react';
 
 const WalletList = () => {
   const wallets = useWallets();

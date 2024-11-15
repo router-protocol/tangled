@@ -1,5 +1,5 @@
 import { useSuiClient } from '@mysten/dapp-kit';
-import { useConnection as useSolanaConnection } from '@tangled3/solana-react';
+import { useConnection as useSolanaConnection } from '@noble-assets/tangled-solana-react';
 import { useMemo } from 'react';
 import { useConfig as useWagmiConfig } from 'wagmi';
 import { FallbackBitcoinProvider } from '../connectors/bitcoin/connectors.js';

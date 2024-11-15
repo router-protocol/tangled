@@ -1,6 +1,6 @@
 import { State as CosmosWalletState } from '@cosmos-kit/core';
 import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
-import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
+import { useWallet as useSolanaWallet } from '@noble-assets/tangled-solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { getBitcoinProvider, isXdefiWalletInstalled } from '../connectors/bitcoin/connectors.js';

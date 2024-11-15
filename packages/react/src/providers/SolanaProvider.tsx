@@ -1,6 +1,6 @@
+import { ConnectionProvider, WalletProvider } from '@noble-assets/tangled-solana-react';
 import { Adapter, WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 import { clusterApiUrl } from '@solana/web3.js';
-import { ConnectionProvider, WalletProvider } from '@tangled3/solana-react';
 import { useState, type FC, type PropsWithChildren } from 'react';
 import { OtherChainData } from '../types/index.js';
 

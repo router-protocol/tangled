@@ -35,7 +35,7 @@ const getDefaultSupportedChains = (): SupportedChainsByType => {
     evm.scroll,
     evm.zkSync,
   ] as EVMChain[];
-  supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.router, cosmos.noble] as CosmsosChainType[];
+  supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.noble] as CosmsosChainType[];
   supportedChains.solana = [solana] as OtherChainData<'solana'>[];
   supportedChains.sui = [sui] as SuiChainType[];
   supportedChains.near = [near] as OtherChainData<'near'>[];

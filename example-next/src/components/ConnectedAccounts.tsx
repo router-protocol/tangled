@@ -1,4 +1,11 @@
-import { ConnectedAccount, useAccounts, useChain, useConnect, useDisconnect, useWallet } from '@tangled3/react';
+import {
+  ConnectedAccount,
+  useAccounts,
+  useChain,
+  useConnect,
+  useDisconnect,
+  useWallet,
+} from '@noble-assets/tangled-react';
 
 export const ConnectedAccounts = () => {
   const accounts = useAccounts();

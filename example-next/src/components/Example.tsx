@@ -6,7 +6,7 @@ import {
   useCurrentWallet,
   useNetwork,
   useWallet,
-} from '@tangled3/react';
+} from '@noble-assets/tangled-react';
 import { useEffect, useState } from 'react';
 import { ConnectedAccounts } from './ConnectedAccounts';
 import Tokens from './Tokens';

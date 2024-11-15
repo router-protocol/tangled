@@ -36,4 +36,3 @@ export const polygon: EVMChain = { ...vPolygon, type: 'evm' } as const;
 export const polygonZkEvm: EVMChain = { ...vPolygonZkEvm, type: 'evm' } as const;
 export const scroll: EVMChain = { ...vScroll, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
-export * from './router-evm.js';

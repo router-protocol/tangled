@@ -1,6 +1,6 @@
 import { useConnectWallet as useSuiConnectWallet } from '@mysten/dapp-kit';
+import { useWallet as useSolanaWallet } from '@noble-assets/tangled-solana-react';
 import { WalletName } from '@solana/wallet-adapter-base';
-import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';

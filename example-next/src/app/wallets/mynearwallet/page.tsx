@@ -1,6 +1,6 @@
 'use client';
 
-import { useConnect, useWallets } from '@tangled3/react';
+import { useConnect, useWallets } from '@noble-assets/tangled-react';
 import { useEffect } from 'react';
 
 export default function NearPage() {

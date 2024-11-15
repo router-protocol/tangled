@@ -10,8 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tangled3/react": "workspace:*",
-    "@tangled3/ui": "workspace:*",
+    "@noble-assets/tangled-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
     "@tanstack/react-query-devtools": "^5.51.23",
     "crypto": "npm:crypto-browserify",

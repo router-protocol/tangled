@@ -8,8 +8,6 @@ export * from './near.js';
 export * from './near.testnet.js';
 export * from './noble.js';
 export * from './osmosis.js';
-export * from './router-cosmos.js';
-export * from './self.js';
 export * from './solana.devnet.js';
 export * from './solana.js';
 export * from './solana.testnet.js';

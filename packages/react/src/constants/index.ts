@@ -21,10 +21,7 @@ import {
   osmosis,
   polygon,
   polygonZkEvm,
-  router,
-  routerEvm,
   scroll,
-  self,
   solana,
   solanaDevnet,
   solanaTestnet,
@@ -55,14 +52,11 @@ export const CHAIN_ID = {
   polygon_zkevm: '1101',
   scroll: '534352',
   zksync: '324',
-  routerEvm: '9600',
 
   // cosmos
   noble: 'noble-1',
   osmosis: 'osmosis-1',
   injective: 'injective-1',
-  self: 'self-1',
-  routerchain: 'router_9600-1',
 
   // near
   near: '397',
@@ -115,14 +109,11 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.polygon_zkevm]: polygonZkEvm,
   [CHAIN_ID.scroll]: scroll,
   [CHAIN_ID.zksync]: zkSync,
-  [CHAIN_ID.routerEvm]: routerEvm,
 
   //cosmos
   [CHAIN_ID.noble]: noble,
   [CHAIN_ID.osmosis]: osmosis,
   [CHAIN_ID.injective]: injective,
-  [CHAIN_ID.self]: self,
-  [CHAIN_ID.routerchain]: router,
 
   // near
   [CHAIN_ID.near]: near,

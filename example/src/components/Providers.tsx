@@ -1,5 +1,5 @@
 'use client';
-import { TangledContextProvider, solana } from '@tangled3/react';
+import { TangledContextProvider, solana } from '@noble-assets/tangled-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';

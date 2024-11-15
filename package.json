@@ -11,8 +11,8 @@
     "dev:example": "pnpm --filter @tangled3/example-react dev",
     "dev:example-next": "pnpm --filter @tangled3/example-next dev",
     "build": "pnpm build:solana && pnpm build:react",
-    "build:solana": "pnpm --filter @tangled3/solana-react build",
-    "build:react": "pnpm --filter @tangled3/react build",
+    "build:solana": "pnpm --filter @noble-assets/tangled-solana-react build",
+    "build:react": "pnpm --filter @noble-assets/tangled-react build",
     "build:example": "pnpm --filter @tangled3/example-react build",
     "build:example-next": "pnpm --filter @tangled3/example-next build",
     "clean": "pnpm exec clean",
@@ -21,7 +21,7 @@
     "lint:fix": "eslint packages --fix",
     "format": "prettier --check . --config ./prettier.config.cjs",
     "format:fix": "prettier --write . --config ./prettier.config.cjs",
-    "watch:react": "pnpm --filter @tangled3/react watch"
+    "watch:react": "pnpm --filter @noble-assets/tangled-react watch"
   },
   "keywords": [],
   "author": "",
