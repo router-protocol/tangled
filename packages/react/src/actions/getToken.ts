@@ -249,14 +249,17 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'near') {
-    const balance = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_balance_of', {
+    let balance = 0n;
+    let allowance: { total: string; available: string } | null = null;
+
+    balance = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_balance_of', {
       account_id: account,
     });
-    const allowance = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'storage_balance_of', {
+    allowance = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'storage_balance_of', {
       account_id: account,
     });
 
-    return { balance, allowance };
+    return { balance: BigInt(balance), allowance: allowance ? BigInt(allowance.available) : 0n };
   }
 
   throw new Error('Chain type not supported');
