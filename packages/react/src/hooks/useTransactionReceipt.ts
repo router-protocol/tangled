@@ -13,8 +13,7 @@ export type UseTransactionReceiptParams = {
   chainId: ChainId;
   /** Transaction overrides {@link GetTransactionReceiptOverrides} */
   overrides?: GetTransactionReceiptOverrides;
-  queryOptions?: QueryParameter;
-};
+} & QueryParameter;
 
 /**
  * Transaction Receipt Hook
@@ -27,7 +26,7 @@ export const useTransactionReceipt = ({
   transactionParams,
   chainId,
   overrides,
-  queryOptions = {},
+  ...queryOptions
 }: UseTransactionReceiptParams) => {
   const connectionOrConfig = useConnectionOrConfig();
   const chain = useChain(chainId);
