@@ -1,4 +1,13 @@
-import { Chain, ChainConfig, SupportedChainsByType } from '../types/index.js';
+import type {
+  Chain,
+  ChainConfig,
+  CosmsosChainType,
+  EVMChain,
+  OtherChainData,
+  OtherChainTypes,
+  SuiChainType,
+  SupportedChainsByType,
+} from '../types/index.js';
 import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
@@ -16,11 +25,26 @@ const overrideChainConfig = (
 
   for (const [type, chains] of Object.entries(chainsByType)) {
     if (chains?.length) {
-      // @ts-expect-error key can be indexed with string
-      supportedChains[type as keyof SupportedChainsByType] = chains.map((chain) => ({
-        ...chain,
-        ...overrides?.[chain.name],
-      }));
+      const customChains = chains.map((chain) => {
+        return {
+          ...chain,
+          ...overrides?.[chain.name],
+        };
+      });
+      switch (type) {
+        case 'cosmos':
+          supportedChains.cosmos = customChains as CosmsosChainType[];
+          break;
+        case 'evm':
+          supportedChains.evm = customChains as EVMChain[];
+          break;
+        case 'sui':
+          supportedChains.sui = customChains as SuiChainType[];
+          break;
+        default:
+          supportedChains[type as OtherChainTypes] = customChains as OtherChainData[];
+          break;
+      }
     }
   }
 
