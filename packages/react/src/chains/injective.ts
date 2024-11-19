@@ -1,6 +1,6 @@
-import { CosmsosChainType } from '../types/index.js';
+import { CosmosChainType } from '../types/index.js';
 
-export const injective: CosmsosChainType = {
+export const injective: CosmosChainType = {
   id: 'injective-1',
   name: 'Injective',
   type: 'cosmos',

@@ -1,5 +1,5 @@
 import {
-  ChainId,
+  type ChainId,
   useChain,
   useChains,
   useCurrentAccount,

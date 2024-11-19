@@ -1,5 +1,5 @@
 import {
-  ConnectedAccount,
+  type ConnectedAccount,
   useAccounts,
   useChain,
   useConnect,

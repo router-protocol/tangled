@@ -1,6 +1,6 @@
-import { CosmsosChainType } from '../types/index.js';
+import { CosmosChainType } from '../types/index.js';
 
-export const noble: CosmsosChainType = {
+export const noble: CosmosChainType = {
   id: 'noble-1',
   chainName: 'noble',
   name: 'Noble',

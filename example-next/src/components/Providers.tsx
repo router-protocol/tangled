@@ -1,10 +1,10 @@
 'use client';
-import { CosmsosChainType, TangledContextProvider, solana } from '@noble-assets/tangled-react';
+import { type CosmosChainType, TangledContextProvider, solana } from '@noble-assets/tangled-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import { ReactNode } from 'react';
+import { type ReactNode } from 'react';
 
-const dydx: CosmsosChainType = {
+const dydx: CosmosChainType = {
   id: 'dydx-mainnet-1' as `${string}-${number}`,
   chainName: 'dydx',
   name: 'dYdX',

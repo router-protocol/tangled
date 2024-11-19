@@ -1,4 +1,4 @@
-import { ETH_ADDRESS, SOL_ADDRESS, TokenMetadata, useChain, useToken } from '@noble-assets/tangled-react';
+import { ETH_ADDRESS, SOL_ADDRESS, type TokenMetadata, useChain, useToken } from '@noble-assets/tangled-react';
 
 export const Tokens = () => {
   return (

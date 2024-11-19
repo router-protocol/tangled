@@ -40,7 +40,7 @@ export default function NearPage() {
 
   return (
     <div>
-      <h1 className='text-lg font-semibold'>Oh, I see you're trying to connect to My Near Wallet.</h1>
+      <h1 className='text-lg font-semibold'>Oh, I see you are trying to connect to My Near Wallet.</h1>
       <h2 className='text-center text-neutral-300 mt-2'>Please wait...</h2>
     </div>
   );

@@ -26,6 +26,8 @@ const config = {
         argsIgnorePattern: '^_',
       },
     ],
+    'jsx-quotes': 'off',
+    'import/no-default-export': 'off',
     '@typescript-eslint/require-await': 'off',
     '@typescript-eslint/no-misused-promises': [
       'error',

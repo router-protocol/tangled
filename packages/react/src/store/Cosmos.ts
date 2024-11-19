@@ -5,7 +5,7 @@ import {
   ChainRegistryClient as CosmosChainRegistryClient,
   getCosmosChainRegistryClient,
 } from '../actions/cosmos/getCosmosChainRegistryClient.js';
-import { ChainData, CosmsosChainType } from '../types/index.js';
+import { ChainData, CosmosChainType } from '../types/index.js';
 
 export type GetCosmosClient = () => {
   walletManager: WalletManager | undefined;
@@ -55,7 +55,7 @@ export const createCosmosStore = (chains: ChainData[]) => {
         if (get().chainRegistry) return get().chainRegistry!;
 
         const chainRegistry = await getCosmosChainRegistryClient(
-          chains.map((chain) => (chain as CosmsosChainType).chainName.toString()),
+          chains.map((chain) => (chain as CosmosChainType).chainName.toString()),
         );
 
         set(() => ({ chainRegistry: chainRegistry }));

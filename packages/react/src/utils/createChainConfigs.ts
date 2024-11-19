@@ -1,5 +1,13 @@
-import { CHAIN_DATA, CHAIN_NAME } from '../constants/index.js';
-import { Chain, ChainConfig, ChainData, ChainId, SupportedChainsByType } from '../types/index.js';
+import type {
+  Chain,
+  ChainConfig,
+  CosmosChainType,
+  EVMChain,
+  OtherChainData,
+  OtherChainTypes,
+  SuiChainType,
+  SupportedChainsByType,
+} from '../types/index.js';
 import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
@@ -11,24 +19,32 @@ const createChainConfigs = (
 
 const overrideChainConfig = (
   chainsByType: Partial<SupportedChainsByType>,
-  overrides: Partial<Record<Chain, ChainConfig>> | undefined,
+  overrides: Partial<Record<string, ChainConfig>> | undefined,
 ) => {
   const supportedChains = getDefaultSupportedChains();
 
-  for (const chains of Object.values(chainsByType)) {
-    for (const chain of chains) {
-      if (supportedChains[chain.type].some((c) => c.id === chain.id)) {
-        continue;
+  for (const [type, chains] of Object.entries(chainsByType)) {
+    if (chains?.length) {
+      const customChains = chains.map((chain) => {
+        return {
+          ...chain,
+          ...overrides?.[chain.name],
+        };
+      });
+      switch (type) {
+        case 'cosmos':
+          supportedChains.cosmos = customChains as CosmosChainType[];
+          break;
+        case 'evm':
+          supportedChains.evm = customChains as EVMChain[];
+          break;
+        case 'sui':
+          supportedChains.sui = customChains as SuiChainType[];
+          break;
+        default:
+          supportedChains[type as OtherChainTypes] = customChains as OtherChainData[];
+          break;
       }
-      // todo: simplify... this is a bit redundant
-      const chainId = chain.id.toString() as ChainId;
-      const chainData = {
-        ...(CHAIN_DATA[chainId] ?? chain),
-        ...overrides?.[CHAIN_NAME[chainId] ?? chain.name],
-      } as ChainData;
-
-      // @ts-expect-error - resolves to never
-      supportedChains[chain.type].push(chainData);
     }
   }
 
