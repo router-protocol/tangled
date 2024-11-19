@@ -5,7 +5,7 @@ on:
       - main
 env:
   CI: true
-  PNPM_CACHE_FOLDER: .pnpm-store
+  # PNPM_CACHE_FOLDER: .pnpm-store
 jobs:
   version:
     timeout-minutes: 15
@@ -21,8 +21,8 @@ jobs:
           node-version: 20
       - name: install pnpm
         run: npm i pnpm@latest -g
-      - name: setup pnpm config
-        run: pnpm config set store-dir $PNPM_CACHE_FOLDER
+      # - name: setup pnpm config
+      #  run: pnpm config set store-dir $PNPM_CACHE_FOLDER
       - name: Setup npmrc
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > .npmrc
       - name: install dependencies
