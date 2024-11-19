@@ -1,7 +1,7 @@
 import type {
   Chain,
   ChainConfig,
-  CosmsosChainType,
+  CosmosChainType,
   EVMChain,
   OtherChainData,
   OtherChainTypes,
@@ -33,7 +33,7 @@ const overrideChainConfig = (
       });
       switch (type) {
         case 'cosmos':
-          supportedChains.cosmos = customChains as CosmsosChainType[];
+          supportedChains.cosmos = customChains as CosmosChainType[];
           break;
         case 'evm':
           supportedChains.evm = customChains as EVMChain[];

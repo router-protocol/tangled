@@ -1,6 +1,6 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { maxInt256 } from 'viem';
-import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
+import { ChainData, ConnectionOrConfig, CosmosChainType } from '../../types/index.js';
 import { areTokensEqual, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
 
 export const getCosmosTokenMetadata = async ({
@@ -9,7 +9,7 @@ export const getCosmosTokenMetadata = async ({
   getCosmosClient,
 }: {
   token: string;
-  chain: CosmsosChainType;
+  chain: CosmosChainType;
   getCosmosClient: ConnectionOrConfig['getCosmosClient'];
 }) => {
   const registryClient = await getCosmosClient().getChainRegistry();

@@ -52,7 +52,7 @@ export interface SuiChainType extends ChainDataGeneric {
   type: Extract<'sui', ChainType>;
   suiNetwork: 'mainnet' | 'testnet' | 'devnet' | 'localnet';
 }
-export interface CosmsosChainType extends ChainDataGeneric {
+export interface CosmosChainType extends ChainDataGeneric {
   type: Extract<'cosmos', ChainType>;
   chainName: string;
   evmId?: string;
@@ -65,7 +65,7 @@ export type OtherChainData<T extends ChainType = OtherChainTypes> = ChainDataGen
 };
 
 // Chain data discriminated union for all supported chains
-export type ChainData = EVMChain | SuiChainType | CosmsosChainType | OtherChainData;
+export type ChainData = EVMChain | SuiChainType | CosmosChainType | OtherChainData;
 
 export type SupportedChainsByType = {
   [K in ChainData as K['type']]: K[];

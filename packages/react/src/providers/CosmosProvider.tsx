@@ -18,7 +18,7 @@ import { createContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useStore } from 'zustand';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { CosmosStore, createCosmosStore } from '../store/Cosmos.js';
-import { CosmsosChainType } from '../types/index.js';
+import { CosmosChainType } from '../types/index.js';
 import { RemoveReadonly } from '../types/utils.js';
 
 export interface CosmosContextValues {
@@ -43,7 +43,7 @@ export const CosmosContextProvider = ({
   chains,
 }: {
   children: React.ReactNode;
-  chains: CosmsosChainType[];
+  chains: CosmosChainType[];
 }) => {
   const tangledConfig = useTangledConfig((state) => state.config);
   const cosmosStore = useRef(createCosmosStore(chains)).current;
