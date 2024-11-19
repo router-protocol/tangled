@@ -1,5 +1,4 @@
-import { CHAIN_DATA, CHAIN_NAME } from '../constants/index.js';
-import { Chain, ChainConfig, ChainData, ChainId, SupportedChainsByType } from '../types/index.js';
+import { Chain, ChainConfig, SupportedChainsByType } from '../types/index.js';
 import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
@@ -11,24 +10,17 @@ const createChainConfigs = (
 
 const overrideChainConfig = (
   chainsByType: Partial<SupportedChainsByType>,
-  overrides: Partial<Record<Chain, ChainConfig>> | undefined,
+  overrides: Partial<Record<string, ChainConfig>> | undefined,
 ) => {
   const supportedChains = getDefaultSupportedChains();
 
-  for (const chains of Object.values(chainsByType)) {
-    for (const chain of chains) {
-      if (supportedChains[chain.type].some((c) => c.id === chain.id)) {
-        continue;
-      }
-      // todo: simplify... this is a bit redundant
-      const chainId = chain.id.toString() as ChainId;
-      const chainData = {
-        ...(CHAIN_DATA[chainId] ?? chain),
-        ...overrides?.[CHAIN_NAME[chainId] ?? chain.name],
-      } as ChainData;
-
-      // @ts-expect-error - resolves to never
-      supportedChains[chain.type].push(chainData);
+  for (const [type, chains] of Object.entries(chainsByType)) {
+    if (chains?.length) {
+      // @ts-expect-error key can be indexed with string
+      supportedChains[type as keyof SupportedChainsByType] = chains.map((chain) => ({
+        ...chain,
+        ...overrides?.[chain.name],
+      }));
     }
   }
 

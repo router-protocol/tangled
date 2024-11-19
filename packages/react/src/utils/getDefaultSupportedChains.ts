@@ -4,7 +4,7 @@ import * as evm from '../chains/evm.js';
 import { near } from '../chains/near.js';
 import { solana } from '../chains/solana.js';
 import { sui } from '../chains/sui.js';
-import { CosmsosChainType, EVMChain, OtherChainData, SuiChainType, SupportedChainsByType } from '../types/index.js';
+import { SupportedChainsByType } from '../types/index.js';
 
 const getDefaultSupportedChains = (): SupportedChainsByType => {
   const supportedChains: SupportedChainsByType = {
@@ -34,12 +34,12 @@ const getDefaultSupportedChains = (): SupportedChainsByType => {
     evm.polygonZkEvm,
     evm.scroll,
     evm.zkSync,
-  ] as EVMChain[];
-  supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.noble] as CosmsosChainType[];
-  supportedChains.solana = [solana] as OtherChainData<'solana'>[];
-  supportedChains.sui = [sui] as SuiChainType[];
-  supportedChains.near = [near] as OtherChainData<'near'>[];
-  supportedChains.bitcoin = [bitcoin] as OtherChainData<'bitcoin'>[];
+  ];
+  supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.noble];
+  supportedChains.solana = [solana];
+  supportedChains.sui = [sui];
+  supportedChains.near = [near];
+  supportedChains.bitcoin = [bitcoin];
 
   return supportedChains;
 };
