@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.14.1
+
+### Patch Changes
+
+- fix xdefi id
+
 ## 1.14.0
 
 ### Minor Changes
