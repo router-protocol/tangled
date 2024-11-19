@@ -12,8 +12,7 @@ export type UseWaitForTransactionParams = {
   chainId: ChainId | undefined;
   /** Transaction overrides {@link WatchTransactionOverrides} */
   overrides?: WatchTransactionOverrides<ChainType>;
-  queryOptions?: QueryParameter;
-};
+} & QueryParameter;
 
 /**
  * Watch transaction Hook
@@ -24,7 +23,7 @@ export const useWaitForTransaction = ({
   transactionParams,
   chainId,
   overrides,
-  queryOptions = {},
+  ...queryOptions
 }: UseWaitForTransactionParams) => {
   const connectionOrConfig = useConnectionOrConfig();
   const chain = useChain(chainId);

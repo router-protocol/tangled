@@ -10,8 +10,7 @@ export type UseTokenParams = {
   chainId: ChainId | undefined;
   /** Token Address */
   token: string | undefined;
-  queryOptions?: QueryParameter;
-};
+} & QueryParameter;
 
 export type TokenMetadata = {
   address: string;
@@ -21,7 +20,7 @@ export type TokenMetadata = {
   chainId: ChainId;
 };
 
-export const useToken = ({ chainId, token, queryOptions = {} }: UseTokenParams) => {
+export const useToken = ({ chainId, token, ...queryOptions }: UseTokenParams) => {
   const chain = useChain(chainId);
   const connectionOrConfig = useConnectionOrConfig();
 

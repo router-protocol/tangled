@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.14.2
+
+### Patch Changes
+
+- fix query options
+
 ## 1.14.1
 
 ### Patch Changes

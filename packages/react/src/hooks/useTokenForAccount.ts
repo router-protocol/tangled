@@ -18,16 +18,9 @@ export type UseTokenForAccountParams = {
   spender: string | undefined;
   /** Subscribe to token balance and allowance changes for every block */
   // subscribe?: boolean;
-  queryOptions?: QueryParameter;
-};
+} & QueryParameter;
 
-export const useTokenForAccount = ({
-  chainId,
-  account,
-  token,
-  spender,
-  queryOptions = {},
-}: UseTokenForAccountParams) => {
+export const useTokenForAccount = ({ chainId, account, token, spender, ...queryOptions }: UseTokenForAccountParams) => {
   const chain = useChain(chainId);
   const connectionOrConfig = useConnectionOrConfig();
 
