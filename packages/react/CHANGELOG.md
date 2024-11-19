@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.14.0
+
+### Minor Changes
+
+- bitcoin amount fixes
+
 ## 1.13.0
 
 ### Minor Changes
