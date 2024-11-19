@@ -1,4 +1,4 @@
 {
   "root": true,
-  "extends": ["react-app", "plugin:prettier/recommended", "./.eslintrc.base"]
+  "extends": ["react-app", "./.eslintrc.base", "plugin:prettier/recommended"]
 }
