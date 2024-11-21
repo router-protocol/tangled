@@ -162,6 +162,27 @@ const tokens: TokenMetadata[] = [
     symbol: 'USDt',
     chainId: '397',
   },
+  {
+    address: '0x2::sui::SUI',
+    decimals: 9,
+    name: 'Sui Token',
+    symbol: 'SUI',
+    chainId: 'sui',
+  },
+  {
+    address: '0xc060006111016b8a020ad5b33834984a437aaa7d3c74c18e09a95d48aceab08c::coin::COIN',
+    decimals: 6,
+    name: 'Tether USD',
+    symbol: 'USDT',
+    chainId: 'sui',
+  },
+  {
+    address: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC',
+    decimals: 6,
+    name: 'USDC',
+    symbol: 'USDC',
+    chainId: 'sui',
+  },
 ];
 
 export default Tokens;
