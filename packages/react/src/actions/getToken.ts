@@ -18,6 +18,7 @@ import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cos
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
+import { querySui } from './sui/querySui.js';
 import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
 
 /**
@@ -123,6 +124,32 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
     }
     const res = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_metadata');
+
+    return {
+      name: res.name,
+      symbol: res.symbol,
+      decimals: res.decimals,
+      address: token,
+      chainId: chain.id,
+    };
+  }
+
+  if (chain.type === 'sui') {
+    if (areTokensEqual(token, ETH_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+    }
+
+    let res;
+    try {
+      res = await querySui({
+        chain,
+        method: 'suix_getCoinMetadata',
+        params: [token],
+      });
+    } catch (error) {
+      console.error('Error fetching Sui token metadata:', error);
+      throw new Error('Failed to fetch Sui token metadata');
+    }
 
     return {
       name: res.name,
@@ -257,6 +284,20 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     });
 
     return { balance, allowance };
+  }
+
+  if (chain.type === 'sui') {
+    let balance = 0n;
+
+    try {
+      const balanceResponse = await querySui({ chain, method: 'suix_getBalance', params: [account, token] });
+      balance = BigInt(balanceResponse.totalBalance);
+    } catch (error) {
+      console.error('Error fetching Sui token balance:', error);
+      throw new Error('Failed to fetch Sui token balance');
+    }
+
+    return { balance, allowance: 0n };
   }
 
   throw new Error('Chain type not supported');
