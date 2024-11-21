@@ -18,7 +18,7 @@ import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cos
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
-import { querySui } from './sui/querySui.js';
+import { getSuiTokenInfo } from './sui/getSuiTokenInfo.js';
 import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
 
 /**
@@ -141,7 +141,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
 
     let res;
     try {
-      res = await querySui({
+      res = await getSuiTokenInfo({
         chain,
         method: 'suix_getCoinMetadata',
         params: [token],
@@ -290,7 +290,7 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     let balance = 0n;
 
     try {
-      const balanceResponse = await querySui({ chain, method: 'suix_getBalance', params: [account, token] });
+      const balanceResponse = await getSuiTokenInfo({ chain, method: 'suix_getBalance', params: [account, token] });
       balance = BigInt(balanceResponse.totalBalance);
     } catch (error) {
       console.error('Error fetching Sui token balance:', error);

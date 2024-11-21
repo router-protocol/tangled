@@ -1,6 +1,6 @@
 import { ChainData } from '../../types/index.js';
 
-export const querySui = async ({
+export const getSuiTokenInfo = async ({
   chain,
   method,
   params,
