@@ -1,6 +1,6 @@
 import { ChainData } from '../../types/index.js';
 
-export const getSuiTokenInfo = async ({
+export const querySuiRpc = async ({
   chain,
   method,
   params,
