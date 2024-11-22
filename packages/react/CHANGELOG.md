@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.14.3
+
+### Patch Changes
+
+- fix sui token fetching
+
 ## 1.14.2
 
 ### Patch Changes
