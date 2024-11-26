@@ -18,7 +18,6 @@ import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cos
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { viewMethodOnNear } from './near/readCalls.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
-import { querySuiRpc } from './sui/queryRpc.js';
 import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
 
 /**
@@ -141,13 +140,13 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
 
     let res;
     try {
-      res = await querySuiRpc({
-        chain,
-        method: 'suix_getCoinMetadata',
-        params: [token],
-      });
+      res = await config.suiClient.getCoinMetadata({ coinType: token });
     } catch (error) {
       console.error('Error fetching Sui token metadata:', error);
+      throw new Error('Failed to fetch Sui token metadata');
+    }
+
+    if (!res) {
       throw new Error('Failed to fetch Sui token metadata');
     }
 
@@ -290,7 +289,10 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     let balance = 0n;
 
     try {
-      const balanceResponse = await querySuiRpc({ chain, method: 'suix_getBalance', params: [account, token] });
+      const balanceResponse = await config.suiClient.getBalance({
+        owner: account,
+        coinType: token,
+      });
       balance = BigInt(balanceResponse.totalBalance);
     } catch (error) {
       console.error('Error fetching Sui token balance:', error);
