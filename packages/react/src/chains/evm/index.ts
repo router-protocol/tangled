@@ -5,6 +5,8 @@ import {
   blast as vBlast,
   boba as vBoba,
   bsc as vBsc,
+  dogechain as vDogechain,
+  fireChain as vFirechain,
   linea as vLinea,
   mainnet as vMainnet,
   manta as vManta,
@@ -14,10 +16,15 @@ import {
   optimism as vOptimism,
   polygon as vPolygon,
   polygonZkEvm as vPolygonZkEvm,
+  rollux as vRollux,
+  rootstock as vRootstock,
+  saakuru as vSaakuru,
   scroll as vScroll,
-  zkSync as vZkSync,
+  taiko as vTaiko,
+  zksync as vZkSync,
+  xLayer as vxLayer,
 } from 'viem/chains';
-import { EVMChain } from '../types/index.js';
+import { EVMChain } from '../../types/index.js';
 
 export const arbitrum: EVMChain = { ...vArbitrum, type: 'evm' } as const;
 export const avalanche: EVMChain = { ...vAvalance, type: 'evm' } as const;
@@ -36,4 +43,15 @@ export const polygon: EVMChain = { ...vPolygon, type: 'evm' } as const;
 export const polygonZkEvm: EVMChain = { ...vPolygonZkEvm, type: 'evm' } as const;
 export const scroll: EVMChain = { ...vScroll, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
+export const xLayer: EVMChain = { ...vxLayer, type: 'evm' } as const;
+export const rootstock: EVMChain = { ...vRootstock, type: 'evm' } as const;
+export const saakuru: EVMChain = { ...vSaakuru, type: 'evm' } as const;
+export const taiko: EVMChain = { ...vTaiko, type: 'evm' } as const;
+export const dogechain: EVMChain = { ...vDogechain, type: 'evm' } as const;
+export const rollux: EVMChain = { ...vRollux, type: 'evm' } as const;
+export const firechain: EVMChain = { ...vFirechain, type: 'evm' } as const;
+
+export * from './arthera.js';
+export * from './oasisSapphire.js';
 export * from './router-evm.js';
+export * from './tangle.js';

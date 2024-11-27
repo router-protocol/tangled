@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.14.4",
+  "version": "1.15.0",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -67,7 +67,7 @@
     "react-dom": "^18.2.0",
     "tronweb": "6.0.0-beta.4",
     "usehooks-ts": "^3.1.0",
-    "viem": "^2.13.8",
+    "viem": "^2.21.51",
     "wagmi": "^2.9.11",
     "zustand": "^4.5.2"
   },

@@ -1,4 +1,4 @@
-import { EVMChain } from '../types/index.js';
+import { EVMChain } from '../../types/index.js';
 
 export const routerEvm: EVMChain = {
   id: 9600,

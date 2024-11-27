@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.0
+
+### Minor Changes
+
+- added additional evm chains
+
 ## 1.14.4
 
 ### Patch Changes
