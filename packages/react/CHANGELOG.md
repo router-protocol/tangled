@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.14.4
+
+### Patch Changes
+
+- fix sui rpc queries
+
 ## 1.14.3
 
 ### Patch Changes
