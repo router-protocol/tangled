@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.2
+
+### Patch Changes
+
+- chore: added vanar and matchain
+
 ## 1.15.1
 
 ### Patch Changes
