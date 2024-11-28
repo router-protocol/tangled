@@ -7,6 +7,7 @@ export const CHAIN_ID = {
   // evm
   arbitrum: '42161',
   avalanche: '43114',
+  arthera: '10242',
   base: '8453',
   binance: '56',
   blast: '81457',
@@ -86,6 +87,7 @@ export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
 export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrum]: chains.arbitrum,
   [CHAIN_ID.avalanche]: chains.avalanche,
+  [CHAIN_ID.arthera]: chains.arthera,
   [CHAIN_ID.base]: chains.base,
   [CHAIN_ID.binance]: chains.binance,
   [CHAIN_ID.blast]: chains.blast,

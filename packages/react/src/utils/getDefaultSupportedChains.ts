@@ -34,6 +34,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     // mainnet chains
     supportedChains.evm = [
       evm.arbitrum,
+      evm.arthera,
       evm.avalanche,
       evm.base,
       evm.binance,
@@ -45,6 +46,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.linea,
       evm.manta,
       evm.mantle,
+      evm.matchain,
       evm.metis,
       evm.mode,
       evm.oasisSapphire,
@@ -57,6 +59,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.scroll,
       evm.taiko,
       evm.tangle,
+      evm.vanar,
       evm.zkSync,
       evm.xLayer,
     ] as EVMChain[];

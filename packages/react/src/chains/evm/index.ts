@@ -11,6 +11,7 @@ import {
   mainnet as vMainnet,
   manta as vManta,
   mantle as vMantle,
+  matchain as vMatchain,
   metis as vMetis,
   mode as vMode,
   optimism as vOptimism,
@@ -21,6 +22,7 @@ import {
   saakuru as vSaakuru,
   scroll as vScroll,
   taiko as vTaiko,
+  vanar as vVanar,
   zksync as vZkSync,
   xLayer as vxLayer,
 } from 'viem/chains';
@@ -38,6 +40,7 @@ export const firechain: EVMChain = { ...vFirechain, type: 'evm' } as const;
 export const linea: EVMChain = { ...vLinea, type: 'evm' } as const;
 export const manta: EVMChain = { ...vManta, type: 'evm' } as const;
 export const mantle: EVMChain = { ...vMantle, type: 'evm' } as const;
+export const matchain: EVMChain = { ...vMatchain, type: 'evm' } as const;
 export const metis: EVMChain = { ...vMetis, type: 'evm' } as const;
 export const mode: EVMChain = { ...vMode, type: 'evm' } as const;
 export const optimism: EVMChain = { ...vOptimism, type: 'evm' } as const;
@@ -48,6 +51,7 @@ export const rollux: EVMChain = { ...vRollux, type: 'evm' } as const;
 export const saakuru: EVMChain = { ...vSaakuru, type: 'evm' } as const;
 export const scroll: EVMChain = { ...vScroll, type: 'evm' } as const;
 export const taiko: EVMChain = { ...vTaiko, type: 'evm' } as const;
+export const vanar: EVMChain = { ...vVanar, type: 'evm' } as const;
 export const xLayer: EVMChain = { ...vxLayer, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
 export * from './arthera.js';
