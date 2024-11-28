@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.1
+
+### Patch Changes
+
+- fix new chain configs
+
 ## 1.15.0
 
 ### Minor Changes
