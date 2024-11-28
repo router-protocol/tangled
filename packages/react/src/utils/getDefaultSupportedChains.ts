@@ -53,6 +53,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.optimism,
       evm.polygon,
       evm.polygonZkEvm,
+      evm.routerEvm,
       evm.rollux,
       evm.rootstock,
       evm.saakuru,

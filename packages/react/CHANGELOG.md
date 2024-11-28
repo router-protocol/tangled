@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.3
+
+### Patch Changes
+
+- chore: add router evm to default chains
+
 ## 1.15.2
 
 ### Patch Changes
