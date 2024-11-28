@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.4
+
+### Patch Changes
+
+- fix chain configuration
+
 ## 1.15.3
 
 ### Patch Changes

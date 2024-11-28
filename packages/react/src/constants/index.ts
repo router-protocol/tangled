@@ -18,6 +18,7 @@ export const CHAIN_ID = {
   linea: '59144',
   manta: '169',
   mantle: '5000',
+  matchain: '698',
   metis: '1088',
   mode: '34443',
   oasisSapphire: '23294',
@@ -31,6 +32,7 @@ export const CHAIN_ID = {
   scroll: '534352',
   taiko: '167000',
   tangle: '5845',
+  vanar: '2040',
   xLayer: '196',
   zksync: '324',
 
@@ -98,6 +100,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.linea]: chains.linea,
   [CHAIN_ID.manta]: chains.manta,
   [CHAIN_ID.mantle]: chains.mantle,
+  [CHAIN_ID.matchain]: chains.matchain,
   [CHAIN_ID.metis]: chains.metis,
   [CHAIN_ID.mode]: chains.mode,
   [CHAIN_ID.oasisSapphire]: chains.oasisSapphire,
@@ -111,6 +114,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.scroll]: chains.scroll,
   [CHAIN_ID.taiko]: chains.taiko,
   [CHAIN_ID.tangle]: chains.tangle,
+  [CHAIN_ID.vanar]: chains.vanar,
   [CHAIN_ID.zksync]: chains.zkSync,
   [CHAIN_ID.xLayer]: chains.xLayer,
 
