@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.5
+
+### Patch Changes
+
+- fix cosmos token balance fetching
+
 ## 1.15.4
 
 ### Patch Changes
