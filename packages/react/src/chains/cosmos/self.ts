@@ -1,4 +1,4 @@
-import { CosmsosChainType } from '../types/index.js';
+import { CosmsosChainType } from '../../types/index.js';
 
 export const self: CosmsosChainType = {
   id: 'self-1',
@@ -20,5 +20,8 @@ export const self: CosmsosChainType = {
       name: 'Self Explorer',
       url: 'https://explorer.selfchain.xyz',
     },
+  },
+  extra: {
+    nativeAddress: 'uslf',
   },
 } as const;

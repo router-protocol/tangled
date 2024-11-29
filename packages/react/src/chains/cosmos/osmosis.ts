@@ -1,4 +1,4 @@
-import { CosmsosChainType } from '../types/index.js';
+import { CosmsosChainType } from '../../types/index.js';
 
 export const osmosis: CosmsosChainType = {
   id: 'osmosis-1',
@@ -20,5 +20,8 @@ export const osmosis: CosmsosChainType = {
       name: 'Cosmos Explorer',
       url: 'https://celatone.osmosis.zone',
     },
+  },
+  extra: {
+    nativeAddress: 'uosmo',
   },
 } as const;

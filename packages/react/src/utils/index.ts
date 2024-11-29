@@ -1,7 +1,7 @@
 import { detect } from 'detect-browser';
 import { FetchError, MAX_RETRIES, REQUEST_TIMEOUT, RETRY_DELAY } from '../actions/bitcoin/bitcoinApiConfig.js';
-import { SLF_TOKEN } from '../constants/index.js';
 import { ApiConfig as BitcoinApiConfig, ApiResponse as BitcoinApiResponse } from '../types/bitcoin.js';
+import { ChainData } from '../types/index.js';
 
 /**
  * This is a workaround for the issue with BigInt serialization in JSON.stringify
@@ -124,9 +124,9 @@ export function formatTokenAddress(token: string): string {
  * @param token - The token address to check
  * @returns Boolean indicating if token is native/factory
  */
-export function isNativeOrFactoryToken(token: string): boolean {
-  const lowerToken = token.toLowerCase();
-  return lowerToken.startsWith('ibc') || lowerToken.startsWith('factory') || lowerToken === SLF_TOKEN;
+export function isNativeOrFactoryToken(token: string, chainData: ChainData): boolean {
+  token = token.toLowerCase();
+  return chainData.extra?.nativeAddress === token || token.startsWith('ibc') || token.startsWith('factory');
 }
 
 /**

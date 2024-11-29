@@ -185,8 +185,3 @@ export const NEAR_NETWORK_CONFIG: Record<string, string> = {
   testnet: CHAIN_ID.nearTestnet,
   mainnet: CHAIN_ID.near,
 };
-
-/**
- * The native SLF token.
- */
-export const SLF_TOKEN = 'uslf';

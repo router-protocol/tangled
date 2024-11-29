@@ -93,13 +93,12 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
   const formattedToken = formatTokenAddress(token);
 
-  // Getting initial token balance
-  const tokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
-
   //  For native/factory tokens
-  if (isNativeOrFactoryToken(token)) {
+  if (isNativeOrFactoryToken(token, chain)) {
+    const nativeTokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
+
     return {
-      balance: BigInt(tokenBalance.amount),
+      balance: BigInt(nativeTokenBalance.amount),
       allowance: maxInt256,
     };
   }

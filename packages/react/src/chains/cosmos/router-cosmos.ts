@@ -1,4 +1,4 @@
-import { CosmsosChainType } from '../types/index.js';
+import { CosmsosChainType } from '../../types/index.js';
 
 export const router: CosmsosChainType = {
   id: 'router_9600-1',
@@ -23,6 +23,7 @@ export const router: CosmsosChainType = {
     },
   },
   extra: {
+    nativeAddress: 'route',
     environment: 'mainnet',
     pathfinder: 'https://api-beta.pathfinder.routerprotocol.com/api',
   },

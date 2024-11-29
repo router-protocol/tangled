@@ -1,4 +1,4 @@
-import { CosmsosChainType } from '../types/index.js';
+import { CosmsosChainType } from '../../types/index.js';
 
 export const injective: CosmsosChainType = {
   id: 'injective-1',
@@ -20,5 +20,8 @@ export const injective: CosmsosChainType = {
       name: 'Injective Explorer',
       url: 'https://explorer.injective.network',
     },
+  },
+  extra: {
+    nativeAddress: 'inj',
   },
 } as const;
