@@ -53,7 +53,7 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
 
   connectors.cosmos = [...(overrides.cosmos ?? []), cosmosConnectors.cosmosWallet];
 
-  connectors.bitcoin = [...(overrides.bitcoin ?? []), bitcoinConnectors.xdefiWallet];
+  connectors.bitcoin = [...(overrides.bitcoin ?? []), bitcoinConnectors.ctrlWallet];
 
   return connectors;
 };
