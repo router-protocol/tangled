@@ -1,4 +1,4 @@
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token';
+import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token';
 import { PublicKey } from '@solana/web3.js';
 import { multicall } from '@wagmi/core';
 import { Address as EVMAddress, erc20Abi } from 'viem';
@@ -66,7 +66,7 @@ export const getBalances = async (
     const connection = config.solanaConnection;
 
     const tokenAccountsCall = connection.getTokenAccountsByOwner(pubkey, { programId: TOKEN_PROGRAM_ID }, {});
-    const token2022AccountsCall = connection.getTokenAccountsByOwner(pubkey, { programId: TOKEN_PROGRAM_ID });
+    const token2022AccountsCall = connection.getTokenAccountsByOwner(pubkey, { programId: TOKEN_2022_PROGRAM_ID });
 
     const [tokenAccounts, token2022Accounts] = await Promise.all([tokenAccountsCall, token2022AccountsCall]);
 
