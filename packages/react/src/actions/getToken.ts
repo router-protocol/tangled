@@ -231,19 +231,20 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'solana') {
-    const pbKey = new PublicKey(token);
+    const tokenPbKey = new PublicKey(token);
+    const accountPbKey = new PublicKey(account);
 
     // if asset is native solana token
     if (areTokensEqual(token, SOL_ADDRESS)) {
-      const balance = BigInt(await config.solanaConnection.getBalance(pbKey));
+      const balance = BigInt(await config.solanaConnection.getBalance(accountPbKey));
       return { balance, allowance: 0n };
     }
 
     const { balance, associatedTokenAccountAddress, isAtaDeployed, delegatedAmount } =
       await getSolanaTokenBalanceAndAllowance({
         connection: config.solanaConnection,
-        account: new PublicKey(account),
-        token: pbKey,
+        account: accountPbKey,
+        token: tokenPbKey,
         spender: spender ? new PublicKey(spender) : undefined,
       });
 
