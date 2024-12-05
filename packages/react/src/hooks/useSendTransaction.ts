@@ -37,11 +37,6 @@ export const useSendTransaction = () => {
         throw new Error(`${chain.type} wallet is not connected`);
       }
 
-      // check if from address matches currentAccount
-      if (from !== currentAccount.address) {
-        throw new Error('From address does not match current account');
-      }
-
       // check chain id of wallet
       if (network !== chain.id.toString()) {
         console.log('Switching network to', chain.id.toString());
@@ -56,6 +51,11 @@ export const useSendTransaction = () => {
         if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
           throw new Error('Failed to switch network');
         }
+      }
+
+      // check if from address matches currentAccount
+      if (from !== currentAccount.address) {
+        throw new Error('From address does not match current account');
       }
 
       return sendTransactionToChain({
