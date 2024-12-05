@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.6
+
+### Patch Changes
+
+- fix solana token program id and send transaction checks for cosmos
+
 ## 1.15.5
 
 ### Patch Changes
