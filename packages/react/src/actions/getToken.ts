@@ -231,7 +231,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'solana') {
-    const tokenPbKey = new PublicKey(token);
     const accountPbKey = new PublicKey(account);
 
     // if asset is native solana token
@@ -239,6 +238,8 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       const balance = BigInt(await config.solanaConnection.getBalance(accountPbKey));
       return { balance, allowance: 0n };
     }
+
+    const tokenPbKey = new PublicKey(token);
 
     const { balance, associatedTokenAccountAddress, isAtaDeployed, delegatedAmount } =
       await getSolanaTokenBalanceAndAllowance({

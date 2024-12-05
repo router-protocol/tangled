@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.8
+
+### Patch Changes
+
+- fix solana native balance fetch
+
 ## 1.15.7
 
 ### Patch Changes
