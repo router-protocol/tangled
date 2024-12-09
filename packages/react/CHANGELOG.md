@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.9
+
+### Patch Changes
+
+- update solana native token address
+
 ## 1.15.8
 
 ### Patch Changes
