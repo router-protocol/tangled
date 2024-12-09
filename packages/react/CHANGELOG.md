@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.10
+
+### Patch Changes
+
+- fix solana native address
+
 ## 1.15.9
 
 ### Patch Changes
