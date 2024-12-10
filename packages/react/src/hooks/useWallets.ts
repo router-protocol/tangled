@@ -3,7 +3,7 @@ import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useContext, useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
-import { getBitcoinProvider, isXdefiWalletInstalled } from '../connectors/bitcoin/connectors.js';
+import { getBitcoinProvider, isCtrlWalletInstalled } from '../connectors/bitcoin/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { NearContext } from '../providers/NearProvider.js';
 import { TonContext } from '../providers/TonProvider.js';
@@ -236,7 +236,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       connector: getBitcoinProvider(),
       icon: connector.adapter.icon,
       type: 'bitcoin',
-      installed: isXdefiWalletInstalled(),
+      installed: isCtrlWalletInstalled(),
       url: connector.adapter.url,
     }));
 

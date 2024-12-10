@@ -4,8 +4,8 @@ import { useStore } from 'zustand';
 import {
   BITCOIN_CHAIN_CONFIG,
   connectToBitcoin,
+  ctrlWallet,
   getBitcoinProvider,
-  xdefiWallet,
 } from '../connectors/bitcoin/connectors.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { BitcoinStore, createBitcoinStore } from '../store/Bitcoin.js';
@@ -66,7 +66,7 @@ export const BitcoinProvider = ({
 
       if (bitcoinProvider && accounts.length > 0) {
         // setting localStorage for handling autoconnect
-        localStorage.setItem('xdefiConnection', 'true');
+        localStorage.setItem('ctrlConnection', 'true');
         return {
           account: accounts[0],
           chainId: BITCOIN_CHAIN_CONFIG[bitcoinProvider.chainId],
@@ -87,7 +87,7 @@ export const BitcoinProvider = ({
     mutationFn: async () => {
       if (!connectedAdapter) return;
 
-      localStorage.removeItem('xdefiConnection');
+      localStorage.removeItem('ctrlConnection');
       // no disconnect method available
       setAddress('');
       setConnectedAdapter(undefined);
@@ -103,10 +103,10 @@ export const BitcoinProvider = ({
       if (Array.isArray(account) && account.length > 0) {
         const validAccount = account[0];
         if (validAccount) {
-          connect(xdefiWallet.id);
+          connect(ctrlWallet.id);
         }
       } else {
-        localStorage.removeItem('xdefiConnection');
+        localStorage.removeItem('ctrlConnection');
       }
     });
   }, [connect]);
@@ -114,10 +114,10 @@ export const BitcoinProvider = ({
   // auto-connect
   useEffect(() => {
     (async function autoConnect() {
-      const isXdefiConnected = JSON.parse(localStorage.getItem('xdefiConnection') || 'null');
-      if (isXdefiConnected) {
+      const isctrlConnected = JSON.parse(localStorage.getItem('ctrlConnection') || 'null');
+      if (isctrlConnected) {
         try {
-          await connect(xdefiWallet.id);
+          await connect(ctrlWallet.id);
         } catch (error) {
           console.error('[BITCOIN] Auto connect failed', error);
         }
