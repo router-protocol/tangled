@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.11
+
+### Patch Changes
+
+- refactor xdefi to ctrl
+
 ## 1.15.10
 
 ### Patch Changes
