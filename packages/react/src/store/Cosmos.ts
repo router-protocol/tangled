@@ -54,8 +54,6 @@ export const createCosmosStore = (chains: ChainData[]) => {
       getChainRegistry: async () => {
         if (get().chainRegistry) return get().chainRegistry!;
 
-        console.log('Getting chain registry client', get());
-
         const chainRegistry = await getCosmosChainRegistryClient(
           chains.map((chain) => (chain as CosmsosChainType).chainName.toString()),
         );
