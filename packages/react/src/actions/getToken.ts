@@ -38,16 +38,17 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
         decimals: chain.nativeCurrency.decimals,
         address: ETH_ADDRESS,
         chainId: chain.id.toString() as ChainId,
+        isNative: true,
       };
     }
 
     const { name, symbol, decimals } = await getEVMTokenMetadata(token, Number(chain.id), config.wagmiConfig);
-    return { name, symbol, decimals, address: token, chainId: chain.id.toString() as ChainId };
+    return { name, symbol, decimals, address: token, chainId: chain.id.toString() as ChainId, isNative: false };
   }
 
   if (chain.type === 'tron') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
     let contractAddress: string = token;
     // = config.tronWeb.address.fromHex(token);
@@ -63,12 +64,12 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
 
     [name, symbol, decimals] = await Promise.all([name, symbol, decimals]);
 
-    return { name, symbol, decimals: Number(decimals), address: token, chainId: chain.id };
+    return { name, symbol, decimals: Number(decimals), address: token, chainId: chain.id, isNative: false };
   }
 
   if (chain.type === 'solana') {
     if (areTokensEqual(token, SOL_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: SOL_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: SOL_ADDRESS, chainId: chain.id, isNative: true };
     }
 
     const pbKey = new PublicKey(token);
@@ -83,6 +84,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
         decimals: parsed.info.decimals,
         address: token,
         chainId: chain.id,
+        isNative: false,
       };
     } else {
       throw new Error('Token metadata not found');
@@ -91,36 +93,38 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
 
   if (chain.type === 'ton') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
     const res = await getTonTokenMetadata({ token, chainId: chain.id });
     return {
       ...res,
       chainId: chain.id,
+      isNative: false,
     };
   }
 
   if (chain.type === 'cosmos') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
     const res = await getCosmosTokenMetadata({ token, chain, getCosmosClient: config.getCosmosClient });
 
     return {
       ...res,
       chainId: chain.id,
+      isNative: false,
     };
   }
 
   if (chain.type === 'bitcoin') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
   }
 
   if (chain.type === 'near') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
     const res = await viewMethodOnNear(chain as OtherChainData<'near'>, token, 'ft_metadata');
 
@@ -130,12 +134,13 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
       decimals: res.decimals,
       address: token,
       chainId: chain.id,
+      isNative: false,
     };
   }
 
   if (chain.type === 'sui') {
     if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id };
+      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
 
     let res;
@@ -156,6 +161,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
       decimals: res.decimals,
       address: token,
       chainId: chain.id,
+      isNative: false,
     };
   }
 

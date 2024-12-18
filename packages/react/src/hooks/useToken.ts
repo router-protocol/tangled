@@ -18,6 +18,7 @@ export type TokenMetadata = {
   symbol: string;
   decimals: number;
   chainId: ChainId;
+  isNative: boolean;
 };
 
 export const useToken = ({ chainId, token, ...queryOptions }: UseTokenParams) => {
