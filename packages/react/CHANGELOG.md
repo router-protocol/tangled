@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.12
+
+### Patch Changes
+
+- fix token struct, add isNative flag
+
 ## 1.15.11
 
 ### Patch Changes
