@@ -2,7 +2,7 @@ import { ParsedAccountData, PublicKey } from '@solana/web3.js';
 import { getBalance } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { trc20Abi } from '../constants/abi/trc20.js';
-import { ETH_ADDRESS, SOL_ADDRESS } from '../constants/index.js';
+import { ETH_ADDRESS, SOL_ADDRESS, SUI_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
 import {
   ChainData,
@@ -139,8 +139,8 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   }
 
   if (chain.type === 'sui') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
+    if (areTokensEqual(token, SUI_ADDRESS)) {
+      return { ...chain.nativeCurrency, address: SUI_ADDRESS, chainId: chain.id, isNative: true };
     }
 
     let res;

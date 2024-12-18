@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.13
+
+### Patch Changes
+
+- fix sui native token address
+
 ## 1.15.12
 
 ### Patch Changes

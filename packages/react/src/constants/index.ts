@@ -176,6 +176,11 @@ export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
 export const ETH_ADDRESS = '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';
 
 /**
+ * The native SUI address.
+ */
+export const SUI_ADDRESS = '0x0000000000000000000000000000000000000000000000000000000000000002::sui::SUI';
+
+/**
  * The native SOL address.
  */
 export const SOL_ADDRESS = '11111111111111111111111111111111';
