@@ -1,5 +1,6 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { maxInt256 } from 'viem';
+import { RouterLCDBalancesResponse } from '../../types/cosmos.js';
 import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
 import { areTokensEqual, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
 
@@ -45,9 +46,14 @@ export const getCosmosTokenBalanceAndAllowance = async ({
   allowance: bigint;
 }> => {
   if (chain.id === 'router_9600-1') {
-    const { getNetworkInfo, ChainGrpcWasmApi, ChainGrpcBankApi, getRouterSignerAddress, toUtf8 } = await import(
-      '@routerprotocol/router-chain-sdk-ts'
-    );
+    const {
+      getNetworkInfo,
+      getEndpointsForNetwork,
+      getNetworkType,
+      restFetcher,
+      ChainGrpcBankApi,
+      getRouterSignerAddress,
+    } = await import('@routerprotocol/router-chain-sdk-ts');
 
     const network = getNetworkInfo(chain.extra?.environment);
     if (token === 'route') {
@@ -68,24 +74,24 @@ export const getCosmosTokenBalanceAndAllowance = async ({
         allowance: maxInt256,
       };
     } else {
-      const wasmClient = new ChainGrpcWasmApi(network.grpcEndpoint);
-
+      const networkEnvironment = chain.id === 'router_9600-1' ? 'mainnet' : 'testnet';
+      const lcdEndpoint = getEndpointsForNetwork(getNetworkType(networkEnvironment)).lcdEndpoint;
       const address = getRouterSignerAddress(account);
       if (!address) {
         throw new Error(`Invalid address to convert to Router: ${account}`);
       }
 
-      const balance = await wasmClient.fetchSmartContractState(
-        token,
-        toUtf8(
-          JSON.stringify({
-            balance: { address },
-          }),
-        ),
+      const balancesData: RouterLCDBalancesResponse = await restFetcher(
+        `${lcdEndpoint}/cosmos/bank/v1beta1/balances/${address}?pagination.limit=1000`,
       );
+      const tokenBalance = balancesData.balances.find((balance) => balance.denom === token);
+
+      if (!tokenBalance) {
+        throw new Error(`Failed to fetch balance for token: ${token}`);
+      }
 
       return {
-        balance: BigInt(balance.data.balance),
+        balance: BigInt(tokenBalance.amount),
         allowance: maxInt256,
       };
     }
