@@ -1,7 +1,6 @@
 import { bitcoin } from '../chains/bitcoin.js';
 import * as cosmos from '../chains/cosmos/index.js';
 import * as evm from '../chains/evm/index.js';
-import { near } from '../chains/near.js';
 import { solana } from '../chains/solana.js';
 import { sui } from '../chains/sui.js';
 import { tonMainnet } from '../chains/ton.js';
@@ -69,7 +68,6 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
     supportedChains.tron = [tronMainnet] as TronChain[];
     supportedChains.sui = [sui] as SuiChainType[];
     supportedChains.ton = [tonMainnet] as OtherChainData<'ton'>[];
-    supportedChains.near = [near] as OtherChainData<'near'>[];
     supportedChains.bitcoin = [bitcoin] as OtherChainData<'bitcoin'>[];
   }
 
