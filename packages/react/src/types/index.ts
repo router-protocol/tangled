@@ -1,8 +1,10 @@
 import type { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
 import type { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
+import type { WalletSelector as NearWalletSelector } from '@near-wallet-selector/core';
 import type { Connection as SolanaConnection } from '@solana/web3.js';
 import type { TonClient } from '@ton/ton';
 import type { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
+import type { providers } from 'near-api-js';
 import type { TronWeb, Types as TronWebTypes } from 'tronweb';
 import type { Chain as ViemChain } from 'viem';
 import type { Config as WagmiConfig } from 'wagmi';
@@ -100,6 +102,9 @@ export interface TangledConfig {
   tonconnectManifestUrl: string;
   /** Telegram mini app url */
   twaReturnUrl: `${string}://${string}`;
+
+  // Configure network environment of near-wallet-selector
+  nearNetwork: 'testnet' | 'mainnet';
 }
 
 type ChainRpcUrls = {
@@ -131,6 +136,7 @@ export type ConnectionOrConfig = {
   tonClient: TonClient;
   getCosmosClient: GetCosmosClient;
   bitcoinProvider: XfiBitcoinConnector;
+  nearSelector: NearWalletSelector;
 };
 
 export type GetTokenMetadataParams = {
@@ -149,4 +155,6 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
         ? TonTransactionInfo
         : C extends 'cosmos'
           ? CosmosIndexedTx
-          : unknown;
+          : C extends 'near'
+            ? providers.FinalExecutionOutcome
+            : unknown;
