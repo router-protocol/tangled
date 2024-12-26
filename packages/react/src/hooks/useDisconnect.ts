@@ -7,7 +7,6 @@ import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
-import { useNearContext } from './useNearContext.js';
 import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
@@ -25,7 +24,6 @@ export const useDisconnect = () => {
   const { disconnect: disconnectTonWallet } = useTonContext();
   const { disconnect: disconnectCosmosWallet } = useCosmosContext();
   const { disconnect: disconnectBitcoinWallet } = useBitcoinContext();
-  const { disconnect: disconnectNearWallet } = useNearContext();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
@@ -64,8 +62,6 @@ export const useDisconnect = () => {
         await disconnectTonWallet();
       } else if (params.chainType === 'bitcoin') {
         await disconnectBitcoinWallet();
-      } else if (params.chainType === 'near') {
-        await disconnectNearWallet();
       } else {
         const connector = walletInstance.connector as DefaultConnector;
         await connector.disconnect();
@@ -79,7 +75,6 @@ export const useDisconnect = () => {
       disconnectTonWallet,
       disconnectCosmosWallet,
       disconnectBitcoinWallet,
-      disconnectNearWallet,
       wallets,
     ],
   );
