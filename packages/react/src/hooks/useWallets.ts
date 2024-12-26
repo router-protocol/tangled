@@ -6,7 +6,6 @@ import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { getBitcoinProvider, isCtrlWalletInstalled } from '../connectors/bitcoin/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
 import { NearContext } from '../providers/NearProvider.js';
-import { TonContext } from '../providers/TonProvider.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useBitcoinStore } from './useBitcoinStore.js';
@@ -36,8 +35,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const configuredConnectors = useTangledConfig((config) => config.connectors);
 
   const tronConnectors = useTronStore((state) => state.connectors);
-
-  const { wallets: tonWallets, tonAdapter } = useContext(TonContext);
 
   const cosmosWallets = useCosmosStore((state) => state.wallets);
 
@@ -168,38 +165,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     return detected.concat(suggested);
   }, [configuredConnectors.sui, options?.onlyInstalled, suiWallets]);
 
-  //ton
-  const extendedTonWallets = useMemo<Wallet<'ton'>[]>(() => {
-    const detected: Wallet<'ton'>[] = tonWallets.map((wallet) => ({
-      id: wallet.appName,
-      name: wallet.name,
-      connector: tonAdapter,
-      icon: wallet.imageUrl,
-      type: 'ton',
-      // @ts-expect-error - `injected` doesn't exist on WalletInfo type
-      installed: wallet.injected,
-      url: wallet.aboutUrl,
-    }));
-
-    // for ton connect modal option
-    const tonConnectOption: Wallet<'ton'> = {
-      id: 'ton-connect',
-      name: 'Ton Connect',
-      connector: tonAdapter,
-      icon: 'https://cryptologos.cc/logos/toncoin-ton-logo.png?v=035',
-      type: 'ton',
-      installed: true,
-    };
-
-    const walletList = [tonConnectOption, ...detected];
-
-    if (options?.onlyInstalled) {
-      return walletList.filter((wallet) => wallet.installed);
-    }
-
-    return walletList;
-  }, [tonWallets, tonAdapter, options]);
-
   //cosmos
   const extendedCosmosWallets = useMemo<Wallet<'cosmos'>[]>(() => {
     if (!cosmosWallets.length) return [] as Wallet<'cosmos'>[];
@@ -271,7 +236,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       evm: extendedEvmWallets,
       solana: extendedSolanaWallets,
       tron: extendedTronWallets,
-      ton: extendedTonWallets,
+      ton: [],
       bitcoin: extendedBitcoinWallets,
       casper: [],
       cosmos: extendedCosmosWallets,
@@ -283,7 +248,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       extendedSolanaWallets,
       extendedTronWallets,
       extendedSuiWallets,
-      extendedTonWallets,
       extendedCosmosWallets,
       extendedBitcoinWallets,
       extendedNearWallets,

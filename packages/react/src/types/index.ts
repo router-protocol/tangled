@@ -2,7 +2,6 @@ import type { IndexedTx as CosmosIndexedTx } from '@cosmjs/stargate';
 import type { SuiClient, SuiTransactionBlockResponse } from '@mysten/sui/client';
 import type { WalletSelector as NearWalletSelector } from '@near-wallet-selector/core';
 import type { Connection as SolanaConnection } from '@solana/web3.js';
-import type { TonClient } from '@ton/ton';
 import type { GetTransactionReceiptReturnType as EVMTxReceipt } from '@wagmi/core';
 import type { providers } from 'near-api-js';
 import type { TronWeb, Types as TronWebTypes } from 'tronweb';
@@ -11,7 +10,6 @@ import type { Config as WagmiConfig } from 'wagmi';
 import { CHAIN_ID } from '../constants/index.js';
 import { GetCosmosClient } from '../store/Cosmos.js';
 import { XfiBitcoinConnector } from './bitcoin.js';
-import { TonTransactionInfo } from './ton.js';
 import { ChainConnectors } from './wallet.js';
 export const CHAIN_TYPES = ['evm', 'tron', 'near', 'cosmos', 'solana', 'sui', 'casper', 'bitcoin', 'ton'] as const;
 
@@ -98,11 +96,6 @@ export interface TangledConfig {
 
   chainConnectors?: Partial<ChainConnectors>;
 
-  /** Manifest url for ton connect */
-  tonconnectManifestUrl: string;
-  /** Telegram mini app url */
-  twaReturnUrl: `${string}://${string}`;
-
   // Configure network environment of near-wallet-selector
   nearNetwork: 'testnet' | 'mainnet';
 }
@@ -133,7 +126,6 @@ export type ConnectionOrConfig = {
   solanaConnection: SolanaConnection;
   tronWeb: TronWeb;
   suiClient: SuiClient;
-  tonClient: TonClient;
   getCosmosClient: GetCosmosClient;
   bitcoinProvider: XfiBitcoinConnector;
   nearSelector: NearWalletSelector;
@@ -151,10 +143,8 @@ export type TransactionReceipt<C extends ChainType> = C extends 'evm'
     ? TronWebTypes.TransactionInfo
     : C extends 'sui'
       ? SuiTransactionBlockResponse
-      : C extends 'ton'
-        ? TonTransactionInfo
-        : C extends 'cosmos'
-          ? CosmosIndexedTx
-          : C extends 'near'
-            ? providers.FinalExecutionOutcome
-            : unknown;
+      : C extends 'cosmos'
+        ? CosmosIndexedTx
+        : C extends 'near'
+          ? providers.FinalExecutionOutcome
+          : unknown;

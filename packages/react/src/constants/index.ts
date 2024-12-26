@@ -63,8 +63,6 @@ export const CHAIN_ID = {
   // casper
 
   // ton
-  tonMainnet: '-239',
-  tonTestnet: '-3',
 
   // bitcoin
   bitcoin: 'bitcoin',
@@ -143,8 +141,6 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.suiTestnet]: chains.suiTestnet,
 
   // ton
-  [CHAIN_ID.tonMainnet]: chains.tonMainnet,
-  [CHAIN_ID.tonTestnet]: chains.tonTestnet,
 
   // bitcoin
   [CHAIN_ID.bitcoin]: chains.bitcoin,
