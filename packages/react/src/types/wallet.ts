@@ -1,5 +1,6 @@
 import { MainWalletBase as CosmosMainWalletBase } from '@cosmos-kit/core';
 import { WalletWithRequiredFeatures } from '@mysten/wallet-standard';
+import { Wallet as NearWallet } from '@near-wallet-selector/core';
 import { Adapter as SolanaAdapter } from '@solana/wallet-adapter-base';
 import { TonConnectUI } from '@tonconnect/ui-react';
 import { Adapter as TronAdapter, AdapterState as TronAdapterReadyState } from '@tronweb3/tronwallet-abstract-adapter';
@@ -7,6 +8,8 @@ import { Mutable } from '@wagmi/core/internal';
 import { CreateConnectorFn, Connector as EVMConnector } from 'wagmi';
 import { ChainId, ChainType } from '../types/index.js';
 import { XfiBitcoinConnector } from './bitcoin.js';
+// @ts-expect-error - SignMessageMethod has no exports
+import { SignMessageMethod } from '@near-wallet-selector/core/src/lib/wallet/index.js';
 
 export type ChainConnectors = {
   evm: CreateConnectorFn[];
@@ -71,7 +74,9 @@ export type WalletInstance<T extends ChainType = ChainType> = T extends 'evm'
             ? TonConnectUI
             : T extends 'bitcoin'
               ? XfiBitcoinConnector | Wallet<'bitcoin'>
-              : DefaultConnector;
+              : T extends 'near'
+                ? NearWallet & SignMessageMethod
+                : DefaultConnector;
 
 export type ConnectedWallet<T extends ChainType = ChainType> = {
   address: string;

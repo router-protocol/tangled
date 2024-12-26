@@ -63,7 +63,6 @@ const tokens: TokenMetadata[] = [
     name: 'OSMO',
     symbol: 'OSMO',
     chainId: 'osmosis-1',
-    isNative: true,
   },
   {
     address: ETH_ADDRESS,
@@ -71,7 +70,6 @@ const tokens: TokenMetadata[] = [
     name: 'Ether',
     symbol: 'ETH',
     chainId: '1',
-    isNative: true,
   },
   {
     address: '',
@@ -79,7 +77,6 @@ const tokens: TokenMetadata[] = [
     name: 'Polygon MATIC',
     symbol: 'MATIC',
     chainId: '137',
-    isNative: true,
   },
   {
     address: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
@@ -87,7 +84,6 @@ const tokens: TokenMetadata[] = [
     name: 'USDC',
     symbol: 'USDC',
     chainId: '42161',
-    isNative: false,
   },
   {
     address: SOL_ADDRESS,
@@ -95,7 +91,6 @@ const tokens: TokenMetadata[] = [
     name: 'Solana SOL',
     symbol: 'SOL',
     chainId: 'solana',
-    isNative: true,
   },
   {
     address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
@@ -103,7 +98,6 @@ const tokens: TokenMetadata[] = [
     name: 'USDC',
     symbol: 'USDC',
     chainId: 'solana',
-    isNative: false,
   },
   {
     address: 'So11111111111111111111111111111111111111112',
@@ -111,7 +105,6 @@ const tokens: TokenMetadata[] = [
     name: 'Wrapped SOL',
     symbol: 'WSOL',
     chainId: 'solana',
-    isNative: false,
   },
   {
     address: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
@@ -119,7 +112,6 @@ const tokens: TokenMetadata[] = [
     name: 'USDT',
     symbol: 'USDT',
     chainId: 'solana',
-    isNative: false,
   },
   {
     address: ETH_ADDRESS,
@@ -127,7 +119,6 @@ const tokens: TokenMetadata[] = [
     name: 'Tron TRX',
     symbol: 'TRX',
     chainId: '728126428',
-    isNative: true,
   },
   {
     address: 'TEkxiTehnzSmSe2XqrBj4w32RUN966rdz8',
@@ -135,7 +126,6 @@ const tokens: TokenMetadata[] = [
     name: 'Tron USDC',
     symbol: 'USDC',
     chainId: '728126428',
-    isNative: false,
   },
   {
     address: ETH_ADDRESS,
@@ -143,7 +133,6 @@ const tokens: TokenMetadata[] = [
     name: 'Toncoin',
     symbol: 'TON',
     chainId: '-239',
-    isNative: true,
   },
   {
     address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
@@ -151,7 +140,6 @@ const tokens: TokenMetadata[] = [
     name: 'Tether USD',
     symbol: 'USDT',
     chainId: '-239',
-    isNative: false,
   },
   {
     address: ETH_ADDRESS,
@@ -159,16 +147,27 @@ const tokens: TokenMetadata[] = [
     name: 'Bitcoin',
     symbol: 'BTC',
     chainId: 'bitcoin',
-    isNative: true,
   },
-
+  {
+    address: ETH_ADDRESS,
+    decimals: 24,
+    name: 'NEAR',
+    symbol: 'NEAR',
+    chainId: '397',
+  },
+  {
+    address: 'usdt.tether-token.near',
+    decimals: 6,
+    name: 'Tether USD',
+    symbol: 'USDt',
+    chainId: '397',
+  },
   {
     address: '0x2::sui::SUI',
     decimals: 9,
     name: 'Sui Token',
     symbol: 'SUI',
     chainId: 'sui',
-    isNative: true,
   },
   {
     address: '0xc060006111016b8a020ad5b33834984a437aaa7d3c74c18e09a95d48aceab08c::coin::COIN',
@@ -176,7 +175,6 @@ const tokens: TokenMetadata[] = [
     name: 'Tether USD',
     symbol: 'USDT',
     chainId: 'sui',
-    isNative: false,
   },
   {
     address: '0xdba34672e30cb065b1f93e3ab55318768fd6fef66c15942c9f7cb846e2f900e7::usdc::USDC',
@@ -184,7 +182,6 @@ const tokens: TokenMetadata[] = [
     name: 'USDC',
     symbol: 'USDC',
     chainId: 'sui',
-    isNative: false,
   },
 ];
 
