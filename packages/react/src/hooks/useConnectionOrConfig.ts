@@ -6,6 +6,7 @@ import { FallbackBitcoinProvider } from '../connectors/bitcoin/connectors.js';
 import { ConnectionOrConfig } from '../types/index.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosStore } from './useCosmosStore.js';
+import { useNearContext } from './useNearContext.js';
 import { useTonStore } from './useTonStore.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -20,6 +21,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
   const tonClient = useTonStore((state) => state.tonClient);
   const getCosmosClient = useCosmosStore((state) => state.getCosmosClient);
   const { bitcoinProvider } = useBitcoinContext();
+  const { nearSelector } = useNearContext();
 
   return useMemo(() => {
     return {
@@ -30,6 +32,7 @@ export const useConnectionOrConfig = (): ConnectionOrConfig | undefined => {
       tonClient,
       getCosmosClient,
       bitcoinProvider: bitcoinProvider ?? new FallbackBitcoinProvider(),
+      nearSelector,
     };
-  }, [wagmiConfig, solanaConnection, tronWeb, suiClient, tonClient, getCosmosClient, bitcoinProvider]);
+  }, [wagmiConfig, solanaConnection, tronWeb, suiClient, tonClient, getCosmosClient, bitcoinProvider, nearSelector]);
 };

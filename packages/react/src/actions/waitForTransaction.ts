@@ -1,9 +1,10 @@
 import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
-import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
+import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
 import { getTransactionStatus as getBitcoinTransactionStatus } from './bitcoin/transaction.js';
+import { getNearProvider } from './near/readCalls.js';
 
 export type DefaultOverrides = {
   interval: number;
@@ -26,7 +27,11 @@ export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
             accountAddress: string;
             lt: string;
           }
-        : any);
+        : C extends 'near'
+          ? {
+              accountAddress: string;
+            }
+          : any);
 
 export type DefaultTransactionParams = {
   txHash: string;
@@ -205,6 +210,38 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     if (!receipt) {
       throw new Error('Transaction not found');
     }
+    return receipt;
+  }
+
+  if (chain.type === 'near') {
+    const _overrides = (overrides || {}) as WatchTransactionOverrides<'near'>;
+    let { txHash } = transactionParams as TransactionParams<'near'>;
+
+    const params = new URLSearchParams(window.location.search);
+    const transactionHashes = params.get('transactionHashes');
+    if (transactionHashes) {
+      txHash = transactionHashes;
+    }
+
+    const receipt = await pollCallback(
+      async () => {
+        const provider = await getNearProvider(chain as OtherChainData<'near'>);
+        const txDetails = await provider.txStatus(txHash, _overrides.accountAddress);
+        if (txDetails.final_execution_status === 'FINAL') {
+          return txDetails;
+        }
+        return undefined;
+      },
+      {
+        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
+        timeout: overrides?.timeout,
+      },
+    );
+
+    if (!receipt) {
+      throw new Error('Transaction not found');
+    }
+
     return receipt;
   }
 
