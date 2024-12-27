@@ -7,7 +7,6 @@ import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
-import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
@@ -21,7 +20,6 @@ export const useDisconnect = () => {
   const { disconnect: disconnectSolanaWallet } = useSolanaWallet();
   const { disconnect: disconnectTronWallet } = useTronContext();
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
-  const { disconnect: disconnectTonWallet } = useTonContext();
   const { disconnect: disconnectCosmosWallet } = useCosmosContext();
   const { disconnect: disconnectBitcoinWallet } = useBitcoinContext();
 
@@ -58,8 +56,6 @@ export const useDisconnect = () => {
         disconnectSuiWallet();
       } else if (params.chainType === 'cosmos') {
         disconnectCosmosWallet();
-      } else if (params.chainType === 'ton') {
-        await disconnectTonWallet();
       } else if (params.chainType === 'bitcoin') {
         await disconnectBitcoinWallet();
       } else {
@@ -72,7 +68,6 @@ export const useDisconnect = () => {
       disconnectSolanaWallet,
       disconnectSuiWallet,
       disconnectTronWallet,
-      disconnectTonWallet,
       disconnectCosmosWallet,
       disconnectBitcoinWallet,
       wallets,
