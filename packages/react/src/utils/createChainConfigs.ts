@@ -4,7 +4,7 @@ import getDefaultSupportedChains from './getDefaultSupportedChains.js';
 
 const createChainConfigs = (
   chains: SupportedChainsByType | undefined,
-  overrides?: Partial<Record<Chain, ChainConfig>>,
+  overrides?: Partial<Record<Chain, Partial<ChainConfig>>>,
   testnet?: boolean,
 ): SupportedChainsByType => {
   let supportedChains: SupportedChainsByType = {
