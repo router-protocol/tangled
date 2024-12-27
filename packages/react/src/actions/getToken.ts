@@ -10,7 +10,6 @@ import { getFormattedBalance as getBitcoinBalance } from './bitcoin/balance.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
 import { getSolanaTokenBalanceAndAllowance } from './solana/getSolanaToken.js';
-import { getTonTokenBalanceAndAllowance, getTonTokenMetadata } from './ton/getTonToken.js';
 
 /**
  * Get token metadata
@@ -81,18 +80,6 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
     } else {
       throw new Error('Token metadata not found');
     }
-  }
-
-  if (chain.type === 'ton') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
-      return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
-    }
-    const res = await getTonTokenMetadata({ token, chainId: chain.id });
-    return {
-      ...res,
-      chainId: chain.id,
-      isNative: false,
-    };
   }
 
   if (chain.type === 'cosmos') {
@@ -232,15 +219,6 @@ export const getTokenBalanceAndAllowance = (async (params) => {
       });
 
     return { balance, associatedTokenAccountAddress, isAtaDeployed, allowance: delegatedAmount };
-  }
-
-  if (chain.type === 'ton') {
-    return getTonTokenBalanceAndAllowance({
-      account,
-      token,
-      spender,
-      config,
-    });
   }
 
   if (chain.type === 'cosmos') {
