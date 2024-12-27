@@ -3,14 +3,10 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
 import { useConnections as useEVMConnections } from 'wagmi';
 import { BITCOIN_CHAIN_CONFIG } from '../connectors/bitcoin/connectors.js';
-import { NEAR_NETWORK_CONFIG } from '../constants/index.js';
 import { useBitcoinStore } from '../hooks/useBitcoinStore.js';
 import { useConnectionOrConfig } from '../hooks/useConnectionOrConfig.js';
 import { useCosmosStore } from '../hooks/useCosmosStore.js';
-import { useNearContext } from '../hooks/useNearContext.js';
-import { useNearStore } from '../hooks/useNearStore.js';
 import { useTangledConfig } from '../hooks/useTangledConfig.js';
-import { useTonStore } from '../hooks/useTonStore.js';
 import { useTronStore } from '../hooks/useTronStore.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainId } from '../types/index.js';
@@ -21,8 +17,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const evmConnections = useEVMConnections();
   const { connections: solanaWallets, wallet: solConnectedWallet } = useSolanaWallet();
   const tronConnectors = useTronStore((state) => state.connectors);
-  const tonConnectors = useTonStore((state) => state.connectors);
-  const tonAddress = useTonStore((state) => state.address);
 
   // Cosmos store states
   const cosmosChainWallets = useCosmosStore((state) => state.chainWallets);
@@ -30,9 +24,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const bitcoinConnectors = useBitcoinStore((state) => state.connectors);
   const bitcoinAddress = useBitcoinStore((state) => state.address);
   const config = useConnectionOrConfig();
-
-  const nearConnectors = useNearStore((state) => state.connectors);
-  const { nearSelector } = useNearContext();
 
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
@@ -134,39 +125,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     });
   }, [setChainConnectedAccounts, setConnectedWallets, tronConnectors]);
 
-  // ton
-  useEffect(() => {
-    const _tonAccounts: { [x: string]: ConnectedAccount } = {};
-    const _tonWallets: { [x: string]: ConnectedWallet<'ton'> } = {};
-
-    for (const [name, adapter] of Object.entries(tonConnectors)) {
-      const address = tonAddress ?? '';
-
-      if (address === '') {
-        continue;
-      }
-
-      _tonAccounts[name] = {
-        address: address,
-        chainId: adapter.wallet?.account.chain,
-        chainType: 'ton',
-        wallet: name,
-      };
-
-      _tonWallets[name] = {
-        address: address,
-        chainId: adapter.wallet?.account.chain,
-        chainType: 'ton',
-        connector: adapter,
-      };
-    }
-
-    setChainConnectedAccounts({ ton: _tonAccounts });
-    setConnectedWallets({
-      ton: _tonWallets,
-    });
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.ton, tonConnectors, tonAddress]);
-
   // cosmos
   useEffect(() => {
     const _cosmosAccounts: { [x: string]: ConnectedAccount } = {};
@@ -266,41 +224,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       bitcoin: _bitcoinWallets,
     });
   }, [bitcoinAddress, bitcoinConnectors, setChainConnectedAccounts, setConnectedWallets, config]);
-
-  // near
-  useEffect(() => {
-    const _nearAccounts: { [x: string]: ConnectedAccount } = {};
-    const _nearWallets: { [x: string]: ConnectedWallet<'near'> } = {};
-
-    for (const [name, adapter] of Object.entries(nearConnectors)) {
-      const state = nearSelector.store.getState();
-      const address = state.accounts[0]?.accountId ?? '';
-
-      if (address === '') {
-        continue;
-      }
-
-      _nearAccounts[name] = {
-        address: address,
-        chainId: NEAR_NETWORK_CONFIG[nearSelector.options.network.networkId] as ChainId,
-        chainType: 'near',
-        wallet: name,
-      };
-
-      _nearWallets[name] = {
-        address: address,
-        chainId: NEAR_NETWORK_CONFIG[nearSelector.options.network.networkId] as ChainId,
-        chainType: 'near',
-        connector: adapter,
-      };
-    }
-
-    setChainConnectedAccounts({ near: _nearAccounts });
-    setConnectedWallets({
-      near: _nearWallets,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setChainConnectedAccounts, setConnectedWallets, chains.near, nearConnectors]);
 
   // ALL CHANGES ABOVE THIS BLOCK
   // when currentWallet changes, update currentAccount

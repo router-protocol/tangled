@@ -1,14 +1,11 @@
 import { Transaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
-import { Cell } from '@ton/ton';
-import { CHAIN } from '@tonconnect/ui-react';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
 import { Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { signBitcoinTransaction } from './bitcoin/transaction.js';
-import { NO_DEPOSIT, THIRTY_TGAS } from './near/readCalls.js';
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -38,49 +35,21 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
       ? {
           tx: Transaction;
         }
-      : CType extends 'ton'
+      : CType extends 'cosmos'
         ? {
-            tonArgs: {
-              validUntil: number; // transaction deadline in unix epoch seconds.
-              network?: CHAIN; // (MAINNET: "-239" & TESTNET: "-3")
-              payload?: string;
-              stateInit?: string;
+            messages: Array<{
+              readonly typeUrl: string;
+              readonly value: any;
+            }>;
+            memo?: string;
+            routerChainArgs?: {
+              executeMsg: object;
+              funds: Array<{ denom: string; amount: string }>;
             };
           }
-        : CType extends 'cosmos'
-          ? {
-              messages: Array<{
-                readonly typeUrl: string;
-                readonly value: any;
-              }>;
-              memo?: string;
-              routerChainArgs?: {
-                executeMsg: object;
-                funds: Array<{ denom: string; amount: string }>;
-              };
-            }
-          : CType extends 'near'
-            ? {
-                nearArgs: {
-                  transactionType:
-                    | 'CreateAccount'
-                    | 'DeployContract'
-                    | 'FunctionCall'
-                    | 'Transfer'
-                    | 'Stake'
-                    | 'AddKey'
-                    | 'DeleteKey'
-                    | 'DeleteAccount';
-                  signerId?: string;
-                  methodName?: string;
-                  args?: object;
-                  gas?: string;
-                  deposit?: string;
-                };
-              }
-            : CType extends 'bitcoin'
-              ? { memo: string; feeRate?: number }
-              : never;
+        : CType extends 'bitcoin'
+          ? { memo: string; feeRate?: number }
+          : never;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type SendTransactionReturnType<C extends ChainType> = { txHash: string };
@@ -196,39 +165,6 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     return { txHash: result.digest };
   }
 
-  if (chain.type === 'ton') {
-    const { tonArgs } = args as TransactionArgs<'ton'>;
-    const messages: Array<{
-      address: string;
-      amount: string;
-      payload?: string;
-      stateInit?: string;
-    }> = [
-      {
-        address: to,
-        amount: value.toString(),
-        payload: tonArgs.payload,
-        stateInit: tonArgs.stateInit,
-      },
-    ];
-    const transaction = {
-      from,
-      messages,
-      network: tonArgs.network,
-      validUntil: tonArgs.validUntil,
-    };
-
-    const walletConnector = config.connector as WalletInstance<'ton'>;
-    // send transaction to TON chain
-    const tx = await walletConnector.sendTransaction(transaction);
-
-    const cell = Cell.fromBase64(tx.boc);
-    const buffer = cell.hash();
-    const hashHex = buffer.toString('hex');
-
-    return { txHash: hashHex };
-  }
-
   if (chain.type === 'cosmos') {
     const chainWallet = config.getCosmosClient().getChainWallet(chain.id);
 
@@ -303,29 +239,6 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     });
 
     return { txHash };
-  }
-
-  if (chain.type === 'near') {
-    const { nearArgs } = args as TransactionArgs<'near'>;
-
-    // sendTransaction to NEAR chain
-    const tx = await config.connector.signAndSendTransaction({
-      receiverId: to,
-      signerId: nearArgs.signerId,
-      actions: [
-        {
-          type: nearArgs.transactionType,
-          params: {
-            methodName: nearArgs.methodName,
-            args: nearArgs.args,
-            gas: nearArgs.gas ?? THIRTY_TGAS,
-            deposit: nearArgs.transactionType === 'Transfer' ? value : nearArgs.deposit ?? NO_DEPOSIT,
-          },
-        },
-      ],
-    });
-
-    return { txHash: tx.transaction.hash };
   }
 
   throw new Error('Chain not supported');

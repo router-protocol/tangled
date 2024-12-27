@@ -1,10 +1,8 @@
-import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
-import { ChainData, ChainType, ConnectionOrConfig, OtherChainData, TransactionReceipt } from '../types/index.js';
+import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
 import { getTransactionStatus as getBitcoinTransactionStatus } from './bitcoin/transaction.js';
-import { getNearProvider } from './near/readCalls.js';
 
 export type DefaultOverrides = {
   interval: number;
@@ -22,16 +20,7 @@ export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
       ? {
           maxSupportedTransactionVersion: number;
         }
-      : C extends 'ton'
-        ? {
-            accountAddress: string;
-            lt: string;
-          }
-        : C extends 'near'
-          ? {
-              accountAddress: string;
-            }
-          : any);
+      : any);
 
 export type DefaultTransactionParams = {
   txHash: string;
@@ -143,26 +132,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     return receipt;
   }
 
-  if (chain.type === 'ton') {
-    const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;
-    const { txHash } = transactionParams as TransactionParams<'ton'>;
-
-    const receipt = await pollCallback(
-      async () => {
-        return await config.tonClient.getTransaction(Address.parse(_overrides.accountAddress), _overrides.lt, txHash);
-      },
-      {
-        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-
-    if (!receipt) {
-      throw new Error('Transaction not found');
-    }
-    return receipt;
-  }
-
   if (chain.type === 'cosmos') {
     const { txHash } = transactionParams as TransactionParams<'cosmos'>;
 
@@ -210,38 +179,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     if (!receipt) {
       throw new Error('Transaction not found');
     }
-    return receipt;
-  }
-
-  if (chain.type === 'near') {
-    const _overrides = (overrides || {}) as WatchTransactionOverrides<'near'>;
-    let { txHash } = transactionParams as TransactionParams<'near'>;
-
-    const params = new URLSearchParams(window.location.search);
-    const transactionHashes = params.get('transactionHashes');
-    if (transactionHashes) {
-      txHash = transactionHashes;
-    }
-
-    const receipt = await pollCallback(
-      async () => {
-        const provider = await getNearProvider(chain as OtherChainData<'near'>);
-        const txDetails = await provider.txStatus(txHash, _overrides.accountAddress);
-        if (txDetails.final_execution_status === 'FINAL') {
-          return txDetails;
-        }
-        return undefined;
-      },
-      {
-        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-
-    if (!receipt) {
-      throw new Error('Transaction not found');
-    }
-
     return receipt;
   }
 
