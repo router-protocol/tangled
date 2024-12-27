@@ -33,7 +33,7 @@ const createChainConfigs = (
 
 const overrideChainConfig = (
   chainsByType: SupportedChainsByType,
-  overrides: Partial<Record<Chain, ChainConfig>> | undefined,
+  overrides: Partial<Record<Chain, Partial<ChainConfig>>> | undefined,
 ) => {
   const supportedChains: SupportedChainsByType = {
     bitcoin: [],
