@@ -59,6 +59,7 @@ export * from './nahmii.js';
 export * from './nero.js';
 export * from './oasisSapphire.js';
 export * from './odyssey.js';
+export * from './redbelly.js';
 export * from './router-evm.js';
 export * from './shido.js';
 export * from './tangle.js';
