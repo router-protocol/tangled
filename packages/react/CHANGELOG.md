@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.15.14
+
+### Patch Changes
+
+- chore: added more evm chains, removed near and ton providers
+
 ## 1.15.13
 
 ### Patch Changes
