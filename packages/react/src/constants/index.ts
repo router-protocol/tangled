@@ -48,8 +48,6 @@ export const CHAIN_ID = {
   // tronNile: 'tron-nile',
 
   // near
-  near: '397',
-  nearTestnet: '398',
 
   // solana
   solana: 'solana',
@@ -130,8 +128,6 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // [CHAIN_ID.tronNile]: chains.tronNile,
 
   // near
-  [CHAIN_ID.near]: chains.near,
-  [CHAIN_ID.nearTestnet]: chains.nearTestnet,
 
   // solana
   [CHAIN_ID.solana]: chains.solana,
@@ -184,9 +180,3 @@ export const SUI_ADDRESS = '0x00000000000000000000000000000000000000000000000000
  * The native SOL address.
  */
 export const SOL_ADDRESS = '11111111111111111111111111111111';
-
-// Lookup for near chain id
-export const NEAR_NETWORK_CONFIG: Record<string, string> = {
-  testnet: CHAIN_ID.nearTestnet,
-  mainnet: CHAIN_ID.near,
-};

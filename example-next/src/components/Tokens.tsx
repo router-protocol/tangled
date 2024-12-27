@@ -149,20 +149,6 @@ const tokens: TokenMetadata[] = [
     chainId: 'bitcoin',
   },
   {
-    address: ETH_ADDRESS,
-    decimals: 24,
-    name: 'NEAR',
-    symbol: 'NEAR',
-    chainId: '397',
-  },
-  {
-    address: 'usdt.tether-token.near',
-    decimals: 6,
-    name: 'Tether USD',
-    symbol: 'USDt',
-    chainId: '397',
-  },
-  {
     address: '0x2::sui::SUI',
     decimals: 9,
     name: 'Sui Token',
