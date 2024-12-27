@@ -48,6 +48,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.metis,
       evm.mode,
       evm.nahmii,
+      evm.nero,
       evm.oasisSapphire,
       evm.odyssey,
       evm.optimism,

@@ -56,6 +56,7 @@ export const xLayer: EVMChain = { ...vxLayer, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
 export * from './arthera.js';
 export * from './nahmii.js';
+export * from './nero.js';
 export * from './oasisSapphire.js';
 export * from './odyssey.js';
 export * from './router-evm.js';
