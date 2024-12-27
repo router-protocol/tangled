@@ -137,22 +137,6 @@ const tokens: TokenMetadata[] = [
     chainId: '728126428',
     isNative: false,
   },
-  {
-    address: ETH_ADDRESS,
-    decimals: 9,
-    name: 'Toncoin',
-    symbol: 'TON',
-    chainId: '-239',
-    isNative: true,
-  },
-  {
-    address: 'EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs',
-    decimals: 6,
-    name: 'Tether USD',
-    symbol: 'USDT',
-    chainId: '-239',
-    isNative: false,
-  },
 ];
 
 export default Tokens;
