@@ -56,6 +56,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.rootstock,
       evm.saakuru,
       evm.scroll,
+      evm.shido,
       evm.taiko,
       evm.tangle,
       evm.vanar,

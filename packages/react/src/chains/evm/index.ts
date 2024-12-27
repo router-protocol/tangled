@@ -57,4 +57,5 @@ export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
 export * from './arthera.js';
 export * from './oasisSapphire.js';
 export * from './router-evm.js';
+export * from './shido.js';
 export * from './tangle.js';
