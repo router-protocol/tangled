@@ -1,4 +1,3 @@
-import { Address } from '@ton/ton';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
@@ -21,12 +20,7 @@ export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
       ? {
           maxSupportedTransactionVersion: number;
         }
-      : C extends 'ton'
-        ? {
-            accountAddress: string;
-            lt: string;
-          }
-        : any);
+      : any);
 
 export type DefaultTransactionParams = {
   txHash: string;
@@ -125,26 +119,6 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
             showBalanceChanges: true,
           },
         });
-      },
-      {
-        interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,
-        timeout: overrides?.timeout,
-      },
-    );
-
-    if (!receipt) {
-      throw new Error('Transaction not found');
-    }
-    return receipt;
-  }
-
-  if (chain.type === 'ton') {
-    const _overrides = (overrides || {}) as WatchTransactionOverrides<'ton'>;
-    const { txHash } = transactionParams as TransactionParams<'ton'>;
-
-    const receipt = await pollCallback(
-      async () => {
-        return await config.tonClient.getTransaction(Address.parse(_overrides.accountAddress), _overrides.lt, txHash);
       },
       {
         interval: overrides?.interval || DEFAULT_POLLING_INTERVAL,

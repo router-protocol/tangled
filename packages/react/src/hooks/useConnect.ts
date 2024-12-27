@@ -4,13 +4,11 @@ import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { useConnect as useWagmiConnect } from 'wagmi';
-import { createTonWalletInstance } from '../connectors/ton/connector.js';
 import { useWalletsStore } from '../store/Wallet.js';
 import { ChainType } from '../types/index.js';
 import { DefaultConnector, Wallet, WalletInstance } from '../types/wallet.js';
 import { useBitcoinContext } from './useBitcoinContext.js';
 import { useCosmosContext } from './useCosmosContext.js';
-import { useTonContext } from './useTonContext.js';
 import { useTronContext } from './useTronContext.js';
 import { useWallets } from './useWallets.js';
 
@@ -22,7 +20,6 @@ export const useConnect = () => {
   const { connect: connectSolanaWallet } = useSolanaWallet();
   const { connect: connectTronWallet } = useTronContext();
   const { mutateAsync: connectSuiWallet } = useSuiConnectWallet();
-  const { connect: connectTonWallet } = useTonContext();
   const { connect: connectCosmosWallet } = useCosmosContext();
   const { connect: connectBitcoinWallet } = useBitcoinContext();
 
@@ -79,18 +76,6 @@ export const useConnect = () => {
 
         // if chainId is provided, set chainId for cosmos wallets
         if (chainId) params.walletId = `${walletInstance.id}:${chainId}`;
-      } else if (params.chainType === 'ton') {
-        const connectedTonWallet = await connectTonWallet(walletInstance.id);
-        if (walletInstance.id === 'ton-connect') {
-          const tonWalletInstance = createTonWalletInstance(connectedTonWallet, walletInstance);
-
-          // set the wallet instance to the created ton wallet instance
-          return {
-            chainType: 'ton',
-            name: tonWalletInstance.name,
-            walletId: tonWalletInstance.id,
-          };
-        }
       } else if (params.chainType === 'bitcoin') {
         await connectBitcoinWallet(walletInstance.id);
       } else {
@@ -105,7 +90,6 @@ export const useConnect = () => {
       connectedWallets,
       connectSolanaWallet,
       connectTronWallet,
-      connectTonWallet,
       connectBitcoinWallet,
       connectEVM,
       connectSuiWallet,
