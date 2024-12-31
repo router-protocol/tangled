@@ -2,6 +2,13 @@ import { Config, multicall } from '@wagmi/core';
 import { Address, erc20Abi } from 'viem';
 
 export const getEVMTokenMetadata = async (address: string, chainId: number, wagmiConfig: Config) => {
+  if (chainId === 998) {
+    return {
+      name: 'USDC',
+      symbol: 'USDC',
+      decimals: 6,
+    };
+  }
   const tokenData = await multicall(wagmiConfig, {
     contracts: [
       {
@@ -38,6 +45,12 @@ export const getEVMTokenBalanceAndAllowance = async (
   chainId: number,
   wagmiConfig: Config,
 ) => {
+  if (chainId === 998) {
+    return {
+      balance: BigInt(0),
+      allowance: BigInt(0),
+    };
+  }
   const calls = [
     {
       address: address as Address,

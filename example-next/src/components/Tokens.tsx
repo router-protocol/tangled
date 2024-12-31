@@ -66,6 +66,14 @@ const tokens: TokenMetadata[] = [
     isNative: true,
   },
   {
+    address: '0xaf88d065e77c8cC2239327C5EDb3A432268e5831',
+    decimals: 6,
+    name: 'USDC',
+    symbol: 'USDC',
+    chainId: '998',
+    isNative: false,
+  },
+  {
     address: ETH_ADDRESS,
     decimals: 18,
     name: 'Ether',

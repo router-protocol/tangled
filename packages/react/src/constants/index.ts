@@ -20,6 +20,7 @@ export const CHAIN_ID = {
   mantle: '5000',
   matchain: '698',
   metis: '1088',
+  hyperliquid: '998',
   mode: '34443',
   nahmii: '4061',
   nero: '1689',
@@ -123,6 +124,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.vanar]: chains.vanar,
   [CHAIN_ID.zksync]: chains.zkSync,
   [CHAIN_ID.xLayer]: chains.xLayer,
+  [CHAIN_ID.hyperliquid]: chains.hyperliquid,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,

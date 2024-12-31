@@ -55,6 +55,7 @@ export const vanar: EVMChain = { ...vVanar, type: 'evm' } as const;
 export const xLayer: EVMChain = { ...vxLayer, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
 export * from './arthera.js';
+export * from './hyperliquid.js';
 export * from './nahmii.js';
 export * from './nero.js';
 export * from './oasisSapphire.js';
