@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.0
+
+### Minor Changes
+
+- feat: add hyperliquid
+
 ## 1.15.14
 
 ### Patch Changes
