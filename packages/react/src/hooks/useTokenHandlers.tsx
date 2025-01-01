@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { Address, encodeFunctionData, erc20Abi } from 'viem';
 import { getProgramId } from '../actions/solana/getProgramId.js';
-import { ChainData, ChainId, OtherChainData } from '../types/index.js';
+import { ChainData, ChainId, OtherChainData, TronChain } from '../types/index.js';
 import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
@@ -110,6 +110,27 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
     [account, connectionOrConfig, sendTransaction],
   );
 
+  const increaseTronAllowance = useCallback(
+    async (spender: string, owner: string, amount: bigint, token: string, chain: TronChain) => {
+      const calldata = encodeFunctionData({
+        abi: erc20Abi,
+        functionName: 'approve',
+        args: [spender, amount] as [Address, bigint],
+      });
+      return await sendTransaction({
+        args: {
+          calldata,
+        },
+        chain,
+        from: owner,
+        overrides: {},
+        to: token,
+        value: 0n,
+      });
+    },
+    [sendTransaction],
+  );
+
   return useMutation({
     mutationKey: ['approve', chain?.id, token],
     mutationFn: async () => {
@@ -121,6 +142,9 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
       }
       if (chain.type === 'solana') {
         return createAssociatedTokenAccount(owner, token, chain as OtherChainData<'solana'>);
+      }
+      if (chain.type === 'tron') {
+        return increaseTronAllowance(spender, owner, amount, token, chain);
       }
 
       throw new Error('Chain type not supported');

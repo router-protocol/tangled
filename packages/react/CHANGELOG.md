@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.1
+
+### Patch Changes
+
+- fix: add tron token handler
+
 ## 1.16.0
 
 ### Minor Changes
