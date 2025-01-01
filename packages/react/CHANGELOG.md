@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.2
+
+### Patch Changes
+
+- fix tron multicall abi
+
 ## 1.16.1
 
 ### Patch Changes
