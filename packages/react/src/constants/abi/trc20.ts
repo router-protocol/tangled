@@ -1,79 +1,300 @@
 export const trc20Abi = [
-  { outputs: [{ type: 'string' }], name: 'currency', stateMutability: 'View', type: 'Function' },
-  { outputs: [{ type: 'uint8' }], name: 'decimals', stateMutability: 'View', type: 'Function' },
-  { outputs: [{ type: 'string' }], name: 'name', stateMutability: 'View', type: 'Function' },
-  { outputs: [{ type: 'string' }], name: 'symbol', stateMutability: 'View', type: 'Function' },
   {
-    outputs: [{ type: 'uint256' }],
-    name: 'totalSupply',
-    stateMutability: 'View',
-    type: 'Function',
-  },
-  {
-    outputs: [{ type: 'uint256' }],
-    inputs: [{ name: '_owner', type: 'address' }],
-    name: 'balanceOf',
-    stateMutability: 'View',
-    type: 'Function',
-  },
-  {
-    outputs: [{ type: 'bool' }],
+    constant: false,
     inputs: [
-      { name: '_to', type: 'address' },
-      { name: '_value', type: 'uint256' },
-    ],
-    name: 'transfer',
-    stateMutability: 'Nonpayable',
-    type: 'Function',
-  },
-  {
-    outputs: [{ type: 'bool' }],
-    inputs: [
-      { name: '_from', type: 'address' },
-      { name: '_to', type: 'address' },
-      { name: '_value', type: 'uint256' },
-    ],
-    name: 'transferFrom',
-    stateMutability: 'Nonpayable',
-    type: 'Function',
-  },
-  {
-    outputs: [{ type: 'bool' }],
-    inputs: [
-      { name: '_spender', type: 'address' },
-      { name: '_value', type: 'uint256' },
+      {
+        name: 'spender',
+        type: 'address',
+      },
+      {
+        name: 'value',
+        type: 'uint256',
+      },
     ],
     name: 'approve',
-    stateMutability: 'Nonpayable',
-    type: 'Function',
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+      },
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+    signature: '0x095ea7b3',
   },
   {
-    outputs: [{ type: 'uint256' }],
+    constant: true,
+    inputs: [],
+    name: 'totalSupply',
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+    signature: '0x18160ddd',
+  },
+  {
+    constant: false,
     inputs: [
-      { name: '_owner', type: 'address' },
-      { name: '_spender', type: 'address' },
+      {
+        name: 'from',
+        type: 'address',
+      },
+      {
+        name: 'to',
+        type: 'address',
+      },
+      {
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'transferFrom',
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+      },
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+    signature: '0x23b872dd',
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: 'spender',
+        type: 'address',
+      },
+      {
+        name: 'addedValue',
+        type: 'uint256',
+      },
+    ],
+    name: 'increaseAllowance',
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+      },
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+    signature: '0x39509351',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: 'owner',
+        type: 'address',
+      },
+    ],
+    name: 'balanceOf',
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+    signature: '0x70a08231',
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: 'spender',
+        type: 'address',
+      },
+      {
+        name: 'subtractedValue',
+        type: 'uint256',
+      },
+    ],
+    name: 'decreaseAllowance',
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+      },
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+    signature: '0xa457c2d7',
+  },
+  {
+    constant: false,
+    inputs: [
+      {
+        name: 'to',
+        type: 'address',
+      },
+      {
+        name: 'value',
+        type: 'uint256',
+      },
+    ],
+    name: 'transfer',
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+      },
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'function',
+    signature: '0xa9059cbb',
+  },
+  {
+    constant: true,
+    inputs: [
+      {
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        name: 'spender',
+        type: 'address',
+      },
     ],
     name: 'allowance',
-    stateMutability: 'View',
-    type: 'Function',
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+    signature: '0xdd62ed3e',
   },
-
   {
     inputs: [
-      { indexed: true, name: '_from', type: 'address' },
-      { indexed: true, name: '_to', type: 'address' },
-      { name: '_value', type: 'uint256' },
+      {
+        name: 'name',
+        type: 'string',
+      },
+      {
+        name: 'symbol',
+        type: 'string',
+      },
+      {
+        name: 'decimals',
+        type: 'uint8',
+      },
+      {
+        name: 'cap',
+        type: 'uint256',
+      },
+    ],
+    payable: false,
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+    signature: 'constructor',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        name: 'from',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        name: 'to',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        name: 'value',
+        type: 'uint256',
+      },
     ],
     name: 'Transfer',
-    type: 'Event',
+    type: 'event',
+    signature: '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef',
   },
   {
+    anonymous: false,
     inputs: [
-      { indexed: true, name: '_owner', type: 'address' },
-      { indexed: true, name: '_spender', type: 'address' },
-      { name: '_value', type: 'uint256' },
+      {
+        indexed: true,
+        name: 'owner',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        name: 'spender',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        name: 'value',
+        type: 'uint256',
+      },
     ],
     name: 'Approval',
-    type: 'Event',
+    type: 'event',
+    signature: '0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'name',
+    outputs: [
+      {
+        name: '',
+        type: 'string',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+    signature: '0x06fdde03',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'symbol',
+    outputs: [
+      {
+        name: '',
+        type: 'string',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+    signature: '0x95d89b41',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'decimals',
+    outputs: [
+      {
+        name: '',
+        type: 'uint8',
+      },
+    ],
+    payable: false,
+    stateMutability: 'view',
+    type: 'function',
+    signature: '0x313ce567',
   },
 ] as const;
