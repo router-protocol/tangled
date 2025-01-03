@@ -24,6 +24,12 @@
 
 - feat: add hyperliquid
 
+## 1.15.15
+
+### Patch Changes
+
+- fix tron switch network call
+
 ## 1.15.14
 
 ### Patch Changes
