@@ -87,26 +87,22 @@ const CurrentAccountAndWallet = () => {
               </td>
               <td className='px-4 py-2 w-[15ch]'>[[{currentAccount?.chainType}]]</td>
               <td className='px-4 py-2 w-[15ch]'>
-                {chain ? (
-                  <select
-                    id='chain'
-                    className='h-12 border border-gray-300 text-gray-600 text-base rounded-lg block w-full focus:outline-none'
-                    onChange={(e) => handleChainChange(e.target.value as ChainId)}
-                    disabled={isPending}
-                    value={selectedChain}
-                  >
-                    {chains.map((chain) => (
-                      <option
-                        key={chain.id}
-                        value={chain.id}
-                      >
-                        {chain.name}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  'Unknown'
-                )}
+                <select
+                  id='chain'
+                  className='h-12 border border-gray-300 text-gray-600 text-base rounded-lg block w-full focus:outline-none'
+                  onChange={(e) => handleChainChange(e.target.value as ChainId)}
+                  disabled={isPending}
+                  value={selectedChain}
+                >
+                  {chains.map((chain) => (
+                    <option
+                      key={chain.id}
+                      value={chain.id}
+                    >
+                      {chain.name}
+                    </option>
+                  ))}
+                </select>
               </td>
               <td className='px-4 py-2 w-[auto]'>[{currentAccount?.chainId}]</td>
             </tr>

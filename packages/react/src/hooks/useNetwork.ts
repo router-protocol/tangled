@@ -47,7 +47,7 @@ export const useNetwork = () => {
         try {
           await (connector as WalletInstance<'tron'>).switchChain(chain.trxId);
         } catch (e) {
-          if (e === WalletSwitchChainError) {
+          if (e instanceof WalletSwitchChainError) {
             console.error('Switch chain is not supported');
           } else {
             console.error(e);
