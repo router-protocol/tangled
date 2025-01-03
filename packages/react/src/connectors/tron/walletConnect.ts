@@ -17,7 +17,6 @@ export const createTronWalletConnect = ({
   icons: string[];
 }) =>
   new WalletConnectAdapter({
-    // @ts-expect-error TODO: fix type
     network: network,
     options: {
       relayUrl: 'wss://relay.walletconnect.com',
