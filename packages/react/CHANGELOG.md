@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.6
+
+### Patch Changes
+
+- fix tron send tx
+
 ## 1.16.5
 
 ### Patch Changes

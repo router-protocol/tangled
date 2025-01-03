@@ -37,7 +37,8 @@ export const TronProvider = ({
   const setConnectedAdapter = useStore(tronStore, (state) => state.setConnectedAdapter);
   const setConnector = useStore(tronStore, (state) => state.setConnector);
   const setAddress = useStore(tronStore, (state) => state.setAddress);
-  const tronWeb = useStore(tronStore, (state) => state.tronweb);
+  // const tronWeb = useStore(tronStore, (state) => state.tronweb);
+  const setTronWeb = useStore(tronStore, (state) => state.setTronWeb);
 
   ///////////////////
   ///// Handlers ////
@@ -120,16 +121,6 @@ export const TronProvider = ({
     tronStore,
   ]);
 
-  useEffect(() => {
-    if (!connectedAdapter) return;
-
-    if (connectedAdapter.address) tronWeb.setAddress(connectedAdapter.address);
-
-    return () => {
-      connectedAdapter.disconnect();
-    };
-  }, [connectedAdapter, tronWeb]);
-
   // autoconnect
   useEffect(() => {
     if (!connectedAdapter || connectedAdapter.state !== AdapterState.Disconnect) {
@@ -156,10 +147,16 @@ export const TronProvider = ({
       }
 
       await adapter.connect();
-      return { account: adapter.address, chainId: undefined, adapter };
+      const tronWeb = window.tron?.tronWeb;
+      if (!tronWeb) {
+        throw new Error('TronWeb not found');
+      }
+
+      return { account: adapter.address, chainId: undefined, adapter, tronWeb };
     },
     onSuccess: (data) => {
       setConnectedAdapter(data.adapter);
+      setTronWeb(data.tronWeb);
     },
   });
 

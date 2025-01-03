@@ -22,7 +22,7 @@ export interface TronState {
   setConnector: (connector: TronAdapterData) => void;
   setConnectors: (connectors: TronState['connectors']) => void;
   setConnectedAdapter: (adapter: Adapter | undefined) => void;
-  setTronweb: (tronweb: TronWeb) => void;
+  setTronWeb: (tronweb: TronWeb) => void;
 }
 
 export type TronStore = ReturnType<typeof createTronStore>;
@@ -46,6 +46,6 @@ export const createTronStore = (props: TronProps) => {
     setConnector: (connector) =>
       set((state) => ({ connectors: { ...state.connectors, [connector.adapter.name]: connector } })),
     setConnectors: (connectors) => set(() => ({ connectors })),
-    setTronweb: (tronweb) => set(() => ({ tronweb })),
+    setTronWeb: (tronweb) => set(() => ({ tronweb })),
   }));
 };

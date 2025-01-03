@@ -1,4 +1,4 @@
-import { Transaction } from '@mysten/sui/transactions';
+import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
@@ -33,7 +33,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
       }
     : CType extends 'sui'
       ? {
-          tx: Transaction;
+          tx: SuiTransaction;
         }
       : CType extends 'cosmos'
         ? {
@@ -123,8 +123,13 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
   if (chain.type === 'tron') {
     const { calldata } = args as TransactionArgs<'tron'>;
     // send transaction to Tron chain
-    const signedTx = await config.tronWeb.trx.sign(calldata);
-    const tx = await config.tronWeb.trx.sendHexTransaction(signedTx);
+    // const signedTx = await config.tronWeb.trx.sign(calldata);
+    // const tx = await config.tronWeb.trx.sendHexTransaction(signedTx);
+
+    const tronWeb = config.tronWeb;
+
+    const signedTx = await tronWeb.trx.sign(calldata);
+    const tx = await tronWeb.trx.sendHexTransaction(signedTx);
 
     return {
       txHash: tx.txid,

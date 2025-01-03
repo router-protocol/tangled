@@ -257,11 +257,11 @@ importers:
         specifier: ^5.44.0
         version: 5.44.0(react@18.3.1)
       '@tronweb3/tronwallet-abstract-adapter':
-        specifier: ^1.1.6
-        version: 1.1.6
+        specifier: ^1.1.8
+        version: 1.1.8
       '@tronweb3/tronwallet-adapters':
-        specifier: ^1.2.1
-        version: 1.2.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+        specifier: ^1.2.6
+        version: 1.2.6(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
       '@wagmi/core':
         specifier: ^2.11.0
         version: 2.11.0(@tanstack/query-core@5.44.0)(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@2.21.51(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
@@ -3229,40 +3229,56 @@ packages:
   '@tronweb3/google-protobuf@3.21.2':
     resolution: {integrity: sha512-IVcT2GfWX3K6tHUVhs14NP5uzKhQt4KeDya1g9ACxuZsUzsaoGUIGzceK2Ltu7xp1YV94AaHOf4yxLAivlvEkQ==}
 
-  '@tronweb3/tronwallet-abstract-adapter@1.1.6':
-    resolution: {integrity: sha512-3T2ojxzSKIAw4ucEcg4p5Nwr4lN1g1Om8s1ty77DOHIa0oS1YDvZmlRQekptWEppKOoRDYFWST1ERCvt2Xxm0A==}
+  '@tronweb3/tronwallet-abstract-adapter@1.1.8':
+    resolution: {integrity: sha512-Ztt2C8kLEaRSgztpBKYqXDtXd7/+4AVS7K+ThZAjOInBu8MM/Jo3tmG4koVW8hM6Hz0rjoohKfQ36LGPVCQfGw==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapter-bitkeep@1.1.1':
-    resolution: {integrity: sha512-Ny3I9ePL0R/oH2YjN7c+LTnCTPBe6SQDA3uyHYDWuH8R6Kdp8/t2n8sChDlu1NBQCUF3pt6THHQEUoXJkmjfJA==}
+  '@tronweb3/tronwallet-adapter-bitkeep@1.1.3':
+    resolution: {integrity: sha512-1Nvxt8P8HbXgC4ccIxyv41Wda9+w2ublfhKtQiOO7nkrdTsr2wYaJ8qenB53r1qm7VWeUTZ+6c0zq5NK6Y+WUA==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapter-ledger@1.1.8':
-    resolution: {integrity: sha512-Tg8plalHNErkp9o+AOCjzlFcWzzI4ewBljaZYc6ue/5W83PNzRHSmUqlwGIDScJD/oSU9gZ/avYPCfJI1MPKtQ==}
+  '@tronweb3/tronwallet-adapter-bybit@1.0.0':
+    resolution: {integrity: sha512-ksmdazU9eWaHr/zG1oMnCcXRi5ezR6OZmU3N7NV2ofyk8MoiyyD8fL/ezQ3D+1YRwfh+tpJa3o5ym6thEa/vsQ==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapter-okxwallet@1.0.3':
-    resolution: {integrity: sha512-43suyRr/RuJCueRaspSlNKxd0rMt/2VTmq5tkRF/WlxGI4CTEIEYk3NqdKBrVFobfsILOXQBiQg0cI+FF5lxtw==}
+  '@tronweb3/tronwallet-adapter-foxwallet@1.0.0':
+    resolution: {integrity: sha512-IBKVcxipR/p5rrl5k89Es+aIY6I7xhtxLyachebEJMeSjJ7/09zRHLQ47kXOTM9cIk/izKMm+klzhdFxXadpjA==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapter-tokenpocket@1.0.3':
-    resolution: {integrity: sha512-vG1JLnlH0fodTY2YdezzWJKeW2VkCERsJYTa6d9oId1dgOaiEvjIO9UbHL/kdTPs1L1M484tM6Rh6pPBJzh/gA==}
+  '@tronweb3/tronwallet-adapter-gatewallet@1.0.1':
+    resolution: {integrity: sha512-tCCA42KisAl1zIs6PfPS33msoXUJ25z9B5shVHoIQvZ13QdHgzzshOIz6ocr2fdRvT04A+Phl/UH2Oq4pZtG5A==}
+    engines: {node: '>=18', pnpm: '>=9'}
+
+  '@tronweb3/tronwallet-adapter-imtoken@1.0.1':
+    resolution: {integrity: sha512-LsZ+qQsf2iwawEh99PMBzYBK09luopeBX98XWGSnQJaqfJJzqcwATeKubEh5VTgZDvCs1MbwEuFULx503/8DLw==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapter-tronlink@1.1.9':
-    resolution: {integrity: sha512-fIDKt822OmESLVeYCG9XbXGI34lM/79/jzJ3rd81xOZD8y7V0/DuDLdg5gFiCH4g9OIutKslDXiwoMpQry9O3w==}
+  '@tronweb3/tronwallet-adapter-ledger@1.1.10':
+    resolution: {integrity: sha512-DGMTMIpvnuDnX0FRCsAt1p4S1CQWgDF4taSenEhLVrI46v+yq39NxfarZo7k6UWhlZsH4AVELEhNzFnmZLEx9A==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapter-walletconnect@1.0.6':
-    resolution: {integrity: sha512-90GCwPOodykBu6cNZWDiYtJTcBF/wterstRt+goZTpCHWf7sS+S5350yFxR/YCWeRinbViFOjDmwvO/JHYYUaA==}
+  '@tronweb3/tronwallet-adapter-okxwallet@1.0.5':
+    resolution: {integrity: sha512-SW+Y801ntTtmyOxcuoMgEO8Ob9T5AEvrmXZX6z3ma6+LScNXQxLiDcbg6A/0OslrPKlO7fWyJI3nkasR3+KO3Q==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/tronwallet-adapters@1.2.1':
-    resolution: {integrity: sha512-Ofnas57Cw1sizv1zcZBZ3eWuqh6HiPEbLZmbHQTyQ1lfa5F6jpc8+eOnWnqDJjV1kmaEdxZGbIUHuakawPhHYA==}
+  '@tronweb3/tronwallet-adapter-tokenpocket@1.0.5':
+    resolution: {integrity: sha512-6Rrb8p+Cy4E57mbd25QjGPbLfnGilsBCcJdWx2+0eZzKsYZGcTwRBybepDbIcZHETe8ijqL+A6KPl1QWaTQ1og==}
     engines: {node: '>=16', pnpm: '>=7'}
 
-  '@tronweb3/walletconnect-tron@2.0.0':
-    resolution: {integrity: sha512-COAm1zOnCUHKU+rMFsTDYn5PX9fD8z1/QItHNpWo33BBDPk+nZfz0mK7orGpVOpO5IcOG33AsyGxqv/C/gJnTQ==}
+  '@tronweb3/tronwallet-adapter-tronlink@1.1.11':
+    resolution: {integrity: sha512-jU+NoWo4TZSE910NUi+tApjmzZmcOyYOnLlzBu7xZTedfnWtJvv9i4PSTac+5e188fQQH47JySt9p74S69mPkA==}
+    engines: {node: '>=16', pnpm: '>=7'}
+
+  '@tronweb3/tronwallet-adapter-walletconnect@2.0.2':
+    resolution: {integrity: sha512-uHA/HzM0pCR/G8BiwP92Xiy4e6/AtF59lcHezVW5h/1mHJZjzYuzq+jE73fEAXDYuvApIWpZTZ8bi02BwW5/FA==}
+    engines: {node: '>=16', pnpm: '>=7'}
+
+  '@tronweb3/tronwallet-adapters@1.2.6':
+    resolution: {integrity: sha512-X1MjaZsInvpYCTlhzJ+c+mF7qN5GWoI02JVmNXmqFt0GjUgAD/i1YX2dw6UVkBfzf4yghh34Geayh9nrgRi6Kg==}
+    engines: {node: '>=16', pnpm: '>=7'}
+
+  '@tronweb3/walletconnect-tron@3.0.0':
+    resolution: {integrity: sha512-aYFbUsZHYumdGXt+1VN4mN9Cjr1+GWYr7cXOLawoQ1WqiHOlAiovSnsTpGhUFLn2FZV8m6rdnXTZ59S/0Mv9mw==}
 
   '@types/babel__core@7.20.5':
     resolution: {integrity: sha512-qoQprZvz5wQFJwMDqeseRXWv3rqMvhgpbXFfVyWhbx9X47POIA6i/+dXefEmZKoAgOaTdaIgNSMqMIU61yRyzA==}
@@ -3878,16 +3894,6 @@ packages:
 
   '@walletconnect/window-metadata@1.0.1':
     resolution: {integrity: sha512-9koTqyGrM2cqFRW517BPY/iEtUDx2r1+Pwwu5m7sJ7ka79wi3EyqhqcICk/yDmv6jAS1rjKgTKXlEhanYjijcA==}
-
-  '@web3modal/core@2.4.3':
-    resolution: {integrity: sha512-7Z/sDe9RIYQ2k9ITcxgEa/u7FvlI76vcVVZn9UY4ISivefqrH4JAS3GX4JmVNUUlovwuiZdyqBv4llAQOMK6Rg==}
-
-  '@web3modal/standalone@2.4.3':
-    resolution: {integrity: sha512-5ATXBoa4GGm+TIUSsKWsfWCJunv1XevOizpgTFhqyeGgRDmWhqsz9UIPzH/1mk+g0iJ/xqMKs5F6v9D2QeKxag==}
-    deprecated: This package has been deprecated in favor of @walletconnect/modal. Please read more at https://docs.walletconnect.com
-
-  '@web3modal/ui@2.4.3':
-    resolution: {integrity: sha512-J989p8CdtEhI9gZHf/rZ/WFqYlrAHWw9GmAhFoiNODwjAp0BoG/uoaPiijJMchXdngihZOjLGCQwDXU16DHiKg==}
 
   '@wry/caches@1.0.1':
     resolution: {integrity: sha512-bXuaUNLVVkD20wcGBWRyo7j9N3TxePEWFZj2Y+r9OoUzfqmavM84+mFykRicNsBqatba5JLay1t48wxaXaWnlA==}
@@ -6847,9 +6853,6 @@ packages:
   lit-html@2.8.0:
     resolution: {integrity: sha512-o9t+MQM3P4y7M7yNzqAyjp7z+mQGa4NS4CxiyLqFPyFWyc4O+nodLrkrxSaCTrla6M5YOLaT3RpbbqjszB5g3Q==}
 
-  lit@2.7.5:
-    resolution: {integrity: sha512-i/cH7Ye6nBDUASMnfwcictBnsTN91+aBjXoTHF2xARghXScKxpD4F4WYI+VLXg9lqbMinDfvoI7VnZXjyHgdfQ==}
-
   lit@2.8.0:
     resolution: {integrity: sha512-4Sc3OFX9QHOJaHbmTMk28SYgVxLN3ePDjg7hofEft2zWlehFL3LiAuapWc4U/kYwMYJSh2hTCPZ6/LIC7ii0MA==}
 
@@ -9317,15 +9320,6 @@ packages:
   validator@13.12.0:
     resolution: {integrity: sha512-c1Q0mCiPlgdTVVVIJIrBuxNicYE+t/7oKeI9MWLj3fh/uq2Pxh/3eeWbVZ4OcGW1TUf53At0njHw5SMdA3tmMg==}
     engines: {node: '>= 0.10'}
-
-  valtio@1.10.5:
-    resolution: {integrity: sha512-jTp0k63VXf4r5hPoaC6a6LCG4POkVSh629WLi1+d5PlajLsbynTMd7qAgEiOSPxzoX5iNvbN7iZ/k/g29wrNiQ==}
-    engines: {node: '>=12.20.0'}
-    peerDependencies:
-      react: '>=16.8'
-    peerDependenciesMeta:
-      react:
-        optional: true
 
   valtio@1.11.2:
     resolution: {integrity: sha512-1XfIxnUXzyswPAPXo1P3Pdx2mq/pIqZICkWN60Hby0d9Iqb+MEIpqgYVlbflvHdrp2YR/q3jyKWRPJJ100yxaw==}
@@ -13829,7 +13823,7 @@ snapshots:
     dependencies:
       '@noble/curves': 1.0.0
       '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.6
+      '@scure/base': 1.1.9
 
   '@scure/bip32@1.3.2':
     dependencies:
@@ -13852,7 +13846,7 @@ snapshots:
   '@scure/bip39@1.2.0':
     dependencies:
       '@noble/hashes': 1.3.3
-      '@scure/base': 1.1.6
+      '@scure/base': 1.1.9
 
   '@scure/bip39@1.2.1':
     dependencies:
@@ -14338,51 +14332,71 @@ snapshots:
 
   '@tronweb3/google-protobuf@3.21.2': {}
 
-  '@tronweb3/tronwallet-abstract-adapter@1.1.6':
+  '@tronweb3/tronwallet-abstract-adapter@1.1.8':
     dependencies:
       eventemitter3: 4.0.7
 
-  '@tronweb3/tronwallet-adapter-bitkeep@1.1.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@tronweb3/tronwallet-adapter-bitkeep@1.1.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
       '@bitget-wallet/web3-sdk': 0.0.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@tronweb3/tronwallet-abstract-adapter': 1.1.6
-      '@tronweb3/tronwallet-adapter-tronlink': 1.1.9
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
     transitivePeerDependencies:
       - bufferutil
       - encoding
       - utf-8-validate
 
-  '@tronweb3/tronwallet-adapter-ledger@1.1.8':
+  '@tronweb3/tronwallet-adapter-bybit@1.0.0':
+    dependencies:
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
+
+  '@tronweb3/tronwallet-adapter-foxwallet@1.0.0':
+    dependencies:
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
+
+  '@tronweb3/tronwallet-adapter-gatewallet@1.0.1':
+    dependencies:
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
+
+  '@tronweb3/tronwallet-adapter-imtoken@1.0.1':
+    dependencies:
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
+
+  '@tronweb3/tronwallet-adapter-ledger@1.1.10':
     dependencies:
       '@ledgerhq/hw-app-trx': 6.28.6
       '@ledgerhq/hw-transport': 6.27.1
       '@ledgerhq/hw-transport-webhid': 6.27.1
-      '@tronweb3/tronwallet-abstract-adapter': 1.1.6
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
       buffer: 6.0.3
       eventemitter3: 4.0.7
       preact: 10.22.0
 
-  '@tronweb3/tronwallet-adapter-okxwallet@1.0.3':
+  '@tronweb3/tronwallet-adapter-okxwallet@1.0.5':
     dependencies:
-      '@tronweb3/tronwallet-abstract-adapter': 1.1.6
-      '@tronweb3/tronwallet-adapter-tronlink': 1.1.9
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
 
-  '@tronweb3/tronwallet-adapter-tokenpocket@1.0.3':
+  '@tronweb3/tronwallet-adapter-tokenpocket@1.0.5':
     dependencies:
-      '@tronweb3/tronwallet-abstract-adapter': 1.1.6
-      '@tronweb3/tronwallet-adapter-tronlink': 1.1.9
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
 
-  '@tronweb3/tronwallet-adapter-tronlink@1.1.9':
+  '@tronweb3/tronwallet-adapter-tronlink@1.1.11':
     dependencies:
-      '@tronweb3/tronwallet-abstract-adapter': 1.1.6
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
 
-  '@tronweb3/tronwallet-adapter-walletconnect@1.0.6(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@tronweb3/tronwallet-adapter-walletconnect@2.0.2(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
-      '@tronweb3/tronwallet-abstract-adapter': 1.1.6
-      '@tronweb3/walletconnect-tron': 2.0.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)
+      '@tronweb3/tronwallet-abstract-adapter': 1.1.8
+      '@tronweb3/walletconnect-tron': 3.0.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)
       '@wagmi/core': 1.4.13(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(viem@0.3.50(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8))(zod@3.23.8)
-      '@walletconnect/sign-client': 2.13.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@walletconnect/types': 2.13.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))
+      '@walletconnect/sign-client': 2.16.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@walletconnect/types': 2.16.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))
       viem: 0.3.50(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - '@azure/app-configuration'
@@ -14409,14 +14423,18 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@tronweb3/tronwallet-adapters@1.2.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)':
+  '@tronweb3/tronwallet-adapters@1.2.6(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)':
     dependencies:
-      '@tronweb3/tronwallet-adapter-bitkeep': 1.1.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@tronweb3/tronwallet-adapter-ledger': 1.1.8
-      '@tronweb3/tronwallet-adapter-okxwallet': 1.0.3
-      '@tronweb3/tronwallet-adapter-tokenpocket': 1.0.3
-      '@tronweb3/tronwallet-adapter-tronlink': 1.1.9
-      '@tronweb3/tronwallet-adapter-walletconnect': 1.0.6(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
+      '@tronweb3/tronwallet-adapter-bitkeep': 1.1.3(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@tronweb3/tronwallet-adapter-bybit': 1.0.0
+      '@tronweb3/tronwallet-adapter-foxwallet': 1.0.0
+      '@tronweb3/tronwallet-adapter-gatewallet': 1.0.1
+      '@tronweb3/tronwallet-adapter-imtoken': 1.0.1
+      '@tronweb3/tronwallet-adapter-ledger': 1.1.10
+      '@tronweb3/tronwallet-adapter-okxwallet': 1.0.5
+      '@tronweb3/tronwallet-adapter-tokenpocket': 1.0.5
+      '@tronweb3/tronwallet-adapter-tronlink': 1.1.11
+      '@tronweb3/tronwallet-adapter-walletconnect': 2.0.2(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(immer@10.1.1)(react@18.3.1)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -14442,11 +14460,11 @@ snapshots:
       - utf-8-validate
       - zod
 
-  '@tronweb3/walletconnect-tron@2.0.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)':
+  '@tronweb3/walletconnect-tron@3.0.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)':
     dependencies:
-      '@walletconnect/sign-client': 2.13.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@walletconnect/utils': 2.13.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))
-      '@web3modal/standalone': 2.4.3(react@18.3.1)
+      '@walletconnect/modal': 2.6.2(@types/react@18.3.3)(react@18.3.1)
+      '@walletconnect/sign-client': 2.16.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@walletconnect/utils': 2.16.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -14458,10 +14476,10 @@ snapshots:
       - '@netlify/blobs'
       - '@planetscale/database'
       - '@react-native-async-storage/async-storage'
+      - '@types/react'
       - '@upstash/redis'
       - '@vercel/kv'
       - bufferutil
-      - encoding
       - ioredis
       - react
       - uWebSockets.js
@@ -15064,7 +15082,7 @@ snapshots:
       abitype: 0.8.7(typescript@5.4.5)(zod@3.23.8)
       eventemitter3: 4.0.7
       viem: 0.3.50(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)(zod@3.23.8)
-      zustand: 4.5.2(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1)
+      zustand: 4.5.5(@types/react@18.3.3)(immer@10.1.1)(react@18.3.1)
     optionalDependencies:
       typescript: 5.4.5
     transitivePeerDependencies:
@@ -15182,7 +15200,7 @@ snapshots:
       '@walletconnect/jsonrpc-ws-connection': 1.0.14(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@walletconnect/keyvaluestorage': 1.1.1(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))
       '@walletconnect/logger': 2.1.2
-      '@walletconnect/relay-api': 1.0.10
+      '@walletconnect/relay-api': 1.0.11
       '@walletconnect/relay-auth': 1.0.4
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
@@ -15840,7 +15858,7 @@ snapshots:
       '@stablelib/random': 1.0.2
       '@stablelib/sha256': 1.0.1
       '@stablelib/x25519': 1.0.3
-      '@walletconnect/relay-api': 1.0.10
+      '@walletconnect/relay-api': 1.0.11
       '@walletconnect/safe-json': 1.0.2
       '@walletconnect/time': 1.0.2
       '@walletconnect/types': 2.11.0(@react-native-async-storage/async-storage@1.23.1(react-native@0.74.2(@babel/core@7.24.7)(@babel/preset-env@7.24.7(@babel/core@7.24.7))(@types/react@18.3.3)(bufferutil@4.0.8)(react@18.3.1)(utf-8-validate@5.0.10)))
@@ -15960,29 +15978,6 @@ snapshots:
     dependencies:
       '@walletconnect/window-getters': 1.0.1
       tslib: 1.14.1
-
-  '@web3modal/core@2.4.3(react@18.3.1)':
-    dependencies:
-      buffer: 6.0.3
-      valtio: 1.10.5(react@18.3.1)
-    transitivePeerDependencies:
-      - react
-
-  '@web3modal/standalone@2.4.3(react@18.3.1)':
-    dependencies:
-      '@web3modal/core': 2.4.3(react@18.3.1)
-      '@web3modal/ui': 2.4.3(react@18.3.1)
-    transitivePeerDependencies:
-      - react
-
-  '@web3modal/ui@2.4.3(react@18.3.1)':
-    dependencies:
-      '@web3modal/core': 2.4.3(react@18.3.1)
-      lit: 2.7.5
-      motion: 10.16.2
-      qrcode: 1.5.3
-    transitivePeerDependencies:
-      - react
 
   '@wry/caches@1.0.1':
     dependencies:
@@ -19659,12 +19654,6 @@ snapshots:
     dependencies:
       '@types/trusted-types': 2.0.7
 
-  lit@2.7.5:
-    dependencies:
-      '@lit/reactive-element': 1.6.3
-      lit-element: 3.3.3
-      lit-html: 2.8.0
-
   lit@2.8.0:
     dependencies:
       '@lit/reactive-element': 1.6.3
@@ -22365,13 +22354,6 @@ snapshots:
       spdx-expression-parse: 3.0.1
 
   validator@13.12.0: {}
-
-  valtio@1.10.5(react@18.3.1):
-    dependencies:
-      proxy-compare: 2.5.1
-      use-sync-external-store: 1.2.0(react@18.3.1)
-    optionalDependencies:
-      react: 18.3.1
 
   valtio@1.11.2(@types/react@18.3.3)(react@18.3.1):
     dependencies:
