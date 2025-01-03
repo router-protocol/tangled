@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.5
+
+### Patch Changes
+
+- fix switch network tron
+
 ## 1.16.4
 
 ### Patch Changes

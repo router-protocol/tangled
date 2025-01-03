@@ -55,7 +55,7 @@ export const useNetwork = () => {
           }
         }
 
-        return;
+        return chains.find((chain) => chain.id === chain.id.toString());
       }
 
       if (chain.type === 'sui') {
