@@ -47,9 +47,13 @@ export const TronProvider = ({
     function (this: Adapter, address: string) {
       if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
       const connector = tronStore.getState().connectors[this.name];
-      setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
+
+      if (window.tron?.tronWeb) {
+        setTronWeb(window.tron.tronWeb);
+        setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
+      }
     },
-    [setAddress, setConnector, tronStore],
+    [setAddress, setConnector, setTronWeb, tronStore],
   );
 
   const handleError = useCallback((error: Error) => {
@@ -60,9 +64,12 @@ export const TronProvider = ({
     function (this: Adapter, address: string) {
       if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
       const connector = tronStore.getState().connectors[this.name];
-      setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
+      if (window.tron?.tronWeb) {
+        setTronWeb(window.tron.tronWeb);
+        setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
+      }
     },
-    [setAddress, setConnector, tronStore],
+    [setAddress, setConnector, setTronWeb, tronStore],
   );
 
   const handleDisconnect = useCallback(() => {
@@ -121,25 +128,32 @@ export const TronProvider = ({
     tronStore,
   ]);
 
+  const { mutateAsync: autoConnect } = useMutation({
+    mutationKey: ['tron autoConnect'],
+    mutationFn: async () => {
+      if (!connectedAdapter) {
+        throw new Error('Connected adapter not found');
+      }
+      await connectedAdapter.connect();
+      const tronWeb = window.tron?.tronWeb;
+      if (!tronWeb) {
+        throw new Error('TronWeb not found');
+      }
+      return { account: connectedAdapter.address, chainId: undefined, adapter: connectedAdapter, tronWeb };
+    },
+    onSuccess: (data) => {
+      setConnectedAdapter(data.adapter);
+      setTronWeb(data.tronWeb);
+    },
+  });
+
   // autoconnect
   useEffect(() => {
     if (!connectedAdapter || connectedAdapter.state !== AdapterState.Disconnect) {
       return;
     }
-    (async function autoConnect() {
-      try {
-        await connectedAdapter.connect();
-        const tronWeb = window.tron?.tronWeb;
-        if (!tronWeb) {
-          throw new Error('TronWeb not found');
-        }
-        setTronWeb(tronWeb);
-        setConnectedAdapter(connectedAdapter);
-      } catch (error) {
-        console.error('[TRON] Auto connect failed', error);
-      }
-    })();
-  }, [connectedAdapter, setTronWeb, setConnectedAdapter]);
+    autoConnect();
+  }, [connectedAdapter, setTronWeb, setConnectedAdapter, autoConnect]);
 
   ///////////////////
   ///// Mutations ///

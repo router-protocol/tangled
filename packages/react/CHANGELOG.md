@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.9
+
+### Patch Changes
+
+- refactor tron autoconnect and listener handlers
+
 ## 1.16.8
 
 ### Patch Changes

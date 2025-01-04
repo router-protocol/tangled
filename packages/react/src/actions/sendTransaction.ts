@@ -125,7 +125,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
     const tronWeb = config.tronWeb;
 
-    const signedTx = await tronWeb.trx.sign(calldata);
+    const signedTx = await tronWeb.trx.signTransaction(calldata);
     const tx = await tronWeb.trx.sendHexTransaction(signedTx);
 
     return {

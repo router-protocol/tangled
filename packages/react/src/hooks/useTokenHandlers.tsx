@@ -120,7 +120,7 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
       });
       return await sendTransaction({
         args: {
-          calldata,
+          calldata: calldata.slice(2),
         },
         chain,
         from: owner,
