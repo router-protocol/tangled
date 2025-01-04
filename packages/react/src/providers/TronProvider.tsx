@@ -129,11 +129,17 @@ export const TronProvider = ({
     (async function autoConnect() {
       try {
         await connectedAdapter.connect();
+        const tronWeb = window.tron?.tronWeb;
+        if (!tronWeb) {
+          throw new Error('TronWeb not found');
+        }
+        setTronWeb(tronWeb);
+        setConnectedAdapter(connectedAdapter);
       } catch (error) {
         console.error('[TRON] Auto connect failed', error);
       }
     })();
-  }, [connectedAdapter]);
+  }, [connectedAdapter, setTronWeb, setConnectedAdapter]);
 
   ///////////////////
   ///// Mutations ///

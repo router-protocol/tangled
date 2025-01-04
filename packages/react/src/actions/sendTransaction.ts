@@ -122,9 +122,6 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
   if (chain.type === 'tron') {
     const { calldata } = args as TransactionArgs<'tron'>;
-    // send transaction to Tron chain
-    // const signedTx = await config.tronWeb.trx.sign(calldata);
-    // const tx = await config.tronWeb.trx.sendHexTransaction(signedTx);
 
     const tronWeb = config.tronWeb;
 

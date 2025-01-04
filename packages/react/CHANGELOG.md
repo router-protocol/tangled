@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.8
+
+### Patch Changes
+
+- fix tron autoconnect
+
 ## 1.16.7
 
 ### Patch Changes
