@@ -17,7 +17,7 @@ const EVMProvider = ({
 
   const [wagmiConfig] = useState(() => {
     return createConfig({
-      chains: props.chains as [EVMChain, ...EVMChain[]],
+      chains: filteredChains as [EVMChain, ...EVMChain[]],
       transports: filteredChains.reduce(
         (acc, chain) => {
           acc[chain.id] = http();
