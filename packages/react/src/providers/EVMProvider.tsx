@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useMemo, useState } from 'react';
 import { Transport, http } from 'viem';
 import { CreateConnectorFn, WagmiProvider, createConfig } from 'wagmi';
 import { ChainData, EVMChain } from '../types/index.js';
@@ -11,10 +11,14 @@ const EVMProvider = ({
   chains: ChainData[];
   connectors: CreateConnectorFn[];
 }) => {
+  const filteredChains = useMemo(() => {
+    return props.chains.filter((chain) => chain.id !== 998);
+  }, [props.chains]);
+
   const [wagmiConfig] = useState(() => {
     return createConfig({
       chains: props.chains as [EVMChain, ...EVMChain[]],
-      transports: props.chains.reduce(
+      transports: filteredChains.reduce(
         (acc, chain) => {
           acc[chain.id] = http();
           return acc;

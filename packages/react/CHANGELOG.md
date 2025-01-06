@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.11
+
+### Patch Changes
+
+- fix wagmi chains
+
 ## 1.16.10
 
 ### Patch Changes
