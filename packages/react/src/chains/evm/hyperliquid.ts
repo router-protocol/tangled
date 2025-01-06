@@ -2,7 +2,7 @@ import { EVMChain } from '../../types/index.js';
 
 export const hyperliquid: EVMChain = {
   id: 998,
-  name: 'hyperliquid',
+  name: 'Hyperliquid',
   type: 'evm',
   nativeCurrency: {
     decimals: 6,
@@ -17,7 +17,7 @@ export const hyperliquid: EVMChain = {
   blockExplorers: {
     default: {
       name: 'Hyperliquid explorer',
-      url: 'http://hypurrscan.io/',
+      url: 'https://arbiscan.io',
     },
   },
   contracts: {
