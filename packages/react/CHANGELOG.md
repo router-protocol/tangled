@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.10
+
+### Patch Changes
+
+- chore: change hyperliquid name
+
 ## 1.16.9
 
 ### Patch Changes
