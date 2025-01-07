@@ -64,7 +64,11 @@ export const rollux: EVMChain = { ...vRollux, type: 'evm' } as const;
 export const saakuru: EVMChain = { ...vSaakuru, type: 'evm' } as const;
 export const scroll: EVMChain = { ...vScroll, type: 'evm' } as const;
 export const taiko: EVMChain = { ...vTaiko, type: 'evm' } as const;
-export const vanar: EVMChain = { ...vVanar, type: 'evm' } as const;
+export const vanar: EVMChain = {
+  ...vVanar,
+  type: 'evm',
+  contracts: { multicall3: { address: '0x545fa049Fe952fea45113325b9a4F556401315Bc' } },
+} as const;
 export const xLayer: EVMChain = { ...vxLayer, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
 export * from './arthera.js';
