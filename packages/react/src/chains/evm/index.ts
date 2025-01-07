@@ -36,7 +36,11 @@ export const boba: EVMChain = { ...vBoba, type: 'evm' } as const;
 export const binance: EVMChain = { ...vBsc, type: 'evm' } as const;
 export const dogechain: EVMChain = { ...vDogechain, type: 'evm' } as const;
 export const ethereum: EVMChain = { ...vMainnet, type: 'evm' } as const;
-export const firechain: EVMChain = { ...vFirechain, type: 'evm' } as const;
+export const firechain: EVMChain = {
+  ...vFirechain,
+  type: 'evm',
+  contracts: { multicall3: { address: '0xa363227E39D1870e20a881b59f8032BEdFB09E8B' } },
+} as const;
 export const linea: EVMChain = { ...vLinea, type: 'evm' } as const;
 export const manta: EVMChain = { ...vManta, type: 'evm' } as const;
 export const mantle: EVMChain = { ...vMantle, type: 'evm' } as const;
