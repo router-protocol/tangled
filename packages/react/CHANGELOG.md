@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.13
+
+### Patch Changes
+
+- chore: upgrade wagmi, viem
+
 ## 1.16.12
 
 ### Patch Changes

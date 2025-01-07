@@ -1,5 +1,4 @@
-import { Evaluate } from '@wagmi/core/internal';
-import { EIP1193Provider } from 'viem';
+import { EIP1193Provider, Evaluate } from 'viem';
 
 export type WalletProviderFlags = string;
 export type WalletProvider = Evaluate<

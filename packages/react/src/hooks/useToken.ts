@@ -29,7 +29,7 @@ export const useToken = ({ chainId, token, ...queryOptions }: UseTokenParams) =>
     queryKey: ['token', chain?.id, token],
     queryFn: async () => {
       if (!chain || !token) {
-        throw new Error('Missing required parameters');
+        throw new Error(`Missing required parameters: chainId: ${chain?.id}, token: ${token}`);
       }
       if (!connectionOrConfig) {
         throw new Error('Connections or config not found');

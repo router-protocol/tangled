@@ -30,7 +30,9 @@ export const useTokenForAccount = ({ chainId, account, token, spender, ...queryO
     queryKey: ['balance and allowance', chain?.id, token, account, spender, tokenMetadata?.decimals],
     queryFn: async () => {
       if (!account || !token || !tokenMetadata || !chain) {
-        throw new Error('Missing required parameters');
+        throw new Error(
+          `Missing required parameters: account: ${account}, token: ${token}, chain: ${chain?.id}, tokenMetadata: ${tokenMetadata}`,
+        );
       }
       if (!connectionOrConfig) {
         throw new Error('Connections or config not found');

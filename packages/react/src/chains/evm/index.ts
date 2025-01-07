@@ -40,7 +40,16 @@ export const firechain: EVMChain = { ...vFirechain, type: 'evm' } as const;
 export const linea: EVMChain = { ...vLinea, type: 'evm' } as const;
 export const manta: EVMChain = { ...vManta, type: 'evm' } as const;
 export const mantle: EVMChain = { ...vMantle, type: 'evm' } as const;
-export const matchain: EVMChain = { ...vMatchain, type: 'evm' } as const;
+export const matchain: EVMChain = {
+  ...vMatchain,
+  type: 'evm',
+  contracts: {
+    multicall3: {
+      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      blockCreated: 1,
+    },
+  },
+} as const;
 export const metis: EVMChain = { ...vMetis, type: 'evm' } as const;
 export const mode: EVMChain = { ...vMode, type: 'evm' } as const;
 export const optimism: EVMChain = { ...vOptimism, type: 'evm' } as const;
