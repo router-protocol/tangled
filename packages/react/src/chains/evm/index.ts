@@ -61,7 +61,11 @@ export const polygon: EVMChain = { ...vPolygon, type: 'evm' } as const;
 export const polygonZkEvm: EVMChain = { ...vPolygonZkEvm, type: 'evm' } as const;
 export const rootstock: EVMChain = { ...vRootstock, type: 'evm' } as const;
 export const rollux: EVMChain = { ...vRollux, type: 'evm' } as const;
-export const saakuru: EVMChain = { ...vSaakuru, type: 'evm' } as const;
+export const saakuru: EVMChain = {
+  ...vSaakuru,
+  type: 'evm',
+  contracts: { multicall3: { address: '0xB558D0c3f1a804AA9ec893c76D546C06624D081D' } },
+} as const;
 export const scroll: EVMChain = { ...vScroll, type: 'evm' } as const;
 export const taiko: EVMChain = { ...vTaiko, type: 'evm' } as const;
 export const vanar: EVMChain = {
