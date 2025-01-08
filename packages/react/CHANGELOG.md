@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.15
+
+### Patch Changes
+
+- chore: fix multicall build
+
 ## 1.16.14
 
 ### Patch Changes
