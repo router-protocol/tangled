@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.20
+
+### Patch Changes
+
+- fix: ssr breakage
+
 ## 1.16.19
 
 ### Patch Changes
