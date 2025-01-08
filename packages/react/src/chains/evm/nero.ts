@@ -20,4 +20,9 @@ export const nero: EVMChain = {
       url: 'https://neroscan.io',
     },
   },
+  contracts: {
+    multicall3: {
+      address: '0x343A0DdD8e58bEaf29d69936c82F1516C6677B0E',
+    },
+  },
 };
