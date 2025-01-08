@@ -20,4 +20,9 @@ export const shido: EVMChain = {
       url: 'https://shidoscan.com',
     },
   },
+  contracts: {
+    multicall3: {
+      address: '0xeD4c58BAEF3dd056345aF4affA05b085B50a8f67',
+    },
+  },
 };
