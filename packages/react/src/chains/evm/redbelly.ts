@@ -20,4 +20,9 @@ export const redbelly: EVMChain = {
       url: 'https://redbelly.routescan.io',
     },
   },
+  contracts: {
+    multicall3: {
+      address: '0xEe43BBcC6340038130681F98d855E416F7F728e9',
+    },
+  },
 };
