@@ -1,3 +1,4 @@
+'use client';
 import {
   ChainId,
   useChain,
@@ -14,11 +15,11 @@ import WalletList from './WalletList';
 
 function Example() {
   return (
-    <div className='space-y-8'>
+    <div className='space-y-8 w-full'>
       <h1 className='text-2xl font-bold'>Tangled Example</h1>
       <h2 className='text-xl font-bold'>ACCOUNTS</h2>
 
-      <div className='sticky top-0 bg-black py-8'>
+      <div className='sticky top-0 bg-black py-8 w-full'>
         <CurrentAccountAndWallet />
       </div>
 
@@ -60,7 +61,7 @@ const CurrentAccountAndWallet = () => {
   }, [currentAccount?.chainId]);
 
   return (
-    <div className='grid grid-cols-2'>
+    <div className='grid grid-cols-2 w-full'>
       <div>
         <h3 className='text-lg font-bold'>Current Account</h3>
         <table className='w-full'>

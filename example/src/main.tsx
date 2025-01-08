@@ -7,7 +7,7 @@ import './index.css';
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Providers>
-      <main className='flex min-h-screen flex-col items-center justify-center text-white bg-neutral-800'>
+      <main className='flex min-h-screen w-[100vw] flex-col items-center justify-center text-white bg-neutral-800'>
         <Example />
       </main>
     </Providers>

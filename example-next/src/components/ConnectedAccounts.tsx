@@ -20,7 +20,7 @@ export const ConnectedAccounts = () => {
   });
 
   return (
-    <div className='bg-neutral-900'>
+    <div className='bg-neutral-900 w-full'>
       <h3 className='text-lg font-bold'>Connected Accounts:</h3>
       <table className='w-full'>
         <thead>

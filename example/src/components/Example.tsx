@@ -14,7 +14,7 @@ import WalletList from './WalletList';
 
 function Example() {
   return (
-    <div className='space-y-8'>
+    <div className='space-y-8 overflow-x-scroll w-[100vw]'>
       <h1 className='text-2xl font-bold'>Tangled Example</h1>
       <h2 className='text-xl font-bold'>ACCOUNTS</h2>
 

@@ -4,6 +4,7 @@ import { GeistSans } from 'geist/font/sans';
 import { type Metadata } from 'next';
 
 import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 const Providers = dynamic(() => import('../components/Providers'), {
   ssr: false,
 });
@@ -20,10 +21,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       lang='en'
       className={`${GeistSans.variable}`}
     >
-      <body className='bg-neutral-800'>
-        <Providers>
-          <main className='flex min-h-screen flex-col items-center text-white p-8'>{children}</main>
-        </Providers>
+      <body className='bg-neutral-800 overflow-x-hidden w-[100vw]'>
+        <Suspense>
+          <Providers>
+            <main className='flex min-h-screen w-full overflow-x-auto flex-col items-center text-white p-2'>
+              {children}
+            </main>
+          </Providers>
+        </Suspense>
       </body>
     </html>
   );
