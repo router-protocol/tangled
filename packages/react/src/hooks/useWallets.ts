@@ -9,6 +9,7 @@ import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useBitcoinStore } from './useBitcoinStore.js';
 import { useCosmosStore } from './useCosmosStore.js';
+import { useIsClient } from './useIsClient.js';
 import { useTangledConfig } from './useTangledConfig.js';
 import { useTronStore } from './useTronStore.js';
 
@@ -25,6 +26,8 @@ type UseWalletsOptions = {
 export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: Wallet<key>[] } => {
   const evmConnectors = useEVMConnectors();
 
+  const isClient = useIsClient();
+
   const { wallets: solanaWallets } = useSolanaWallet();
 
   // const data = useManager;
@@ -40,6 +43,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const bitcoinConnectors = useBitcoinStore((state) => state.connectors);
 
   const extendedEvmWallets = useMemo<Wallet<'evm'>[]>(() => {
+    if (!isClient) return [];
     const prepareWallets = (connector: Connector): Wallet<'evm'> | undefined => {
       const walletId = Object.keys(walletConfigs).find(
         (id) =>
@@ -79,9 +83,11 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }
 
     return wallets;
-  }, [evmConnectors, options?.onlyInstalled]);
+  }, [evmConnectors, isClient, options?.onlyInstalled]);
 
   const extendedSolanaWallets = useMemo<Wallet<'solana'>[]>(() => {
+    if (!isClient) return [];
+
     const detected: Wallet<'solana'>[] = solanaWallets
       .filter((wallet) => wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported')
       .map((wallet) => ({
@@ -104,9 +110,11 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       ) ?? [];
 
     return detected.concat(suggested);
-  }, [configuredConnectors.solana, options?.onlyInstalled, solanaWallets]);
+  }, [configuredConnectors.solana, isClient, options?.onlyInstalled, solanaWallets]);
 
   const extendedTronWallets = useMemo<Wallet<'tron'>[]>(() => {
+    if (!isClient) return [];
+
     const detected: Wallet<'tron'>[] = Object.values(tronConnectors).map((connector) => ({
       id: connector.adapter.name,
       name: connector.adapter.name,
@@ -135,10 +143,12 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
         })) ?? [];
 
     return detected.concat(suggested);
-  }, [configuredConnectors.tron, options?.onlyInstalled, tronConnectors]);
+  }, [configuredConnectors.tron, isClient, options?.onlyInstalled, tronConnectors]);
 
   //sui
   const extendedSuiWallets = useMemo<Wallet<'sui'>[]>(() => {
+    if (!isClient) return [];
+
     const detected: Wallet<'sui'>[] =
       suiWallets.map((wallet) => ({
         id: wallet.name,
@@ -160,10 +170,12 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
       ) ?? [];
 
     return detected.concat(suggested);
-  }, [configuredConnectors.sui, options?.onlyInstalled, suiWallets]);
+  }, [configuredConnectors.sui, isClient, options?.onlyInstalled, suiWallets]);
 
   //cosmos
   const extendedCosmosWallets = useMemo<Wallet<'cosmos'>[]>(() => {
+    if (!isClient) return [];
+
     if (!cosmosWallets.length) return [] as Wallet<'cosmos'>[];
 
     const detected: Wallet<'cosmos'>[] = cosmosWallets.map((wallet) => {
@@ -188,10 +200,11 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }
 
     return walletList;
-  }, [cosmosWallets, options?.onlyInstalled]);
+  }, [cosmosWallets, isClient, options?.onlyInstalled]);
 
   // bitcoin
   const extendedBitcoinWallets = useMemo<Wallet<'bitcoin'>[]>(() => {
+    if (!isClient) return [];
     const detected: Wallet<'bitcoin'>[] = Object.values(bitcoinConnectors).map((connector) => ({
       id: connector.adapter.id,
       name: connector.adapter.name,
@@ -207,7 +220,7 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     }
 
     return detected;
-  }, [bitcoinConnectors, options?.onlyInstalled]);
+  }, [bitcoinConnectors, isClient, options?.onlyInstalled]);
 
   return useMemo(
     () => ({

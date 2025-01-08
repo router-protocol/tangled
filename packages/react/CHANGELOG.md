@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.18
+
+### Patch Changes
+
+- chore: add binance wallet config
+
 ## 1.16.17
 
 ### Patch Changes
