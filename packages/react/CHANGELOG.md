@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.14
+
+### Patch Changes
+
+- chore: add multicalla addresses
+
 ## 1.16.13
 
 ### Patch Changes
