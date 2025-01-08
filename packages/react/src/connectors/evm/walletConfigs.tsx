@@ -42,7 +42,7 @@ export const walletConfigs: {
   },
   'Binance Web3 Wallet, wallet.binance.com': {
     isInstalled: undefined,
-    name: 'Binance Web3 Wallet',
+    name: 'Binance Wallet',
     url: 'https://www.binance.com/en/web3wallet',
   },
   coinbaseWalletSDK: {

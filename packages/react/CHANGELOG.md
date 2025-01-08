@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.19
+
+### Patch Changes
+
+- chore: binance wallet slugs
+
 ## 1.16.18
 
 ### Patch Changes
