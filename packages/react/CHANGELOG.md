@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.16
+
+### Patch Changes
+
+- chore: add shido, redbelly multicall
+
 ## 1.16.15
 
 ### Patch Changes
