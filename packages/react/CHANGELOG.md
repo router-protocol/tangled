@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.17
+
+### Patch Changes
+
+- fix injected wallet discovery
+
 ## 1.16.16
 
 ### Patch Changes
