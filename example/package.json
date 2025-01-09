@@ -17,7 +17,8 @@
     "crypto": "npm:crypto-browserify",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "stream": "npm:stream-browserify"
+    "stream": "npm:stream-browserify",
+    "wagmi": "2.14.6"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

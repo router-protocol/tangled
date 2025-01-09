@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.21
+
+### Patch Changes
+
+- fix only show injected if no other wallets are discovered
+
 ## 1.16.20
 
 ### Patch Changes

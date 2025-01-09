@@ -53,25 +53,28 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
             .indexOf(connector.id) !== -1,
       );
 
+      const walletConfig = walletId ? walletConfigs[walletId] : undefined;
+
+      // walletconnect, coinbase wallet are supported by default
+      if (evmConnectors.length > 3 && connector.id === 'injected') {
+        return undefined;
+      }
+
+      const isInjected = connector.type === 'injected' && connector.id !== 'metaMask';
+      let isInstalled = isInjected;
+      if (walletConfig?.isInstalled) {
+        isInstalled =
+          typeof walletConfig.isInstalled === 'function' ? walletConfig.isInstalled() : walletConfig.isInstalled;
+      }
+
       const c: Wallet<'evm'> = {
         id: connector.id,
-        name: connector.name ?? connector.id ?? connector.type,
-        icon: connector.icon ?? '',
+        name: walletConfig?.name || connector.name || connector.id || connector.type,
+        icon: connector.icon ?? walletConfig?.icon ?? '',
         connector,
-        installed: connector.type === 'injected' && connector.id !== 'metaMask',
+        installed: isInstalled,
         type: 'evm',
       };
-
-      if (walletId) {
-        const wallet = walletConfigs[walletId];
-        if (wallet.hide) return undefined;
-
-        return {
-          ...c,
-          ...wallet,
-          installed: typeof wallet.isInstalled === 'function' ? wallet.isInstalled() : wallet.isInstalled,
-        };
-      }
 
       return c;
     };

@@ -3,6 +3,7 @@ import { TangledContextProvider, solana } from '@tangled3/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { ReactNode } from 'react';
+import { injected } from 'wagmi';
 
 const queryClient = new QueryClient();
 
@@ -23,6 +24,9 @@ const Providers = ({ children }: { children: ReactNode }) => {
             },
           },
 
+          chainConnectors: {
+            evm: [injected()],
+          },
           projectId: '41980758771052df3f01be0a46f172a5',
           bitcoinNetwork: 'mainnet',
         }}
