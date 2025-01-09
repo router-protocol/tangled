@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.22
+
+### Patch Changes
+
+- configure binance solana wallet
+
 ## 1.16.21
 
 ### Patch Changes

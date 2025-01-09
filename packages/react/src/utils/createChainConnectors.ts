@@ -39,6 +39,7 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
     ...(overrides.solana ?? []),
     solConnectors.phantom,
     solConnectors.solflare,
+    solConnectors.binance,
     solConnectors.backpack,
   ];
 
