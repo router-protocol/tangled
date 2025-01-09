@@ -2,11 +2,11 @@ import { ETH_ADDRESS, SOL_ADDRESS, TokenMetadata, useChain, useToken } from '@ta
 
 export const Tokens = () => {
   return (
-    <div className='bg-neutral-900'>
-      <h3 className='text-lg font-bold'>Onchain Token Fetching</h3>
-      <table className='w-full'>
+    <div className='bg-neutral-800 p-4 rounded-lg shadow-lg overflow-auto'>
+      <h3 className='text-lg font-bold mb-4'>Onchain Token Fetching</h3>
+      <table className='w-full border-collapse rounded-lg'>
         <thead>
-          <tr className='bg-gray-900'>
+          <tr className='bg-gray-800 text-white'>
             <th className='text-left w-[5ch] px-4 py-2'>Address</th>
             <th className='text-left w-[10ch] px-4 py-2'>Chain</th>
             <th className='text-left w-[10ch] px-4 py-2'>Chain Type</th>
@@ -43,7 +43,7 @@ export const Token = (token: TokenMetadata) => {
   const chain = useChain(token.chainId);
   const dataOK = fetchedToken?.symbol === token.symbol && fetchedToken.decimals === token.decimals;
   return (
-    <tr className='border-b border-gray-700'>
+    <tr className='border-b border-gray-600 hover:bg-gray-700'>
       <td className='px-4 py-2 max-w-[10ch] overflow-hidden text-ellipsis'>{token.address}</td>
       <td className='px-4 py-2'>{chain?.name}</td>
       <td className='px-4 py-2'>{chain?.type}</td>

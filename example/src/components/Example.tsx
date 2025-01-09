@@ -60,7 +60,7 @@ const CurrentAccountAndWallet = () => {
   }, [currentAccount?.chainId]);
 
   return (
-    <div className='grid grid-cols-2'>
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
       <div>
         <h3 className='text-lg font-bold'>Current Account</h3>
         <table className='w-full'>

@@ -5,15 +5,18 @@ const WalletList = () => {
   const { connect } = useConnect();
 
   return (
-    <div className='max-h-[30rem] overflow-scroll bg-neutral-900'>
-      <h2 className='text-xl font-bold sticky top-0 bg-black'>WALLETS</h2>
+    <div className='max-h-[30rem] overflow-auto bg-neutral-800 p-4 rounded-lg shadow-lg'>
+      <h2 className='text-xl font-bold sticky top-0 bg-black mb-4'>WALLETS</h2>
       <div className='space-y-8'>
         {CHAIN_TYPES.map((chainType) => (
-          <div key={chainType}>
+          <div
+            key={chainType}
+            className='rounded-lg'
+          >
             <span className='font-bold'>{chainType}</span>
-            <table className='w-full'>
+            <table className='w-full border-collapse rounded-lg'>
               <thead>
-                <tr className='bg-gray-900'>
+                <tr className='bg-gray-800 text-white'>
                   <th className='text-left px-4 py-2 w-[5ch]'>Icon</th>
                   <th className='text-left px-4 py-2 w-[20ch]'>Name</th>
                   <th className='text-left px-4 py-2 w-[5ch]'>Installed</th>
@@ -26,13 +29,13 @@ const WalletList = () => {
                 {wallets[chainType].map((wallet) => (
                   <tr
                     key={wallet.id}
-                    className='border-b border-gray-700'
+                    className='border-b border-gray-600 hover:bg-gray-700'
                   >
                     <td className='px-4 py-2'>
                       <img
                         src={wallet.icon}
                         alt=''
-                        className='w-8 h-8'
+                        className='w-8 h-8 rounded-full'
                       />
                     </td>
                     <td className='px-4 py-2'>{wallet.name}</td>
@@ -42,7 +45,7 @@ const WalletList = () => {
                       {wallet.installed ? (
                         <button
                           onClick={() => connect({ walletId: wallet.id, chainType })}
-                          className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'
+                          className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg'
                         >
                           connect
                         </button>
