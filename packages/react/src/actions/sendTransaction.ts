@@ -91,12 +91,20 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
         funds,
       });
 
+      const walletConnector = config.connector as WalletInstance<'evm'>;
+      const injectedSigner = await walletConnector.getClient?.({
+        chainId: chain.id,
+      });
+      if (!injectedSigner) {
+        throw new Error("Couldn't get injected signer");
+      }
+
       const txResponse = await sendEthTxnToRouterChainPf({
         networkEnv: chain.extra.environment,
         txMsg: executeContractMsg,
         nodeUrl: network.lcdEndpoint,
         ethereumAddress: from,
-        injectedSigner: window.ethereum,
+        injectedSigner: injectedSigner,
         pfUrl: `${chain.extra.pathfinder}/v2/router-pubkey`,
       });
 

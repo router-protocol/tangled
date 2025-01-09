@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.23
+
+### Patch Changes
+
+- fix routerchain evm integration
+
 ## 1.16.22
 
 ### Patch Changes
