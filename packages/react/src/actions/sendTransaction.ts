@@ -92,12 +92,9 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       });
 
       const walletConnector = config.connector as WalletInstance<'evm'>;
-      const injectedSigner = await walletConnector.getClient?.({
+      const injectedSigner = await walletConnector.getProvider({
         chainId: chain.id,
       });
-      if (!injectedSigner) {
-        throw new Error("Couldn't get injected signer");
-      }
 
       const txResponse = await sendEthTxnToRouterChainPf({
         networkEnv: chain.extra.environment,

@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.24
+
+### Patch Changes
+
+- fix(react): switch evm routerchain client to provider
+
 ## 1.16.23
 
 ### Patch Changes
