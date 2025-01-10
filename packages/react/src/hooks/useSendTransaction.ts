@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { SendTransactionParams, sendTransactionToChain } from '../actions/sendTransaction.js';
 import { ChainData, ChainId } from '../types/index.js';
+import { compareStrings } from '../utils/index.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
@@ -50,7 +51,7 @@ export const useSendTransaction = () => {
       }
 
       // check if from address matches currentAccount
-      if (from !== currentAccount.address) {
+      if (!compareStrings(from, currentAccount.address)) {
         throw new Error('From address does not match current account');
       }
 

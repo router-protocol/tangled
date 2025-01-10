@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.26
+
+### Patch Changes
+
+- fix(useSendTransaction) current account comparison
+
 ## 1.16.25
 
 ### Patch Changes

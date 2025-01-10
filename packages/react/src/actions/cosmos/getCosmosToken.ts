@@ -2,7 +2,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { maxInt256 } from 'viem';
 import { RouterLCDBalancesResponse } from '../../types/cosmos.js';
 import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
-import { areTokensEqual, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
+import { compareStrings, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
 
 export const getCosmosTokenMetadata = async ({
   token,
@@ -17,7 +17,7 @@ export const getCosmosTokenMetadata = async ({
 
   const assetList = registryClient.getChainAssetList(chain.chainName).assets;
 
-  const asset = assetList.find((asset) => areTokensEqual(asset.base, token));
+  const asset = assetList.find((asset) => compareStrings(asset.base, token));
 
   if (!asset) {
     throw new Error('Token not found');

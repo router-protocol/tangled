@@ -5,7 +5,7 @@ import { trc20Abi } from '../constants/abi/trc20.js';
 import { ETH_ADDRESS, SOL_ADDRESS, SUI_ADDRESS } from '../constants/index.js';
 import { TokenMetadata } from '../hooks/useToken.js';
 import { ChainData, ChainId, ChainType, ConnectionOrConfig, GetTokenMetadataParams } from '../types/index.js';
-import { areTokensEqual } from '../utils/index.js';
+import { compareStrings } from '../utils/index.js';
 import { getFormattedBalance as getBitcoinBalance } from './bitcoin/balance.js';
 import { getCosmosTokenBalanceAndAllowance, getCosmosTokenMetadata } from './cosmos/getCosmosToken.js';
 import { getEVMTokenBalanceAndAllowance, getEVMTokenMetadata } from './evm/getEVMToken.js';
@@ -22,7 +22,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   // console.log('[Token] configs', { token, chain, config });
   // evm chain
   if (chain?.type === 'evm') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
+    if (compareStrings(token, ETH_ADDRESS)) {
       return {
         name: chain.nativeCurrency.name,
         symbol: chain.nativeCurrency.symbol,
@@ -38,7 +38,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   }
 
   if (chain.type === 'tron') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
+    if (compareStrings(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
     let contractAddress: string = token;
@@ -59,7 +59,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   }
 
   if (chain.type === 'solana') {
-    if (areTokensEqual(token, SOL_ADDRESS)) {
+    if (compareStrings(token, SOL_ADDRESS)) {
       return { ...chain.nativeCurrency, address: SOL_ADDRESS, chainId: chain.id, isNative: true };
     }
 
@@ -83,7 +83,7 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   }
 
   if (chain.type === 'cosmos') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
+    if (compareStrings(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
     const res = await getCosmosTokenMetadata({ token, chain, getCosmosClient: config.getCosmosClient });
@@ -96,13 +96,13 @@ export const getTokenMetadata = async ({ token, chain, config }: GetTokenMetadat
   }
 
   if (chain.type === 'bitcoin') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
+    if (compareStrings(token, ETH_ADDRESS)) {
       return { ...chain.nativeCurrency, address: ETH_ADDRESS, chainId: chain.id, isNative: true };
     }
   }
 
   if (chain.type === 'sui') {
-    if (areTokensEqual(token, SUI_ADDRESS)) {
+    if (compareStrings(token, SUI_ADDRESS)) {
       return { ...chain.nativeCurrency, address: SUI_ADDRESS, chainId: chain.id, isNative: true };
     }
 
@@ -167,7 +167,7 @@ export const getTokenBalanceAndAllowance = (async (params) => {
 
   // evm chain
   if (chain.type === 'evm') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
+    if (compareStrings(token, ETH_ADDRESS)) {
       const result = {
         balance: await getBalance(config.wagmiConfig, {
           address: account as EVMAddress,
@@ -181,7 +181,7 @@ export const getTokenBalanceAndAllowance = (async (params) => {
   }
 
   if (chain.type === 'tron') {
-    if (areTokensEqual(token, ETH_ADDRESS)) {
+    if (compareStrings(token, ETH_ADDRESS)) {
       const balance = BigInt(await config.tronWeb.trx.getBalance(account));
       const allowance = BigInt(0);
       return { balance, allowance };
@@ -203,7 +203,7 @@ export const getTokenBalanceAndAllowance = (async (params) => {
     const accountPbKey = new PublicKey(account);
 
     // if asset is native solana token
-    if (areTokensEqual(token, SOL_ADDRESS)) {
+    if (compareStrings(token, SOL_ADDRESS)) {
       const balance = BigInt(await config.solanaConnection.getBalance(accountPbKey));
       return { balance, allowance: 0n };
     }

@@ -37,7 +37,7 @@ export const isMobile = () => {
  * @param tokenB The second token.
  * @returns True if the two tokens are equal.
  */
-export const areTokensEqual = (tokenA: string | undefined, tokenB: string | undefined): boolean => {
+export const compareStrings = (tokenA: string | undefined, tokenB: string | undefined): boolean => {
   // Early return if either token is undefined
   if (!tokenA || !tokenB) return false;
 
