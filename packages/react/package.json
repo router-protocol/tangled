@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.16.24",
+  "version": "1.16.25",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -47,7 +47,7 @@
     "@safe-global/safe-apps-sdk": "^9.0.0",
     "@solana/spl-token": "^0.4.8",
     "@solana/wallet-adapter-base": "^0.9.23",
-    "@solana/web3.js": "^1.94.0",
+    "@solana/web3.js": "^1.98.0",
     "@tangled3/solana-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.8",

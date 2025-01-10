@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.25
+
+### Patch Changes
+
+- chore: upgrade solana web3
+
 ## 1.16.24
 
 ### Patch Changes
