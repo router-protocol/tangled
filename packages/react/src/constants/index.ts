@@ -77,7 +77,10 @@ export const CHAIN_ID = {
   // fuji: '43113',
   // mumbai: '80001',
   // scrollSepolia: '534351',
-  // sepolia: '11155111',
+  sepolia: '11155111',
+  holesky: '17000',
+  arbitrumSepolia: '421614',
+  avalancheFuji: '43113',
 } as const;
 
 export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
@@ -160,6 +163,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // 43113: avalancheFuji,
   // 534351: scrollSepolia,
   // 11155111: sepolia,
+  [CHAIN_ID.holesky]: chains.holesky,
+  [CHAIN_ID.arbitrumSepolia]: chains.arbitrumSepolia,
+  [CHAIN_ID.avalancheFuji]: chains.avalancheFuji,
+  [CHAIN_ID.sepolia]: chains.sepolia,
 } as const;
 
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {

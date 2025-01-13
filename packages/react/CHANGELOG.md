@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.27
+
+### Patch Changes
+
+- chore: add chain configs
+
 ## 1.16.26
 
 ### Patch Changes
