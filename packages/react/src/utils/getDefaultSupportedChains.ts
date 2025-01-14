@@ -62,6 +62,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.saakuru,
       evm.scroll,
       evm.shido,
+      evm.soneium,
       evm.taiko,
       evm.tangle,
       evm.vanar,

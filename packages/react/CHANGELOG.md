@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.28
+
+### Patch Changes
+
+- chore: add soneium chain
+
 ## 1.16.27
 
 ### Patch Changes

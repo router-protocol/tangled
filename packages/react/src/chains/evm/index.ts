@@ -84,4 +84,5 @@ export * from './odyssey.js';
 export * from './redbelly.js';
 export * from './router-evm.js';
 export * from './shido.js';
+export * from './soneium.js';
 export * from './tangle.js';
