@@ -1,6 +1,6 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { getTransactionReceipt as getEVMTransactionReceipt } from '@wagmi/core';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
-
 import { getTransactionStatus as getBitcoinTransactionStatus } from './bitcoin/transaction.js';
 import { TransactionParams } from './waitForTransaction.js';
 
@@ -79,12 +79,10 @@ export const getTransactionReceipt = (async ({
     const { txHash } = transactionParams as TransactionParams<'cosmos'>;
 
     // Use StargateClient or CosmWasmClient depending on the chain
-    const chainWallet = config.getCosmosClient().chainWallets[chain.id];
-
-    const cosmosClient = await chainWallet.getStargateClient();
+    const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
 
     // Fetch transaction details using the `getTx` method
-    const result = await cosmosClient.getTx(txHash);
+    const result = await cosmwasmClient.getTx(txHash);
 
     if (!result) {
       throw new Error('Transaction not found');

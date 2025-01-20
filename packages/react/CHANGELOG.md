@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.29
+
+### Patch Changes
+
+- fix cosmos receipt fetching
+
 ## 1.16.28
 
 ### Patch Changes
