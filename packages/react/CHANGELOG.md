@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.31
+
+### Patch Changes
+
+- fix soneium multicall, tronweb version
+
 ## 1.16.30
 
 ### Patch Changes
