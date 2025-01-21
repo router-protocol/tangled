@@ -104,7 +104,7 @@ importers:
         version: 7.13.0(eslint@8.57.0)(typescript@5.4.5)
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.3.1(vite@5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1))
+        version: 4.3.1(vite@5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1))
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.40)
@@ -128,10 +128,10 @@ importers:
         version: 5.4.5
       vite:
         specifier: ^5.2.0
-        version: 5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1)
+        version: 5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1)
       vite-plugin-node-polyfills:
         specifier: ^0.17.0
-        version: 0.17.0(rollup@4.18.0)(vite@5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1))
+        version: 0.17.0(rollup@4.18.0)(vite@5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1))
 
   example-next:
     dependencies:
@@ -278,8 +278,8 @@ importers:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
       tronweb:
-        specifier: ^6.0.0
-        version: 6.0.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        specifier: ^6.0.1
+        version: 6.0.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       usehooks-ts:
         specifier: ^3.1.0
         version: 3.1.0(react@18.3.1)
@@ -392,7 +392,7 @@ importers:
         version: 7.13.0(eslint@8.57.0)(typescript@5.4.5)
       '@vitejs/plugin-react':
         specifier: ^4.2.1
-        version: 4.3.1(vite@5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1))
+        version: 4.3.1(vite@5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1))
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -407,7 +407,7 @@ importers:
         version: 5.4.5
       vite:
         specifier: ^5.2.0
-        version: 5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1)
+        version: 5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1)
 
 packages:
 
@@ -3233,9 +3233,6 @@ packages:
     peerDependencies:
       react: ^18.0.0
 
-  '@tronweb3/google-protobuf@3.21.2':
-    resolution: {integrity: sha512-IVcT2GfWX3K6tHUVhs14NP5uzKhQt4KeDya1g9ACxuZsUzsaoGUIGzceK2Ltu7xp1YV94AaHOf4yxLAivlvEkQ==}
-
   '@tronweb3/tronwallet-abstract-adapter@1.1.8':
     resolution: {integrity: sha512-Ztt2C8kLEaRSgztpBKYqXDtXd7/+4AVS7K+ThZAjOInBu8MM/Jo3tmG4koVW8hM6Hz0rjoohKfQ36LGPVCQfGw==}
     engines: {node: '>=16', pnpm: '>=7'}
@@ -3384,14 +3381,14 @@ packages:
   '@types/node@13.13.52':
     resolution: {integrity: sha512-s3nugnZumCC//n4moGGe6tkNMyYEdaDBitVjwPxXmR5lnMG5dHePinH2EdxkG3Rh1ghFHHixAG4NJhpJW1rthQ==}
 
-  '@types/node@18.15.13':
-    resolution: {integrity: sha512-N+0kuo9KgrUQ1Sn/ifDXsvg0TTleP7rIy4zOBGECxAljqvqfqpTfzx0Q1NUedOixRMBfe2Whhb056a42cWs26Q==}
-
   '@types/node@18.19.34':
     resolution: {integrity: sha512-eXF4pfBNV5DAMKGbI02NnDtWrQ40hAN558/2vvS4gMpMIxaf6JmD7YjnZbq0Q9TDSSkKBamime8ewRoomHdt4g==}
 
   '@types/node@20.14.14':
     resolution: {integrity: sha512-d64f00982fS9YoOgJkAMolK7MN8Iq3TDdVjchbYHdEmjth/DHowx82GnoA+tVUAN+7vxfYUgAzi+JXbKNd2SDQ==}
+
+  '@types/node@22.7.5':
+    resolution: {integrity: sha512-jML7s2NAzMWc//QSJ1a3prpk78cOPchGvXJsC3C6R6PSMoooztvRVQEz89gmBTBY1SPMaqo5teB4uNHPdetShQ==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -5572,8 +5569,8 @@ packages:
   ethers@5.7.2:
     resolution: {integrity: sha512-wswUsmWo1aOK8rR7DIKiWSw9DbLWe6x98Jrn8wcTflTVvaXhAMaB5zGAXy0GYQEQp9iO1iSHWVyARQm11zUtyg==}
 
-  ethers@6.13.2:
-    resolution: {integrity: sha512-9VkriTTed+/27BGuY1s0hf441kqwHJ1wtN2edksEtiRvXx+soxRX3iSXTfFqq2+YwrOqbDoTHjIhQnjJRlzKmg==}
+  ethers@6.13.5:
+    resolution: {integrity: sha512-+knKNieu5EKRThQJWwqaJ10a6HE9sSehGeqWN65//wE7j47ZpFhKAnHB/JJFibwwg61I/koxaPsXbXpD/skNOQ==}
     engines: {node: '>=14.0.0'}
 
   ethjs-unit@0.1.6:
@@ -8900,8 +8897,8 @@ packages:
     resolution: {integrity: sha512-c1PTsA3tYrIsLGkJkzHF+w9F2EyxfXGo4UyJc4pFL++FMjnq0HJS69T3M7d//gKrFKwy429bouPescbjecU+Zw==}
     engines: {node: '>=8'}
 
-  tronweb@6.0.0:
-    resolution: {integrity: sha512-mIh00KG00Iu80UT1SLDgNEBLzWiR24WnttlObP8B9eQyNJ6mg4oD2gE+vG0cd6FcHL9DV6Jd18gKeBp4y3Y7Ew==}
+  tronweb@6.0.1:
+    resolution: {integrity: sha512-/WR4g9s21JAMdKS/s6yaQwrLVQTwSiLyOa8SAO2cAvASDfXJR8cFgsukPpHpyrkiHweC05PukSavshbIhB0cPw==}
 
   ts-api-utils@1.3.0:
     resolution: {integrity: sha512-UQMIo7pb8WRomKR1/+MFVLTroIvDVtMX3K6OUir8ynLyzB8Jeriont2bTAtmNPa1ekAgN7YPDyf6V+ygrdU+eQ==}
@@ -8925,11 +8922,11 @@ packages:
   tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
 
-  tslib@2.4.0:
-    resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
-
   tslib@2.6.3:
     resolution: {integrity: sha512-xNvxJEOUiWPGhUuUdQgAJPKOOJfGnIyKySOc09XkKsgdUV/3E2zvwZYdejjmRgPCgcym1juLH3226yA7sEFJKQ==}
+
+  tslib@2.7.0:
+    resolution: {integrity: sha512-gLXCKdN1/j47AiHiOkJN69hJmcbGTHI0ImLmbYLHykhgeN0jVGola9yVjFgzCUklsZQMW55o+dW7IXv3RCXDzA==}
 
   tsutils@3.21.0:
     resolution: {integrity: sha512-mHKK3iUXL+3UF6xL5k0PEhKRUBKPBCv/+RkEOpjRWxxx27KKRBmmA60A9pgOUvMi8GKhRMPEmjBRPzs2W7O1OA==}
@@ -9051,6 +9048,9 @@ packages:
 
   undici-types@5.26.5:
     resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+
+  undici-types@6.19.8:
+    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
 
   unenv@1.9.0:
     resolution: {integrity: sha512-QKnFNznRxmbOF1hDgzpqrlIf6NC5sbZ2OJ+5Wl3OX8uM+LUJXbj4TXvLJCtwbPTmbMHCLIz6JLKNinNsMShK9g==}
@@ -14271,8 +14271,6 @@ snapshots:
       '@tanstack/query-core': 5.44.0
       react: 18.3.1
 
-  '@tronweb3/google-protobuf@3.21.2': {}
-
   '@tronweb3/tronwallet-abstract-adapter@1.1.8':
     dependencies:
       eventemitter3: 4.0.7
@@ -14540,8 +14538,6 @@ snapshots:
 
   '@types/node@13.13.52': {}
 
-  '@types/node@18.15.13': {}
-
   '@types/node@18.19.34':
     dependencies:
       undici-types: 5.26.5
@@ -14549,6 +14545,10 @@ snapshots:
   '@types/node@20.14.14':
     dependencies:
       undici-types: 5.26.5
+
+  '@types/node@22.7.5':
+    dependencies:
+      undici-types: 6.19.8
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -14923,14 +14923,14 @@ snapshots:
     dependencies:
       '@vanilla-extract/css': 1.15.5(babel-plugin-macros@3.1.0)
 
-  '@vitejs/plugin-react@4.3.1(vite@5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1))':
+  '@vitejs/plugin-react@4.3.1(vite@5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1))':
     dependencies:
       '@babel/core': 7.24.7
       '@babel/plugin-transform-react-jsx-self': 7.24.7(@babel/core@7.24.7)
       '@babel/plugin-transform-react-jsx-source': 7.24.7(@babel/core@7.24.7)
       '@types/babel__core': 7.20.5
       react-refresh: 0.14.2
-      vite: 5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1)
+      vite: 5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -18109,14 +18109,14 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  ethers@6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+  ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
       '@adraffy/ens-normalize': 1.10.1
       '@noble/curves': 1.2.0
       '@noble/hashes': 1.3.2
-      '@types/node': 18.15.13
+      '@types/node': 22.7.5
       aes-js: 4.0.0-beta.5
-      tslib: 2.4.0
+      tslib: 2.7.0
       ws: 8.17.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - bufferutil
@@ -21869,15 +21869,15 @@ snapshots:
 
   trim-newlines@3.0.1: {}
 
-  tronweb@6.0.0(bufferutil@4.0.8)(utf-8-validate@5.0.10):
+  tronweb@6.0.1(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
-      '@babel/runtime': 7.25.0
-      '@tronweb3/google-protobuf': 3.21.2
+      '@babel/runtime': 7.26.0
       axios: 1.7.9
       bignumber.js: 9.1.2
       ethereum-cryptography: 2.2.0
-      ethers: 6.13.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      ethers: 6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       eventemitter3: 3.1.2
+      google-protobuf: 3.21.4
       semver: 5.7.2
       validator: 13.12.0
     transitivePeerDependencies:
@@ -21910,9 +21910,9 @@ snapshots:
 
   tslib@1.14.1: {}
 
-  tslib@2.4.0: {}
-
   tslib@2.6.3: {}
+
+  tslib@2.7.0: {}
 
   tsutils@3.21.0(typescript@5.4.5):
     dependencies:
@@ -22023,6 +22023,8 @@ snapshots:
   uncrypto@0.1.3: {}
 
   undici-types@5.26.5: {}
+
+  undici-types@6.19.8: {}
 
   unenv@1.9.0:
     dependencies:
@@ -22239,23 +22241,23 @@ snapshots:
       - utf-8-validate
       - zod
 
-  vite-plugin-node-polyfills@0.17.0(rollup@4.18.0)(vite@5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1)):
+  vite-plugin-node-polyfills@0.17.0(rollup@4.18.0)(vite@5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1)):
     dependencies:
       '@rollup/plugin-inject': 5.0.5(rollup@4.18.0)
       buffer-polyfill: buffer@6.0.3
       node-stdlib-browser: 1.2.0
       process: 0.11.10
-      vite: 5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1)
+      vite: 5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1)
     transitivePeerDependencies:
       - rollup
 
-  vite@5.2.13(@types/node@20.14.14)(lightningcss@1.27.0)(terser@5.31.1):
+  vite@5.2.13(@types/node@22.7.5)(lightningcss@1.27.0)(terser@5.31.1):
     dependencies:
       esbuild: 0.20.2
       postcss: 8.4.40
       rollup: 4.18.0
     optionalDependencies:
-      '@types/node': 20.14.14
+      '@types/node': 22.7.5
       fsevents: 2.3.3
       lightningcss: 1.27.0
       terser: 5.31.1

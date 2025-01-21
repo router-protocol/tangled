@@ -124,9 +124,26 @@ export function formatTokenAddress(token: string): string {
  * @param token - The token address to check
  * @returns Boolean indicating if token is native/factory
  */
-export function isNativeOrFactoryToken(token: string, chainData: ChainData): boolean {
+export function isCosmosNativeOrFactoryToken(token: string, chainData: ChainData): boolean {
   token = token.toLowerCase();
-  return chainData.extra?.nativeAddress === token || token.startsWith('ibc') || token.startsWith('factory');
+  return isCosmosNativeToken(token, chainData) || isCosmosFactoryOrIbcToken(token);
+}
+/**
+ * Checks if a cosmos token is a native token
+ * @param token - The token address to check
+ * @param chainData - The chain data
+ * @returns Boolean indicating if token is native
+ */
+export function isCosmosNativeToken(token: string, chainData: ChainData): boolean {
+  return chainData.extra?.nativeAddress === token;
+}
+/**
+ * Checks if a cosmos token is a factory or ibc token
+ * @param token - The token address to check
+ * @returns Boolean indicating if token is factory/ibc
+ */
+export function isCosmosFactoryOrIbcToken(token: string): boolean {
+  return token.startsWith('factory') || token.startsWith('ibc');
 }
 
 /**

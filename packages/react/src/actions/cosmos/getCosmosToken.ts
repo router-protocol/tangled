@@ -2,7 +2,7 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { maxInt256 } from 'viem';
 import { RouterLCDBalancesResponse } from '../../types/cosmos.js';
 import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
-import { compareStrings, formatTokenAddress, isNativeOrFactoryToken } from '../../utils/index.js';
+import { compareStrings, isCosmosNativeOrFactoryToken } from '../../utils/index.js';
 
 export const getCosmosTokenMetadata = async ({
   token,
@@ -97,11 +97,10 @@ export const getCosmosTokenBalanceAndAllowance = async ({
     }
   }
   const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
-  const formattedToken = formatTokenAddress(token);
 
   //  For native/factory tokens
-  if (isNativeOrFactoryToken(token, chain)) {
-    const nativeTokenBalance = await cosmwasmClient.getBalance(account, formattedToken);
+  if (isCosmosNativeOrFactoryToken(token, chain)) {
+    const nativeTokenBalance = await cosmwasmClient.getBalance(account, token);
 
     return {
       balance: BigInt(nativeTokenBalance.amount),

@@ -1,5 +1,23 @@
 # @tangled3/react
 
+## 1.16.31
+
+### Patch Changes
+
+- fix soneium multicall, tronweb version
+
+## 1.16.30
+
+### Patch Changes
+
+- fix: cosmos factory, ibc balance fetch
+
+## 1.16.29
+
+### Patch Changes
+
+- fix cosmos receipt fetching
+
 ## 1.16.28
 
 ### Patch Changes
