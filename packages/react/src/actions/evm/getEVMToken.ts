@@ -1,5 +1,10 @@
 import { Config, multicall } from '@wagmi/core';
-import { Address, erc20Abi } from 'viem';
+import { Address, erc20Abi, maxInt256 } from 'viem';
+
+// Interface for the response containing withdrawable
+interface WithdrawableResponse {
+  withdrawable: string; // Field to store the withdrawable amount
+}
 
 export const getEVMTokenMetadata = async (address: string, chainId: number, wagmiConfig: Config) => {
   if (chainId === 998) {
@@ -46,9 +51,30 @@ export const getEVMTokenBalanceAndAllowance = async (
   wagmiConfig: Config,
 ) => {
   if (chainId === 998) {
+    const response = await fetch('https://api-ui.hyperliquid.xyz/info', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        type: 'clearinghouseState',
+        user: account,
+      }),
+    });
+
+    if (!response.ok) {
+      return {
+        balance: BigInt(0),
+        allowance: maxInt256,
+      };
+    }
+
+    const balance = (await response.json()) as WithdrawableResponse;
+    const withdrawableBalance = balance.withdrawable;
+
     return {
-      balance: BigInt(0),
-      allowance: BigInt(0),
+      balance: BigInt(withdrawableBalance),
+      allowance: maxInt256,
     };
   }
   const calls = [
