@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.30
+
+### Patch Changes
+
+- fix: cosmos factory, ibc balance fetch
+
 ## 1.16.29
 
 ### Patch Changes
