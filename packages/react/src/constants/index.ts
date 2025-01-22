@@ -82,6 +82,10 @@ export const CHAIN_ID = {
   holesky: '17000',
   arbitrumSepolia: '421614',
   avalancheFuji: '43113',
+
+  // cosmos
+  osmosisTestnet: 'osmo-test-5',
+  alloraTestnet: 'allora-testnet-1',
 } as const;
 
 export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
@@ -169,6 +173,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrumSepolia]: chains.arbitrumSepolia,
   [CHAIN_ID.avalancheFuji]: chains.avalancheFuji,
   [CHAIN_ID.sepolia]: chains.sepolia,
+
+  // cosmos testnets
+  [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,
+  [CHAIN_ID.alloraTestnet]: chains.alloraTestnet,
 } as const;
 
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
