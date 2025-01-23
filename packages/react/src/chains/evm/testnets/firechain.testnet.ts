@@ -22,7 +22,7 @@ export const firechainTestnet: EVMChain = {
   },
   contracts: {
     multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11',
+      address: '0xCDD0e0902eB1d560A316982CBf618b74e21db27D',
     },
   },
 };

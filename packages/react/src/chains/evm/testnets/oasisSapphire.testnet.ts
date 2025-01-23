@@ -18,12 +18,12 @@ export const oasisSapphireTestnet: EVMChain = {
   blockExplorers: {
     default: {
       name: 'Oasis Testnet Explorer',
-      url: 'ttps://explorer.oasis.io/mainnet/sapphire',
+      url: 'https://explorer.oasis.io/testnet/sapphire',
     },
   },
   contracts: {
     multicall3: {
-      address: '0xca11bde05977b3631167028862be2a173976ca11', // NOTE: no multicall3 address
+      address: '0xce275dFaB490427301A83A93EeB7df733BE8aa10',
     },
   },
 };
