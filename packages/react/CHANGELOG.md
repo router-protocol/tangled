@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.32
+
+### Patch Changes
+
+- refactor: wallet config for sui, solana
+
 ## 1.16.31
 
 ### Patch Changes
