@@ -82,6 +82,19 @@ export const CHAIN_ID = {
   holesky: '17000',
   arbitrumSepolia: '421614',
   avalancheFuji: '43113',
+  amoy: '80002',
+  fireChainTestnet: '997',
+  pentagonTestnet: '555555',
+  soneiumTestnet: '1946',
+  oasisSapphireTestnet: '23295',
+  bearChainTestnet: '80084',
+  unichainSepolia: '1301',
+  abstractSepolia: '11124',
+  storyOdyssey: '1516',
+
+  // cosmos
+  osmosisTestnet: 'osmo-test-5',
+  alloraTestnet: 'allora-testnet-1',
 } as const;
 
 export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
@@ -169,6 +182,19 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrumSepolia]: chains.arbitrumSepolia,
   [CHAIN_ID.avalancheFuji]: chains.avalancheFuji,
   [CHAIN_ID.sepolia]: chains.sepolia,
+  [CHAIN_ID.amoy]: chains.amoy,
+  [CHAIN_ID.fireChainTestnet]: chains.firechainTestnet,
+  [CHAIN_ID.pentagonTestnet]: chains.pentagonTestnet,
+  [CHAIN_ID.soneiumTestnet]: chains.soneiumTestnet,
+  [CHAIN_ID.oasisSapphireTestnet]: chains.oasisSapphireTestnet,
+  [CHAIN_ID.bearChainTestnet]: chains.beraChainTestnet,
+  [CHAIN_ID.unichainSepolia]: chains.unichainSepolia,
+  [CHAIN_ID.abstractSepolia]: chains.abstractSepolia,
+  [CHAIN_ID.storyOdyssey]: chains.storyOdyssey,
+
+  // cosmos testnets
+  [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,
+  [CHAIN_ID.alloraTestnet]: chains.alloraTestnet,
 } as const;
 
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
