@@ -1,6 +1,6 @@
 # @tangled3/react
 
-## 1.16.32
+## 1.16.33
 
 ### Patch Changes
 
