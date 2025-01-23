@@ -1,5 +1,11 @@
 # @tangled3/solana-react
 
+## 1.1.3
+
+### Patch Changes
+
+- fix tronweb for autoconnect
+
 ## 1.1.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @tangled3/react
 
+## 1.16.32
+
+### Patch Changes
+
+- fix tronweb for autoconnect
+- Updated dependencies
+  - @tangled3/solana-react@1.1.3
+
 ## 1.16.31
 
 ### Patch Changes

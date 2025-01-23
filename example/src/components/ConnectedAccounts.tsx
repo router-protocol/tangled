@@ -1,11 +1,13 @@
 import {
   ConnectedAccount,
+  ETH_ADDRESS,
   SOL_ADDRESS,
   useAccounts,
   useChain,
   useConnect,
   useDisconnect,
   useTokenForAccount,
+  useTokenHandlers,
   useWallet,
 } from '@tangled3/react';
 
@@ -19,9 +21,18 @@ export const ConnectedAccounts = () => {
     spender: undefined,
   });
 
+  const { mutate } = useTokenHandlers({
+    amount: 1000000000000000000n,
+    chainId: '728126428',
+    owner: 'TVFSThBJyyr7GsXSgNGBujfvTNhfro5pmR',
+    spender: '0x9d25b8289c0f3789237c1b3a88264882eed6c610',
+    token: ETH_ADDRESS,
+  });
+
   return (
     <div className='bg-neutral-800 p-4 rounded-lg shadow-lg overflow-auto'>
       <h3 className='text-lg font-bold mb-4'>Connected Accounts:</h3>
+      <button onClick={() => mutate()}>Approve</button>
       <table className='w-full border-collapse rounded-lg'>
         <thead>
           <tr className='bg-gray-800 text-white'>
