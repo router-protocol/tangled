@@ -1,4 +1,5 @@
 import { Wallet } from '../../types/wallet.js';
+import { WalletConfigProps } from '../index.js';
 
 export const suiWallet: Wallet<'sui'> = {
   id: 'Sui Wallet',
@@ -30,4 +31,45 @@ export const suiet: Wallet<'sui'> = {
   icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMjQiIGZpbGw9InVybCgjcGFpbnQwX3JhZGlhbF8zMDVfMTI1MTYpIi8+PHBhdGggZD0iTTUxLjUgNDMuNmMtMy45IDAtNy42LTMuOS05LjUtNi40LTEuOSAyLjUtNS42IDYuNC05LjUgNi40LTQgMC03LjctMy45LTkuNS02LjQtMS44IDIuNS01LjUgNi40LTkuNSA2LjQtLjggMC0xLjUtLjYtMS41LTEuNSAwLS44LjctMS41IDEuNS0xLjUgMy4yIDAgNy4xLTUuMSA4LjItNi45LjMtLjQuOC0uNyAxLjMtLjdzMSAuMiAxLjMuN2MxLjEgMS44IDUgNi45IDguMiA2LjkgMy4xIDAgNy4xLTUuMSA4LjItNi45LjMtLjQuOC0uNyAxLjMtLjdzMSAuMiAxLjIuN2MxLjEgMS44IDUgNi45IDguMiA2LjkuOSAwIDEuNi43IDEuNiAxLjUgMCAuOS0uNiAxLjUtMS41IDEuNXoiIGZpbGw9IiNmZmYiLz48cGF0aCBkPSJNNTEuNSA1Mi4zYy0zLjkgMC03LjYtMy45LTkuNS02LjQtMS45IDIuNS01LjYgNi40LTkuNSA2LjQtNCAwLTcuNy0zLjktOS41LTYuNC0xLjggMi41LTUuNSA2LjQtOS41IDYuNC0uOCAwLTEuNS0uNi0xLjUtMS41IDAtLjguNy0xLjUgMS41LTEuNSAzLjIgMCA3LjEtNS4xIDguMi02LjkuMy0uNC44LS43IDEuMy0uN3MxIC4zIDEuMy43YzEuMSAxLjggNSA2LjkgOC4yIDYuOSAzLjEgMCA3LjEtNS4xIDguMi02LjkuMy0uNC44LS43IDEuMy0uN3MxIC4zIDEuMi43YzEuMSAxLjggNSA2LjkgOC4yIDYuOS45IDAgMS42LjcgMS42IDEuNSAwIC45LS42IDEuNS0xLjUgMS41ek0xNC42IDM2LjdjLS44IDAtMS40LS41LTEuNi0xLjNsLS4zLTMuNmMwLTEwLjkgOC45LTE5LjggMTkuOC0xOS44IDExIDAgMTkuOCA4LjkgMTkuOCAxOS44bC0uMyAzLjZjLS4xLjgtLjkgMS40LTEuNyAxLjItLjktLjEtMS41LS45LTEuMy0xLjhsLjMtM2MwLTkuMi03LjUtMTYuOC0xNi44LTE2LjgtOS4yIDAtMTYuNyA3LjUtMTYuNyAxNi44bC4yIDMuMWMuMi44LS4zIDEuNi0xLjEgMS44aC0uM3oiIGZpbGw9IiNmZmYiLz48ZGVmcz48cmFkaWFsR3JhZGllbnQgaWQ9InBhaW50MF9yYWRpYWxfMzA1XzEyNTE2IiBjeD0iMCIgY3k9IjAiIHI9IjEiIGdyYWRpZW50VW5pdHM9InVzZXJTcGFjZU9uVXNlIiBncmFkaWVudFRyYW5zZm9ybT0ibWF0cml4KDUyLjc1ODAzIDUxLjM1OCAtNTEuNDM5NDcgNTIuODQxNzIgMCA3LjQwNykiPjxzdG9wIHN0b3AtY29sb3I9IiMwMDU4REQiLz48c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiM2N0M4RkYiLz48L3JhZGlhbEdyYWRpZW50PjwvZGVmcz48L3N2Zz4=',
   type: 'sui',
   url: 'https://suiet.app/',
+};
+
+export const binanceWeb3Wallet: Wallet<'sui'> = {
+  id: 'Binance Web3 Wallet',
+  name: 'Binance Web3 Wallet',
+  icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAaVBMVEVHcEz+uQD9uAD9uAD+uAD9uAD9uAD+uAD9uAD+uAD9uAD9uAD+uQD+uAD9uAD+uQD9uAD+uAD+uAD9uAAKCw3/uQDXnAHdoQFPPAhWQQj2swBJOAmMZwUaFwzkpgGWbwUWFAyufwSzgwMQ2+JPAAAAE3RSTlMAFfrza+DEidY+7LUse5YdCaRN0GUCOgAAAqdJREFUWMO1l+2SqyAMhhUV8bstUm3Rrbv3f5FHLShognY6h1+dKe9jSEJIPA9eVRKWGYvSIEgjlpVh4nsfLP8W05TwdZEgpfHtLCMvaMCBFdAiPyOPGccWYYcIP8Tl82Kh8yBJRvjBIlmCyi9hxE8sFl4Q8+OAn1ppDB6juhJ+cpHSh/TgXiFAwnVH8BH9zw9I4FsbLiVov7i3jwa2IbY9GQawXtY1QghCK/4R8v26RgnMyAc/c+hRguHIgrj0GIEsh8iZW48RWKUA8ZEeIxTKgOhQjxCUCcUJfT1AhLcXfOrSS+mygU6BuAUOfdvcXYQ0gVxo6YVwEgroBM+HpVgJw+O5JWS+l6Q7QDcs319uxLT613O7N8q9cJeFQhFabbEijHoBXKnSFnMxE3pt/0rQehsSe5ntv65RhPb94zXLRkKvfnS2JzPPvAeiadWHn78KNGjhrwJtYkG91NbrYAmhnaEIYnGGRYg8sou/3vB2heF8HQ6TkHpG/dTxf6hC+up1+AwDzQ1TGEyA/r9V/+t8GDRAQgBil9BJfxdWPvSdjj94hHRThFX+rE4cOrcT2aaMq/j/6TAqffMHh5HtEumuEknlQ6fSoEUS6bpJZePwisCFCjCWyvhlepy7TNB17q0CshQY+DrvCsqaULqgrA8MVFB2JW1TxOwCt91bIEXVIBj6O1xUK8odhPa4rMMPi9w8LDX+sCBP24bQOp425HGVpx9X7HmXh897ftBgSKf9RoOBtjjSqc/84yZLIvGfszix2my4TZ4IiN5u8/BGU7bnGk201W1OtrpjRmcfNNv8Wn3X7kP68RTlyYEjiP2vRp4IG3lGQkK/GrqmYxTfjX3z4Ok4B4vz/z/6zhG9lfbwzcknw/fszmn8p2yc/sf5n9Fx/K+Qnf8Ahh33hO8kM/4AAAAASUVORK5CYII=',
+  type: 'sui',
+  url: 'https://www.binance.com/en/web3wallet',
+};
+
+export const suiConnectorsConfig: Record<string, WalletConfigProps> = {
+  'Sui Wallet': {
+    name: 'Sui Wallet',
+    url: suiWallet.url,
+    icon: suiWallet.icon,
+    isInstalled: undefined,
+  },
+  Nightly: {
+    name: 'Nightly',
+    url: nightly.url,
+    icon: nightly.icon,
+    isInstalled: undefined,
+  },
+  'Martian Sui Wallet': {
+    name: 'Martian Sui Wallet',
+    url: martianSuiWallet.url,
+    icon: martianSuiWallet.icon,
+    isInstalled: undefined,
+  },
+  Suiet: {
+    name: 'Suiet',
+    url: suiet.url,
+    icon: suiet.icon,
+    isInstalled: undefined,
+  },
+  'Binance Web3 Wallet': {
+    name: 'Binance Web3 Wallet',
+    url: binanceWeb3Wallet.url,
+    icon: binanceWeb3Wallet.icon,
+    isInstalled: undefined,
+  },
 };

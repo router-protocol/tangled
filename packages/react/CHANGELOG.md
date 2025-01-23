@@ -1,12 +1,24 @@
 # @tangled3/react
 
-## 1.16.32
+## 1.16.35
 
 ### Patch Changes
 
 - fix tronweb for autoconnect
 - Updated dependencies
   - @tangled3/solana-react@1.1.3
+
+## 1.16.34
+
+### Patch Changes
+
+- chore: add testnet configs
+
+## 1.16.33
+
+### Patch Changes
+
+- refactor: wallet config for sui, solana
 
 ## 1.16.31
 
