@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.37
+
+### Patch Changes
+
+- chore: add testnet config
+
 ## 1.16.36
 
 ### Patch Changes
