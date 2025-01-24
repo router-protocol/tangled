@@ -47,7 +47,9 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.matchain,
       evm.metis,
       evm.hyperliquid,
+      evm.ink,
       evm.mode,
+      evm.morph,
       evm.nahmii,
       evm.nero,
       evm.oasisSapphire,
@@ -63,11 +65,15 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.scroll,
       evm.shido,
       evm.soneium,
+      evm.sonic,
       evm.taiko,
       evm.tangle,
       evm.vanar,
-      evm.zkSync,
+      evm.worldChain,
       evm.xLayer,
+      evm.zero,
+      evm.zkSync,
+      evm.zora,
     ] as EVMChain[];
     supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.self, cosmos.router] as CosmsosChainType[];
     supportedChains.solana = [solana] as OtherChainData<'solana'>[];
