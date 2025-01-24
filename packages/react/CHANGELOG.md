@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.36
+
+### Patch Changes
+
+- chore: add evm chains
+
 ## 1.16.34
 
 ### Patch Changes
