@@ -1,8 +1,17 @@
-import { ChainRegistryChainUtil, ChainRegistryClientOptions, ChainRegistryFetcher } from '@chain-registry/client';
+import {
+  ChainRegistryClientOptions as BaseChainRegistryClientOptions,
+  ChainRegistryChainUtil,
+  ChainRegistryFetcher,
+} from '@chain-registry/client';
 
-export const getCosmosChainRegistryClient = async (chains: string[]) => {
+interface ChainRegistryClientOptions extends BaseChainRegistryClientOptions {
+  testnet?: boolean | undefined;
+}
+
+export const getCosmosChainRegistryClient = async (chains: string[], testnet: boolean | undefined) => {
   const client = new ChainRegistryClient({
     chainNames: chains,
+    testnet,
   });
 
   await client.fetchUrls();
@@ -14,10 +23,11 @@ export class ChainRegistryClient extends ChainRegistryFetcher {
   protected _options: ChainRegistryClientOptions = {
     chainNames: [],
     baseUrl: 'https://raw.githubusercontent.com/cosmos/chain-registry/master',
+    testnet: undefined,
   };
 
   constructor(options: ChainRegistryClientOptions) {
-    const { chainNames, assetListNames, ibcNamePairs, baseUrl, ...restOptions } = options;
+    const { chainNames, assetListNames, ibcNamePairs, baseUrl, testnet, ...restOptions } = options;
 
     super(restOptions);
     this._options = {
@@ -26,20 +36,25 @@ export class ChainRegistryClient extends ChainRegistryFetcher {
       assetListNames: assetListNames || this._options.assetListNames,
       ibcNamePairs: ibcNamePairs || this._options.ibcNamePairs,
       baseUrl: baseUrl || this._options.baseUrl,
+      testnet,
     };
 
     this.generateUrls();
   }
 
   generateUrls() {
-    const { chainNames, assetListNames, ibcNamePairs, baseUrl } = this._options;
+    const { chainNames, assetListNames, ibcNamePairs, baseUrl, testnet } = this._options;
+
+    const getPath = (chain: string) => {
+      return testnet === true ? `/testnets/${chain}` : `/${chain}`;
+    };
 
     const chainUrls = chainNames.map((chain) => {
-      return `${baseUrl}/${chain}/chain.json`;
+      return `${baseUrl}${getPath(chain)}/chain.json`;
     });
 
     const assetlistUrls = (assetListNames || chainNames).map((chain) => {
-      return `${baseUrl}/${chain}/assetlist.json`;
+      return `${baseUrl}${getPath(chain)}/assetlist.json`;
     });
 
     let namePairs = ibcNamePairs;

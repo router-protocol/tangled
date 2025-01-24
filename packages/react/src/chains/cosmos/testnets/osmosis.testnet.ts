@@ -2,7 +2,7 @@ import { CosmsosChainType } from '../../../types/index.js';
 
 export const osmosisTestnet: CosmsosChainType = {
   id: 'osmo-test-5',
-  chainName: 'osmosisTestnet',
+  chainName: 'osmosistestnet',
   name: 'Osmosis Testnet',
   type: 'cosmos',
   nativeCurrency: {

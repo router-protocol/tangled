@@ -2,8 +2,11 @@ import { bitcoin } from '../chains/bitcoin.js';
 import * as cosmos from '../chains/cosmos/index.js';
 import * as evm from '../chains/evm/index.js';
 import { solana } from '../chains/solana.js';
+import { solanaTestnet } from '../chains/solana.testnet.js';
 import { sui } from '../chains/sui.js';
+import { suiTestnet } from '../chains/sui.testnet.js';
 import { tronMainnet } from '../chains/tron.js';
+import { tronShasta } from '../chains/tron.shasta.js';
 import {
   CosmsosChainType,
   EVMChain,
@@ -28,6 +31,25 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
 
   if (testnet) {
     // testnet chains
+    supportedChains.evm = [
+      evm.sepolia,
+      evm.holesky,
+      evm.arbitrumSepolia,
+      evm.avalancheFuji,
+      evm.amoy,
+      evm.abstractSepolia,
+      evm.beraChainTestnet,
+      evm.firechainTestnet,
+      evm.oasisSapphireTestnet,
+      evm.pentagonTestnet,
+      evm.soneiumTestnet,
+      evm.storyOdyssey,
+      evm.unichainSepolia,
+    ] as EVMChain[];
+    supportedChains.cosmos = [cosmos.osmosisTestnet, cosmos.alloraTestnet] as CosmsosChainType[];
+    supportedChains.solana = [solanaTestnet] as OtherChainData<'solana'>[];
+    supportedChains.tron = [tronShasta] as TronChain[];
+    supportedChains.sui = [suiTestnet] as SuiChainType[];
   } else {
     // mainnet chains
     supportedChains.evm = [

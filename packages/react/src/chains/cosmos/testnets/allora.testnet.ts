@@ -2,7 +2,7 @@ import { CosmsosChainType } from '../../../types/index.js';
 
 export const alloraTestnet: CosmsosChainType = {
   id: 'allora-testnet-1',
-  chainName: 'alloraTestnet',
+  chainName: 'alloratestnet',
   name: 'Allora Testnet',
   type: 'cosmos',
   nativeCurrency: {

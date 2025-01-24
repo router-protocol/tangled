@@ -86,3 +86,5 @@ export * from './router-evm.js';
 export * from './shido.js';
 export * from './soneium.js';
 export * from './tangle.js';
+
+export * from './testnet.js';

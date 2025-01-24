@@ -40,7 +40,7 @@ export const CosmosContext = createContext<CosmosContextValues>({
 
 const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode; chains: CosmsosChainType[] }) => {
   const tangledConfig = useTangledConfig((state) => state.config);
-  const cosmosStore = useRef(createCosmosStore(chains)).current;
+  const cosmosStore = useRef(createCosmosStore(chains, tangledConfig.testnet)).current;
 
   const [, setViewWalletRepo] = useState<WalletRepo | undefined>();
   const [, setData] = useState<Data>();
