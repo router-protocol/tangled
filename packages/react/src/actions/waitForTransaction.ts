@@ -1,3 +1,4 @@
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
@@ -136,12 +137,11 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
     const { txHash } = transactionParams as TransactionParams<'cosmos'>;
 
     // Use Cosmos client's RPC or LCD to fetch the transaction details
-    const cosmosClient = config.getCosmosClient().chainWallets[chain.id];
-    const stargateClient = await cosmosClient.getStargateClient();
+    const cosmwasmClient = await SigningCosmWasmClient.connect(chain.rpcUrls.default.http[0]);
 
     const receipt = await pollCallback(
       async () => {
-        const result = await stargateClient.getTx(txHash);
+        const result = await cosmwasmClient.getTx(txHash);
 
         if (!result || result.code !== 0) {
           return undefined; // Transaction not found or failed, continue polling
