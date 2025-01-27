@@ -69,7 +69,7 @@ export const CHAIN_ID = {
 
   // sui
   sui: 'sui',
-  suiTestnet: 'suiTestnet',
+  suiTestnet: 'sui-testnet',
 
   // casper
 
