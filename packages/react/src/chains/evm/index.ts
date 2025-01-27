@@ -89,6 +89,7 @@ export * from './shido.js';
 export * from './soneium.js';
 export * from './sonic.js';
 export * from './tangle.js';
+export * from './testnet.js';
 export * from './worldChain.js';
 export * from './zero.js';
 export * from './zora.js';

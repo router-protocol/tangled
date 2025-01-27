@@ -93,10 +93,11 @@ export const CHAIN_ID = {
   pentagonTestnet: '555555',
   soneiumTestnet: '1946',
   oasisSapphireTestnet: '23295',
-  bearChainTestnet: '80084',
+  beraChainTestnet: '80084',
   unichainSepolia: '1301',
   abstractSepolia: '11124',
   storyOdyssey: '1516',
+  monadTestnet: '10143',
 
   // cosmos
   osmosisTestnet: 'osmo-test-5',
@@ -199,10 +200,11 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.pentagonTestnet]: chains.pentagonTestnet,
   [CHAIN_ID.soneiumTestnet]: chains.soneiumTestnet,
   [CHAIN_ID.oasisSapphireTestnet]: chains.oasisSapphireTestnet,
-  [CHAIN_ID.bearChainTestnet]: chains.beraChainTestnet,
+  [CHAIN_ID.beraChainTestnet]: chains.beraChainTestnet,
   [CHAIN_ID.unichainSepolia]: chains.unichainSepolia,
   [CHAIN_ID.abstractSepolia]: chains.abstractSepolia,
   [CHAIN_ID.storyOdyssey]: chains.storyOdyssey,
+  [CHAIN_ID.monadTestnet]: chains.monadTestnet,
 
   // cosmos testnets
   [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,

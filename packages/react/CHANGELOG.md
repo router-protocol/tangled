@@ -6,11 +6,25 @@
 
 - fix wallet configs
 
+## 1.16.37
+
+### Patch Changes
+
+- chore: add testnet config
+
 ## 1.16.36
 
 ### Patch Changes
 
 - chore: add evm chains
+
+## 1.16.35
+
+### Patch Changes
+
+- fix tronweb for autoconnect
+- Updated dependencies
+  - @tangled3/solana-react@1.1.3
 
 ## 1.16.34
 

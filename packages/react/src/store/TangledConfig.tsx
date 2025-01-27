@@ -15,7 +15,7 @@ export interface TangledConfigState {
 export type TangledConfigStore = ReturnType<typeof createTangledConfigStore>;
 
 export const createTangledConfigStore = (config: TangledConfig) => {
-  const chains = createChainConfigs(config.chains, config.chainConfigs);
+  const chains = createChainConfigs(config.chains, config.chainConfigs, config.testnet);
   const chainsById = Object.values(chains).reduce(
     (acc, chain) => {
       chain.forEach((c) => {

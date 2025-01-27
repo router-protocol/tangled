@@ -37,7 +37,7 @@ export interface CosmosState {
 
 export type CosmosStore = ReturnType<typeof createCosmosStore>;
 
-export const createCosmosStore = (chains: ChainData[]) => {
+export const createCosmosStore = (chains: ChainData[], testnet: boolean | undefined) => {
   return createStore<CosmosState>()(
     devtools((set, get) => ({
       connectedMainWallet: undefined,
@@ -56,6 +56,7 @@ export const createCosmosStore = (chains: ChainData[]) => {
 
         const chainRegistry = await getCosmosChainRegistryClient(
           chains.map((chain) => (chain as CosmsosChainType).chainName.toString()),
+          testnet,
         );
 
         set(() => ({ chainRegistry: chainRegistry }));

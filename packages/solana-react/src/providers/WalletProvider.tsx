@@ -118,7 +118,7 @@ export const WalletProvider = ({
   // Mutations
   /////////////////////////////
   const { mutateAsync: handleAutoConnectRequest, isPending: isAutoConnecting } = useMutation({
-    mutationKey: ['autoConnect'],
+    mutationKey: ['autoConnectSolanaWallet'],
     mutationFn: async () => {
       if (!autoConnect || !connectedAdapter || connectedAdapter.readyState !== WalletReadyState.Installed) return;
       // If autoConnect is true or returns true, use the default autoConnect behavior.
