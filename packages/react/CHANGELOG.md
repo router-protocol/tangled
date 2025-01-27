@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.38
+
+### Patch Changes
+
+- fix wallet configs
+
 ## 1.16.36
 
 ### Patch Changes
