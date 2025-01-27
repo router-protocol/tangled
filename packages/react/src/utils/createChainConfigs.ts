@@ -49,8 +49,10 @@ const overrideChainConfig = (
   for (const chains of Object.values(chainsByType)) {
     for (const chain of chains) {
       const chainId = chain.id.toString() as ChainId;
+      const chainConfigData = CHAIN_DATA[chainId] || {};
       const chainData = {
-        ...CHAIN_DATA[chainId],
+        ...chainConfigData,
+        ...chain,
         ...overrides?.[CHAIN_NAME[chainId]],
       } as ChainData;
 
