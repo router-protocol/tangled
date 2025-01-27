@@ -64,8 +64,8 @@ export const CHAIN_ID = {
 
   // solana
   solana: 'solana',
-  solanaTestnet: 'solanaTestnet',
-  solanaDevnet: 'solanaDevnet',
+  solanaTestnet: 'solana-testnet',
+  solanaDevnet: 'solana-devnet',
 
   // sui
   sui: 'sui',

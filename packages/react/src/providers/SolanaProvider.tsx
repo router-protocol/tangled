@@ -36,10 +36,10 @@ export const SolanaProvider: FC<PropsWithChildren & SolanaProviderProps> = ({ ch
     if (chain.id === 'solana') {
       return clusterApiUrl(WalletAdapterNetwork.Mainnet);
     }
-    if (chain.id === 'solanaTestnet') {
+    if (chain.id === 'solana-testnet') {
       return clusterApiUrl(WalletAdapterNetwork.Testnet);
     }
-    if (chain.id === 'solanaDevnet') {
+    if (chain.id === 'solana-devnet') {
       return clusterApiUrl(WalletAdapterNetwork.Devnet);
     }
     return clusterApiUrl(WalletAdapterNetwork.Testnet);
