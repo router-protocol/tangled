@@ -19,11 +19,10 @@ const createChainConfigs = (
     ton: [],
   };
 
-  const defaultChains = getDefaultSupportedChains(testnet);
-
   if (chains) {
     supportedChains = overrideChainConfig(chains, overrides);
   } else {
+    const defaultChains = getDefaultSupportedChains(testnet);
     // Override with custom configs
     supportedChains = overrideChainConfig(defaultChains, overrides);
   }
