@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.39
+
+### Patch Changes
+
+- fix chain default configs, cosmos waitfortx
+
 ## 1.16.38
 
 ### Patch Changes
