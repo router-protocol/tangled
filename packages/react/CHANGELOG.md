@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.44
+
+### Patch Changes
+
+- chore: add abstract chain
+
 ## 1.16.43
 
 ### Patch Changes
