@@ -47,6 +47,7 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
   connectors.sui = [
     ...(overrides.sui ?? []),
     suiConnectors.suiWallet,
+    suiConnectors.binanceWeb3Wallet,
     suiConnectors.martianSuiWallet,
     suiConnectors.suiet,
     suiConnectors.nightly,

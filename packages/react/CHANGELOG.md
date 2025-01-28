@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.43
+
+### Patch Changes
+
+- fix export evm connector utils
+
 ## 1.16.42
 
 ### Patch Changes
