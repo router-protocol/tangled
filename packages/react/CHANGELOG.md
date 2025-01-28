@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.42
+
+### Patch Changes
+
+- fix tron walletconnect
+
 ## 1.16.41
 
 ### Patch Changes
