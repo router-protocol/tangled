@@ -11,7 +11,7 @@ export const abstract: EVMChain = {
   },
   rpcUrls: {
     default: {
-      http: ['https://api.mainnet.abs.xyz'],
+      http: ['https://rpc.fsd.adfasd32442ds.com'],
     },
   },
   blockExplorers: {
