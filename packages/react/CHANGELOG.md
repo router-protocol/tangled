@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.41
+
+### Patch Changes
+
+- fix binance wallet id
+
 ## 1.16.40
 
 ### Patch Changes
