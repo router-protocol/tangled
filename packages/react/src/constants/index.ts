@@ -48,6 +48,7 @@ export const CHAIN_ID = {
   zero: '543210',
   zksync: '324',
   zora: '7777777',
+  abstract: '2741',
 
   // cosmos
   osmosis: 'osmosis-1',
@@ -156,6 +157,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.zero]: chains.zero,
   [CHAIN_ID.zksync]: chains.zkSync,
   [CHAIN_ID.zora]: chains.zora,
+  [CHAIN_ID.abstract]: chains.abstract,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,
