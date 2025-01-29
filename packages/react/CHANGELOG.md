@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.45
+
+### Patch Changes
+
+- chore: add safe logo
+
 ## 1.16.44
 
 ### Patch Changes
