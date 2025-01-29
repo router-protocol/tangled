@@ -73,7 +73,7 @@ export const getEVMTokenBalanceAndAllowance = async (
     const withdrawableBalance = balance.withdrawable;
 
     return {
-      balance: BigInt(withdrawableBalance),
+      balance: parseFloat(withdrawableBalance, 6),
       allowance: maxInt256,
     };
   }
