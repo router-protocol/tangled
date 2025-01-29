@@ -1,5 +1,5 @@
 import { Config, multicall } from '@wagmi/core';
-import { Address, erc20Abi, maxInt256 } from 'viem';
+import { Address, erc20Abi, maxInt256, parseUnits } from 'viem';
 
 // Interface for the response containing withdrawable
 interface WithdrawableResponse {
@@ -73,7 +73,7 @@ export const getEVMTokenBalanceAndAllowance = async (
     const withdrawableBalance = balance.withdrawable;
 
     return {
-      balance: parseFloat(withdrawableBalance, 6),
+      balance: parseUnits(withdrawableBalance, 6),
       allowance: maxInt256,
     };
   }
