@@ -103,6 +103,7 @@ export const CHAIN_ID = {
   // cosmos
   osmosisTestnet: 'osmo-test-5',
   alloraTestnet: 'allora-testnet-1',
+  injectiveTestnet: 'injective-888',
 } as const;
 
 export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
@@ -211,6 +212,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // cosmos testnets
   [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,
   [CHAIN_ID.alloraTestnet]: chains.alloraTestnet,
+  [CHAIN_ID.injectiveTestnet]: chains.injectiveTestnet,
 } as const;
 
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {
