@@ -20,6 +20,7 @@ import { useTangledConfig } from '../hooks/useTangledConfig.js';
 import { CosmosStore, createCosmosStore } from '../store/Cosmos.js';
 import { CosmsosChainType } from '../types/index.js';
 import { RemoveReadonly } from '../types/utils.js';
+import { fetchTestnetAssetLists } from '../utils/index.js';
 
 export interface CosmosContextValues {
   connect: (params: { adapterId: string; chainId?: string }) => Promise<{
@@ -69,6 +70,22 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
 
   const logger = useMemo(() => new Logger('ERROR'), []);
 
+  const [assetLists, setAssetLists] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!tangledConfig.testnet || !chainRegistry?.chains) {
+      setAssetLists([]);
+      return;
+    }
+
+    const fetchAssets = async () => {
+      const lists = await Promise.all(chainRegistry.chains.map((chain) => fetchTestnetAssetLists(chain.chain_name)));
+      setAssetLists(lists);
+    };
+
+    fetchAssets();
+  }, [chainRegistry?.chains, tangledConfig.testnet]);
+
   const walletManager = useMemo(() => {
     const _walletManager = new WalletManager(
       chainRegistry?.chains ? chainRegistry.chains : chainNames,
@@ -77,7 +94,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       false,
       true,
       [], // allowedIframeParentOrigins,
-      [], // assetLists,
+      assetLists, // assetLists,
       'icns', // defaultNameService,
       {
         signClient: {
@@ -171,7 +188,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       });
     });
     return _walletManager;
-  }, [chainIds, chainNames, chainRegistry, chains, logger, tangledConfig.projectId]);
+  }, [chainIds, chainNames, chainRegistry, chains, logger, tangledConfig.projectId, assetLists]);
 
   const chainRepos = useMemo(
     () => chains.map((chain) => walletManager.getWalletRepo(chain.chainName)),
