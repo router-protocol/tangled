@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.46
+
+### Patch Changes
+
+- fix: hyperliquid balance format
+
 ## 1.16.32
 
 ### Patch Changes
