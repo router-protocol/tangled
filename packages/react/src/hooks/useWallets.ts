@@ -5,6 +5,8 @@ import { useMemo } from 'react';
 import { Connector, useConnectors as useEVMConnectors } from 'wagmi';
 import { getBitcoinProvider, isCtrlWalletInstalled } from '../connectors/bitcoin/connectors.js';
 import { walletConfigs } from '../connectors/evm/walletConfigs.js';
+import { solanaConnectorsConfig } from '../connectors/solana/connectors.js';
+import { suiConnectorsConfig } from '../connectors/sui/connectors.js';
 import { ChainType } from '../types/index.js';
 import { Wallet } from '../types/wallet.js';
 import { useBitcoinStore } from './useBitcoinStore.js';
@@ -93,15 +95,18 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
     const detected: Wallet<'solana'>[] = solanaWallets
       .filter((wallet) => wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported')
-      .map((wallet) => ({
-        id: wallet.adapter.name,
-        name: wallet.adapter.name,
-        connector: wallet.adapter,
-        icon: wallet.adapter.icon,
-        type: 'solana',
-        installed: wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported',
-        url: wallet.adapter.url,
-      }));
+      .map((wallet) => {
+        const config = solanaConnectorsConfig[wallet.adapter.name];
+        return {
+          id: wallet.adapter.name,
+          name: config?.name || wallet.adapter.name,
+          connector: wallet.adapter,
+          icon: config?.icon || wallet.adapter.icon,
+          type: 'solana',
+          installed: wallet.readyState !== 'NotDetected' && wallet.readyState !== 'Unsupported',
+          url: config?.url || wallet.adapter.url,
+        };
+      });
 
     if (options?.onlyInstalled) {
       return detected;
@@ -153,15 +158,18 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     if (!isClient) return [];
 
     const detected: Wallet<'sui'>[] =
-      suiWallets.map((wallet) => ({
-        id: wallet.name,
-        name: wallet.name,
-        connector: wallet,
-        icon: wallet.icon.toString(),
-        type: 'sui',
-        installed: true,
-        url: '',
-      })) ?? [];
+      suiWallets.map((wallet) => {
+        const config = suiConnectorsConfig[wallet.name];
+        return {
+          id: wallet.name,
+          name: config?.name || wallet.name,
+          icon: config?.icon || wallet.icon.toString(),
+          type: 'sui',
+          connector: wallet,
+          installed: true,
+          url: config?.url || '',
+        };
+      }) ?? [];
 
     if (options?.onlyInstalled) {
       return detected;

@@ -21,7 +21,9 @@ export const CHAIN_ID = {
   matchain: '698',
   metis: '1088',
   hyperliquid: '998',
+  ink: '57073',
   mode: '34443',
+  morph: '2818',
   nahmii: '4061',
   nero: '1689',
   oasisSapphire: '23294',
@@ -37,11 +39,16 @@ export const CHAIN_ID = {
   scroll: '534352',
   shido: '9008',
   soneium: '1868',
+  sonic: '146',
   taiko: '167000',
   tangle: '5845',
   vanar: '2040',
+  worldChain: '480',
   xLayer: '196',
+  zero: '543210',
   zksync: '324',
+  zora: '7777777',
+  abstract: '2741',
 
   // cosmos
   osmosis: 'osmosis-1',
@@ -58,12 +65,12 @@ export const CHAIN_ID = {
 
   // solana
   solana: 'solana',
-  solanaTestnet: 'solanaTestnet',
-  solanaDevnet: 'solanaDevnet',
+  solanaTestnet: 'solana-testnet',
+  solanaDevnet: 'solana-devnet',
 
   // sui
   sui: 'sui',
-  suiTestnet: 'suiTestnet',
+  suiTestnet: 'sui-testnet',
 
   // casper
 
@@ -82,6 +89,20 @@ export const CHAIN_ID = {
   holesky: '17000',
   arbitrumSepolia: '421614',
   avalancheFuji: '43113',
+  amoy: '80002',
+  fireChainTestnet: '997',
+  pentagonTestnet: '555555',
+  soneiumTestnet: '1946',
+  oasisSapphireTestnet: '23295',
+  beraChainTestnet: '80084',
+  unichainSepolia: '1301',
+  abstractSepolia: '11124',
+  storyOdyssey: '1516',
+  monadTestnet: '10143',
+
+  // cosmos
+  osmosisTestnet: 'osmo-test-5',
+  alloraTestnet: 'allora-testnet-1',
 } as const;
 
 export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
@@ -108,7 +129,10 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.mantle]: chains.mantle,
   [CHAIN_ID.matchain]: chains.matchain,
   [CHAIN_ID.metis]: chains.metis,
+  [CHAIN_ID.hyperliquid]: chains.hyperliquid,
+  [CHAIN_ID.ink]: chains.ink,
   [CHAIN_ID.mode]: chains.mode,
+  [CHAIN_ID.morph]: chains.morph,
   [CHAIN_ID.nahmii]: chains.nahmii,
   [CHAIN_ID.nero]: chains.nero,
   [CHAIN_ID.oasisSapphire]: chains.oasisSapphire,
@@ -124,12 +148,16 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.scroll]: chains.scroll,
   [CHAIN_ID.shido]: chains.shido,
   [CHAIN_ID.soneium]: chains.soneium,
+  [CHAIN_ID.sonic]: chains.sonic,
   [CHAIN_ID.taiko]: chains.taiko,
   [CHAIN_ID.tangle]: chains.tangle,
   [CHAIN_ID.vanar]: chains.vanar,
-  [CHAIN_ID.zksync]: chains.zkSync,
+  [CHAIN_ID.worldChain]: chains.worldChain,
   [CHAIN_ID.xLayer]: chains.xLayer,
-  [CHAIN_ID.hyperliquid]: chains.hyperliquid,
+  [CHAIN_ID.zero]: chains.zero,
+  [CHAIN_ID.zksync]: chains.zkSync,
+  [CHAIN_ID.zora]: chains.zora,
+  [CHAIN_ID.abstract]: chains.abstract,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,
@@ -169,6 +197,20 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.arbitrumSepolia]: chains.arbitrumSepolia,
   [CHAIN_ID.avalancheFuji]: chains.avalancheFuji,
   [CHAIN_ID.sepolia]: chains.sepolia,
+  [CHAIN_ID.amoy]: chains.amoy,
+  [CHAIN_ID.fireChainTestnet]: chains.firechainTestnet,
+  [CHAIN_ID.pentagonTestnet]: chains.pentagonTestnet,
+  [CHAIN_ID.soneiumTestnet]: chains.soneiumTestnet,
+  [CHAIN_ID.oasisSapphireTestnet]: chains.oasisSapphireTestnet,
+  [CHAIN_ID.beraChainTestnet]: chains.beraChainTestnet,
+  [CHAIN_ID.unichainSepolia]: chains.unichainSepolia,
+  [CHAIN_ID.abstractSepolia]: chains.abstractSepolia,
+  [CHAIN_ID.storyOdyssey]: chains.storyOdyssey,
+  [CHAIN_ID.monadTestnet]: chains.monadTestnet,
+
+  // cosmos testnets
+  [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,
+  [CHAIN_ID.alloraTestnet]: chains.alloraTestnet,
 } as const;
 
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {

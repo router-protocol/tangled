@@ -84,7 +84,7 @@ export interface TangledConfig {
   // Override default chain configs. TODO: Add chain config type
   chainConfigs: Partial<Record<Chain, Partial<ChainConfig>>>;
   // Enable testnets. Defaults to false. If true, only testnet chains will be provided in the context.
-  // testnet?: boolean;
+  testnet?: boolean;
 
   /** Walletconnect project ID */
   projectId: string;

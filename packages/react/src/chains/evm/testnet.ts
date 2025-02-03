@@ -1,4 +1,5 @@
 import {
+  polygonAmoy as vAmoy,
   arbitrumSepolia as vArbitrumSepolia,
   avalancheFuji as vAvalancheFuji,
   holesky as vHolesky,
@@ -10,3 +11,6 @@ export const sepolia: EVMChain = { ...vSepolia, type: 'evm' } as const;
 export const holesky: EVMChain = { ...vHolesky, type: 'evm' } as const;
 export const arbitrumSepolia: EVMChain = { ...vArbitrumSepolia, type: 'evm' } as const;
 export const avalancheFuji: EVMChain = { ...vAvalancheFuji, type: 'evm' } as const;
+export const amoy: EVMChain = { ...vAmoy, type: 'evm' } as const;
+
+export * from './testnets/index.js';

@@ -1,22 +1,6 @@
 import { hasInjectedProvider } from '../../actions/evm/getInjectedConnector.js';
 import { isAndroid, isIOS, isMobile } from '../../utils/index.js';
-
-/**
- * EIP-6963: Multi Injected Provider Discovery
- * https://eips.ethereum.org/EIPS/eip-6963
- *
- */
-export type WalletConfigProps = {
-  // Wallets name
-  name?: string;
-  // Links to download the wallet
-  url?: string;
-  icon?: string;
-  isInstalled: boolean | (() => boolean) | undefined;
-  hide?: boolean;
-  // Create URI for QR code, where uri is encoded data from WalletConnect
-  getWalletConnectDeeplink?: (uri: string) => string;
-};
+import { WalletConfigProps } from '../index.js';
 
 // Organised in alphabetical order by key
 export const walletConfigs: {
@@ -130,6 +114,7 @@ export const walletConfigs: {
     name: 'Safe',
 
     url: 'https://safe.global/',
+    icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAACABAMAAAAxEHz4AAAAMFBMVEUS/4AS/4AS/4ASExISEBASJxsS1WwSTy4S83oS+X0S53USOiQSpVYSumASbTwShkj3Jz7lAAAAAnRSTlPk6gxe8LYAAAJASURBVGje7Zi9T8JAGMb5V+xAWgJh6BEXP4aWMGB0AEcYHDTqwCCJA04Mahw06aSJCQmDGmfUQSeIupCYkBgXZDBKiKvGhLgIpe0BveOud4kf8Z6BifvxlHvvubevT+LTmE8ABEAABOB3AwKLKBWpAYHPeZSu8rSAJV1FqkUJUJ7R69VpSkAogQHE8nSAIGa9Gln484CocPB9DsIap4MtjdPBG/YRilSAPdxZUmMGAbBZ7ehuDfcEIEU4zv4X82vd9UBHKFomAI6dnwaRdYSapEx8h/t1c+CWQUrlQMkBpJhi3Q///TInAFUwngAxgxMwbggHwkGfA+Wo25ms5JkdPJyZrcmGwQgIJnsJEW0zAu6thAETbADY6ozYllEA2UmYeJFpF2BERakActb+/pzEBJAqdiafDwMidICCdRvEa4wOlEbusqOLDwnrwCpNA3c37px2dOLOecdBw1Wao9p9t4NDqzTVtkeA7cAuTXWS0QEszTyTAyXrbnZGAVylDEstQgWA1/WswQRQVrXB1sSzg1BpsDXxDJAyvdJsSqyAodJkAAxtiwAIwMDxZASgWlFPgLDqLVBcukYMAnCA/W23MkkHMEMIVaWBeN/IwW5ebxEAhSTqlccMJxOQLhIAFQB0Tdf7P3orQbpar9cflwlTHFgww7LvXQLAn6B/8UMCQjgD6hMvoMwLqAnAPwL4eQF9gwDiHAh9nHFznCnasfAuQA1igPZKC5BvqefCmFCVkZNp6rmymO4LgAAIwA8BePUFpDdKpDteQj4AAAAASUVORK5CYII=',
 
     getWalletConnectDeeplink: (uri: string) => {
       return isAndroid() ? uri : `https://gnosis-safe.io/wc?uri=${encodeURIComponent(uri)}`;

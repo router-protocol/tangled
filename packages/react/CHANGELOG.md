@@ -6,6 +6,87 @@
 
 - feat: add hyperliquid balance fetch
 
+## 1.16.45
+
+### Patch Changes
+
+- chore: add safe logo
+
+## 1.16.44
+
+### Patch Changes
+
+- chore: add abstract chain
+
+## 1.16.43
+
+### Patch Changes
+
+- fix export evm connector utils
+
+## 1.16.42
+
+### Patch Changes
+
+- fix tron walletconnect
+
+## 1.16.41
+
+### Patch Changes
+
+- fix binance wallet id
+
+## 1.16.40
+
+### Patch Changes
+
+- chore: fix testnet chains config
+
+## 1.16.39
+
+### Patch Changes
+
+- fix chain default configs, cosmos waitfortx
+
+## 1.16.38
+
+### Patch Changes
+
+- fix wallet configs
+
+## 1.16.37
+
+### Patch Changes
+
+- chore: add testnet config
+
+## 1.16.36
+
+### Patch Changes
+
+- chore: add evm chains
+
+## 1.16.35
+
+### Patch Changes
+
+- fix tronweb for autoconnect
+- Updated dependencies
+  - @tangled3/solana-react@1.1.3
+
+## 1.16.34
+
+### Patch Changes
+
+- chore: add testnet configs
+
+## 1.16.33
+
+### Patch Changes
+
+- refactor: wallet config for sui, solana
+  > > > > > > > main
+
 ## 1.16.31
 
 ### Patch Changes

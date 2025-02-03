@@ -1,7 +1,7 @@
 import { OtherChainData } from '../types/index.js';
 
 export const solanaTestnet: OtherChainData<'solana'> = {
-  id: 'solanaTestnet',
+  id: 'solana-testnet',
   name: 'Solana Testnet',
   type: 'solana',
   nativeCurrency: {

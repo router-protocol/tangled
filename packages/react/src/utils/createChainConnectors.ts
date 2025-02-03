@@ -1,4 +1,4 @@
-import { WalletConnectAdapter as TronWalletConnectAdapter } from '@tronweb3/tronwallet-adapters';
+import { WalletConnectAdapter as TronWalletConnectAdapter } from '@tronweb3/tronwallet-adapter-walletconnect';
 import { coinbaseWallet, walletConnect } from 'wagmi/connectors';
 import * as bitcoinConnectors from '../connectors/bitcoin/connectors.js';
 import * as cosmosConnectors from '../connectors/cosmos/connector.js';
@@ -7,6 +7,7 @@ import * as suiConnectors from '../connectors/sui/connectors.js';
 import * as tronConnectors from '../connectors/tron/connectors.js';
 import { CHAIN_TYPES, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
+
 export const createChainConnectors = (config: TangledConfig, chains: SupportedChainsByType): ChainConnectors => {
   const overrides = config.chainConnectors ?? {};
 
@@ -46,6 +47,7 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
   connectors.sui = [
     ...(overrides.sui ?? []),
     suiConnectors.suiWallet,
+    suiConnectors.binanceWeb3Wallet,
     suiConnectors.martianSuiWallet,
     suiConnectors.suiet,
     suiConnectors.nightly,

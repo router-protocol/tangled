@@ -1,27 +1,12 @@
-import {
-  ConnectedAccount,
-  SOL_ADDRESS,
-  useAccounts,
-  useChain,
-  useConnect,
-  useDisconnect,
-  useTokenForAccount,
-  useWallet,
-} from '@tangled3/react';
+import { ConnectedAccount, useAccounts, useChain, useConnect, useDisconnect, useWallet } from '@tangled3/react';
 
 export const ConnectedAccounts = () => {
   const accounts = useAccounts();
 
-  useTokenForAccount({
-    chainId: 'solana',
-    account: 'Gc9ZS3FLaLPhVBVG8ZojAnFWDdP6jZ8TxxT6SK8kDA8f',
-    token: SOL_ADDRESS,
-    spender: undefined,
-  });
-
   return (
     <div className='bg-neutral-800 p-4 rounded-lg shadow-lg overflow-auto'>
       <h3 className='text-lg font-bold mb-4'>Connected Accounts:</h3>
+
       <table className='w-full border-collapse rounded-lg'>
         <thead>
           <tr className='bg-gray-800 text-white'>
