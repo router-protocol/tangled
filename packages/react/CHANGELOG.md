@@ -91,7 +91,6 @@
 ### Patch Changes
 
 - refactor: wallet config for sui, solana
-  > > > > > > > main
 
 ## 1.16.31
 
