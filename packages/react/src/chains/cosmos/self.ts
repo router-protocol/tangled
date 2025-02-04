@@ -8,7 +8,7 @@ export const self: CosmsosChainType = {
   nativeCurrency: {
     name: 'Self',
     symbol: 'SLF',
-    decimals: 18,
+    decimals: 6,
   },
   rpcUrls: {
     default: {

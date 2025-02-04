@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.49
+
+### Patch Changes
+
+- chore: fix self currency decimals
+
 ## 1.16.48
 
 ### Patch Changes
