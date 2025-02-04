@@ -8,7 +8,7 @@ export const osmosis: CosmsosChainType = {
   nativeCurrency: {
     name: 'osmo',
     symbol: 'osmo',
-    decimals: 18,
+    decimals: 6,
   },
   rpcUrls: {
     default: {

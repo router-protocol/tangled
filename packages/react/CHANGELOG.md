@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.48
+
+### Patch Changes
+
+- fix osmo decimals
+
 ## 1.16.47
 
 ### Patch Changes
