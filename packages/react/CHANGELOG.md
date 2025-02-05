@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.50
+
+### Patch Changes
+
+- fix injected wallet conditions
+
 ## 1.16.49
 
 ### Patch Changes
