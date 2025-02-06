@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.53
+
+### Patch Changes
+
+- fix cosmos testnet
+
 ## 1.16.52
 
 ### Patch Changes
