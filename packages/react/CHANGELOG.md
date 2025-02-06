@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.54
+
+### Patch Changes
+
+- fix cosmos chains
+
 ## 1.16.53
 
 ### Patch Changes
