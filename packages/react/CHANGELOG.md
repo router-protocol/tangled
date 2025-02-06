@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.52
+
+### Patch Changes
+
+- chore: add berachain config
+
 ## 1.16.51
 
 ### Patch Changes
