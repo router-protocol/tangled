@@ -59,6 +59,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.arthera,
       evm.avalanche,
       evm.base,
+      evm.berachain,
       evm.binance,
       evm.blast,
       evm.boba,
