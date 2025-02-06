@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.51
+
+### Patch Changes
+
+- hyperliquid balance fetch
+
 ## 1.16.50
 
 ### Patch Changes
