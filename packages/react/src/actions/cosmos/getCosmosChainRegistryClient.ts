@@ -71,7 +71,7 @@ export class ChainRegistryClient extends ChainRegistryFetcher {
         namePair[0].localeCompare(namePair[1]) <= 0
           ? `${namePair[0]}-${namePair[1]}.json`
           : `${namePair[1]}-${namePair[0]}.json`;
-      return `${baseUrl}/_IBC/${fileName}`;
+      return `${baseUrl}${testnet ? '/testnets' : ''}/_IBC/${fileName}`;
     });
 
     this.urls = [...new Set([...chainUrls, ...assetlistUrls, ...ibcUrls, ...(this.urls || [])])];

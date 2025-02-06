@@ -12,17 +12,17 @@ export const alloraTestnet: CosmsosChainType = {
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet-allora-rpc.rhino-apis.com'],
+      http: ['https://rpc.ankr.com/allora_testnet'],
       webSocket: ['wss://rpc.testnet.osmosis.zone'],
     },
   },
   blockExplorers: {
     default: {
-      name: 'Self Explorer',
-      url: 'https://explorer.selfchain.xyz',
+      name: 'Allora Testnet Explorer',
+      url: 'https://explorer.testnet.allora.network',
     },
   },
   extra: {
-    nativeAddress: 'uslf',
+    nativeAddress: 'uallo',
   },
 } as const;

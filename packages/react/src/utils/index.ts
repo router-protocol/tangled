@@ -226,3 +226,11 @@ const fetchWithTimeout = async (url: string, timeout: number): Promise<Response>
     throw error;
   }
 };
+
+export const fetchTestnetAssetLists = async (chain: string) => {
+  const response = await fetch(
+    `https://raw.githubusercontent.com/cosmos/chain-registry/master/testnets/${chain}/assetlist.json`,
+  );
+  const data = await response.json();
+  return data;
+};

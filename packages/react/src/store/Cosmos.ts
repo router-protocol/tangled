@@ -5,7 +5,9 @@ import {
   ChainRegistryClient as CosmosChainRegistryClient,
   getCosmosChainRegistryClient,
 } from '../actions/cosmos/getCosmosChainRegistryClient.js';
+import { AssetList } from '../types/cosmos.js';
 import { ChainData, CosmsosChainType } from '../types/index.js';
+import { fetchTestnetAssetLists } from '../utils/index.js';
 
 export type GetCosmosClient = () => {
   walletManager: WalletManager | undefined;
@@ -21,6 +23,7 @@ export interface CosmosState {
 
   chainRegistry: CosmosChainRegistryClient | undefined;
   wallets: MainWalletBase[];
+  assetList: AssetList[];
 
   // Actions
   setConnectedMainWallet: (wallet: MainWalletBase | undefined) => void;
@@ -31,6 +34,7 @@ export interface CosmosState {
   getCosmosClient: GetCosmosClient;
   getChainWallet: (chainId: string) => ChainWalletBase | undefined;
   getChainRegistry: () => Promise<CosmosChainRegistryClient>;
+  getAssetList: (isTestnet: boolean | undefined) => Promise<AssetList[]>;
 
   reset: () => void;
 }
@@ -47,6 +51,7 @@ export const createCosmosStore = (chains: ChainData[], testnet: boolean | undefi
 
       chainRegistry: undefined,
       wallets: [],
+      assetList: [],
 
       getChainWallet: (chainId: string) =>
         Object.values(get().chainWallets).find((wallet) => wallet.chainId === chainId),
@@ -69,6 +74,24 @@ export const createCosmosStore = (chains: ChainData[], testnet: boolean | undefi
         getChainRegistry: get().getChainRegistry,
         getChainWallet: get().getChainWallet,
       }),
+
+      getAssetList: async (isTestnet: boolean | undefined) => {
+        const chainRegistry = await get().getChainRegistry();
+        let newAssetList: AssetList[] = [];
+
+        if (isTestnet) {
+          newAssetList = await Promise.all(
+            chainRegistry.chains.map((chain) => fetchTestnetAssetLists(chain.chain_name)),
+          );
+        }
+
+        const currentAssetList = get().assetList;
+        if (JSON.stringify(currentAssetList) !== JSON.stringify(newAssetList)) {
+          set(() => ({ assetList: newAssetList }));
+        }
+
+        return newAssetList;
+      },
 
       // Updates the wallet client for a specific connector
       setConnectedMainWallet: (wallet) => set(() => ({ connectedMainWallet: wallet })),

@@ -1,5 +1,23 @@
 # @tangled3/react
 
+## 1.16.55
+
+### Patch Changes
+
+- chore: cosmos sanity
+
+## 1.16.54
+
+### Patch Changes
+
+- fix cosmos chains
+
+## 1.16.53
+
+### Patch Changes
+
+- fix cosmos testnet
+
 ## 1.16.52
 
 ### Patch Changes
