@@ -24,6 +24,18 @@
 
 - chore: export hooks
 
+## 1.16.46
+
+### Patch Changes
+
+- fix: hyperliquid balance format
+
+## 1.16.32
+
+### Patch Changes
+
+- feat: add hyperliquid balance fetch
+
 ## 1.16.45
 
 ### Patch Changes
