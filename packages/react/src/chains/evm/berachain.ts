@@ -6,7 +6,7 @@ export const berachain: EVMChain = {
   type: 'evm',
   nativeCurrency: {
     decimals: 18,
-    name: 'Bera Token',
+    name: 'Berachain',
     symbol: 'BERA',
   },
   rpcUrls: {
