@@ -9,6 +9,7 @@ export const CHAIN_ID = {
   avalanche: '43114',
   arthera: '10242',
   base: '8453',
+  berachain: '80094',
   binance: '56',
   blast: '81457',
   boba: '288',
@@ -48,6 +49,7 @@ export const CHAIN_ID = {
   zero: '543210',
   zksync: '324',
   zora: '7777777',
+  abstract: '2741',
 
   // cosmos
   osmosis: 'osmosis-1',
@@ -64,12 +66,12 @@ export const CHAIN_ID = {
 
   // solana
   solana: 'solana',
-  solanaTestnet: 'solanaTestnet',
-  solanaDevnet: 'solanaDevnet',
+  solanaTestnet: 'solana-testnet',
+  solanaDevnet: 'solana-devnet',
 
   // sui
   sui: 'sui',
-  suiTestnet: 'suiTestnet',
+  suiTestnet: 'sui-testnet',
 
   // casper
 
@@ -117,6 +119,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.avalanche]: chains.avalanche,
   [CHAIN_ID.arthera]: chains.arthera,
   [CHAIN_ID.base]: chains.base,
+  [CHAIN_ID.berachain]: chains.berachain,
   [CHAIN_ID.binance]: chains.binance,
   [CHAIN_ID.blast]: chains.blast,
   [CHAIN_ID.boba]: chains.boba,
@@ -156,6 +159,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.zero]: chains.zero,
   [CHAIN_ID.zksync]: chains.zkSync,
   [CHAIN_ID.zora]: chains.zora,
+  [CHAIN_ID.abstract]: chains.abstract,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,

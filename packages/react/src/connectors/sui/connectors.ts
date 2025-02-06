@@ -19,7 +19,7 @@ export const nightly: Wallet<'sui'> = {
 
 export const martianSuiWallet: Wallet<'sui'> = {
   id: 'Martian Sui Wallet',
-  name: 'Martian Sui Wallet',
+  name: 'Martian Wallet',
   icon: 'https://cdn.martianwallet.xyz/assets/icon.png',
   type: 'sui',
   url: 'https://martianwallet.xyz',
@@ -35,7 +35,7 @@ export const suiet: Wallet<'sui'> = {
 
 export const binanceWeb3Wallet: Wallet<'sui'> = {
   id: 'Binance Web3 Wallet',
-  name: 'Binance Web3 Wallet',
+  name: 'Binance Wallet',
   icon: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAaVBMVEVHcEz+uQD9uAD9uAD+uAD9uAD9uAD+uAD9uAD+uAD9uAD9uAD+uQD+uAD9uAD+uQD9uAD+uAD+uAD9uAAKCw3/uQDXnAHdoQFPPAhWQQj2swBJOAmMZwUaFwzkpgGWbwUWFAyufwSzgwMQ2+JPAAAAE3RSTlMAFfrza+DEidY+7LUse5YdCaRN0GUCOgAAAqdJREFUWMO1l+2SqyAMhhUV8bstUm3Rrbv3f5FHLShognY6h1+dKe9jSEJIPA9eVRKWGYvSIEgjlpVh4nsfLP8W05TwdZEgpfHtLCMvaMCBFdAiPyOPGccWYYcIP8Tl82Kh8yBJRvjBIlmCyi9hxE8sFl4Q8+OAn1ppDB6juhJ+cpHSh/TgXiFAwnVH8BH9zw9I4FsbLiVov7i3jwa2IbY9GQawXtY1QghCK/4R8v26RgnMyAc/c+hRguHIgrj0GIEsh8iZW48RWKUA8ZEeIxTKgOhQjxCUCcUJfT1AhLcXfOrSS+mygU6BuAUOfdvcXYQ0gVxo6YVwEgroBM+HpVgJw+O5JWS+l6Q7QDcs319uxLT613O7N8q9cJeFQhFabbEijHoBXKnSFnMxE3pt/0rQehsSe5ntv65RhPb94zXLRkKvfnS2JzPPvAeiadWHn78KNGjhrwJtYkG91NbrYAmhnaEIYnGGRYg8sou/3vB2heF8HQ6TkHpG/dTxf6hC+up1+AwDzQ1TGEyA/r9V/+t8GDRAQgBil9BJfxdWPvSdjj94hHRThFX+rE4cOrcT2aaMq/j/6TAqffMHh5HtEumuEknlQ6fSoEUS6bpJZePwisCFCjCWyvhlepy7TNB17q0CshQY+DrvCsqaULqgrA8MVFB2JW1TxOwCt91bIEXVIBj6O1xUK8odhPa4rMMPi9w8LDX+sCBP24bQOp425HGVpx9X7HmXh897ftBgSKf9RoOBtjjSqc/84yZLIvGfszix2my4TZ4IiN5u8/BGU7bnGk201W1OtrpjRmcfNNv8Wn3X7kP68RTlyYEjiP2vRp4IG3lGQkK/GrqmYxTfjX3z4Ok4B4vz/z/6zhG9lfbwzcknw/fszmn8p2yc/sf5n9Fx/K+Qnf8Ahh33hO8kM/4AAAAASUVORK5CYII=',
   type: 'sui',
   url: 'https://www.binance.com/en/web3wallet',
@@ -43,31 +43,31 @@ export const binanceWeb3Wallet: Wallet<'sui'> = {
 
 export const suiConnectorsConfig: Record<string, WalletConfigProps> = {
   'Sui Wallet': {
-    name: 'Sui Wallet',
+    name: suiWallet.name,
     url: suiWallet.url,
     icon: suiWallet.icon,
     isInstalled: undefined,
   },
   Nightly: {
-    name: 'Nightly',
+    name: nightly.name,
     url: nightly.url,
     icon: nightly.icon,
     isInstalled: undefined,
   },
   'Martian Sui Wallet': {
-    name: 'Martian Sui Wallet',
+    name: martianSuiWallet.name,
     url: martianSuiWallet.url,
     icon: martianSuiWallet.icon,
     isInstalled: undefined,
   },
   Suiet: {
-    name: 'Suiet',
+    name: suiet.name,
     url: suiet.url,
     icon: suiet.icon,
     isInstalled: undefined,
   },
   'Binance Web3 Wallet': {
-    name: 'Binance Web3 Wallet',
+    name: binanceWeb3Wallet.name,
     url: binanceWeb3Wallet.url,
     icon: binanceWeb3Wallet.icon,
     isInstalled: undefined,

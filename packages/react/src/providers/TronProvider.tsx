@@ -51,7 +51,7 @@ export const TronProvider = ({
       console.log('[TRON] handleConnect', address, window.tron?.tronWeb);
 
       if (window.tron?.tronWeb) {
-        setTronWeb(window.tron.tronWeb);
+        if (window.tron.tronWeb) setTronWeb(window.tron.tronWeb);
         setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
       }
     },
@@ -67,7 +67,7 @@ export const TronProvider = ({
       if (tronStore.getState().connectedAdapter?.name === this.name) setAddress(address);
       const connector = tronStore.getState().connectors[this.name];
       if (window.tron?.tronWeb) {
-        setTronWeb(window.tron.tronWeb);
+        if (window.tron.tronWeb) setTronWeb(window.tron.tronWeb);
         setConnector({ adapter: this, account: address, network: connector.network, readyState: this.state });
       }
     },
@@ -138,14 +138,12 @@ export const TronProvider = ({
       }
       await connectedAdapter.connect();
       const tronWeb = window.tron?.tronWeb;
-      if (!tronWeb) {
-        throw new Error('TronWeb not found');
-      }
+
       return { account: connectedAdapter.address, chainId: undefined, adapter: connectedAdapter, tronWeb };
     },
     onSuccess: (data) => {
       setConnectedAdapter(data.adapter);
-      setTronWeb(data.tronWeb);
+      if (data.tronWeb) setTronWeb(data.tronWeb);
     },
   });
 
@@ -157,7 +155,6 @@ export const TronProvider = ({
         if (tronWeb) {
           setTronWeb(tronWeb);
         }
-        return;
       }
       return;
     }
@@ -177,16 +174,12 @@ export const TronProvider = ({
 
       await adapter.connect();
       const tronWeb = window.tron?.tronWeb;
-      if (!tronWeb) {
-        throw new Error('TronWeb not found');
-      }
-      console.log('[TRON] connect', adapter.address, tronWeb);
 
       return { account: adapter.address, chainId: undefined, adapter, tronWeb };
     },
     onSuccess: (data) => {
       setConnectedAdapter(data.adapter);
-      setTronWeb(data.tronWeb);
+      if (data.tronWeb) setTronWeb(data.tronWeb);
     },
   });
 

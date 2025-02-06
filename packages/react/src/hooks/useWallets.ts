@@ -57,11 +57,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
       const walletConfig = walletId ? walletConfigs[walletId] : undefined;
 
-      // walletconnect, coinbase wallet are supported by default
-      if (evmConnectors.length > 3 && connector.id === 'injected') {
-        return undefined;
-      }
-
       const isInjected = connector.type === 'injected' && connector.id !== 'metaMask';
       let isInstalled = isInjected;
       if (walletConfig?.isInstalled) {

@@ -1,10 +1,100 @@
 # @tangled3/react
 
+## 1.16.52
+
+### Patch Changes
+
+- chore: add berachain config
+
+## 1.16.51
+
+### Patch Changes
+
+- hyperliquid balance fetch
+
+## 1.16.50
+
+### Patch Changes
+
+- fix injected wallet conditions
+
+## 1.16.49
+
+### Patch Changes
+
+- chore: fix self currency decimals
+
+## 1.16.48
+
+### Patch Changes
+
+- fix osmo decimals
+
+## 1.16.47
+
+### Patch Changes
+
+- chore: export hooks
+
+## 1.16.46
+
+### Patch Changes
+
+- fix: hyperliquid balance format
+
+## 1.16.32
+
+### Patch Changes
+
+- feat: add hyperliquid balance fetch
+
+## 1.16.45
+
+### Patch Changes
+
+- chore: add safe logo
+
+## 1.16.44
+
+### Patch Changes
+
+- chore: add abstract chain
+
+## 1.16.43
+
+### Patch Changes
+
+- fix export evm connector utils
+
+## 1.16.42
+
+### Patch Changes
+
+- fix tron walletconnect
+
+## 1.16.41
+
+### Patch Changes
+
+- fix binance wallet id
+
+## 1.16.40
+
+### Patch Changes
+
+- chore: fix testnet chains config
+
+## 1.16.39
+
+### Patch Changes
+
+- fix chain default configs, cosmos waitfortx
+
 ## 1.16.38
 
 ### Patch Changes
 
-- fix cosmos testnets
+- fix wallet configs
 
 ## 1.16.37
 

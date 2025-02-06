@@ -2,7 +2,7 @@ import { getFullnodeUrl } from '@mysten/sui/client';
 import { SuiChainType } from '../types/index.js';
 
 export const suiTestnet: SuiChainType = {
-  id: 'suiTestnet',
+  id: 'sui-testnet',
   name: 'Sui Testnet',
   suiNetwork: 'testnet',
   type: 'sui',

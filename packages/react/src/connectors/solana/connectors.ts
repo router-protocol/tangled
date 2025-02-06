@@ -34,26 +34,26 @@ export const binance: Wallet<'solana'> = {
 };
 
 export const solanaConnectorsConfig: Record<string, WalletConfigProps> = {
-  'com.solflare': {
-    name: 'Solflare',
+  [solflare.id]: {
+    name: solflare.name,
     url: solflare.url,
     icon: solflare.icon,
     isInstalled: undefined,
   },
-  'app.phantom': {
-    name: 'Phantom',
+  [phantom.id]: {
+    name: phantom.name,
     url: phantom.url,
     icon: phantom.icon,
     isInstalled: undefined,
   },
-  'app.backpack': {
-    name: 'Backpack',
+  [backpack.id]: {
+    name: backpack.name,
     url: backpack.url,
     icon: backpack.icon,
     isInstalled: undefined,
   },
-  'Binance Web3 Wallet': {
-    name: 'Binance Web3 Wallet',
+  [binance.id]: {
+    name: binance.name,
     url: binance.url,
     icon: binance.icon,
     isInstalled: undefined,
