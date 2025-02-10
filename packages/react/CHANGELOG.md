@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.56
+
+### Patch Changes
+
+- chore: change injected wallet name
+
 ## 1.16.52
 
 ### Patch Changes
