@@ -1,18 +1,14 @@
 # @tangled3/react
 
-## 1.16.55
+## 1.16.57
 
 ### Patch Changes
 
-- chore: cosmos sanity
+- chore: upgrade solana deps
+- Updated dependencies
+  - @tangled3/solana-react@1.1.4
 
-## 1.16.54
-
-### Patch Changes
-
-- fix cosmos chains
-
-## 1.16.53
+## 1.16.56
 
 ### Patch Changes
 

@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.16.55",
+  "version": "1.16.57",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
