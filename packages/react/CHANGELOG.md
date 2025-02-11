@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.58
+
+### Patch Changes
+
+- chore: added jfin chain
+
 ## 1.16.57
 
 ### Patch Changes
