@@ -22,7 +22,7 @@ export const pentagonTestnet: EVMChain = {
   },
   contracts: {
     multicall3: {
-      address: '0xb7ab6Acb91F83B27eFf584338fE9555030659EAE',
+      address: '0xFd16E48426e22ac5ef9b8d4B6C917eFC5F33e8C6',
     },
   },
 };
