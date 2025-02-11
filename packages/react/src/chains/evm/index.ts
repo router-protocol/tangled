@@ -80,6 +80,7 @@ export * from './arthera.js';
 export * from './berachain.js';
 export * from './hyperliquid.js';
 export * from './ink.js';
+export * from './jfin.js';
 export * from './morph.js';
 export * from './nahmii.js';
 export * from './nero.js';

@@ -54,6 +54,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
   } else {
     // mainnet chains
     supportedChains.evm = [
+      evm.jfin,
       evm.abstract,
       evm.arbitrum,
       evm.arthera,
