@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.59
+
+### Patch Changes
+
+- chore: fix pentagon testnet chain multicall
+
 ## 1.16.58
 
 ### Patch Changes
