@@ -12,7 +12,6 @@ export const jfin: EVMChain = {
   rpcUrls: {
     default: {
       http: ['https://rpc.jfinchain.com'],
-      webSocket: ['https://rpc.jfinchain.com'],
     },
   },
   blockExplorers: {
