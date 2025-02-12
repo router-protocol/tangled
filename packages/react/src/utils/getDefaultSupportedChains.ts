@@ -95,6 +95,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.taiko,
       evm.tangle,
       evm.uniChain,
+      evm.story,
       evm.vanar,
       evm.worldChain,
       evm.xLayer,

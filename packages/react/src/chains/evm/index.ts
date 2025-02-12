@@ -91,6 +91,7 @@ export * from './router-evm.js';
 export * from './shido.js';
 export * from './soneium.js';
 export * from './sonic.js';
+export * from './story.js';
 export * from './tangle.js';
 export * from './testnet.js';
 export * from './unichain.js';

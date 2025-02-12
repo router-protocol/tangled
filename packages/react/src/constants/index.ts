@@ -6,6 +6,7 @@ export * from './abi/index.js';
 export const CHAIN_ID = {
   // evm
   abstract: '2741',
+  story: '1514',
   arbitrum: '42161',
   avalanche: '43114',
   arthera: '10242',
@@ -162,6 +163,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.zksync]: chains.zkSync,
   [CHAIN_ID.zora]: chains.zora,
   [CHAIN_ID.abstract]: chains.abstract,
+  [CHAIN_ID.story]: chains.story,
   [CHAIN_ID.jfin]: chains.jfin,
   [CHAIN_ID.uniChain]: chains.uniChain,
 
