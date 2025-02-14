@@ -63,6 +63,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const reset = useStore(cosmosStore, (state) => state.reset);
 
   const autoConnectRef = useRef(true);
+  const [storedWallet, setStoredWallet] = useState<string | null>(null);
 
   const chainIds = useMemo(() => chains.map((chain) => chain.id), [chains]);
   const chainNames = useMemo(() => chains.map((chain) => chain.chainName), [chains]);
@@ -243,24 +244,28 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
     },
   });
 
+  useEffect(() => {
+    const cosmosCurrentWallet = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+    setStoredWallet(cosmosCurrentWallet);
+  }, []); // runs only once on mount
+
   /**
    * On first render, connect to the wallet if the wallet is already connected
    * Serves as a way to persist the wallet connection across page refreshes
    */
   useEffect(() => {
-    const cosmosCurrentWallet = localStorage.getItem('cosmos-kit@2:core//current-wallet');
-    if (!autoConnectRef.current || !cosmosCurrentWallet) {
+    if (!autoConnectRef.current || !storedWallet) {
       return;
     }
 
-    if (clientState[cosmosCurrentWallet] !== State.Done) {
+    if (clientState[storedWallet] !== State.Done) {
       return;
     }
 
-    connect({ adapterId: cosmosCurrentWallet });
+    connect({ adapterId: storedWallet });
 
     autoConnectRef.current = false;
-  }, [walletManager, connect, clientState]);
+  }, [storedWallet, walletManager, connect, clientState]);
 
   return (
     <CosmosContext.Provider
