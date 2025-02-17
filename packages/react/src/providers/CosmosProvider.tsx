@@ -174,6 +174,28 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
     return _walletManager;
   }, [chainIds, chainNames, chainRegistry, chains, logger, tangledConfig.projectId]);
 
+  /**
+   * Waits for the mutable client of the wallet to be available
+   * @param mainWallet
+   * @returns
+   */
+  const waitForClient = async (mainWallet: MainWalletBase): Promise<void> => {
+    return new Promise((resolve) => {
+      const checkInterval = setInterval(() => {
+        if (mainWallet.clientMutable.data) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 100); // checking every 100ms
+
+      // optional timeout to prevent indefinite waiting
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        resolve();
+      }, 5000);
+    });
+  };
+
   const chainRepos = useMemo(
     () => chains.map((chain) => walletManager.getWalletRepo(chain.chainName)),
     [chains, walletManager],
@@ -207,6 +229,9 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       if (!mainWallet) {
         throw new Error('Failed to connect to Cosmos wallet: wallet not found');
       }
+
+      // waiting for the client before trying to connect
+      await waitForClient(mainWallet);
 
       const client = mainWallet.clientMutable.data;
 
@@ -247,7 +272,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   useEffect(() => {
     const cosmosCurrentWallet = localStorage.getItem('cosmos-kit@2:core//current-wallet');
     setStoredWallet(cosmosCurrentWallet);
-  }, []); // runs only once on mount
+  }, []);
 
   /**
    * On first render, connect to the wallet if the wallet is already connected
