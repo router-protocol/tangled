@@ -24,7 +24,7 @@
 
 ### Patch Changes
 
-- chore: change injected wallet name
+- fix cosmos testnet
 
 ## 1.16.52
 

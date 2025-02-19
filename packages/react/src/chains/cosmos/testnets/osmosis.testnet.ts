@@ -19,7 +19,7 @@ export const osmosisTestnet: CosmsosChainType = {
   blockExplorers: {
     default: {
       name: 'Osmosis Testnet Explorer',
-      url: 'https://explorer.testnet.osmosis.zone',
+      url: 'https://celatone.osmosis.zone/osmo-test-5',
     },
   },
   extra: {
