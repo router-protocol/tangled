@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.60
+
+### Patch Changes
+
+- fix:cosmos issue, story chain, unichain add
+
 ## 1.16.59
 
 ### Patch Changes
