@@ -180,7 +180,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
    * @returns
    */
   const waitForClient = async (mainWallet: MainWalletBase): Promise<void> => {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const checkInterval = setInterval(() => {
         if (mainWallet.clientMutable.data) {
           clearInterval(checkInterval);
@@ -191,7 +191,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       // optional timeout to prevent indefinite waiting
       setTimeout(() => {
         clearInterval(checkInterval);
-        resolve();
+        reject();
       }, 5000);
     });
   };
