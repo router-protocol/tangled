@@ -1,7 +1,13 @@
-import { CosmsosChainType } from '../types/index.js';
+import { Asset } from '../types/cosmos.js';
+import { ChainId } from '../types/index.js';
+
+export const overrideMap: Record<string, ChainId> = {
+  injectivetestnet: 'injective-888',
+  // more mappings here as needed
+};
 
 const specialAssetOverrides: {
-  [chainId: string]: { [token: string]: any };
+  [chainId: string]: { [token: string]: Asset };
 } = {
   'router_9600-1': {
     'ibc/B9E4FD154C92D3A23BEA029906C4C5FF2FE74CB7E3A058290B77197A263CF88B': {
@@ -148,8 +154,8 @@ const specialAssetOverrides: {
   },
 };
 
-function getOverridenAssets({ chain, token }: { chain: CosmsosChainType; token: string }) {
-  return specialAssetOverrides[chain.id]?.[token];
-}
-
-export default getOverridenAssets;
+export const getAssetsToOverride = (chainId: ChainId) => {
+  const overriddenAssets = specialAssetOverrides[chainId];
+  const moreAssets = Object.entries(overriddenAssets).map(([, value]) => value);
+  return moreAssets;
+};
