@@ -1,5 +1,13 @@
 # @tangled3/react
 
+## 1.16.60
+
+### Patch Changes
+
+- fix: wallet persistance
+- Updated dependencies
+  - @tangled3/solana-react@1.1.5
+
 ## 1.16.59
 
 ### Patch Changes
