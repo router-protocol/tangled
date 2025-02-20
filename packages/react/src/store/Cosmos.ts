@@ -88,7 +88,11 @@ export const createCosmosStore = (chains: ChainData[], testnet: boolean | undefi
             const overrideKey = overrideMap[assetItem.chain_name];
             if (overrideKey) {
               const overriddenAssets = getAssetsToOverride(overrideKey);
-              assetItem.assets = assetItem.assets.concat(overriddenAssets);
+              // filtering out assets that already exist in the assetList
+              const newAssets = overriddenAssets.filter(
+                (overrideAsset) => !assetItem.assets.some((existingAsset) => existingAsset.base === overrideAsset.base),
+              );
+              assetItem.assets = assetItem.assets.concat(newAssets);
             }
           });
 
