@@ -7,6 +7,7 @@ import {
 } from '../actions/cosmos/getCosmosChainRegistryClient.js';
 import { AssetList } from '../types/cosmos.js';
 import { ChainData, CosmsosChainType } from '../types/index.js';
+import { getAssetsToOverride, overrideMap } from '../utils/getAssetsToOverride.js';
 import { fetchTestnetAssetLists } from '../utils/index.js';
 
 export type GetCosmosClient = () => {
@@ -83,6 +84,25 @@ export const createCosmosStore = (chains: ChainData[], testnet: boolean | undefi
           newAssetList = await Promise.all(
             chainRegistry.chains.map((chain) => fetchTestnetAssetLists(chain.chain_name)),
           );
+          newAssetList.forEach((assetItem) => {
+            const overrideKey = overrideMap[assetItem.chain_name];
+            if (overrideKey) {
+              const overriddenAssets = getAssetsToOverride(overrideKey);
+              // filtering out assets that already exist in the assetList
+              const newAssets = overriddenAssets.filter(
+                (overrideAsset) => !assetItem.assets.some((existingAsset) => existingAsset.base === overrideAsset.base),
+              );
+              assetItem.assets = assetItem.assets.concat(newAssets);
+            }
+          });
+
+          // updating assetLists in chainRegistry
+          Object.keys(overrideMap).forEach((chainName) => {
+            const assetList = newAssetList.find((a) => a.chain_name === chainName);
+            if (assetList) {
+              chainRegistry.setAssetList(assetList, chainName);
+            }
+          });
         }
 
         const currentAssetList = get().assetList;

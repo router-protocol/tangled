@@ -3,6 +3,7 @@ import {
   ChainRegistryChainUtil,
   ChainRegistryFetcher,
 } from '@chain-registry/client';
+import { AssetList } from '../../types/cosmos.js';
 
 interface ChainRegistryClientOptions extends BaseChainRegistryClientOptions {
   testnet?: boolean | undefined;
@@ -89,6 +90,13 @@ export class ChainRegistryClient extends ChainRegistryFetcher {
     await Promise.allSettled(this.urls.map((url) => this.fetch(url)));
 
     return Promise.all([]);
+  }
+
+  setAssetList(customAssetList: AssetList | undefined, chainName: string) {
+    const chainAssetList = this.assetLists.find((asset) => asset.chain_name === chainName);
+    if (chainAssetList && customAssetList) {
+      chainAssetList.assets = customAssetList.assets;
+    }
   }
 }
 

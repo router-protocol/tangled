@@ -2,7 +2,6 @@ import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
 import { maxInt256 } from 'viem';
 import { RouterLCDBalancesResponse } from '../../types/cosmos.js';
 import { ChainData, ConnectionOrConfig, CosmsosChainType } from '../../types/index.js';
-import getOverridenAssets from '../../utils/getOverridenAssetsForCosmos.js';
 import { compareStrings, isCosmosNativeOrFactoryToken } from '../../utils/index.js';
 
 export const getCosmosTokenMetadata = async ({
@@ -18,13 +17,10 @@ export const getCosmosTokenMetadata = async ({
 
   const assetList = registryClient.getChainAssetList(chain.chainName).assets;
 
-  let asset = assetList.find((asset) => compareStrings(asset.base, token));
+  const asset = assetList.find((asset) => compareStrings(asset.base, token));
 
   if (!asset) {
-    asset = getOverridenAssets({ chain, token });
-    if (!asset) {
-      throw new Error('Token not found');
-    }
+    throw new Error('Token not found');
   }
   return {
     symbol: asset.symbol,

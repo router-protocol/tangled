@@ -1,7 +1,13 @@
-import { CosmsosChainType } from '../types/index.js';
+import { Asset } from '../types/cosmos.js';
+import { ChainId } from '../types/index.js';
+
+export const overrideMap: Record<string, ChainId> = {
+  injectivetestnet: 'injective-888',
+  // more mappings here as needed
+};
 
 const specialAssetOverrides: {
-  [chainId: string]: { [token: string]: any };
+  [chainId: string]: { [token: string]: Asset };
 } = {
   'router_9600-1': {
     'ibc/B9E4FD154C92D3A23BEA029906C4C5FF2FE74CB7E3A058290B77197A263CF88B': {
@@ -89,33 +95,6 @@ const specialAssetOverrides: {
       ],
       type_asset: 'sdk.coin',
     },
-    'ibc/2CD6478D5AFA173C86448E008B760934166AED04C3968874EA6E44D2ECEA236D': {
-      description: 'OSMO is the native token of the Osmosis blockchain, bridged over to the Injective testnet.',
-      denom_units: [
-        {
-          denom: 'ibc/2CD6478D5AFA173C86448E008B760934166AED04C3968874EA6E44D2ECEA236D',
-          exponent: 0,
-        },
-        {
-          denom: 'UOSMO',
-          exponent: 6,
-        },
-      ],
-      base: 'ibc/2CD6478D5AFA173C86448E008B760934166AED04C3968874EA6E44D2ECEA236D',
-      name: 'Osmosis',
-      display: 'UOSMO',
-      symbol: 'UOSMO',
-      logo_URIs: {
-        png: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png',
-      },
-      coingecko_id: 'osmosis',
-      images: [
-        {
-          png: 'https://raw.githubusercontent.com/cosmos/chain-registry/master/osmosis/images/osmo.png',
-        },
-      ],
-      type_asset: 'ics20',
-    },
     peggy0x87aB3B4C8661e07D6372361211B96ed4Dc36B1B5: {
       description: 'USDT is a USD-pegged stablecoin available on the Injective testnet.',
       denom_units: [
@@ -148,8 +127,8 @@ const specialAssetOverrides: {
   },
 };
 
-function getOverridenAssets({ chain, token }: { chain: CosmsosChainType; token: string }) {
-  return specialAssetOverrides[chain.id]?.[token];
-}
-
-export default getOverridenAssets;
+export const getAssetsToOverride = (chainId: ChainId) => {
+  const overriddenAssets = specialAssetOverrides[chainId];
+  const moreAssets = Object.entries(overriddenAssets).map(([, value]) => value);
+  return moreAssets;
+};
