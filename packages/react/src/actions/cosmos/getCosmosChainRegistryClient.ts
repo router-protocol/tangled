@@ -3,6 +3,7 @@ import {
   ChainRegistryChainUtil,
   ChainRegistryFetcher,
 } from '@chain-registry/client';
+import { AssetList } from '../../types/cosmos.js';
 
 interface ChainRegistryClientOptions extends BaseChainRegistryClientOptions {
   testnet?: boolean | undefined;
@@ -71,7 +72,7 @@ export class ChainRegistryClient extends ChainRegistryFetcher {
         namePair[0].localeCompare(namePair[1]) <= 0
           ? `${namePair[0]}-${namePair[1]}.json`
           : `${namePair[1]}-${namePair[0]}.json`;
-      return `${baseUrl}/_IBC/${fileName}`;
+      return `${baseUrl}${testnet ? '/testnets' : ''}/_IBC/${fileName}`;
     });
 
     this.urls = [...new Set([...chainUrls, ...assetlistUrls, ...ibcUrls, ...(this.urls || [])])];
@@ -89,6 +90,13 @@ export class ChainRegistryClient extends ChainRegistryFetcher {
     await Promise.allSettled(this.urls.map((url) => this.fetch(url)));
 
     return Promise.all([]);
+  }
+
+  setAssetList(customAssetList: AssetList | undefined, chainName: string) {
+    const chainAssetList = this.assetLists.find((asset) => asset.chain_name === chainName);
+    if (chainAssetList && customAssetList) {
+      chainAssetList.assets = customAssetList.assets;
+    }
   }
 }
 

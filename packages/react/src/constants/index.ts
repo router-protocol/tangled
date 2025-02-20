@@ -5,6 +5,8 @@ export * from './abi/index.js';
 
 export const CHAIN_ID = {
   // evm
+  abstract: '2741',
+  story: '1514',
   arbitrum: '42161',
   avalanche: '43114',
   arthera: '10242',
@@ -23,6 +25,7 @@ export const CHAIN_ID = {
   metis: '1088',
   hyperliquid: '998',
   ink: '57073',
+  jfin: '3501',
   mode: '34443',
   morph: '2818',
   nahmii: '4061',
@@ -43,14 +46,13 @@ export const CHAIN_ID = {
   sonic: '146',
   taiko: '167000',
   tangle: '5845',
+  uniChain: '130',
   vanar: '2040',
   worldChain: '480',
   xLayer: '196',
   zero: '543210',
   zksync: '324',
   zora: '7777777',
-  abstract: '2741',
-  jfin: '3501',
 
   // cosmos
   osmosis: 'osmosis-1',
@@ -105,6 +107,7 @@ export const CHAIN_ID = {
   // cosmos
   osmosisTestnet: 'osmo-test-5',
   alloraTestnet: 'allora-testnet-1',
+  injectiveTestnet: 'injective-888',
 } as const;
 
 export const CHAIN_NAME = Object.keys(CHAIN_ID).reduce(
@@ -161,7 +164,9 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.zksync]: chains.zkSync,
   [CHAIN_ID.zora]: chains.zora,
   [CHAIN_ID.abstract]: chains.abstract,
+  [CHAIN_ID.story]: chains.story,
   [CHAIN_ID.jfin]: chains.jfin,
+  [CHAIN_ID.uniChain]: chains.uniChain,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,
@@ -215,6 +220,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   // cosmos testnets
   [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,
   [CHAIN_ID.alloraTestnet]: chains.alloraTestnet,
+  [CHAIN_ID.injectiveTestnet]: chains.injectiveTestnet,
 } as const;
 
 export const CHAIN_TYPE_LABEL: Record<ChainType, string> = {

@@ -47,14 +47,13 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.unichainSepolia,
       evm.monadTestnet,
     ] as EVMChain[];
-    supportedChains.cosmos = [];
+    supportedChains.cosmos = [cosmos.osmosisTestnet, cosmos.alloraTestnet, cosmos.injectiveTestnet];
     supportedChains.solana = [solanaTestnet] as OtherChainData<'solana'>[];
     supportedChains.tron = [tronShasta] as TronChain[];
     supportedChains.sui = [suiTestnet] as SuiChainType[];
   } else {
     // mainnet chains
     supportedChains.evm = [
-      evm.jfin,
       evm.abstract,
       evm.arbitrum,
       evm.arthera,
@@ -74,6 +73,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.metis,
       evm.hyperliquid,
       evm.ink,
+      evm.jfin,
       evm.mode,
       evm.morph,
       evm.nahmii,
@@ -94,6 +94,8 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.sonic,
       evm.taiko,
       evm.tangle,
+      evm.uniChain,
+      evm.story,
       evm.vanar,
       evm.worldChain,
       evm.xLayer,

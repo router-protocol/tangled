@@ -22,7 +22,7 @@ const Providers = ({ children }: { children: ReactNode }) => {
               },
             },
           },
-
+          testnet: true,
           projectId: '41980758771052df3f01be0a46f172a5',
           bitcoinNetwork: 'mainnet',
         }}

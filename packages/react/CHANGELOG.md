@@ -1,5 +1,29 @@
 # @tangled3/react
 
+## 1.16.63
+
+### Patch Changes
+
+- chore:injective changes
+
+## 1.16.62
+
+### Patch Changes
+
+- chore: cosmos override
+
+## 1.16.61
+
+### Patch Changes
+
+- fix:injective
+
+## 1.16.60
+
+### Patch Changes
+
+- fix:cosmos issue, story chain, unichain add
+
 ## 1.16.59
 
 ### Patch Changes
@@ -24,7 +48,7 @@
 
 ### Patch Changes
 
-- chore: change injected wallet name
+- fix cosmos testnet
 
 ## 1.16.52
 
