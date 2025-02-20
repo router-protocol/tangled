@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.63
+
+### Patch Changes
+
+- chore:injective changes
+
 ## 1.16.62
 
 ### Patch Changes
