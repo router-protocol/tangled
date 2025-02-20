@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.62
+
+### Patch Changes
+
+- chore: cosmos override
+
 ## 1.16.61
 
 ### Patch Changes
