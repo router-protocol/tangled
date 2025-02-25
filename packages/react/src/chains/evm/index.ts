@@ -76,8 +76,10 @@ export const vanar: EVMChain = {
 export const xLayer: EVMChain = { ...vxLayer, type: 'evm' } as const;
 export const zkSync: EVMChain = { ...vZkSync, type: 'evm' } as const;
 export * from './abstract.js';
+export * from './appchain.js';
 export * from './arthera.js';
 export * from './berachain.js';
+export * from './gnosis.js';
 export * from './hyperliquid.js';
 export * from './ink.js';
 export * from './jfin.js';
@@ -98,5 +100,3 @@ export * from './unichain.js';
 export * from './worldChain.js';
 export * from './zero.js';
 export * from './zora.js';
-export * from './gnosis.js';
-export * from './appchain.js';
