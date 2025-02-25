@@ -297,13 +297,17 @@ export const WalletProvider = ({
 
   // Auto connect when the wallet is ready
   useEffect(() => {
-    if (
-      connected ||
-      !handleAutoConnectRequest ||
-      connectedWallet?.readyState === WalletReadyState.Installed ||
-      connectedWallet?.readyState === WalletReadyState.Loadable
-    )
+    if (connected || !handleAutoConnectRequest) {
       return;
+    }
+
+    const shouldAutoConnect =
+      connectedWallet?.readyState === WalletReadyState.Installed ||
+      connectedWallet?.readyState === WalletReadyState.Loadable;
+
+    if (!shouldAutoConnect) {
+      return;
+    }
 
     (async function () {
       try {
