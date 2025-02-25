@@ -98,3 +98,6 @@ export * from './unichain.js';
 export * from './worldChain.js';
 export * from './zero.js';
 export * from './zora.js';
+export * from './gnosis.js';
+export * from './appchain.js';
+
