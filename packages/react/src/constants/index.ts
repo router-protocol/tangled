@@ -53,6 +53,8 @@ export const CHAIN_ID = {
   zero: '543210',
   zksync: '324',
   zora: '7777777',
+  appchain: '466',
+  gnosis: '100',
 
   // cosmos
   osmosis: 'osmosis-1',
@@ -167,6 +169,8 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.story]: chains.story,
   [CHAIN_ID.jfin]: chains.jfin,
   [CHAIN_ID.uniChain]: chains.uniChain,
+  [CHAIN_ID.appchain]: chains.appchain,
+  [CHAIN_ID.gnosis]: chains.gnosis,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,

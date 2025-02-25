@@ -102,6 +102,8 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.zero,
       evm.zkSync,
       evm.zora,
+      evm.appchain,
+      evm.gnosis,
     ] as EVMChain[];
     supportedChains.cosmos = [cosmos.osmosis, cosmos.injective, cosmos.self, cosmos.router] as CosmsosChainType[];
     supportedChains.solana = [solana] as OtherChainData<'solana'>[];
