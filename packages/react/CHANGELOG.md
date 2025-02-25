@@ -4,7 +4,9 @@
 
 ### Patch Changes
 
-- add: genosis and appchain
+- chore:wallet persistence
+- Updated dependencies
+  - @tangled3/solana-react@1.1.5
 
 ## 1.16.63
 
