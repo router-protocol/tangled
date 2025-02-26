@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.65
+
+### Patch Changes
+
+- add:genosis and appchain
+
 ## 1.16.64
 
 ### Patch Changes
