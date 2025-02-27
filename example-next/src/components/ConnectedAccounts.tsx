@@ -1,10 +1,14 @@
+import { buildNitroTransaction } from '@/actions/buildNitroTransaction';
+import getPfQuote from '@/actions/getPfQuote';
 import {
+  CHAIN_DATA,
   ConnectedAccount,
   SOL_ADDRESS,
   useAccounts,
   useChain,
   useConnect,
   useDisconnect,
+  useSendTransaction,
   useTokenForAccount,
   useWallet,
 } from '@tangled3/react';
@@ -53,6 +57,14 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
   const wallet = useWallet(account.chainType, account.wallet);
   const chain = useChain(account.chainId);
 
+  const { mutateAsync: sendTransaction } = useSendTransaction();
+  const handleSendTx = async () => {
+    const quote = getPfQuote();
+    const txArgs = await buildNitroTransaction(quote, CHAIN_DATA['injective-888']);
+    const tx = await sendTransaction(txArgs);
+    console.log('[inj] tx = ', { tx });
+  };
+
   return (
     <tr className='border-b border-gray-700'>
       <td className='min-w-8 w-[5ch] h-8 px-4 py-2'>
@@ -84,6 +96,12 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
           className='bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded'
         >
           Switch
+        </button>
+        <button
+          onClick={handleSendTx}
+          className='bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded'
+        >
+          Send Tx
         </button>
       </td>
     </tr>

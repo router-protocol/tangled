@@ -135,6 +135,9 @@ importers:
 
   example-next:
     dependencies:
+      '@injectivelabs/sdk-ts':
+        specifier: ^1.14.41
+        version: 1.14.41(@types/react@18.3.3)(bufferutil@4.0.8)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(utf-8-validate@5.0.10)
       '@t3-oss/env-nextjs':
         specifier: ^0.10.1
         version: 0.10.1(typescript@5.5.4)(zod@3.23.8)
