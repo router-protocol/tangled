@@ -1,4 +1,4 @@
-import { MsgSend } from '@injectivelabs/sdk-ts';
+import { MsgExecuteContractCompat } from '@injectivelabs/sdk-ts';
 import { type ChainData, type SendTransactionMutationParams, type TransactionArgs } from '@tangled3/react';
 
 export type CosmosCoin = {
@@ -89,10 +89,11 @@ export const buildNitroTransaction = async (
     }
 
     if (sourceChain.id === 'injective-888') {
-      const msg = MsgSend.fromJSON({
-        amount: transactionData.value, // currently empty array from pf
-        srcInjectiveAddress: transactionData.from,
-        dstInjectiveAddress: transactionData.to,
+      const msg = MsgExecuteContractCompat.fromJSON({
+        sender: transactionData.from,
+        contractAddress: transactionData.to,
+        msg: transactionData.data,
+        funds: isCosmosCoinArray(transactionData.value) ? [...transactionData.value] : [],
       });
 
       return {

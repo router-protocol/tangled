@@ -1,4 +1,4 @@
-import { MsgSend, TxRestApi } from '@injectivelabs/sdk-ts';
+import { MsgExecuteContractCompat, TxRestApi } from '@injectivelabs/sdk-ts';
 import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
@@ -53,7 +53,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
               funds: Array<{ denom: string; amount: string }>;
             };
             injectiveArgs?: {
-              msg: MsgSend;
+              msg: MsgExecuteContractCompat;
             };
           }
         : CType extends 'bitcoin'

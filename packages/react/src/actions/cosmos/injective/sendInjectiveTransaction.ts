@@ -5,9 +5,9 @@ import {
   ChainRestAuthApi,
   ChainRestTendermintApi,
   CosmosTxV1Beta1Tx,
-  createTransaction,
+  createTransactionFromMsg,
   getTxRawFromTxRawOrDirectSignResponse,
-  MsgSend,
+  MsgExecuteContractCompat,
   SignDoc,
   TxRaw,
 } from '@injectivelabs/sdk-ts';
@@ -38,7 +38,7 @@ export async function prepareTransaction({
 }: {
   from: string;
   chain: CosmsosChainType;
-  args: { msg: MsgSend };
+  args: { msg: MsgExecuteContractCompat };
 }): Promise<PreparedTxRawAndSignDoc> {
   // only lcd rpc url works instead of chain's default
   const restEndpoint = 'https://testnet.sentry.lcd.injective.network:443';
@@ -55,8 +55,9 @@ export async function prepareTransaction({
 
   // preparing the message
   const keplr = await getKeplrFromWindow(chain.id);
-  const { txRaw, signDoc } = createTransaction({
-    pubKey: keplr.key.publicKey,
+
+  const { txRaw, signDoc } = createTransactionFromMsg({
+    pubKey: Buffer.from(keplr.key.pubKey).toString('base64'),
     chainId: chain.id,
     fee: getStdFee({}),
     message: args.msg,
