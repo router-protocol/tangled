@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.66
+
+### Patch Changes
+
+- add/rome testnet
+
 ## 1.16.65
 
 ### Patch Changes
