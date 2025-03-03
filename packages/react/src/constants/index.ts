@@ -105,6 +105,7 @@ export const CHAIN_ID = {
   abstractSepolia: '11124',
   storyOdyssey: '1516',
   monadTestnet: '10143',
+  romeTestnet: '200018',
 
   // cosmos
   osmosisTestnet: 'osmo-test-5',
@@ -220,6 +221,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.abstractSepolia]: chains.abstractSepolia,
   [CHAIN_ID.storyOdyssey]: chains.storyOdyssey,
   [CHAIN_ID.monadTestnet]: chains.monadTestnet,
+  [CHAIN_ID.romeTestnet]: chains.romeTestnet,
 
   // cosmos testnets
   [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,

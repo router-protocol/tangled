@@ -46,6 +46,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.storyOdyssey,
       evm.unichainSepolia,
       evm.monadTestnet,
+      evm.romeTestnet,
     ] as EVMChain[];
     supportedChains.cosmos = [cosmos.osmosisTestnet, cosmos.alloraTestnet, cosmos.injectiveTestnet];
     supportedChains.solana = [solanaTestnet] as OtherChainData<'solana'>[];
