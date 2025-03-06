@@ -53,6 +53,8 @@ export const CHAIN_ID = {
   zero: '543210',
   zksync: '324',
   zora: '7777777',
+  appchain: '466',
+  gnosis: '100',
 
   // cosmos
   osmosis: 'osmosis-1',
@@ -103,6 +105,7 @@ export const CHAIN_ID = {
   abstractSepolia: '11124',
   storyOdyssey: '1516',
   monadTestnet: '10143',
+  romeTestnet: '200018',
 
   // cosmos
   osmosisTestnet: 'osmo-test-5',
@@ -167,6 +170,8 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.story]: chains.story,
   [CHAIN_ID.jfin]: chains.jfin,
   [CHAIN_ID.uniChain]: chains.uniChain,
+  [CHAIN_ID.appchain]: chains.appchain,
+  [CHAIN_ID.gnosis]: chains.gnosis,
 
   //cosmos
   [CHAIN_ID.osmosis]: chains.osmosis,
@@ -216,6 +221,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.abstractSepolia]: chains.abstractSepolia,
   [CHAIN_ID.storyOdyssey]: chains.storyOdyssey,
   [CHAIN_ID.monadTestnet]: chains.monadTestnet,
+  [CHAIN_ID.romeTestnet]: chains.romeTestnet,
 
   // cosmos testnets
   [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,

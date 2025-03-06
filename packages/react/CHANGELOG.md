@@ -1,10 +1,32 @@
 # @tangled3/react
 
+## 1.16.67
+
+### Patch Changes
+
+- add:injective
+- Updated dependencies
+  - @tangled3/solana-react@1.1.6
+
+## 1.16.66
+
+### Patch Changes
+
+- add/rome testnet
+
+## 1.16.65
+
+### Patch Changes
+
+- add:genosis and appchain
+
 ## 1.16.64
 
 ### Patch Changes
 
-- add:injective changes
+- chore:wallet persistence
+- Updated dependencies
+  - @tangled3/solana-react@1.1.5
 
 ## 1.16.63
 

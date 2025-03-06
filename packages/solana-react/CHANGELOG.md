@@ -1,5 +1,17 @@
 # @tangled3/solana-react
 
+## 1.1.6
+
+### Patch Changes
+
+- add:injective
+
+## 1.1.5
+
+### Patch Changes
+
+- chore:wallet persistence
+
 ## 1.1.4
 
 ### Patch Changes

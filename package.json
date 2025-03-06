@@ -21,7 +21,8 @@
     "lint:fix": "eslint packages --fix",
     "format": "prettier --check . --config ./prettier.config.cjs",
     "format:fix": "prettier --write . --config ./prettier.config.cjs",
-    "watch:react": "pnpm --filter @tangled3/react watch"
+    "watch:react": "pnpm --filter @tangled3/react watch",
+    "watch:solana-react": "pnpm --filter @tangled3/solana-react watch"
   },
   "keywords": [],
   "author": "",

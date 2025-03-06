@@ -65,6 +65,7 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
   const reset = useStore(cosmosStore, (state) => state.reset);
 
   const autoConnectRef = useRef(true);
+  const [storedWallet, setStoredWallet] = useState<string | null>(null);
 
   const chainIds = useMemo(() => chains.map((chain) => chain.id), [chains]);
   const chainNames = useMemo(() => chains.map((chain) => chain.chainName), [chains]);
@@ -175,6 +176,28 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
     return _walletManager;
   }, [chainIds, chainNames, chainRegistry, chains, logger, tangledConfig.projectId, assetList]);
 
+  /**
+   * Waits for the mutable client of the wallet to be available
+   * @param mainWallet
+   * @returns
+   */
+  const waitForClient = async (mainWallet: MainWalletBase): Promise<void> => {
+    return new Promise((resolve, reject) => {
+      const checkInterval = setInterval(() => {
+        if (mainWallet.clientMutable.data) {
+          clearInterval(checkInterval);
+          resolve();
+        }
+      }, 100); // checking every 100ms
+
+      // optional timeout to prevent indefinite waiting
+      setTimeout(() => {
+        clearInterval(checkInterval);
+        reject();
+      }, 5000);
+    });
+  };
+
   const chainRepos = useMemo(
     () => chains.map((chain) => walletManager.getWalletRepo(chain.chainName)),
     [chains, walletManager],
@@ -209,6 +232,9 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
       if (!mainWallet) {
         throw new Error('Failed to connect to Cosmos wallet: wallet not found');
       }
+
+      // waiting for the client before trying to connect
+      await waitForClient(mainWallet);
 
       const client = mainWallet.clientMutable.data;
 
@@ -246,24 +272,28 @@ const CosmosContextProvider = ({ children, chains }: { children: React.ReactNode
     },
   });
 
+  useEffect(() => {
+    const cosmosCurrentWallet = localStorage.getItem('cosmos-kit@2:core//current-wallet');
+    setStoredWallet(cosmosCurrentWallet);
+  }, []);
+
   /**
    * On first render, connect to the wallet if the wallet is already connected
    * Serves as a way to persist the wallet connection across page refreshes
    */
   useEffect(() => {
-    const cosmosCurrentWallet = localStorage.getItem('cosmos-kit@2:core//current-wallet');
-    if (!autoConnectRef.current || !cosmosCurrentWallet) {
+    if (!autoConnectRef.current || !storedWallet) {
       return;
     }
 
-    if (clientState[cosmosCurrentWallet] !== State.Done) {
+    if (clientState[storedWallet] !== State.Done) {
       return;
     }
 
-    connect({ adapterId: cosmosCurrentWallet });
+    connect({ adapterId: storedWallet });
 
     autoConnectRef.current = false;
-  }, [walletManager, connect, clientState]);
+  }, [storedWallet, walletManager, connect, clientState]);
 
   return (
     <CosmosContext.Provider
