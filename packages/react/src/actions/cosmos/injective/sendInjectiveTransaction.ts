@@ -41,7 +41,7 @@ export async function prepareTransaction({
   args: { msg: MsgExecuteContractCompat };
 }): Promise<PreparedTxRawAndSignDoc> {
   // only lcd rpc url works instead of chain's default
-  const restEndpoint = 'https://testnet.sentry.lcd.injective.network:443';
+  const restEndpoint = chain.rpcUrls.default.http[0];
   const chainRestAuthApi = new ChainRestAuthApi(restEndpoint);
 
   const accountDetailsResponse = await chainRestAuthApi.fetchAccount(from);
