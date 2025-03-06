@@ -1,5 +1,25 @@
 # @tangled3/react
 
+## 1.16.66
+
+### Patch Changes
+
+- add/rome testnet
+
+## 1.16.65
+
+### Patch Changes
+
+- add:genosis and appchain
+
+## 1.16.64
+
+### Patch Changes
+
+- chore:wallet persistence
+- Updated dependencies
+  - @tangled3/solana-react@1.1.5
+
 ## 1.16.63
 
 ### Patch Changes
