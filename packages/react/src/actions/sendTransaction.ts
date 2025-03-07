@@ -236,7 +236,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       const signedTx = await signInjTransaction({ from, chain, preparedTx });
       const broadcastedTx = await broadcastTransaction({ chain, txRaw: signedTx });
 
-      const response = await new TxRestApi(chain.rpcUrls.default.http[0]).fetchTxPoll(broadcastedTx);
+      const response = await new TxRestApi(chain.rpcUrls.default.lcd![0]).fetchTxPoll(broadcastedTx);
 
       return { txHash: response.txHash };
     }

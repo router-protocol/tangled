@@ -12,8 +12,9 @@ export const injectiveTestnet: CosmsosChainType = {
   },
   rpcUrls: {
     default: {
-      http: ['https://testnet.sentry.lcd.injective.network:443'],
+      http: ['https://testnet.sentry.tm.injective.network:443'],
       webSocket: ['wss://testnet.sentry.lcd.injective.network:443/websocket'],
+      lcd: ['https://testnet.sentry.lcd.injective.network:443'],
     },
   },
   blockExplorers: {
