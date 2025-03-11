@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.69
+
+### Patch Changes
+
+- add/ hyperevm
+
 ## 1.16.68
 
 ### Patch Changes
