@@ -128,10 +128,19 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
   if (chain.type === 'tron') {
     const { calldata } = args as TransactionArgs<'tron'>;
 
+    const walletInstance = config.connector as WalletInstance<'tron'>;
     const tronWeb = config.tronWeb;
 
-    const signedTx = await tronWeb.trx.signTransaction(calldata);
+    console.log('tronWeb - - ', tronWeb, calldata, 'd2hh37');
+
+    const signedTx = await walletInstance.signTransaction(calldata);
+
+    // const signedTx = await tronWeb.trx.signTransaction(calldata);
+
+    console.log('signedTx - -+s- ', signedTx);
     const tx = await tronWeb.trx.sendHexTransaction(signedTx);
+
+    console.log('tx - - ', tx);
 
     return {
       txHash: tx.txid,

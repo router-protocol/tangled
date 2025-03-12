@@ -1,10 +1,10 @@
-import { WalletConnectAdapter as TronWalletConnectAdapter } from '@tronweb3/tronwallet-adapter-walletconnect';
 import { coinbaseWallet, walletConnect } from 'wagmi/connectors';
 import * as bitcoinConnectors from '../connectors/bitcoin/connectors.js';
 import * as cosmosConnectors from '../connectors/cosmos/connector.js';
 import * as solConnectors from '../connectors/solana/connectors.js';
 import * as suiConnectors from '../connectors/sui/connectors.js';
 import * as tronConnectors from '../connectors/tron/connectors.js';
+import { WalletConnectAdapter } from '../connectors/tron/wcTronAdapter.js';
 import { CHAIN_TYPES, SupportedChainsByType, TangledConfig } from '../types/index.js';
 import { ChainConnectors } from '../types/wallet.js';
 
@@ -27,13 +27,20 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
   connectors.evm = [...(overrides.evm ?? []), walletconnectConnector, coinbaseWalletConnector];
 
   const tronChain = chains.tron[0];
-  const tronWalletConnectAdapter = new TronWalletConnectAdapter({
-    network: tronChain.tronName,
+
+  const tronWalletConnectAdapter = new WalletConnectAdapter({
+    network: '0x2b6653dc',
     options: {
-      relayUrl: 'wss://relay.walletconnect.com',
-      projectId: config.projectId,
+      projectId: 'e899c82be21d4acca2c8aec45e893598',
+      metadata: {
+        name: config.projectName,
+        description: 'sss',
+        url: 'https://tangled.xyz',
+        icons: ['https://tangled.xyz/logo.png'],
+      },
     },
   });
+
   connectors.tron = [...(overrides.tron ?? []), tronConnectors.tronLinkAdapter, tronWalletConnectAdapter];
 
   connectors.solana = [
