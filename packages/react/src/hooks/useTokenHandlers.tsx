@@ -145,7 +145,7 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
       console.log('tx - ', tx);
       return await sendTransaction({
         args: {
-          calldata: JSON.stringify(tx.transaction),
+          calldata: JSON.stringify(tx?.transaction),
         },
         chain,
         from: owner,
