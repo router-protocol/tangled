@@ -9,6 +9,7 @@ import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useSendTransaction } from './useSendTransaction.js';
+import { getTronWeb } from '../actions/tron/getTronweb.js';
 
 export type UseTokenHandlersParams = {
   /** Chain ID of token */
@@ -120,9 +121,11 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
 
       console.log('spender - ', spender);
       console.log('amount - ', amount);
+      console.log('owner - ', owner);
 
-      const tronWeb = connectionOrConfig?.tronWeb;
+      const tronWeb = getTronWeb(chain);
       tronWeb?.setAddress(owner);
+
       const functionSelector = 'approve(address,uint256)';
       const parameter = [
         { type: 'address', value: tronWeb?.address?.fromHex(spender) },
