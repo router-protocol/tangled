@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.0
+
+### Minor Changes
+
+- updated verison
+
 ## 1.16.66
 
 ### Patch Changes
