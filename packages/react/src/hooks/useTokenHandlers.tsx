@@ -4,7 +4,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { Address, encodeFunctionData, erc20Abi } from 'viem';
 import { getProgramId } from '../actions/solana/getProgramId.js';
-import { getTronWeb } from '../actions/tron/getTronweb.js';
 import { ChainData, ChainId, OtherChainData, TronChain } from '../types/index.js';
 import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
@@ -122,10 +121,11 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
       console.log('spender - ', spender);
       console.log('amount - ', amount);
 
-      const tronWeb = getTronWeb(chain);
+      const tronWeb = connectionOrConfig?.tronWeb;
+      tronWeb?.setAddress(owner);
       const functionSelector = 'approve(address,uint256)';
       const parameter = [
-        { type: 'address', value: spender },
+        { type: 'address', value: tronWeb?.address?.fromHex(spender) },
         {
           type: 'uint256',
           value: amount.toString(),
