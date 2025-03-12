@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.16.72
+
+### Patch Changes
+
+- add/tron issue
+
 ## 1.16.71
 
 ### Patch Changes
