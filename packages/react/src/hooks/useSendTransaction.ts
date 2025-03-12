@@ -51,9 +51,9 @@ export const useSendTransaction = () => {
       // }
 
       // check if from address matches currentAccount
-      if (!compareStrings(from, currentAccount.address)) {
-        throw new Error('From address does not match current account');
-      }
+      // if (!compareStrings(from, currentAccount.address)) {
+      //   throw new Error('From address does not match current account');
+      // }
 
       return sendTransactionToChain({
         chain,

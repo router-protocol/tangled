@@ -187,14 +187,14 @@ export class WalletConnectAdapter extends Adapter {
       throw new Error('Provider is required to sign a transaction.');
     }
 
-    const address = 'TABd1oGDnR5SntsXxiKZYGfYQ1kNfyLUHx';
+    const address = 'TWnvMKB3zukqx8QsoJgDEhJfstbWi98rup';
     try {
       const tronWeb = getTronWeb(tronMainnet);
       const ethStyleAddress = tronWeb.address.toHex(address).replace(/^41/, '0x');
 
       // Step 1: Get quote from Router Protocol
       const quoteResponse = await fetch(
-        'https://api-beta.pathfinder.routerprotocol.com/api/v2/quote?fromTokenAddress=0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee&toTokenAddress=0xa614f803b6fd780986a42c78ec9c7f77e6ded13c&amount=1000&fromTokenChainId=728126428&toTokenChainId=728126428&slippageTolerance=2&destFuel=0&partnerId=1',
+        'https://api-beta.pathfinder.routerprotocol.com/api/v2/quote?fromTokenAddress=0xa614f803b6fd780986a42c78ec9c7f77e6ded13c&toTokenAddress=0xc2132d05d31c914a87c6611c10748aeb04b58e8f&amount=5000000&fromTokenChainId=728126428&toTokenChainId=137&slippageTolerance=2&destFuel=0&partnerId=1',
         {
           headers: {
             accept: '*/*',
@@ -212,7 +212,7 @@ export class WalletConnectAdapter extends Adapter {
       const requestBody = JSON.stringify({
         ...quoteData,
         senderAddress: ethStyleAddress,
-        receiverAddress: ethStyleAddress,
+        receiverAddress: "0x67Ae61317122F081e640AA979056d406b93FbBA9",
       });
       console.log('Request body:', requestBody);
       // Step 2: Get transaction data from Router Protocol
@@ -252,7 +252,7 @@ export class WalletConnectAdapter extends Adapter {
 
       console.log('Signed transaction res:', JSON.stringify(signedTransaction, null, 2));
 
-      const tx = signedTransaction;
+      const tx = signedTransaction.result;
 
       // Step 5: Send the transaction to the network
 

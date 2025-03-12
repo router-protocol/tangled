@@ -21,35 +21,35 @@ export type SendTransactionParams<CData extends ChainData> = {
 
 export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
   ? {
-      calldata: string;
-      routerChainArgs?: {
-        executeMsg: object;
-        funds: Array<{ denom: string; amount: string }>;
-      };
-    }
+    calldata: string;
+    routerChainArgs?: {
+      executeMsg: object;
+      funds: Array<{ denom: string; amount: string }>;
+    };
+  }
   : CType extends 'solana'
-    ? {
-        versionedTx: SolanaVersionedTransaction;
-      }
-    : CType extends 'sui'
-      ? {
-          tx: SuiTransaction;
-        }
-      : CType extends 'cosmos'
-        ? {
-            messages: Array<{
-              readonly typeUrl: string;
-              readonly value: any;
-            }>;
-            memo?: string;
-            routerChainArgs?: {
-              executeMsg: object;
-              funds: Array<{ denom: string; amount: string }>;
-            };
-          }
-        : CType extends 'bitcoin'
-          ? { memo: string; feeRate?: number }
-          : never;
+  ? {
+    versionedTx: SolanaVersionedTransaction;
+  }
+  : CType extends 'sui'
+  ? {
+    tx: SuiTransaction;
+  }
+  : CType extends 'cosmos'
+  ? {
+    messages: Array<{
+      readonly typeUrl: string;
+      readonly value: any;
+    }>;
+    memo?: string;
+    routerChainArgs?: {
+      executeMsg: object;
+      funds: Array<{ denom: string; amount: string }>;
+    };
+  }
+  : CType extends 'bitcoin'
+  ? { memo: string; feeRate?: number }
+  : never;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export type SendTransactionReturnType<C extends ChainType> = { txHash: string };
@@ -138,7 +138,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     // const signedTx = await tronWeb.trx.signTransaction(calldata);
 
     console.log('signedTx - -+s- ', signedTx);
-    const tx = await tronWeb.trx.sendHexTransaction(signedTx);
+    const tx = await tronWeb.trx.sendRawTransaction(signedTx);
 
     console.log('tx - - ', tx);
 
