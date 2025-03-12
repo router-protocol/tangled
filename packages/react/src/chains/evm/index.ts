@@ -80,7 +80,7 @@ export * from './appchain.js';
 export * from './arthera.js';
 export * from './berachain.js';
 export * from './gnosis.js';
-export * from './hyperevm.js';
+export * from './hyperEVM.js';
 export * from './hyperliquid.js';
 export * from './ink.js';
 export * from './jfin.js';

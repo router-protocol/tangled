@@ -1,7 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { SendTransactionParams, sendTransactionToChain } from '../actions/sendTransaction.js';
 import { ChainData } from '../types/index.js';
-import { compareStrings } from '../utils/index.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
 import { useCurrentWallet } from './useCurrentWallet.js';
