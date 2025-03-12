@@ -22,7 +22,7 @@ export const buildNitroTransaction = async (
       throw new Error('Tron transaction has no raw data hex');
     }
     const args: TransactionArgs<'tron'> = {
-      calldata: transactionData.raw_data_hex,
+      calldata: JSON.stringify(transactionData),
     };
     return {
       chain: sourceChain,

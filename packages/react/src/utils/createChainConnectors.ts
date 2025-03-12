@@ -29,14 +29,14 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
   const tronChain = chains.tron[0];
 
   const tronWalletConnectAdapter = new WalletConnectAdapter({
-    network: '0x2b6653dc',
+    network: tronChain.trxId,
     options: {
       projectId: 'e899c82be21d4acca2c8aec45e893598',
       metadata: {
         name: config.projectName,
-        description: 'sss',
-        url: 'https://tangled.xyz',
-        icons: ['https://tangled.xyz/logo.png'],
+        description: '',
+        url: '',
+        icons: [''],
       },
     },
   });

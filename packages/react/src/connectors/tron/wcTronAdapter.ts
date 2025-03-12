@@ -16,7 +16,6 @@ import UniversalProvider, {
   IUniversalProvider,
   UniversalProvider as UniversalTronProvider,
 } from '@walletconnect/universal-provider';
-import { getTronWeb } from '../../actions/tron/getTronweb.js';
 import { tronMainnet } from '../../chains/tron.js';
 
 const UniversalProviderType = UniversalProvider;
@@ -64,7 +63,7 @@ export class WalletConnectAdapter extends Adapter {
       console.error(
         `[WalletconnectAdapter] config.network must be one of ${NETWORK.join()} or a chainID such as 0x2b6653dc. Use Nile network instead.`,
       );
-      config.network = '0x2b6653dc';
+      config.network = tronMainnet.trxId;
     }
     if (!config.options?.projectId) {
       throw new Error(`[WalletconnectAdapter] config.options.projectId is required.`);
@@ -106,8 +105,6 @@ export class WalletConnectAdapter extends Adapter {
 
       try {
         // Initialize provider if not already initialized
-        console.log('start connecting werd');
-
         if (!this._provider) {
           this._provider = await UniversalTronProvider.init({
             logger: 'error',
@@ -120,11 +117,7 @@ export class WalletConnectAdapter extends Adapter {
           this._provider.on('display_uri', async (uri: string) => {
             await this._modal.openModal({ uri });
           });
-
-          console.log('start connecting in1 ');
         }
-
-        console.log('start connecting in2 ', this._config.network);
 
         // Connect to provider
         await this._provider.connect({
@@ -180,66 +173,61 @@ export class WalletConnectAdapter extends Adapter {
     this.emit('stateChanged', this._state);
   }
 
-  async signTransaction(transaction: Transaction): Promise<SignedTransaction> {
+  async signTransaction(calldata: Transaction): Promise<SignedTransaction> {
     if (this.state !== AdapterState.Connected) throw new WalletDisconnectedError();
 
     if (!this._provider) {
       throw new Error('Provider is required to sign a transaction.');
     }
 
-    const address = 'TWnvMKB3zukqx8QsoJgDEhJfstbWi98rup';
+    const address = this._address;
     try {
-      const tronWeb = getTronWeb(tronMainnet);
-      const ethStyleAddress = tronWeb.address.toHex(address).replace(/^41/, '0x');
+      // const ethStyleAddress = tronWeb.address.toHex(address).replace(/^41/, '0x');
 
-      // Step 1: Get quote from Router Protocol
-      const quoteResponse = await fetch(
-        'https://api-beta.pathfinder.routerprotocol.com/api/v2/quote?fromTokenAddress=0xa614f803b6fd780986a42c78ec9c7f77e6ded13c&toTokenAddress=0xc2132d05d31c914a87c6611c10748aeb04b58e8f&amount=5000000&fromTokenChainId=728126428&toTokenChainId=137&slippageTolerance=2&destFuel=0&partnerId=1',
-        {
-          headers: {
-            accept: '*/*',
-            origin: 'https://routernitro.com',
-            referer: 'https://routernitro.com/',
-            'user-agent':
-              'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
-          },
-        },
-      );
+      // // Step 1: Get quote from Router Protocol
+      // const quoteResponse = await fetch(
+      //   'https://api-beta.pathfinder.routerprotocol.com/api/v2/quote?fromTokenAddress=0xa614f803b6fd780986a42c78ec9c7f77e6ded13c&toTokenAddress=0xc2132d05d31c914a87c6611c10748aeb04b58e8f&amount=5000000&fromTokenChainId=728126428&toTokenChainId=137&slippageTolerance=2&destFuel=0&partnerId=1',
+      //   {
+      //     headers: {
+      //       accept: '*/*',
+      //       origin: 'https://routernitro.com',
+      //       referer: 'https://routernitro.com/',
+      //       'user-agent':
+      //         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+      //     },
+      //   },
+      // );
 
-      const quoteData = await quoteResponse.json();
-      console.log('Quote data received:', JSON.stringify(quoteData, null, 2));
+      // const quoteData = await quoteResponse.json();
+      // console.log('Quote data received:', JSON.stringify(quoteData, null, 2));
 
-      const requestBody = JSON.stringify({
-        ...quoteData,
-        senderAddress: ethStyleAddress,
-        receiverAddress: "0x67Ae61317122F081e640AA979056d406b93FbBA9",
-      });
-      console.log('Request body:', requestBody);
-      // Step 2: Get transaction data from Router Protocol
-      const transactionResponse = await fetch('https://api-beta.pathfinder.routerprotocol.com/api/v2/transaction', {
-        method: 'POST',
-        headers: {
-          accept: '*/*',
-          'content-type': 'application/json',
-          origin: 'https://routernitro.com',
-          referer: 'https://routernitro.com/',
-          'user-agent':
-            'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
-        },
-        body: requestBody,
-      });
+      // const requestBody = JSON.stringify({
+      //   ...quoteData,
+      //   senderAddress: ethStyleAddress,
+      //   receiverAddress: "0x67Ae61317122F081e640AA979056d406b93FbBA9",
+      // });
 
-      const transactionData = await transactionResponse.json();
-      console.log('Transaction data received:', JSON.stringify(transactionData, null, 2));
+      // // Step 2: Get transaction data from Router Protocol
+      // const transactionResponse = await fetch('https://api-beta.pathfinder.routerprotocol.com/api/v2/transaction', {
+      //   method: 'POST',
+      //   headers: {
+      //     accept: '*/*',
+      //     'content-type': 'application/json',
+      //     origin: 'https://routernitro.com',
+      //     referer: 'https://routernitro.com/',
+      //     'user-agent':
+      //       'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36',
+      //   },
+      //   body: requestBody,
+      // });
+
+      // const transactionData = await transactionResponse.json();
 
       // Step 3: Extract the transaction object from the response
-      const transaction = { result: { result: true }, transaction: transactionData.txn };
-      console.log('transaction: ', transaction);
+      const transaction = { result: { result: true }, transaction: JSON.parse(calldata) };
       // if (!transaction || !transaction.transaction || !transaction.transaction.raw_data || !transaction.transaction.raw_data.contract) {
       //   throw new Error("Invalid transaction format received from Router Protocol");
       // }
-
-      console.log('Transaction to sign:', JSON.stringify(transaction, null, 2));
 
       // Step 4: Request the signature via WalletConnect
       const signedTransaction = await this._provider!.request<{ result: unknown }>(
@@ -250,22 +238,7 @@ export class WalletConnectAdapter extends Adapter {
         `tron:${TronChains.Mainnet}`,
       );
 
-      console.log('Signed transaction res:', JSON.stringify(signedTransaction, null, 2));
-
       const tx = signedTransaction.result;
-
-      // Step 5: Send the transaction to the network
-
-      //       const signedTx: any = signedTransaction.result;
-      // const tx = {
-      //   visible: signedTx.visible,
-      //   txID: signedTx.txID,
-      //   raw_data: signedTx.raw_data,
-      //   raw_data_hex: signedTx.raw_data_hex,
-      //   signature: signedTx.signature
-      // };
-
-      // const result = await tronWeb.trx.sendRawTransaction(tx);
 
       return tx;
     } catch (error: any) {
