@@ -31,7 +31,7 @@ export const createChainConnectors = (config: TangledConfig, chains: SupportedCh
   const tronWalletConnectAdapter = new WalletConnectAdapter({
     network: tronChain.trxId,
     options: {
-      projectId: "41980758771052df3f01be0a46f172a5",
+      projectId: '41980758771052df3f01be0a46f172a5',
       metadata: {
         name: config.projectName,
         description: '',

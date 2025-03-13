@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query';
 import { SendTransactionParams, sendTransactionToChain } from '../actions/sendTransaction.js';
-import { ChainData } from '../types/index.js';
+import { ChainData, ChainId } from '../types/index.js';
 import { compareStrings } from '../utils/index.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
 import { useCurrentAccount } from './useCurrentAccount.js';
@@ -39,21 +39,21 @@ export const useSendTransaction = () => {
       }
 
       // check chain id of wallet
-      // if (!network || network?.toString() !== chain.id.toString()) {
-      //   console.log('Switching network to', chain.id.toString());
-      //   const switchedChain = await switchNetworkAsync(chain.id.toString() as ChainId).catch((e) => {
-      //     console.error(e);
-      //     throw e;
-      //   });
-      //   if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
-      //     throw new Error('Failed to switch network');
-      //   }
-      // }
+      if (!network || network?.toString() !== chain.id.toString()) {
+        console.log('Switching network to', chain.id.toString());
+        const switchedChain = await switchNetworkAsync(chain.id.toString() as ChainId).catch((e) => {
+          console.error(e);
+          throw e;
+        });
+        if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
+          throw new Error('Failed to switch network');
+        }
+      }
 
       // check if from address matches currentAccount
-      // if (!compareStrings(from, currentAccount.address)) {
-      //   throw new Error('From address does not match current account');
-      // }
+      if (!compareStrings(from, currentAccount.address)) {
+        throw new Error('From address does not match current account');
+      }
 
       return sendTransactionToChain({
         chain,
