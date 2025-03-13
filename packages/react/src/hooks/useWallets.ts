@@ -1,4 +1,5 @@
 import { State as CosmosWalletState } from '@cosmos-kit/core';
+import { Hooks } from '@matchain/matchid-sdk-react';
 import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMemo } from 'react';
@@ -33,6 +34,8 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const { wallets: solanaWallets } = useSolanaWallet();
 
   // const data = useManager;
+  const { useUserInfo } = Hooks;
+  const { login, logout, isLogin, address } = useUserInfo();
 
   const suiWallets = useSuiWallets();
 
@@ -77,6 +80,17 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
     };
 
     const wallets = evmConnectors.map((c) => prepareWallets(c)).filter((w) => w !== undefined) as Wallet<'evm'>[];
+
+    // ✅ Add MatchID Google Wallet manually
+    wallets.push({
+      id: 'Google',
+      name: 'Google',
+      icon: 'https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png', // Replace with actual icon
+      connector: evmConnectors[0], //temporary
+      installed: true,
+      type: 'evm',
+      getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+    });
 
     if (options?.onlyInstalled) {
       return wallets.filter((wallet) => wallet.installed);

@@ -1,3 +1,4 @@
+import { Hooks } from '@matchain/matchid-sdk-react';
 import { useDisconnectWallet as useSuiDisconnectWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMutation } from '@tanstack/react-query';
@@ -22,6 +23,8 @@ export const useDisconnect = () => {
   const { mutate: disconnectSuiWallet } = useSuiDisconnectWallet();
   const { disconnect: disconnectCosmosWallet } = useCosmosContext();
   const { disconnect: disconnectBitcoinWallet } = useBitcoinContext();
+  const { useUserInfo } = Hooks;
+  const { logout } = useUserInfo();
 
   const disconnectWallet = useCallback(
     async (params: DisconnectParams) => {
@@ -38,8 +41,12 @@ export const useDisconnect = () => {
 
       if (!walletInstance) {
         console.log(wallets, params.walletId);
-
         throw new Error('Wallet not found');
+      }
+
+      if (params.chainType === 'evm' && params.walletId === 'Google') {
+        console.log('logout google ', params.chainType, params.walletId);
+        await logout();
       }
 
       if (!walletInstance.connector) {

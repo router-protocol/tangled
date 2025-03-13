@@ -41,6 +41,7 @@
     "@cosmos-kit/keplr": "^2.12.2",
     "@cosmos-kit/leap": "^2.14.1",
     "@cosmos-kit/xdefi": "^2.10.2",
+    "@matchain/matchid-sdk-react": "^0.1.52",
     "@mysten/dapp-kit": "^0.14.14",
     "@mysten/sui": "^1.4.0",
     "@routerprotocol/router-chain-sdk-ts": "0.8.70-beta-0.2",

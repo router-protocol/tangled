@@ -1,11 +1,14 @@
+import { Hooks } from '@matchain/matchid-sdk-react';
 import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
-import { Address as EVMAddress } from 'viem';
+import { Chain, Address as EVMAddress, http } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { signBitcoinTransaction } from './bitcoin/transaction.js';
+const { useWallet } = Hooks;
+const { createWalletClient } = useWallet();
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -69,6 +72,8 @@ export type SendTransactionToChainFunction = <CData extends ChainData>(
  */
 export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides = {} }) => {
   if (chain.type === 'evm') {
+    const { calldata } = args as TransactionArgs<'evm'>;
+
     if (overrides?.walletType === 'evm') {
       const { sendEthTxnToRouterChainPf, getNetworkInfo, MsgExecuteCwContract, getRouterSignerAddress } = await import(
         '@routerprotocol/router-chain-sdk-ts'
@@ -106,9 +111,36 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
       });
 
       return { txHash: txResponse.tx_response.txhash };
-    }
+    } else if (overrides?.walletType === 'matchId') {
+      const walletClient = createWalletClient({
+        // @ts-ignore
+        chain: chain as Chain,
+        // @ts-ignore
+        transport: http(),
+      });
 
-    const { calldata } = args as TransactionArgs<'evm'>;
+      if (!walletClient) {
+        throw new Error('MatchID wallet client initialization failed');
+      }
+
+      try {
+        const txHash = await walletClient.sendTransaction({
+          chain: chain as Chain,
+          account: from as EVMAddress,
+          to: to as EVMAddress,
+          value,
+          data: calldata as `0x${string}`,
+          ...overrides,
+        });
+
+        return {
+          txHash,
+        };
+      } catch (error) {
+        console.error('MatchID transaction failed:', error);
+        throw error;
+      }
+    }
 
     // send transaction to EVM chain
     const txHash = await sendEVMTransaction(config.wagmiConfig, {

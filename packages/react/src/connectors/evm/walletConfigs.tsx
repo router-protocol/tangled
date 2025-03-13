@@ -110,6 +110,16 @@ export const walletConfigs: {
     url: 'https://rabby.io',
     isInstalled: true,
   },
+  google: {
+    // Use consistent ID with connector
+    name: 'Google',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
   safe: {
     name: 'Safe',
 

@@ -1,3 +1,4 @@
+import { Hooks } from '@matchain/matchid-sdk-react';
 import { useSuiClientContext, useCurrentWallet as useSuiCurrentWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
@@ -36,6 +37,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const { network: currentSuiNetwork } = useSuiClientContext();
 
   const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
+  const { useUserInfo } = Hooks;
+  const { login, isLogin, address } = useUserInfo();
 
   // update wallet store states when connections change for individual providers
   // evm
@@ -43,6 +46,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     const _evmAccounts: { [x: string]: ConnectedAccount } = {};
     const _evmWallets: { [x: string]: ConnectedWallet } = {};
 
+    // Handle regular EVM wallet connections
     for (const connection of evmConnections) {
       _evmAccounts[connection.connector.id] = {
         address: connection.accounts?.[0],
@@ -60,11 +64,32 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       };
     }
 
+    // Handle Google MatchID wallet
+    if (isLogin && address) {
+      _evmAccounts['Google'] = {
+        address: address,
+        chainId: '1' as ChainId, // Assuming mainnet, adjust as needed
+        chainType: 'evm',
+        wallet: 'Google',
+      };
+
+      _evmWallets['Google'] = {
+        address: address,
+        loading: false,
+        chainId: '1' as ChainId,
+        chainType: 'evm',
+        // connector: {
+        //   id: 'Google',
+        //   name: 'Google'
+        // }
+      };
+    }
+
     setChainConnectedAccounts({ evm: _evmAccounts });
     setConnectedWallets({
       evm: _evmWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, evmConnections]);
+  }, [setChainConnectedAccounts, setConnectedWallets, evmConnections, isLogin, address]);
 
   // solana
   useEffect(() => {
@@ -232,6 +257,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       setCurrentAccount(undefined);
       return;
     }
+
+    console.log('here i am 2', connectedAccountsByChain);
 
     const [walletId, walletChainId] = currentWallet.id.split(':');
 

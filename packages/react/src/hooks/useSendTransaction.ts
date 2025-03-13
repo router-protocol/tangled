@@ -39,14 +39,18 @@ export const useSendTransaction = () => {
       }
 
       // check chain id of wallet
-      if (!network || network?.toString() !== chain.id.toString()) {
-        console.log('Switching network to', chain.id.toString());
-        const switchedChain = await switchNetworkAsync(chain.id.toString() as ChainId).catch((e) => {
-          console.error(e);
-          throw e;
-        });
-        if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
-          throw new Error('Failed to switch network');
+      if (overrides?.walletType === 'matchId') {
+        console.log('MatchID wallet');
+      } else {
+        if (!network || network?.toString() !== chain.id.toString()) {
+          console.log('Switching network to', chain.id.toString());
+          const switchedChain = await switchNetworkAsync(chain.id.toString() as ChainId).catch((e) => {
+            console.error(e);
+            throw e;
+          });
+          if (!switchedChain || switchedChain.id.toString() !== chain.id.toString()) {
+            throw new Error('Failed to switch network');
+          }
         }
       }
 
