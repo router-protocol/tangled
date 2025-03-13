@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.8
+
+### Patch Changes
+
+- fix: wallet connect
+
 ## 1.17.7
 
 ### Patch Changes
