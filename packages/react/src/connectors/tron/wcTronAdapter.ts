@@ -12,13 +12,10 @@ import {
   WalletWindowClosedError,
 } from '@tronweb3/tronwallet-abstract-adapter';
 import { WalletConnectModal } from '@walletconnect/modal';
-import UniversalProvider, {
-  IUniversalProvider,
-  UniversalProvider as UniversalTronProvider,
-} from '@walletconnect/universal-provider';
+import { IUniversalProvider, UniversalProvider as UniversalTronProvider } from '@walletconnect/universal-provider';
 import { tronMainnet } from '../../chains/tron.js';
 
-const UniversalProviderType = UniversalProvider;
+// const UniversalProviderType = UniversalProvider;
 export enum TronChains {
   Mainnet = '0x2b6653dc',
   Devnet = '0xcd8690dc',
