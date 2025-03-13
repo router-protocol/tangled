@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.7
+
+### Patch Changes
+
+- fix/package version
+
 ## 1.17.6
 
 ### Patch Changes
