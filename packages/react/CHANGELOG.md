@@ -1,5 +1,65 @@
 # @tangled3/react
 
+## 1.17.7
+
+### Patch Changes
+
+- fix/package version
+
+## 1.17.6
+
+### Patch Changes
+
+- hooks issue solve
+
+## 1.17.5
+
+### Patch Changes
+
+- version update
+
+## 1.17.4
+
+### Minor Changes
+
+- updated verison
+
+## 1.16.72
+
+### Patch Changes
+
+- match id transaction
+
+## 1.16.71
+
+### Patch Changes
+
+- fix:hyper evm issue
+
+## 1.16.70
+
+### Patch Changes
+
+- add/hyperEVM chain
+
+## 1.16.69
+
+### Patch Changes
+
+- add/ hyperevm
+
+## 1.16.68
+
+### Patch Changes
+
+- add:injective changes
+
+## 1.16.67
+
+### Patch Changes
+
+- add:injective
+
 ## 1.16.66
 
 ### Patch Changes
