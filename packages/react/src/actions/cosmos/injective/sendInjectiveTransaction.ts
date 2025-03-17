@@ -38,7 +38,7 @@ export async function prepareTransaction({
 }: {
   from: string;
   chain: CosmsosChainType;
-  args: { msg: MsgExecuteContractCompat };
+  args: { msg: MsgExecuteContractCompat; gas?: string | number };
 }): Promise<PreparedTxRawAndSignDoc> {
   // only lcd rpc url works instead of chain's default
   const restEndpoint = chain.rpcUrls.default.lcd![0];
@@ -59,7 +59,7 @@ export async function prepareTransaction({
   const { txRaw, signDoc } = createTransactionFromMsg({
     pubKey: Buffer.from(keplr.key.pubKey).toString('base64'),
     chainId: chain.id,
-    fee: getStdFee({}),
+    fee: Number(args.gas) > 0 ? getStdFee({ gas: args.gas }) : getStdFee({}),
     message: args.msg,
     sequence: baseAccount.sequence,
     timeoutHeight: timeoutHeight.toNumber(),

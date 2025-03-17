@@ -54,6 +54,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
             };
             injectiveArgs?: {
               msg: MsgExecuteContractCompat;
+              gas?: string | number;
             };
           }
         : CType extends 'bitcoin'
@@ -232,7 +233,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
     if (chain.id === 'injective-888' || chain.id === 'injective-1') {
       const { injectiveArgs } = args as TransactionArgs<'cosmos'>;
-      if (!injectiveArgs) {
+      if (!injectiveArgs?.msg) {
         throw new Error('Missing arguments for injective');
       }
 
