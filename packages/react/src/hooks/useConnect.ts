@@ -58,7 +58,6 @@ export const useConnect = () => {
 
       if (params.chainType === 'evm' && params.walletId === 'Google') {
         await login('google');
-        console.log('login google ', params.chainType, params.walletId);
         return { chainType: params.chainType, name: walletInstance.name, walletId: params.walletId };
       }
 
@@ -103,6 +102,7 @@ export const useConnect = () => {
       connectEVM,
       connectSuiWallet,
       connectCosmosWallet,
+      login,
     ],
   );
 

@@ -45,7 +45,6 @@ export const useDisconnect = () => {
       }
 
       if (params.chainType === 'evm' && params.walletId === 'Google') {
-        console.log('logout google ', params.chainType, params.walletId);
         await logout();
       }
 
@@ -77,6 +76,7 @@ export const useDisconnect = () => {
       disconnectTronWallet,
       disconnectCosmosWallet,
       disconnectBitcoinWallet,
+      logout,
       wallets,
     ],
   );

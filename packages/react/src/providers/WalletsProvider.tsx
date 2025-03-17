@@ -38,7 +38,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
   const { useUserInfo } = Hooks;
-  const { login, isLogin, address } = useUserInfo();
+  const { isLogin, address } = useUserInfo();
 
   // update wallet store states when connections change for individual providers
   // evm
@@ -78,10 +78,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
         loading: false,
         chainId: '1' as ChainId,
         chainType: 'evm',
-        // connector: {
-        //   id: 'Google',
-        //   name: 'Google'
-        // }
       };
     }
 

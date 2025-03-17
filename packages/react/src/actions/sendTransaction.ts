@@ -1,14 +1,11 @@
-import { Hooks } from '@matchain/matchid-sdk-react';
 import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
 import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
-import { Chain, Address as EVMAddress, http } from 'viem';
+import { Chain, Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { signBitcoinTransaction } from './bitcoin/transaction.js';
-const { useWallet } = Hooks;
-const { createWalletClient } = useWallet();
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -20,6 +17,7 @@ export type SendTransactionParams<CData extends ChainData> = {
   config: ConnectionOrConfig & {
     connector: WalletInstance<CData['type']>;
   };
+  walletClient?: any;
 };
 
 export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
@@ -70,7 +68,16 @@ export type SendTransactionToChainFunction = <CData extends ChainData>(
  * @param args - Additional arguments
  * @param config - {@link ConnectionOrConfig}
  */
-export const sendTransactionToChain = (async ({ chain, to, from, value, args, config, overrides = {} }) => {
+export const sendTransactionToChain = (async ({
+  chain,
+  to,
+  from,
+  value,
+  args,
+  config,
+  overrides = {},
+  walletClient,
+}) => {
   if (chain.type === 'evm') {
     const { calldata } = args as TransactionArgs<'evm'>;
 
@@ -112,13 +119,7 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
 
       return { txHash: txResponse.tx_response.txhash };
     } else if (overrides?.walletType === 'matchId') {
-      const walletClient = createWalletClient({
-        // @ts-ignore
-        chain: chain as Chain,
-        // @ts-ignore
-        transport: http(),
-      });
-
+      console.log('MatchID wallet inside sendTransaction');
       if (!walletClient) {
         throw new Error('MatchID wallet client initialization failed');
       }

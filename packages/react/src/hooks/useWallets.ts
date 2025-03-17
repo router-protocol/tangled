@@ -1,5 +1,4 @@
 import { State as CosmosWalletState } from '@cosmos-kit/core';
-import { Hooks } from '@matchain/matchid-sdk-react';
 import { useWallets as useSuiWallets } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { useMemo } from 'react';
@@ -34,8 +33,6 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
   const { wallets: solanaWallets } = useSolanaWallet();
 
   // const data = useManager;
-  const { useUserInfo } = Hooks;
-  const { login, logout, isLogin, address } = useUserInfo();
 
   const suiWallets = useSuiWallets();
 
