@@ -254,8 +254,6 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    console.log('here i am 2', connectedAccountsByChain);
-
     const [walletId, walletChainId] = currentWallet.id.split(':');
 
     const currentAccount = Object.values(connectedAccountsByChain[currentWallet.type]).find((account) => {
