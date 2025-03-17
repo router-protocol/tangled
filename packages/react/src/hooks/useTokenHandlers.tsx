@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useCallback } from 'react';
 import { Address, encodeFunctionData, erc20Abi } from 'viem';
 import { getProgramId } from '../actions/solana/getProgramId.js';
-import { trc20Abi } from '../constants/index.js';
+import { getTronWeb } from '../actions/tron/getTronweb.js';
 import { ChainData, ChainId, OtherChainData, TronChain } from '../types/index.js';
 import { useChain } from './useChain.js';
 import { useConnectionOrConfig } from './useConnectionOrConfig.js';
@@ -113,14 +113,39 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
 
   const increaseTronAllowance = useCallback(
     async (spender: string, owner: string, amount: bigint, token: string, chain: TronChain) => {
-      const calldata = encodeFunctionData({
-        abi: trc20Abi,
-        functionName: 'approve',
-        args: [spender, amount] as [Address, bigint],
-      });
+      // const calldata = encodeFunctionData({
+      //   abi: trc20Abi,
+      //   functionName: 'approve',
+      //   args: [spender, amount] as [Address, bigint],
+      // });
+
+      console.log('spender - ', spender);
+      console.log('amount - ', amount);
+      console.log('owner - ', owner);
+
+      const tronWeb = getTronWeb(chain);
+      tronWeb?.setAddress(owner);
+
+      const functionSelector = 'approve(address,uint256)';
+      const parameter = [
+        { type: 'address', value: tronWeb?.address?.fromHex(spender) },
+        {
+          type: 'uint256',
+          value: amount.toString(),
+        },
+      ];
+
+      const tx = await tronWeb?.transactionBuilder.triggerSmartContract(
+        tronWeb?.address?.fromHex(token),
+        functionSelector,
+        {},
+        parameter,
+      );
+
+      console.log('tx - ', tx);
       return await sendTransaction({
         args: {
-          calldata: calldata.slice(2),
+          calldata: JSON.stringify(tx?.transaction),
         },
         chain,
         from: owner,
