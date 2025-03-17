@@ -1,5 +1,8 @@
 import { buildNitroTransaction } from '@/actions/buildNitroTransaction';
 import getPfQuote from '@/actions/getPfQuote';
+// import { buildNitroTransaction } from '@/txArgs/buildNitroTx';
+// import { pfData } from '@/txArgs/getPfData';
+// import { PathfinderTransaction } from '@/txArgs/types';
 import {
   CHAIN_DATA,
   ConnectedAccount,
@@ -7,6 +10,7 @@ import {
   useAccounts,
   useChain,
   useConnect,
+  useConnectionOrConfig,
   useDisconnect,
   useSendTransaction,
   useTokenForAccount,
@@ -56,6 +60,7 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
   const { connect } = useConnect();
   const wallet = useWallet(account.chainType, account.wallet);
   const chain = useChain(account.chainId);
+  const connectionOrConfig = useConnectionOrConfig();
 
   const { mutateAsync: sendTransaction } = useSendTransaction();
   const handleSendTx = async () => {
@@ -65,6 +70,17 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
     console.log('[inj] tx = ', { tx });
   };
 
+  // const currentWallet = useCurrentWallet();
+  // const walletInstance = useWallet(currentWallet?.type, currentWallet?.id);
+
+  // const handleSendTx = async () => {
+  //   const nitroTx = await buildNitroTransaction(pfData as unknown as PathfinderTransaction, tronMainnet);
+
+  //   console.log('tx data ', nitroTx, account);
+
+  //   const tx = await sendTransaction(nitroTx);
+  //   console.log('[tron] tx = ', tx);
+  // };
   return (
     <tr className='border-b border-gray-700'>
       <td className='min-w-8 w-[5ch] h-8 px-4 py-2'>
@@ -101,7 +117,7 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
           onClick={handleSendTx}
           className='bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded'
         >
-          Send Tx
+          Send Txn
         </button>
       </td>
     </tr>
