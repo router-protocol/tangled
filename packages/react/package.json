@@ -49,7 +49,7 @@
     "@solana/spl-token": "^0.4.8",
     "@solana/wallet-adapter-base": "^0.9.23",
     "@solana/web3.js": "^1.98.0",
-    "@tangled3/solana-react": "^1.1.6",
+    "@tangled3/solana-react": "workspace:*",
     "@tanstack/react-query": "^5.44.0",
     "@tronweb3/tronwallet-abstract-adapter": "^1.1.8",
     "@tronweb3/tronwallet-adapter-walletconnect": "^2.0.2",
