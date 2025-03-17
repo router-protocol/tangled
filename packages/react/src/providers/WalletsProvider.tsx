@@ -38,8 +38,9 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
   const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
   const { useUserInfo } = Hooks;
-  const { isLogin, address } = useUserInfo();
+  const { isLogin, address, username, overview, getAuthInfo, loginByMethod } = useUserInfo();
 
+  console.log('currentWallet => ', currentWallet, username, overview, getAuthInfo, loginByMethod);
   // update wallet store states when connections change for individual providers
   // evm
   useEffect(() => {
@@ -66,6 +67,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
 
     // Handle Google MatchID wallet
     if (isLogin && address) {
+      console.log('isLogin', address, currentWallet);
       _evmAccounts['Google'] = {
         address: address,
         chainId: '1' as ChainId, // Assuming mainnet, adjust as needed

@@ -114,7 +114,27 @@ export const walletConfigs: {
     // Use consistent ID with connector
     name: 'Google',
     url: 'https://www.matchid.ai/',
-    icon: 'https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png',
+    icon: 'https://www.citypng.com/public/uploads/preview/google-logo-icon-gsuite-hd-701751694791470gzbayltphh.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  telegram: {
+    // Use consistent ID with connector
+    name: 'Telegram',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://i.pinimg.com/474x/9f/f9/9c/9ff99cea674681327ba53e7721246f5b.jpg',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  twitter: {
+    // Use consistent ID with connector
+    name: 'Twitter',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://freepnglogo.com/images/all_img/1725374683twitter-x-logo.png',
     getWalletConnectDeeplink: (uri: string) => {
       return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
     },

@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.11
+
+### Patch Changes
+
+- match chain approval added
+
 ## 1.17.10
 
 ### Patch Changes

@@ -44,8 +44,12 @@ export const useDisconnect = () => {
         throw new Error('Wallet not found');
       }
 
-      if (params.chainType === 'evm' && params.walletId === 'Google') {
+      if (
+        params.chainType === 'evm' &&
+        (params.walletId === 'Google' || params.walletId === 'Telegram' || params.walletId === 'Twitter')
+      ) {
         await logout();
+        return;
       }
 
       if (!walletInstance.connector) {

@@ -56,8 +56,12 @@ export const useConnect = () => {
         throw new Error('Wallet not found');
       }
 
-      if (params.chainType === 'evm' && params.walletId === 'Google') {
-        await login('google');
+      type LoginMethodType = 'google' | 'twitter' | 'wallet' | 'telegram';
+      if (
+        params.chainType === 'evm' &&
+        (params.walletId === 'Google' || params.walletId === 'Telegram' || params.walletId === 'Twitter')
+      ) {
+        await login(params.walletId.toLowerCase() as LoginMethodType);
         return { chainType: params.chainType, name: walletInstance.name, walletId: params.walletId };
       }
 
