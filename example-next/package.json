@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@injectivelabs/sdk-ts": "^1.14.41",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tangled3/react": "workspace:*",
     "@tangled3/ui": "workspace:*",

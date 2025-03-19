@@ -1,3 +1,4 @@
+import { MsgExecuteContractCompat, TxRestApi } from '@injectivelabs/sdk-ts';
 import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
@@ -6,6 +7,11 @@ import { Chain, Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { signBitcoinTransaction } from './bitcoin/transaction.js';
+import {
+  broadcastTransaction,
+  prepareTransaction as prepareInjTransaction,
+  signTransaction as signInjTransaction,
+} from './cosmos/injective/sendInjectiveTransaction.js';
 
 export type SendTransactionParams<CData extends ChainData> = {
   chain: CData;
@@ -46,6 +52,10 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
             routerChainArgs?: {
               executeMsg: object;
               funds: Array<{ denom: string; amount: string }>;
+            };
+            injectiveArgs?: {
+              msg: MsgExecuteContractCompat;
+              gas?: string | number;
             };
           }
         : CType extends 'bitcoin'
@@ -252,6 +262,21 @@ export const sendTransactionToChain = (async ({
       } else {
         throw new Error('Unsupported Wallet, please connect with Keplr wallet');
       }
+    }
+
+    if (chain.id === 'injective-888' || chain.id === 'injective-1') {
+      const { injectiveArgs } = args as TransactionArgs<'cosmos'>;
+      if (!injectiveArgs?.msg) {
+        throw new Error('Missing arguments for injective');
+      }
+
+      const preparedTx = await prepareInjTransaction({ from, chain, args: injectiveArgs });
+      const signedTx = await signInjTransaction({ from, chain, preparedTx });
+      const broadcastedTx = await broadcastTransaction({ chain, txRaw: signedTx });
+
+      const response = await new TxRestApi(chain.rpcUrls.default.lcd![0]).fetchTxPoll(broadcastedTx);
+
+      return { txHash: response.txHash };
     }
 
     const { messages, memo } = args as TransactionArgs<'cosmos'>;
