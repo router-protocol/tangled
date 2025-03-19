@@ -22,7 +22,7 @@ export const romeTestnet: EVMChain = {
   },
   contracts: {
     multicall3: {
-      address: '0xF9cda624FBC7e059355ce98a31693d299FACd963',
+      address: '0xee783Cc989AFBa38614Cc3d0643255145278a307',
     },
   },
 };
