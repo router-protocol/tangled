@@ -67,9 +67,11 @@ export const useConnect = () => {
           params.walletId === 'Github' ||
           params.walletId === 'Linkedin')
       ) {
-        setMatchWallet(params.walletId);
         await login(params.walletId.toLowerCase() as LoginMethodType);
+        // if (isLogin) {
+        setMatchWallet(params.walletId);
         return { chainType: params.chainType, name: walletInstance.name, walletId: params.walletId };
+        // }
       }
 
       if (!walletInstance.connector) {
