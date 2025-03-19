@@ -46,7 +46,12 @@ export const useDisconnect = () => {
 
       if (
         params.chainType === 'evm' &&
-        (params.walletId === 'Google' || params.walletId === 'Telegram' || params.walletId === 'Twitter')
+        (params.walletId === 'Google' ||
+          params.walletId === 'Telegram' ||
+          params.walletId === 'Twitter' ||
+          params.walletId === 'Discord' ||
+          params.walletId === 'Github' ||
+          params.walletId === 'Linkedin')
       ) {
         await logout();
         return;

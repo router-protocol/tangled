@@ -27,6 +27,7 @@ export const useConnect = () => {
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
   const setRecentWallet = useWalletsStore((state) => state.setRecentWallet);
+  const setMatchWallet = useWalletsStore((state) => state.setMatchWallet);
   const { useUserInfo } = Hooks;
   const { login } = useUserInfo();
 
@@ -56,11 +57,17 @@ export const useConnect = () => {
         throw new Error('Wallet not found');
       }
 
-      type LoginMethodType = 'google' | 'twitter' | 'wallet' | 'telegram';
+      type LoginMethodType = 'google' | 'twitter' | 'wallet' | 'telegram' | 'discord' | 'github' | 'linkedin';
       if (
         params.chainType === 'evm' &&
-        (params.walletId === 'Google' || params.walletId === 'Telegram' || params.walletId === 'Twitter')
+        (params.walletId === 'Google' ||
+          params.walletId === 'Telegram' ||
+          params.walletId === 'Twitter' ||
+          params.walletId === 'Discord' ||
+          params.walletId === 'Github' ||
+          params.walletId === 'Linkedin')
       ) {
+        setMatchWallet(params.walletId);
         await login(params.walletId.toLowerCase() as LoginMethodType);
         return { chainType: params.chainType, name: walletInstance.name, walletId: params.walletId };
       }

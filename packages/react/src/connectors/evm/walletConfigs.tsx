@@ -140,6 +140,36 @@ export const walletConfigs: {
     },
     isInstalled: true,
   },
+  discord: {
+    // Use consistent ID with connector
+    name: 'Discord',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://static.vecteezy.com/system/resources/previews/023/741/066/non_2x/discord-logo-icon-social-media-icon-free-png.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  github: {
+    // Use consistent ID with connector
+    name: 'Github',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://static.vecteezy.com/system/resources/previews/053/066/802/non_2x/free-logo-github-free-png.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  linkedin: {
+    // Use consistent ID with connector
+    name: 'Linkedin',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://pngimg.com/d/linkedIn_PNG32.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
   safe: {
     name: 'Safe',
 
