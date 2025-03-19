@@ -60,7 +60,7 @@ export const useSendTransaction = () => {
       }
 
       // Check if from address matches currentAccount
-      if (!compareStrings(from, currentAccount.address)) {
+      if (chain.type !== 'tron' && !compareStrings(from, currentAccount.address)) {
         throw new Error('From address does not match current account');
       }
 
