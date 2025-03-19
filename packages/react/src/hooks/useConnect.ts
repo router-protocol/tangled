@@ -1,3 +1,4 @@
+import { Hooks } from '@matchain/matchid-sdk-react';
 import { useConnectWallet as useSuiConnectWallet } from '@mysten/dapp-kit';
 import { WalletName } from '@solana/wallet-adapter-base';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
@@ -26,6 +27,9 @@ export const useConnect = () => {
   const connectedWallets = useWalletsStore((state) => state.connectedWalletsByChain);
   const setCurrentWallet = useWalletsStore((state) => state.setCurrentWallet);
   const setRecentWallet = useWalletsStore((state) => state.setRecentWallet);
+  const setMatchWallet = useWalletsStore((state) => state.setMatchWallet);
+  const { useUserInfo } = Hooks;
+  const { login } = useUserInfo();
 
   const connectWallet = useCallback(
     async (params: {
@@ -51,6 +55,23 @@ export const useConnect = () => {
 
       if (!walletInstance) {
         throw new Error('Wallet not found');
+      }
+
+      type LoginMethodType = 'google' | 'twitter' | 'wallet' | 'telegram' | 'discord' | 'github' | 'linkedin';
+      if (
+        params.chainType === 'evm' &&
+        (params.walletId === 'Google' ||
+          params.walletId === 'Telegram' ||
+          params.walletId === 'Twitter' ||
+          params.walletId === 'Discord' ||
+          params.walletId === 'Github' ||
+          params.walletId === 'Linkedin')
+      ) {
+        await login(params.walletId.toLowerCase() as LoginMethodType);
+        // if (isLogin) {
+        setMatchWallet(params.walletId);
+        return { chainType: params.chainType, name: walletInstance.name, walletId: params.walletId };
+        // }
       }
 
       if (!walletInstance.connector) {
@@ -94,6 +115,7 @@ export const useConnect = () => {
       connectEVM,
       connectSuiWallet,
       connectCosmosWallet,
+      login,
     ],
   );
 

@@ -1,5 +1,23 @@
 # @tangled3/react
 
+## 1.17.12
+
+### Patch Changes
+
+- added match id wallets
+
+## 1.17.11
+
+### Patch Changes
+
+- match chain approval added
+
+## 1.17.10
+
+### Patch Changes
+
+- match id v1
+
 ## 1.17.9
 
 ### Patch Changes
