@@ -14,7 +14,6 @@ import {
   useDisconnect,
   useSendTransaction,
   useTokenForAccount,
-  useTokenHandlers,
   useWallet,
 } from '@tangled3/react';
 
@@ -71,19 +70,19 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
     console.log('[inj] tx = ', { tx });
   };
 
-//     console.log('tx data ', account);
+  //     console.log('tx data ', account);
 
-//     const tx = await handleTokenPrerequisite();
-//     console.log('[tron] tx = ', tx);
-//   };
+  //     const tx = await handleTokenPrerequisite();
+  //     console.log('[tron] tx = ', tx);
+  //   };
 
-//   const { mutateAsync: handleTokenPrerequisite } = useTokenHandlers({
-//     amount: 1n,
-//     chainId: tronMainnet.id,
-//     owner: account.address,
-//     spender: '0x0259094fde1684b82d2c6b10b65d044c31c0693a',
-//     token: '0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C',
-//   });
+  //   const { mutateAsync: handleTokenPrerequisite } = useTokenHandlers({
+  //     amount: 1n,
+  //     chainId: tronMainnet.id,
+  //     owner: account.address,
+  //     spender: '0x0259094fde1684b82d2c6b10b65d044c31c0693a',
+  //     token: '0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C',
+  //   });
 
   // const currentWallet = useCurrentWallet();
   // const walletInstance = useWallet(currentWallet?.type, currentWallet?.id);
