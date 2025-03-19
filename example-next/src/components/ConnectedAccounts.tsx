@@ -13,6 +13,7 @@ import {
   useDisconnect,
   useSendTransaction,
   useTokenForAccount,
+  useTokenHandlers,
   useWallet,
 } from '@tangled3/react';
 
@@ -68,11 +69,20 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
   const handleSendTx = async () => {
     const nitroTx = await buildNitroTransaction(pfData as unknown as PathfinderTransaction, tronMainnet);
 
-    console.log('tx data ', nitroTx, account);
+    console.log('tx data ', account);
 
-    const tx = await sendTransaction(nitroTx);
+    const tx = await handleTokenPrerequisite();
     console.log('[tron] tx = ', tx);
   };
+
+  const { mutateAsync: handleTokenPrerequisite } = useTokenHandlers({
+    amount: 1n,
+    chainId: tronMainnet.id,
+    owner: account.address,
+    spender: '0x0259094fde1684b82d2c6b10b65d044c31c0693a',
+    token: '0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C',
+  });
+
   return (
     <tr className='border-b border-gray-700'>
       <td className='min-w-8 w-[5ch] h-8 px-4 py-2'>

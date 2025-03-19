@@ -39,7 +39,8 @@ export const useSendTransaction = () => {
       }
 
       // check chain id of wallet
-      if (!network || network?.toString() !== chain.id.toString()) {
+      // network in case of tron is undefined(also switch chain not supported tronlink & walletconenct)
+      if (chain.type !== 'tron' && (!network || network?.toString() !== chain.id.toString())) {
         console.log('Switching network to', chain.id.toString());
         const switchedChain = await switchNetworkAsync(chain.id.toString() as ChainId).catch((e) => {
           console.error(e);

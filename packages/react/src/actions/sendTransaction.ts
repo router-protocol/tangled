@@ -131,11 +131,16 @@ export const sendTransactionToChain = (async ({ chain, to, from, value, args, co
     const walletInstance = config.connector as WalletInstance<'tron'>;
     const tronWeb = config.tronWeb;
 
-    const signedTx = await walletInstance.signTransaction(calldata);
+    if (walletInstance.name === 'WalletConnect') {
+      const signedTx = await walletInstance.signTransaction(calldata);
+      const tx = await tronWeb.trx.sendRawTransaction(signedTx);
 
+      return {
+        txHash: tx.txid,
+      };
+    }
+    const signedTx = await tronWeb.trx.signTransaction(JSON.parse(calldata));
     const tx = await tronWeb.trx.sendRawTransaction(signedTx);
-
-    console.log('tx - ', tx);
 
     return {
       txHash: tx.txid,
