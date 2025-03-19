@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.14
+
+### Patch Changes
+
+- add pnpm lock file
+
 ## 1.17.13
 
 ### Patch Changes
