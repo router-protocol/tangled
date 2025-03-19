@@ -29,7 +29,7 @@ export const useConnect = () => {
   const setRecentWallet = useWalletsStore((state) => state.setRecentWallet);
   const setMatchWallet = useWalletsStore((state) => state.setMatchWallet);
   const { useUserInfo } = Hooks;
-  const { login } = useUserInfo();
+  const { login, logout } = useUserInfo();
 
   const connectWallet = useCallback(
     async (params: {
@@ -67,6 +67,7 @@ export const useConnect = () => {
           params.walletId === 'Github' ||
           params.walletId === 'Linkedin')
       ) {
+        await logout();
         await login(params.walletId.toLowerCase() as LoginMethodType);
         // if (isLogin) {
         setMatchWallet(params.walletId);
