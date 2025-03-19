@@ -1,5 +1,47 @@
 # @tangled3/react
 
+## 1.17.16
+
+### Patch Changes
+
+- fix/tron-wallet
+
+## 1.17.15
+
+### Patch Changes
+
+- match id login fix
+
+## 1.17.14
+
+### Patch Changes
+
+- add pnpm lock file
+
+## 1.17.13
+
+### Patch Changes
+
+- add tron approval
+
+## 1.17.12
+
+### Patch Changes
+
+- added match id wallets
+
+## 1.17.11
+
+### Patch Changes
+
+- match chain approval added
+
+## 1.17.10
+
+### Patch Changes
+
+- match id v1
+
 ## 1.17.9
 
 ### Patch Changes

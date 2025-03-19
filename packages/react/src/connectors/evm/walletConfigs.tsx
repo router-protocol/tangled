@@ -110,6 +110,66 @@ export const walletConfigs: {
     url: 'https://rabby.io',
     isInstalled: true,
   },
+  google: {
+    // Use consistent ID with connector
+    name: 'Google',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://www.citypng.com/public/uploads/preview/google-logo-icon-gsuite-hd-701751694791470gzbayltphh.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  telegram: {
+    // Use consistent ID with connector
+    name: 'Telegram',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://i.pinimg.com/474x/9f/f9/9c/9ff99cea674681327ba53e7721246f5b.jpg',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  twitter: {
+    // Use consistent ID with connector
+    name: 'Twitter',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://freepnglogo.com/images/all_img/1725374683twitter-x-logo.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  discord: {
+    // Use consistent ID with connector
+    name: 'Discord',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://static.vecteezy.com/system/resources/previews/023/741/066/non_2x/discord-logo-icon-social-media-icon-free-png.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  github: {
+    // Use consistent ID with connector
+    name: 'Github',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://static.vecteezy.com/system/resources/previews/053/066/802/non_2x/free-logo-github-free-png.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
+  linkedin: {
+    // Use consistent ID with connector
+    name: 'Linkedin',
+    url: 'https://www.matchid.ai/',
+    icon: 'https://pngimg.com/d/linkedIn_PNG32.png',
+    getWalletConnectDeeplink: (uri: string) => {
+      return isAndroid() ? uri : `https://matchid-login-url.com/wc?uri=${encodeURIComponent(uri)}`;
+    },
+    isInstalled: true,
+  },
   safe: {
     name: 'Safe',
 
