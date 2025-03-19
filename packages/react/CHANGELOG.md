@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.9
+
+### Patch Changes
+
+- add/injective
+
 ## 1.17.8
 
 ### Patch Changes

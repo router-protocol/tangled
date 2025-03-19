@@ -1,15 +1,16 @@
-import { buildNitroTransaction } from '@/txArgs/buildNitroTx';
-import { pfData } from '@/txArgs/getPfData';
-import { PathfinderTransaction } from '@/txArgs/types';
+import { buildNitroTransaction } from '@/actions/buildNitroTransaction';
+import getPfQuote from '@/actions/getPfQuote';
+// import { buildNitroTransaction } from '@/txArgs/buildNitroTx';
+// import { pfData } from '@/txArgs/getPfData';
+// import { PathfinderTransaction } from '@/txArgs/types';
 import {
+  CHAIN_DATA,
   ConnectedAccount,
   SOL_ADDRESS,
-  tronMainnet,
   useAccounts,
   useChain,
   useConnect,
   useConnectionOrConfig,
-  useCurrentWallet,
   useDisconnect,
   useSendTransaction,
   useTokenForAccount,
@@ -63,26 +64,38 @@ const ConnectedAccountItem = ({ account }: { account: ConnectedAccount }) => {
   const connectionOrConfig = useConnectionOrConfig();
 
   const { mutateAsync: sendTransaction } = useSendTransaction();
-  const currentWallet = useCurrentWallet();
-  const walletInstance = useWallet(currentWallet?.type, currentWallet?.id);
-
   const handleSendTx = async () => {
-    const nitroTx = await buildNitroTransaction(pfData as unknown as PathfinderTransaction, tronMainnet);
-
-    console.log('tx data ', account);
-
-    const tx = await handleTokenPrerequisite();
-    console.log('[tron] tx = ', tx);
+    const quote = getPfQuote();
+    const txArgs = await buildNitroTransaction(quote, CHAIN_DATA['injective-888']);
+    const tx = await sendTransaction(txArgs);
+    console.log('[inj] tx = ', { tx });
   };
 
-  const { mutateAsync: handleTokenPrerequisite } = useTokenHandlers({
-    amount: 1n,
-    chainId: tronMainnet.id,
-    owner: account.address,
-    spender: '0x0259094fde1684b82d2c6b10b65d044c31c0693a',
-    token: '0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C',
-  });
+//     console.log('tx data ', account);
 
+//     const tx = await handleTokenPrerequisite();
+//     console.log('[tron] tx = ', tx);
+//   };
+
+//   const { mutateAsync: handleTokenPrerequisite } = useTokenHandlers({
+//     amount: 1n,
+//     chainId: tronMainnet.id,
+//     owner: account.address,
+//     spender: '0x0259094fde1684b82d2c6b10b65d044c31c0693a',
+//     token: '0xa614f803B6FD780986A42c78Ec9c7f77e6DeD13C',
+//   });
+
+  // const currentWallet = useCurrentWallet();
+  // const walletInstance = useWallet(currentWallet?.type, currentWallet?.id);
+
+  // const handleSendTx = async () => {
+  //   const nitroTx = await buildNitroTransaction(pfData as unknown as PathfinderTransaction, tronMainnet);
+
+  //   console.log('tx data ', nitroTx, account);
+
+  //   const tx = await sendTransaction(nitroTx);
+  //   console.log('[tron] tx = ', tx);
+  // };
   return (
     <tr className='border-b border-gray-700'>
       <td className='min-w-8 w-[5ch] h-8 px-4 py-2'>
