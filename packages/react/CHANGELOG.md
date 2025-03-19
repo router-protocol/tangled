@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.16
+
+### Patch Changes
+
+- fix/tron-wallet
+
 ## 1.17.15
 
 ### Patch Changes
