@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.13
+
+### Patch Changes
+
+- add tron approval
+
 ## 1.17.12
 
 ### Patch Changes
