@@ -98,6 +98,7 @@ export interface TangledConfig {
 type ChainRpcUrls = {
   http: readonly string[];
   webSocket?: readonly string[] | undefined;
+  lcd?: readonly string[] | undefined;
 };
 
 export interface ChainConfig {
