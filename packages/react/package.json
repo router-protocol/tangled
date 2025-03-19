@@ -1,7 +1,7 @@
 {
   "name": "@tangled3/react",
   "private": false,
-  "version": "1.17.9",
+  "version": "1.17.12",
   "type": "module",
   "license": "MIT",
   "main": "./src/index.ts",
@@ -41,6 +41,7 @@
     "@cosmos-kit/keplr": "^2.12.2",
     "@cosmos-kit/leap": "^2.14.1",
     "@cosmos-kit/xdefi": "^2.10.2",
+    "@matchain/matchid-sdk-react": "^0.1.52",
     "@injectivelabs/exceptions": "^1.14.41",
     "@injectivelabs/sdk-ts": "^1.14.41",
     "@injectivelabs/utils": "^1.14.41",

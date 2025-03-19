@@ -78,6 +78,64 @@ export const useWallets = (options?: UseWalletsOptions): { [key in ChainType]: W
 
     const wallets = evmConnectors.map((c) => prepareWallets(c)).filter((w) => w !== undefined) as Wallet<'evm'>[];
 
+    // ✅ Add MatchID Wallets manually
+    wallets.push(
+      {
+        id: 'Google',
+        name: 'Google',
+        icon: 'https://cdn4.iconfinder.com/data/icons/logos-brands-7/512/google_logo-google_icongoogle-512.png', // Replace with actual icon
+        connector: evmConnectors[0], //temporary
+        installed: true,
+        type: 'evm',
+        getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+      },
+      {
+        id: 'Twitter',
+        name: 'Twitter',
+        icon: 'https://freepnglogo.com/images/all_img/1725374683twitter-x-logo.png', // Replace with actual icon
+        connector: evmConnectors[0], //temporary
+        installed: true,
+        type: 'evm',
+        getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+      },
+      {
+        id: 'Telegram',
+        name: 'Telegram',
+        icon: 'https://i.pinimg.com/474x/9f/f9/9c/9ff99cea674681327ba53e7721246f5b.jpg', // Replace with actual icon
+        connector: evmConnectors[0], //temporary
+        installed: true,
+        type: 'evm',
+        getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+      },
+      {
+        id: 'Discord',
+        name: 'Discord',
+        icon: 'https://static.vecteezy.com/system/resources/previews/023/741/066/non_2x/discord-logo-icon-social-media-icon-free-png.png', // Replace with actual icon
+        connector: evmConnectors[0], //temporary
+        installed: true,
+        type: 'evm',
+        getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+      },
+      {
+        id: 'Github',
+        name: 'Github',
+        icon: 'https://static.vecteezy.com/system/resources/previews/053/066/802/non_2x/free-logo-github-free-png.png', // Replace with actual icon
+        connector: evmConnectors[0], //temporary
+        installed: true,
+        type: 'evm',
+        getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+      },
+      {
+        id: 'Linkedin',
+        name: 'Linkedin',
+        icon: 'https://pngimg.com/d/linkedIn_PNG32.png', // Replace with actual icon
+        connector: evmConnectors[0], //temporary
+        installed: true,
+        type: 'evm',
+        getWalletConnectDeeplink: () => 'https://matchid-login-url.com', // Replace with actual deeplink if needed
+      },
+    );
+
     if (options?.onlyInstalled) {
       return wallets.filter((wallet) => wallet.installed);
     }

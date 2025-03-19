@@ -1,3 +1,4 @@
+import { Hooks } from '@matchain/matchid-sdk-react';
 import { useSuiClientContext, useCurrentWallet as useSuiCurrentWallet } from '@mysten/dapp-kit';
 import { useWallet as useSolanaWallet } from '@tangled3/solana-react';
 import { ReactNode, useEffect } from 'react';
@@ -28,6 +29,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   // Wallet store states
   const currentWallet = useWalletsStore((state) => state.currentWallet);
   const recentWallet = useWalletsStore((state) => state.recentWallet);
+  const matchWallet = useWalletsStore((state) => state.matchWallet);
   const connectedAccountsByChain = useWalletsStore((state) => state.connectedAccountsByChain);
   const setChainConnectedAccounts = useWalletsStore((state) => state.setChainConnectedAccounts);
   const setConnectedWallets = useWalletsStore((state) => state.setConnectedWallets);
@@ -36,6 +38,8 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
   const { network: currentSuiNetwork } = useSuiClientContext();
 
   const { currentWallet: currentSuiWallet, connectionStatus: suiWalletStatus } = useSuiCurrentWallet();
+  const { useUserInfo } = Hooks;
+  const { isLogin, address } = useUserInfo();
 
   // update wallet store states when connections change for individual providers
   // evm
@@ -43,6 +47,7 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
     const _evmAccounts: { [x: string]: ConnectedAccount } = {};
     const _evmWallets: { [x: string]: ConnectedWallet } = {};
 
+    // Handle regular EVM wallet connections
     for (const connection of evmConnections) {
       _evmAccounts[connection.connector.id] = {
         address: connection.accounts?.[0],
@@ -60,11 +65,27 @@ const WalletsProvider = ({ children }: { children: ReactNode }) => {
       };
     }
 
+    if (isLogin && address && matchWallet) {
+      _evmAccounts[matchWallet] = {
+        address: address,
+        chainId: '1' as ChainId, // Assuming mainnet, adjust as needed
+        chainType: 'evm',
+        wallet: matchWallet,
+      };
+
+      _evmWallets[matchWallet] = {
+        address: address,
+        loading: false,
+        chainId: '1' as ChainId,
+        chainType: 'evm',
+      };
+    }
+
     setChainConnectedAccounts({ evm: _evmAccounts });
     setConnectedWallets({
       evm: _evmWallets,
     });
-  }, [setChainConnectedAccounts, setConnectedWallets, evmConnections]);
+  }, [setChainConnectedAccounts, setConnectedWallets, evmConnections, isLogin, address, matchWallet, setCurrentWallet]);
 
   // solana
   useEffect(() => {

@@ -22,11 +22,13 @@ export type UseTokenHandlersParams = {
   owner: string | undefined;
   /** Amount to approve */
   amount: bigint;
+  /** Overrides */
+  overrides?: any;
 };
 
 // export type UseTokenHandlersReturnType = {};
 
-const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHandlersParams) => {
+const useTokenHandlers = ({ chainId, token, spender, owner, amount, overrides }: UseTokenHandlersParams) => {
   const chain = useChain(chainId);
   const connectionOrConfig = useConnectionOrConfig();
   const account = useCurrentAccount();
@@ -34,7 +36,7 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
   const { mutateAsync: sendTransaction } = useSendTransaction();
 
   const increaseErc20Allowance = useCallback(
-    async (spender: string, owner: string, amount: bigint, tokenAddress: string, chain: ChainData) => {
+    async (spender: string, owner: string, amount: bigint, tokenAddress: string, chain: ChainData, overrides?: any) => {
       const calldata = encodeFunctionData({
         abi: erc20Abi,
         functionName: 'approve',
@@ -47,7 +49,7 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
         },
         chain,
         from: owner,
-        overrides: {},
+        overrides: overrides ? overrides : {},
         to: tokenAddress,
         value: 0n,
       });
@@ -163,8 +165,9 @@ const useTokenHandlers = ({ chainId, token, spender, owner, amount }: UseTokenHa
       if (!chain || !token || !connectionOrConfig || !spender || !owner || !amount) {
         throw new Error('Missing required parameters');
       }
+      console.log('overrides token allowance -> ', overrides);
       if (chain.type === 'evm') {
-        return increaseErc20Allowance(spender, owner, amount, token, chain);
+        return increaseErc20Allowance(spender, owner, amount, token, chain, overrides);
       }
       if (chain.type === 'solana') {
         return createAssociatedTokenAccount(owner, token, chain as OtherChainData<'solana'>);
