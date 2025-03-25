@@ -1,8 +1,8 @@
 import { EVMChain } from '../../types/index.js';
 
-export const megaEVM: EVMChain = {
+export const megaETH: EVMChain = {
   id: 6342,
-  name: 'megaEVM',
+  name: 'megaETH',
   type: 'evm',
   nativeCurrency: {
     decimals: 18,
@@ -16,7 +16,7 @@ export const megaEVM: EVMChain = {
   },
   blockExplorers: {
     default: {
-      name: 'megaEVM explorer',
+      name: 'megaETH explorer',
       url: 'https://testnet.megaeth.com',
     },
   },
