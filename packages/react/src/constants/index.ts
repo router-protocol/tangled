@@ -107,7 +107,7 @@ export const CHAIN_ID = {
   storyOdyssey: '1516',
   monadTestnet: '10143',
   romeTestnet: '200018',
-
+  megaEVM: '6342',
   // cosmos
   osmosisTestnet: 'osmo-test-5',
   alloraTestnet: 'allora-testnet-1',
@@ -224,6 +224,7 @@ export const CHAIN_DATA: Record<ChainId, ChainData> = {
   [CHAIN_ID.storyOdyssey]: chains.storyOdyssey,
   [CHAIN_ID.monadTestnet]: chains.monadTestnet,
   [CHAIN_ID.romeTestnet]: chains.romeTestnet,
+  [CHAIN_ID.megaEVM]: chains.megaEVM,
 
   // cosmos testnets
   [CHAIN_ID.osmosisTestnet]: chains.osmosisTestnet,

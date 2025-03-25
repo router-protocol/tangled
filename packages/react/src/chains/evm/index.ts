@@ -84,6 +84,7 @@ export * from './hyperEVM.js';
 export * from './hyperliquid.js';
 export * from './ink.js';
 export * from './jfin.js';
+export * from './megaETH.js';
 export * from './morph.js';
 export * from './nahmii.js';
 export * from './nero.js';

@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.17
+
+### Patch Changes
+
+- add/megaETH chain
+
 ## 1.17.16
 
 ### Patch Changes
