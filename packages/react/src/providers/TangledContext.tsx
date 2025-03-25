@@ -1,3 +1,4 @@
+import { MatchProvider } from '@matchain/matchid-sdk-react';
 import { ReactNode, createContext, useRef } from 'react';
 import { StoreApi, useStore } from 'zustand';
 import { TangledConfigState, createTangledConfigStore } from '../store/TangledConfig.js';
@@ -24,25 +25,30 @@ export const TangledContextProvider = ({ children, config }: { children: ReactNo
 
   return (
     <TangledContext.Provider value={{ configStore }}>
-      <EVMProvider
-        chains={chains.evm}
-        connectors={connectors.evm}
+      <MatchProvider
+        appid='0gubs1qtriqfmawj'
+        wallet={{ type: 'UserPasscode' }}
       >
-        <TronProvider
-          adapters={connectors.tron}
-          chain={chains.tron[0]}
+        <EVMProvider
+          chains={chains.evm}
+          connectors={connectors.evm}
         >
-          <SolanaProvider chain={chains.solana[0]}>
-            <SuiProvider chains={chains.sui}>
-              <CosmosContextProvider chains={chains.cosmos}>
-                <BitcoinProvider adapters={connectors.bitcoin}>
-                  <WalletsProvider>{children}</WalletsProvider>
-                </BitcoinProvider>
-              </CosmosContextProvider>
-            </SuiProvider>
-          </SolanaProvider>
-        </TronProvider>
-      </EVMProvider>
+          <TronProvider
+            adapters={connectors.tron}
+            chain={chains.tron[0]}
+          >
+            <SolanaProvider chain={chains.solana[0]}>
+              <SuiProvider chains={chains.sui}>
+                <CosmosContextProvider chains={chains.cosmos}>
+                  <BitcoinProvider adapters={connectors.bitcoin}>
+                    <WalletsProvider>{children}</WalletsProvider>
+                  </BitcoinProvider>
+                </CosmosContextProvider>
+              </SuiProvider>
+            </SolanaProvider>
+          </TronProvider>
+        </EVMProvider>
+      </MatchProvider>
     </TangledContext.Provider>
   );
 };
