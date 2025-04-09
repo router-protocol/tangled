@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.19
+
+### Patch Changes
+
+- add/solana-fixes
+
 ## 1.17.18
 
 ### Patch Changes
