@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.20
+
+### Patch Changes
+
+- fix/solana-rpc
+
 ## 1.17.19
 
 ### Patch Changes
