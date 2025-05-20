@@ -1,8 +1,8 @@
 import { bitcoin } from '../chains/bitcoin.js';
 import * as cosmos from '../chains/cosmos/index.js';
 import * as evm from '../chains/evm/index.js';
+import { solanaDevnet } from '../chains/solana.devnet.js';
 import { solana } from '../chains/solana.js';
-import { solanaTestnet } from '../chains/solana.testnet.js';
 import { sui } from '../chains/sui.js';
 import { suiTestnet } from '../chains/sui.testnet.js';
 import { tronMainnet } from '../chains/tron.js';
@@ -50,7 +50,7 @@ const getDefaultSupportedChains = (testnet?: boolean): SupportedChainsByType => 
       evm.megaETH,
     ] as EVMChain[];
     supportedChains.cosmos = [cosmos.osmosisTestnet, cosmos.alloraTestnet, cosmos.injectiveTestnet];
-    supportedChains.solana = [solanaTestnet] as OtherChainData<'solana'>[];
+    supportedChains.solana = [solanaDevnet] as OtherChainData<'solana'>[];
     supportedChains.tron = [tronShasta] as TronChain[];
     supportedChains.sui = [suiTestnet] as SuiChainType[];
   } else {
