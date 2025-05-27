@@ -22,7 +22,7 @@ export const nero: EVMChain = {
   },
   contracts: {
     multicall3: {
-      address: '0x343A0DdD8e58bEaf29d69936c82F1516C6677B0E',
+      address: '0xdad8799c38de68a498769f99d4a222f1221a4c18',
     },
   },
 };
