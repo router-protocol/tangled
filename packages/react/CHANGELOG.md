@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.21
+
+### Patch Changes
+
+- fix/multicaller
+
 ## 1.17.20
 
 ### Patch Changes
