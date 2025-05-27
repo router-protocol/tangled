@@ -11,7 +11,10 @@ export const solana: OtherChainData<'solana'> = {
   },
   rpcUrls: {
     default: {
-      http: ['https://api.mainnet-beta.solana.com'],
+      http: [
+        'https://mainnet.helius-rpc.com/?api-key=945d5aa7-fa07-41e0-ba43-b861dbeb142b',
+        'https://api.mainnet-beta.solana.com',
+      ],
     },
   },
   blockExplorers: {
