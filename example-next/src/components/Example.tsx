@@ -46,7 +46,7 @@ const CurrentAccountAndWallet = () => {
     Number(currentAccount?.chainId ?? '1'),
     currentAccount?.address ?? '',
   );
-  console.log({ walletCapabilities, isWalletCapabilitiesLoading, isWalletCapabilitiesError });
+  console.log({ walletCapabilities });
   // useEffect(() => {
   //   if (currentAccount?.chainType === 'evm' && currentAccount?.wallet && connectionOrConfig) {
   //     getWalletCapabilities(connectionOrConfig.wagmiConfig, currentAccount.chainId, currentAccount.address).then(setWalletCapabilities);

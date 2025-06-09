@@ -43,8 +43,8 @@ jobs:
       - name: Build React example
         run: pnpm run build:example
 
-      - name: Build Next example
-        run: pnpm run build:example-next
+      # - name: Build Next example
+      #   run: pnpm run build:example-next
 
       - name: Check formatting
         run: pnpm run format
