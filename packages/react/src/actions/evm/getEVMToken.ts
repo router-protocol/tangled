@@ -14,6 +14,27 @@ export const getEVMTokenMetadata = async (address: string, chainId: number, wagm
       decimals: 6,
     };
   }
+  if (chainId === 1689 && address === '0xb6dc6c8b71e88642cead3be1025565a9ee74d1c6') {
+    return {
+      name: 'WETH',
+      symbol: 'WETH',
+      decimals: 18,
+    };
+  }
+  if (chainId === 1689 && address === '0x97eec1c29f745dc7c267f90292aa663d997a601d') {
+    return {
+      name: 'USDC',
+      symbol: 'USDC',
+      decimals: 6,
+    };
+  }
+  if (chainId === 1689 && address === '0xff13a7a12fd485bc9687ff88d8ae1a6b655ab469') {
+    return {
+      name: 'USDT',
+      symbol: 'USDT',
+      decimals: 6,
+    };
+  }
   const tokenData = await multicall(wagmiConfig, {
     contracts: [
       {
@@ -93,12 +114,21 @@ export const getEVMTokenBalanceAndAllowance = async (
       args: [account as Address, spender as Address],
     });
   }
+  console.log('yoyoyo', calls);
   const balanceAndAllowance = await multicall(wagmiConfig, {
     contracts: calls,
     chainId: Number(chainId),
     allowFailure: false,
   });
 
+  // const balance = await readContract(wagmiConfig,{
+  //   address: address as Address,
+  //   abi: erc20Abi,
+  //   functionName: 'balanceOf',
+  //   args: [account as Address],
+  //   chainId,
+  // });
+  console.log('final yoyoyo', balanceAndAllowance);
   return {
     balance: BigInt(balanceAndAllowance[0]),
     allowance: BigInt(balanceAndAllowance[1] ?? 0),
