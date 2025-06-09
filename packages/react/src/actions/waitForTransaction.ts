@@ -65,7 +65,7 @@ export const waitForTransaction = (async ({ chain, config, overrides, transactio
       return receipt;
     }
     if (batchId) {
-      const { status, receipts } = await waitForCallsStatus(config.wagmiConfig, {
+      const { receipts } = await waitForCallsStatus(config.wagmiConfig, {
         id: batchId,
       });
       return receipts;
