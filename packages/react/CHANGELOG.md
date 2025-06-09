@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.22
+
+### Patch Changes
+
+- fix/token metadata
+
 ## 1.17.21
 
 ### Patch Changes
