@@ -2,7 +2,7 @@ import { MsgExecuteContractCompat, TxRestApi } from '@injectivelabs/sdk-ts';
 import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
-import { sendTransaction as sendEVMTransaction } from '@wagmi/core';
+import { sendCalls as sendEVMCalls, sendTransaction as sendEVMTransaction, waitForCallsStatus } from '@wagmi/core';
 import { Chain, Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
@@ -29,6 +29,11 @@ export type SendTransactionParams<CData extends ChainData> = {
 export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tron'
   ? {
       calldata: string;
+      callsToPrepend?: Array<{
+        to: string;
+        value: bigint;
+        data: string;
+      }>;
       routerChainArgs?: {
         executeMsg: object;
         funds: Array<{ denom: string; amount: string }>;
@@ -63,7 +68,7 @@ export type TransactionArgs<CType extends ChainType> = CType extends 'evm' | 'tr
           : never;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type SendTransactionReturnType<C extends ChainType> = { txHash: string };
+export type SendTransactionReturnType<C extends ChainType> = { txHash: string; batchId?: string };
 
 export type SendTransactionToChainFunction = <CData extends ChainData>(
   params: SendTransactionParams<CData>,
@@ -89,7 +94,7 @@ export const sendTransactionToChain = (async ({
   walletClient,
 }) => {
   if (chain.type === 'evm') {
-    const { calldata } = args as TransactionArgs<'evm'>;
+    const { calldata, callsToPrepend } = args as TransactionArgs<'evm'>;
 
     if (overrides?.walletType === 'evm') {
       const { sendEthTxnToRouterChainPf, getNetworkInfo, MsgExecuteCwContract, getRouterSignerAddress } = await import(
@@ -153,6 +158,34 @@ export const sendTransactionToChain = (async ({
       }
     }
 
+    if (callsToPrepend) {
+      const { id } = await sendEVMCalls(config.wagmiConfig, {
+        calls: [
+          ...callsToPrepend,
+          {
+            to: to as EVMAddress,
+            value,
+            data: calldata as `0x${string}`,
+          },
+        ],
+        account: from as EVMAddress,
+        chainId: chain.id,
+        ...overrides,
+      });
+      const { status, receipts } = await waitForCallsStatus(config.wagmiConfig, {
+        id,
+      });
+
+      if (status === 'success') {
+        return {
+          txHash: receipts![receipts!.length - 1].transactionHash,
+          batchId: id,
+        };
+      } else {
+        throw new Error('Transaction failed');
+      }
+    }
+
     // send transaction to EVM chain
     const txHash = await sendEVMTransaction(config.wagmiConfig, {
       account: from as EVMAddress,
@@ -165,6 +198,7 @@ export const sendTransactionToChain = (async ({
 
     return {
       txHash,
+      batchId: undefined,
     };
   }
 

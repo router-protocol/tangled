@@ -24,4 +24,5 @@ export * from './useTronContext.js';
 export * from './useTronStore.js';
 export * from './useWaitForTransaction.js';
 export * from './useWallet.js';
+export * from './useWalletCapabilities.js';
 export * from './useWallets.js';

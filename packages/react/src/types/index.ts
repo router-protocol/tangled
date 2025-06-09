@@ -133,7 +133,7 @@ export type GetTokenMetadataParams = {
 };
 
 export type TransactionReceipt<C extends ChainType> = C extends 'evm'
-  ? EVMTxReceipt
+  ? EVMTxReceipt | EVMTxReceipt[]
   : C extends 'tron'
     ? TronWebTypes.TransactionInfo
     : C extends 'sui'
