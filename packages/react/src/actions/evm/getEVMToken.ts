@@ -114,21 +114,12 @@ export const getEVMTokenBalanceAndAllowance = async (
       args: [account as Address, spender as Address],
     });
   }
-  console.log('yoyoyo', calls);
   const balanceAndAllowance = await multicall(wagmiConfig, {
     contracts: calls,
     chainId: Number(chainId),
     allowFailure: false,
   });
 
-  // const balance = await readContract(wagmiConfig,{
-  //   address: address as Address,
-  //   abi: erc20Abi,
-  //   functionName: 'balanceOf',
-  //   args: [account as Address],
-  //   chainId,
-  // });
-  console.log('final yoyoyo', balanceAndAllowance);
   return {
     balance: BigInt(balanceAndAllowance[0]),
     allowance: BigInt(balanceAndAllowance[1] ?? 0),

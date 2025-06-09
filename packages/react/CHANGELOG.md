@@ -1,5 +1,11 @@
 # @tangled3/react
 
+## 1.17.23
+
+### Patch Changes
+
+- add/pectra changes
+
 ## 1.17.22
 
 ### Patch Changes
