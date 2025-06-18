@@ -7,6 +7,7 @@ import {
   useCurrentWallet,
   useNetwork,
   useWallet,
+  useWalletCapabilities,
 } from '@tangled3/react';
 import { useEffect, useState } from 'react';
 import { ConnectedAccounts } from './ConnectedAccounts';
@@ -41,6 +42,16 @@ const CurrentAccountAndWallet = () => {
   const { switchNetworkAsync, isPending } = useNetwork();
   const chains = useChains(currentAccount?.chainType);
   const [selectedChain, setSelectedChain] = useState(currentAccount?.chainId);
+  const { data: walletCapabilities } = useWalletCapabilities(
+    Number(currentAccount?.chainId ?? '1'),
+    currentAccount?.address ?? '',
+  );
+  console.log({ walletCapabilities });
+  // useEffect(() => {
+  //   if (currentAccount?.chainType === 'evm' && currentAccount?.wallet && connectionOrConfig) {
+  //     getWalletCapabilities(connectionOrConfig.wagmiConfig, currentAccount.chainId, currentAccount.address).then(setWalletCapabilities);
+  //   }
+  // }, [currentAccount?.chainType, currentAccount?.wallet, currentAccount?.chainId, currentAccount?.address]);
 
   const handleChainChange = (chainId: ChainId) => {
     // optimistically update UI immediately

@@ -1,5 +1,5 @@
 import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate';
-import { waitForTransactionReceipt } from '@wagmi/core';
+import { waitForCallsStatus, waitForTransactionReceipt } from '@wagmi/core';
 import { ReplacementReturnType } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig, TransactionReceipt } from '../types/index.js';
 import { pollCallback } from '../utils/index.js';
@@ -25,6 +25,7 @@ export type WatchTransactionOverrides<C extends ChainType> = DefaultOverrides &
 
 export type DefaultTransactionParams = {
   txHash: string;
+  batchId?: string;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -52,16 +53,23 @@ const DEFAULT_POLLING_INTERVAL = 2500; // 2.5 seconds
  */
 export const waitForTransaction = (async ({ chain, config, overrides, transactionParams }) => {
   if (chain.type === 'evm') {
-    const { txHash } = transactionParams as TransactionParams<'evm'>;
+    const { txHash, batchId } = transactionParams as TransactionParams<'evm'>;
     const evmOverrides = (overrides || {}) as WatchTransactionOverrides<'evm'>;
+    if (!batchId && txHash != '0x') {
+      const receipt = await waitForTransactionReceipt(config.wagmiConfig, {
+        hash: txHash as `0x${string}`,
+        chainId: chain.id,
 
-    const receipt = await waitForTransactionReceipt(config.wagmiConfig, {
-      hash: txHash as `0x${string}`,
-      chainId: chain.id,
-
-      ...evmOverrides,
-    });
-    return receipt;
+        ...evmOverrides,
+      });
+      return receipt;
+    }
+    if (batchId) {
+      const { receipts } = await waitForCallsStatus(config.wagmiConfig, {
+        id: batchId,
+      });
+      return receipts;
+    }
   }
 
   if (chain.type === 'tron') {
