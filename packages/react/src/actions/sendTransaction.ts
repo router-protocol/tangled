@@ -2,8 +2,13 @@ import { MsgExecuteContractCompat, TxRestApi } from '@injectivelabs/sdk-ts';
 import { Transaction as SuiTransaction } from '@mysten/sui/transactions';
 import type { Network as RouterChainNetwork } from '@routerprotocol/router-chain-sdk-ts';
 import { VersionedTransaction as SolanaVersionedTransaction } from '@solana/web3.js';
-import { sendCalls as sendEVMCalls, sendTransaction as sendEVMTransaction, waitForCallsStatus } from '@wagmi/core';
-import { Chain, Address as EVMAddress } from 'viem';
+import {
+  sendCalls as sendEVMCalls,
+  sendTransaction as sendEVMTransaction,
+  waitForCallsStatus,
+  waitForTransactionReceipt,
+} from '@wagmi/core';
+import { BaseError, Chain, Address as EVMAddress } from 'viem';
 import { ChainData, ChainType, ConnectionOrConfig } from '../types/index.js';
 import { WalletInstance } from '../types/wallet.js';
 import { signBitcoinTransaction } from './bitcoin/transaction.js';
@@ -159,30 +164,59 @@ export const sendTransactionToChain = (async ({
     }
 
     if (callsToPrepend) {
-      const { id } = await sendEVMCalls(config.wagmiConfig, {
-        calls: [
-          ...callsToPrepend,
-          {
-            to: to as EVMAddress,
-            value,
-            data: calldata as `0x${string}`,
-          },
-        ],
-        account: from as EVMAddress,
-        chainId: chain.id,
-        ...overrides,
-      });
-      const { status, receipts } = await waitForCallsStatus(config.wagmiConfig, {
-        id,
-      });
+      try {
+        const { id } = await sendEVMCalls(config.wagmiConfig, {
+          calls: [
+            ...callsToPrepend,
+            {
+              to: to as EVMAddress,
+              value,
+              data: calldata as `0x${string}`,
+            },
+          ],
+          account: from as EVMAddress,
+          chainId: chain.id,
+          ...overrides,
+        });
+        const { status, receipts } = await waitForCallsStatus(config.wagmiConfig, {
+          id,
+        });
 
-      if (status === 'success') {
-        return {
-          txHash: receipts![receipts!.length - 1].transactionHash,
-          batchId: id,
-        };
-      } else {
-        throw new Error('Transaction failed');
+        if (status === 'success') {
+          return {
+            txHash: receipts![receipts!.length - 1].transactionHash,
+            batchId: id,
+          };
+        } else {
+          throw new Error('Transaction failed');
+        }
+      } catch (error: BaseError | unknown) {
+        console.log('Error in sendTransaction', error);
+        if (error instanceof BaseError && error.details === 'User rejected account upgrade') {
+          for (const call of callsToPrepend) {
+            const { to, value, data } = call;
+            const txHash = await sendEVMTransaction(config.wagmiConfig, {
+              account: from as EVMAddress,
+              to: to as EVMAddress,
+              value,
+              chainId: chain.id,
+              data,
+              ...overrides,
+            });
+            const receipt = await waitForTransactionReceipt(config.wagmiConfig, {
+              hash: txHash as `0x${string}`,
+              chainId: chain.id,
+              ...overrides,
+            });
+            if (receipt.status === 'success') {
+              continue;
+            } else {
+              throw new Error('Prepended transaction failed, try turning off 1-click swap and try again');
+            }
+          }
+        } else {
+          throw error;
+        }
       }
     }
 
